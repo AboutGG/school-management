@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\SchoolAPI\\SchoolAPI\\SchoolAPI.csproj": {}
+    "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\school-management\\backend\\SchoolAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\SchoolAPI\\SchoolAPI\\SchoolAPI.csproj": {
+    "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\school-management\\backend\\SchoolAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\SchoolAPI\\SchoolAPI\\SchoolAPI.csproj",
+        "projectUniqueName": "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\school-management\\backend\\SchoolAPI.csproj",
         "projectName": "SchoolAPI",
-        "projectPath": "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\SchoolAPI\\SchoolAPI\\SchoolAPI.csproj",
+        "projectPath": "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\school-management\\backend\\SchoolAPI.csproj",
         "packagesPath": "C:\\Users\\massi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\SchoolAPI\\SchoolAPI\\obj\\",
+        "outputPath": "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\school-management\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
