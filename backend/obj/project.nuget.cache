@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AW2wVC9UzADVjQT7c48IqQm315GnjR92rXEjEtB1K6KjvB3xacdbgJXQkJ2h0s6QO+rTCXCgz4snxDuTgHFEsg==",
+  "dgSpecHash": "yxdnwg8OPXIhum0lFkf+15OnPe0iHjJKbcJ/YwgsIRBjzGGhuYXcbzV5rgraBXtngSuTDl/Q6ZKSOK3sDDZXJQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\SchoolAPI\\SchoolAPI\\SchoolAPI.csproj",
+  "projectFilePath": "C:\\Users\\massi\\Desktop\\Projects\\Lavori\\school-management\\backend\\SchoolAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\massi\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\massi\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
