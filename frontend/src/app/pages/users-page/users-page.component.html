@@ -1,0 +1,55 @@
+<form [formGroup]="usersForm">
+    <div class="d-flex flex-column">
+    <div class="pb-3">
+        <label for="username">Username:*</label>
+        <input type="text" title="username" formControlName="username">
+        <p class="text-danger" *ngIf="!usersForm.get('username')!.valid && usersForm.get('username')!.touched">this insert a username</p>
+    </div>
+    <div class="pb-3">
+        <label for="password">Password:*</label>
+        <input type="password" title="password" formControlName="password">
+        <p class="text-danger" *ngIf="!usersForm.get('password')!.valid && usersForm.get('password')!.touched">invalid password</p>
+    </div>
+    <div class="pb-3">
+        <label for="name">Name:*</label>
+        <input type="text" title="name" formControlName="name">
+        <p class="text-danger" *ngIf="!usersForm.get('name')!.valid && usersForm.get('name')!.touched">this insert a name</p>
+    </div>
+    <div class="pb-3">
+        <label for="surname">Surname:*</label>
+        <input type="text" title="surname" formControlName="surname">
+        <p class="text-danger" *ngIf="!usersForm.get('surname')!.valid && usersForm.get('surname')!.touched">this insert a surname</p>
+    </div>
+    <div class="pb-3">
+        <label for="birth">Birth:</label>
+        <input type="date" title="birth" formControlName="birth">
+    </div>
+    <div class="pb-3">
+        <label for="gender">Gender:*</label>
+        <input type="text" title="gender" formControlName="gender">
+        <p class="text-danger" *ngIf="!usersForm.get('gender')!.valid && usersForm.get('gender')!.touched">this insert a gender</p>
+    </div>
+    <div class="pb-3">
+        <label for="email">Email:</label>
+        <input type="text" title="email" formControlName="email">
+        <p class="text-danger" *ngIf="!usersForm.get('email')!.valid">this insert a email</p>
+    </div>
+    <div class="pb-3">
+        <label for="address">Address:</label>
+        <input type="text" title="address" formControlName="address">
+    </div>
+    <div class="pb-3">
+        <label for="telephone">Telephone:</label>
+        <input type="text" title="telephone" formControlName="telephone">
+        <p class="text-danger" *ngIf="!usersForm.get('telephone')!.valid">this insert a telephone</p>
+    </div>
+    <div class="pb-3">
+        <label for="classroom">Classroom:*</label>
+        <input type="text" title="classroom" formControlName="classroom">
+        <p class="text-danger" *ngIf="!usersForm.get('classroom')!.valid && usersForm.get('classroom')!.touched">this insert a classroom</p>
+    </div>
+        <div>
+            <button type="submit" class="btn btn-primary" [disabled]="!usersForm.valid">Submit</button>
+        </div>
+    </div>
+</form>
