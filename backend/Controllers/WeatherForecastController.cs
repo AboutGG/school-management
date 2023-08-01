@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace SchoolAPI.Controllers;
+namespace backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
