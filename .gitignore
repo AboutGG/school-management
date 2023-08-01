@@ -8,3 +8,5 @@ backend/obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+backend/appsettings.json
