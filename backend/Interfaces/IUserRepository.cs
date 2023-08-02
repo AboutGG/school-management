@@ -10,7 +10,7 @@ public interface IUserRepository
     /// <summary> UserExists check using userId </summary>
     /// <param name="userId"></param>
     /// <returns>true if exist , false if not</returns>
-    bool UserExists(Guid userId);
+    bool UserExists(Guid id);
 
     /// <summary> UserExists check using username </summary>
     /// <param name="username"></param>
@@ -22,13 +22,12 @@ public interface IUserRepository
     /// <returns>true successful, false not successful</returns>
     bool CreateUser(User user);
 
-    bool DeleteUser (User user);
+    bool DeleteUser (Guid id);
     bool Save();
 
     /// <summary> UpdateUser </summary>
     /// <param name="user"></param>
     /// <returns>if the user is updated</returns>
     bool UpdateUser(User user);
-
-    bool CreateEntity (User entity);
+    
 }
