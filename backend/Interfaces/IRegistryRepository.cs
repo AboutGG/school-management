@@ -6,7 +6,7 @@ public interface IRegistryRepository
 {
     ICollection<Registry> GetRegistries();
 
-    ICollection<Registry> GetRegistries(string name);
+    ICollection<Registry> GetRegistriesByName(string name);
 
     /// <summary> RegistryExists check using Registryname </summary>
     /// <param name="name"></param>
@@ -18,14 +18,14 @@ public interface IRegistryRepository
     /// <summary> RegistryExists check using RegistryId </summary>
     /// <param name="RegistryId"></param>
     /// <returns>true if exist , false if not</returns>
-    bool RegistryExists(Guid RegistryId);
+    bool RegistryExists(Guid id);
 
     /// <summary> Create a Registry </summary>
     /// <param name="Registry"></param>
     /// <returns>true successful, false not successful</returns>
     bool CreateRegistry(Registry Registry);
 
-    bool DeleteRegistry(Registry Registry);
+    bool DeleteRegistry(Guid id);
     bool Save();
 
     /// <summary> UpdateRegistry </summary>
