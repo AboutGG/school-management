@@ -29,7 +29,7 @@ public class UserRepository : IUserRepository
 
     public bool UserExists(string username)
     {
-        return this._context.Users.Any(u=> u.Username == username);
+        return this._context.Users.Any(u=> u.Username.Trim().ToLower() == username.Trim().ToLower());
     }
 
     public bool CreateUser(User user)
