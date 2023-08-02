@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 interface User {
   name: string;
   surname: string;
-  age: number;
-  role: string
+  username: string;
+  password: string;
 }
 
 @Injectable({
@@ -20,23 +20,23 @@ export class AuthService {
     {
       name: 'Giacomo',
       surname: 'Cappello',
-      age: 35,
-      role: 'Administrator'
+      username: "giaco.",
+      password: 'admin'
     },
     {
       name: 'Sergio',
       surname: 'Musumeci',
-      age: 35,
-      role: 'Administrator'
+      username: "sirjoh",
+      password: 'Administrator'
     },
     {
       name: 'Mirko',
       surname: 'Amato',
-      age: 24,
-      role: 'Administrator'
+      username: "disturbed",
+      password: 'Administrator'
     }
   ]
-
+  // 
   // login(user: User) {
   //   return this.http.post(`https://dummyjson.com/auth/login`, user).subscribe((res: any) => {
   //       localStorage.setItem('token', res.token);
@@ -44,11 +44,23 @@ export class AuthService {
   //   })
   // }
 
-  login(user: User) {
-    this.users.find(input => input.name === user.name)
-    localStorage.setItem('user', JSON.stringify(user));
-    this.router.navigate(['/dashboard']);
-    console.log("ciaoooo");
+  // login(input: User) {
+  //   this.users.map((user) => {
+  //     if (user.name === input.name) {
+  //       localStorage.setItem('input', JSON.stringify(input));
+  //       this.router.navigate(['/dashboard']);
+  //     }
+  //     console.log(user);
+  //   })
+  // }
+
+  login(formUser: User) {
+    this.users.find((user) => {
+      if (user.username === formUser.username) {
+        this.router.navigate(['/dashboard']);
+        console.log(user);
+      }
+    })
   }
 
   logout() {
