@@ -1,4 +1,5 @@
-﻿using backend.Interfaces;
+﻿using backend.Dto;
+using backend.Interfaces;
 using backend.Models;
 
 namespace backend.Repositories;
@@ -17,9 +18,19 @@ public class UserRepository : IUserRepository
         return this._context.Users.OrderBy(u => u.Id).ToList();
     }
 
-    public User GetUserById(Guid id)
+    public User GetUser(Guid id)
     {
         return this._context.Users.Where(u => u.Id == id).FirstOrDefault();
+    }
+
+    public User GetUser(string username)
+    {
+        return this._context.Users.Where(u => u.Username.Trim().ToLower() == username.Trim().ToLower()).FirstOrDefault();
+    }
+
+    public bool CheckCredentials(UserDto user)
+    {
+        return this._context.Users.Any(u => u.Username.Trim().ToLower() == user.Username.Trim().ToLower() && u.Password == user.Password);
     }
 
     public bool UserExists(Guid id)
@@ -40,7 +51,7 @@ public class UserRepository : IUserRepository
 
     public bool DeleteUser(Guid id)
     {
-        var user = GetUserById(id);
+        var user = GetUser(id);
         this._context.Users.Remove(user);
         return Save();
     }

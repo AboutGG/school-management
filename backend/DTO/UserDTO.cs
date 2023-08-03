@@ -1,8 +1,8 @@
 ﻿using backend.Utils;
 
-namespace backend.Dto;
+namespace backend.DTO;
 
-public class UserDto
+public class UserDTO
 {
     /// <summary> User username </summary>
     [StringValidator(3, ErrorMessage = "Username cannot contain less then 3 character")]
