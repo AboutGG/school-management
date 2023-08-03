@@ -1,20 +1,31 @@
-﻿using backend.Interfaces;
+﻿using AutoMapper;
+using backend.Dto;
+using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
 
 public class TeacherRepository : ITeacherRepository
 {
     private readonly SchoolContext _context;
+    private readonly IMapper _mapper;
 
-    public TeacherRepository(SchoolContext context)
+    public TeacherRepository(SchoolContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
     
-    public ICollection<Teacher> GetTeachers()
+    public ICollection<TeacherDto> GetTeachers()
     {
-        return this._context.Teachers.OrderBy(t => t.Id).ToList();
+        var teachers = _mapper.Map<List<TeacherDto>>(_context.Teachers
+            .OrderBy(t => t.Id)
+            .Include(t => t.Registry) // Include il registro associato
+            .Include(t => t.User)
+            .ToList());
+        
+        return teachers;
     }
     public Teacher GetTeacherById(Guid id)
     {

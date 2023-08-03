@@ -1,10 +1,11 @@
+using backend.Dto;
 using backend.Models;
 
 namespace backend.Interfaces;
 
 public interface ITeacherRepository
 {
-    ICollection<Teacher> GetTeachers();
+    ICollection<TeacherDto> GetTeachers();
 
     Teacher GetTeacherById(Guid id);
 
