@@ -25,7 +25,8 @@ public class Registry
 
     [Column("gender")]
     [JsonPropertyName("gender")]
-    public String Gender { get; set; }
+    [Required]
+    public String Gender { get; set; } 
 
     [Column("birth")]
     [JsonPropertyName("birth")]
@@ -43,7 +44,9 @@ public class Registry
 
     [Column("telephone")]
     [JsonPropertyName("telephone")]
+    [DataType(DataType.PhoneNumber)]
     [Phone]
+    [RegularExpression(@"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$", ErrorMessage = "Invalid phone format")]
     public string? Telephone { get; set; }
 
     #region References from another table

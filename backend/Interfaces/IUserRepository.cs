@@ -1,4 +1,4 @@
-using backend.DTO;
+using backend.Dto;
 using backend.Models;
 namespace backend.Interfaces;
 
@@ -20,7 +20,7 @@ public interface IUserRepository
     /// <returns>true if exist , false if not</returns>
     bool UserExists(string username);
 
-    bool CheckCredentials(UserDTO user);
+    bool CheckCredentials(UserDto user);
     
     /// <summary> Create a user </summary>
     /// <param name="user"></param>

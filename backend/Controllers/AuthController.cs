@@ -1,4 +1,4 @@
-﻿using backend.DTO;
+﻿using backend.Dto;
 using backend.Interfaces;
 using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ public class AuthController : Controller
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] UserDTO request)
+    public IActionResult Login([FromBody] UserDto request)
     {
         if (_userRepository.UserExists(request.Username))
         {
