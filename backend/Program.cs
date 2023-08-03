@@ -2,6 +2,7 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found");
@@ -20,6 +21,11 @@ builder.Services.AddDbContext<SchoolContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; // Remove null field from json response
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

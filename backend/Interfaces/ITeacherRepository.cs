@@ -5,7 +5,7 @@ namespace backend.Interfaces;
 
 public interface ITeacherRepository
 {
-    ICollection<TeacherDto> GetTeachers();
+    ICollection<Teacher> GetTeachers();
 
     Teacher GetTeacherById(Guid id);
 

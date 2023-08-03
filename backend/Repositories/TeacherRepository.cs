@@ -29,13 +29,13 @@ public class TeacherRepository : ITeacherRepository
 
     /// <summary> In this function i take All the Teachers including the User and Registry reference. </summary>
     /// <returns>Returns Teacher with his data contains User and Registry related to it</returns>
-    public ICollection<TeacherDto> GetTeachers()
+    public ICollection<Teacher> GetTeachers()
     {
-        var teachers = _mapper.Map<List<TeacherDto>>(_context.Teachers
+        var teachers =_context.Teachers
             .OrderBy(t => t.Id)
             .Include(t => t.Registry) // Include il registro associato
             .Include(t => t.User)
-            .ToList());
+            .ToList();
 
         return teachers;
     }

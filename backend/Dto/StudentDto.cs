@@ -10,8 +10,8 @@ public class StudentDto
     public string Classroom { get; set; }
 
     public Guid UserId { get; set; }
-    public virtual UserDto User { get; set; }
+    public virtual User User { get; set; }
 
     public Guid RegistryId { get; set; }
-    public virtual RegistryDto Registry { get; set; }
+    public virtual Registry Registry { get; set; }
 }

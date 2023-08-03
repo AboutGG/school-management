@@ -5,7 +5,7 @@ namespace backend.Interfaces;
 
 public interface IStudentRepository
 {
-    ICollection<StudentDto> GetStudents();
+    ICollection<Student> GetStudents();
     Student GetStudentById(Guid id);
     bool StudentExist(Guid id);
     bool CreateStudent(Student student);

@@ -29,20 +29,23 @@ public class StudentRepository : IStudentRepository
 
     /// <summary> In this function i take All the Student including the User and Registry reference. </summary>
     /// <returns>Returns Student with his data contains User and Registry related to it</returns>
-    public ICollection<StudentDto> GetStudents()
+    public ICollection<Student> GetStudents()
     {
-        var student = _mapper.Map<List<StudentDto>>(_context.Students
+        var student = _context.Students
             .OrderBy(s => s.Id)
-            .Include(t => t.User) // Include il registro associato
-            .Include(t => t.Registry)
-            .ToList());
+            .Include(s => s.User) // Include il registro associato
+            .Include(s => s.Registry)
+            .ToList();
 
         return student;
     }
 
     public Student GetStudentById(Guid id)
     {
-        return _context.Students.Where(s => s.Id == id).FirstOrDefault();
+        return _context.Students.Where(s => s.Id == id)
+            .Include(s => s.User)
+            .Include(s => s.Registry)
+            .FirstOrDefault();
     }
 
     public bool StudentExist(Guid id)

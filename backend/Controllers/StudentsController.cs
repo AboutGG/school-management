@@ -1,8 +1,10 @@
 using backend.Dto;
 using backend.Interfaces;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class StudentsController : Controller
@@ -24,14 +26,18 @@ public class StudentsController : Controller
 
     #region API calls
 
+    #region Get students
+
     /// <summary> Get All Teachers with its Registry and user </summary>
     /// <returns>ICollection<TeacherDto></returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<StudentDto>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<Student>))]
     public IActionResult GetStudents()
     {
         return Ok(_studentRepository.GetStudents());
     }
 
+    #endregion
+    
     #endregion
 }
