@@ -38,13 +38,13 @@ export class AuthService {
     }
   ]
   // LOGIN PER DATI DAL DATABASE
-  // login(user: User) {
-  //   return this.http.post(`https://dummyjson.com/auth/login`, user).subscribe((res: any) => {
-  //     this.response = res.status
-  //     localStorage.setItem('token', res.token);
-  //     this.router.navigate(['/home']);
-  //   })
-  // }
+  login(user: User) {
+    return this.http.post(`https://dummyjson.com/auth/login`, user).subscribe((res: any) => {
+      this.response = res.status
+      localStorage.setItem('token', res.token);
+      this.router.navigate(['/home']);
+    })
+  }
 
   // login(input: User) {
   //   this.users.map((user) => {
@@ -56,16 +56,16 @@ export class AuthService {
   //   })
   // }
 
-  login(formUser: User) {
-    this.users.find((user) => {
-      if (user.username === formUser.username) {
-        this.router.navigate(['/dashboard']);
-        console.log(user);
-      } else {
-        this.response = false        
-      }
-    })
-  }
+  // login(formUser: User) {
+  //   this.users.find((user) => {
+  //     if (user.username === formUser.username) {
+  //       this.router.navigate(['/dashboard']);
+  //       console.log(user);
+  //     } else {
+  //       this.response = false        
+  //     }
+  //   })
+  // }
 
   logout() {
     // localStorage.removeItem('token')
