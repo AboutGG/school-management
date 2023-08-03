@@ -12,6 +12,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService) { }
 
+  showInvalidInput: boolean = false;
+
   ngOnInit(): void {
     this.loginForm = new FormGroup({
       username: new FormControl(null, Validators.required),
