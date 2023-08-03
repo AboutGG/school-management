@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   showInvalidInput: boolean = false;
+  response = this.authService.response
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({

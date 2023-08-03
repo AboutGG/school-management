@@ -16,6 +16,7 @@ interface User {
 export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
+  response!: any
   users: User[] = [
     {
       name: 'Giacomo',
@@ -39,8 +40,9 @@ export class AuthService {
   // LOGIN PER DATI DAL DATABASE
   // login(user: User) {
   //   return this.http.post(`https://dummyjson.com/auth/login`, user).subscribe((res: any) => {
-  //       localStorage.setItem('token', res.token);
-  //       this.router.navigate(['/home']);
+  //     this.response = res.status
+  //     localStorage.setItem('token', res.token);
+  //     this.router.navigate(['/home']);
   //   })
   // }
 
@@ -59,6 +61,8 @@ export class AuthService {
       if (user.username === formUser.username) {
         this.router.navigate(['/dashboard']);
         console.log(user);
+      } else {
+        this.response = false        
       }
     })
   }
