@@ -21,7 +21,7 @@ public class TeachersController : Controller
 
     #region Api calls
     
-    /// <summary> Get All Teachers </summary>
+    /// <summary> Get All Teachers with its Registry and user </summary>
     /// <returns>ICollection<TeacherDto></returns>
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(IEnumerable<TeacherDto>))]

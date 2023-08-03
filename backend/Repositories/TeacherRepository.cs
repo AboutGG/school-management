@@ -8,15 +8,27 @@ namespace backend.Repositories;
 
 public class TeacherRepository : ITeacherRepository
 {
+    #region Attributes
+
     private readonly SchoolContext _context;
     private readonly IMapper _mapper;
+
+    #endregion
+
+    #region Costructor
 
     public TeacherRepository(SchoolContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
     }
-    
+
+    #endregion
+
+    #region Methods
+
+    /// <summary> In this function i take All the Teachers including the User and Registry reference. </summary>
+    /// <returns>Returns Teacher with his data contains User and Registry related to it</returns>
     public ICollection<TeacherDto> GetTeachers()
     {
         var teachers = _mapper.Map<List<TeacherDto>>(_context.Teachers
@@ -24,9 +36,10 @@ public class TeacherRepository : ITeacherRepository
             .Include(t => t.Registry) // Include il registro associato
             .Include(t => t.User)
             .ToList());
-        
+
         return teachers;
     }
+
     public Teacher GetTeacherById(Guid id)
     {
         return this._context.Teachers.Where(t => t.Id == id).FirstOrDefault();
@@ -49,14 +62,18 @@ public class TeacherRepository : ITeacherRepository
         this._context.Teachers.Remove(teacher);
         return Save();
     }
-    
+
     public bool UpdateTeacher(Teacher teacher)
     {
         _context.Teachers.Update(teacher);
         return Save();
     }
+
     public bool Save()
     {
         return _context.SaveChanges() > 0 ? true : false;
     }
+
+    #endregion
+
 }
