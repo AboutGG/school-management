@@ -36,7 +36,7 @@ export class AuthService {
       password: 'Administrator'
     }
   ]
-  // 
+  // LOGIN PER DATI DAL DATABASE
   // login(user: User) {
   //   return this.http.post(`https://dummyjson.com/auth/login`, user).subscribe((res: any) => {
   //       localStorage.setItem('token', res.token);

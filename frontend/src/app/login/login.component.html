@@ -1,5 +1,5 @@
-<div class="d-flex justify-content-center align-items-center vh-100 bodyLogin">
-  <div class="p-5 bg-light border border-secondary rounded-4">
+<div class="d-flex justify-content-center align-items-center vh-100 bg-success">
+  <div class="p-5 bodyLogin border border-3 border-dark rounded-4">
     <div class="d-flex flex-column justify-content-center align-items-center pb-3">
       <img class="w-100 rounded-3 m-5" style="max-width: 100px;" src="/assets/login/logoScuola.png" alt="">
       <h5>Nome della scuola</h5>
@@ -8,11 +8,12 @@
     <form [formGroup]="loginForm" class="d-flex flex-column justify-content-center">
       <div class="mb-3">
         <input type="username" class="form-control" formControlName="username" id="exampleInputEmail1"
-          aria-describedby="emailHelp" placeholder="Login ID or Email">
+          aria-describedby="emailHelp" placeholder="Login ID or Email" required>
+          <div *ngIf="!loginForm.value">Username errato</div>
       </div>
       <div class="mb-3">
         <input type="password" class="form-control" formControlName="password" id="exampleInputPassword1"
-          placeholder="Password">
+          placeholder="Password" required>
       </div>
       <div class="mb-3 form-check row">
         <div class="col-6">
