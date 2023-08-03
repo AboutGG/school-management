@@ -4,7 +4,7 @@ namespace backend.Interfaces;
 
 public interface IRegistryExamRepository
 {
-    /// <summary> Rturn all registryExams </summary>
+    /// <summary> Return all registryExams </summary>
     ICollection<RegistryExam> GetRegistriesExams();
 
     /// <summary> Create a registryExam </summary>
