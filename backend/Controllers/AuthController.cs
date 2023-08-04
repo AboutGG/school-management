@@ -20,7 +20,7 @@ public class AuthController : Controller
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] UserDto request)
+    public IActionResult Login([FromBody] UserDtoLogin request)
     {
         if (_userRepository.UserExists(request.Username))
         {
