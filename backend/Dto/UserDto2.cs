@@ -2,7 +2,7 @@ using backend.Utils;
 
 namespace backend.Dto;
 
-public class UserDto
+public class UserDto2
 {
     /// <summary> User id </summary>
     public Guid Id { get; set; }
