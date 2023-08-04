@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../environments/environment'
+import { environment } from '../../../environments/environment'
 // import { User } from 'src/app/models/data';
 
 const URL = environment.apiUrl;
@@ -19,7 +19,7 @@ export class AuthService {
     return this.http.post(`${URL}/auth/login`, user).subscribe((res: any) => {
       this.response = res.status
       localStorage.setItem('token', res.token);
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['']);
       console.log(res);
       
     })
