@@ -57,7 +57,7 @@ export class AddUserComponent implements OnInit {
   }
 
   onAddUser() {
-    this.serviceUsers.addUser(this.usersForm.value).subscribe({
+    this.serviceUsers.addTeacher(this.usersForm.value).subscribe({
       next: (res) => {
         console.log(res);
       },

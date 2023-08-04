@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { User } from '../models/users';
+import { User, Users } from '../models/users';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -11,9 +11,9 @@ export class UsersService {
 
   constructor(private http: HttpClient) { }
 
-  addUser = (user: FormGroup): Observable<User> => {
-    return this.http.post<User>(
-      `http://localhost:4200/`, user
+  addTeacher = (user: FormGroup): Observable<Users> => {
+    return this.http.post<Users>(
+      `https://localhost:7262/api/users/teacher`, user
     );
   };
 
