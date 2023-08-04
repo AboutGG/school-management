@@ -10,6 +10,11 @@ public class MappingProfiles : Profile
     {
         CreateMap<User, UserDto>();
         CreateMap<UserDto, User>();
-
+        CreateMap<Registry, RegistryDto>();
+        CreateMap<RegistryDto, Registry>();
+        CreateMap<UserDetailDto, Student>();
+        CreateMap<UserDetailDto, Teacher>();
+        CreateMap<Student, UserDetailDto>();
+        CreateMap<Teacher, UserDetailDto>();
     }
 }

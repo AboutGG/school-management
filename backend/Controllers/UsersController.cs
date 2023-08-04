@@ -67,7 +67,7 @@ public class UsersController : Controller
     [HttpPost("teacher")]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
-    public IActionResult AddUserTeacher([FromBody] UserTeacherDto userTeacher)
+    public IActionResult AddUserTeacher([FromBody] UserDetailDto userTeacher)
     {
 
         if (userTeacher == null || userTeacher.User == null || userTeacher.Registry == null)
@@ -145,12 +145,12 @@ public class UsersController : Controller
     /// <summary>
     /// This call is used to create an user which is a Teacher
     /// </summary>
-    /// <param name="userStudent"></param>
+    /// <param name="userDetail"></param>
     /// <returns></returns>
     [HttpPost("student")]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
-    public IActionResult AddUserStudent([FromBody] UserStudentDto userStudent)
+    public IActionResult AddUserStudent([FromBody] UserDetailDto userStudent)
     {
         if (userStudent == null
             || userStudent.Classroom == null
