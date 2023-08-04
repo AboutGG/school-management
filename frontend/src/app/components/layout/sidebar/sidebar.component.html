@@ -1,0 +1,59 @@
+<div class="sidebar" [ngClass]="{ 'expanded': isExpanded }">
+  <div class="content">
+    <div class="link">
+      <div class="content">
+        <div class="icon">
+          <i class="bi bi-house"></i> <!--dashboard-->
+        </div>
+        <div class="title">Dashboard</div>
+      </div>
+    </div>
+
+    <div class="link">
+      <div class="content">
+        <div class="icon">
+          <i class="bi bi-person-lines-fill"></i> <!--students-->
+        </div>
+        <div class="title">Students</div>
+      </div>
+    </div>
+
+    <div class="link">
+      <div class="content">
+        <div class="icon">
+          <i class="bi bi-people-fill"></i> <!--users-->
+        </div>
+        <div class="title">Users</div>
+      </div>
+    </div>
+
+    <div class="link">
+      <div class="content">
+        <div [routerLink]="['/classes']" class="icon">
+          <i class="bi bi-newspaper"></i> <!--classes-->
+        </div>
+        <div class="title">Classes</div>
+      </div>
+    </div>
+
+    <div class="link">
+      <div class="content">
+        <div class="icon">
+          <i class="bi bi-geo-alt-fill"></i> <!--subjects-->
+        </div>
+        <div class="title">Subjects</div>
+      </div>
+
+      <div class="link">
+        <div class="content">
+          <div class="icon">
+            <i class="bi bi-book-fill"></i> <!--exams-->
+          </div>
+          <div class="title">Exams</div>
+        </div>
+
+    </div>
+  </div>
+
+  <div class="footer"></div>
+</div>
