@@ -1,14 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../environments/environment'
 // import { User } from 'src/app/models/data';
 
-interface User {
-  name: string;
-  surname: string;
-  username: string;
-  password: string;
-}
+const URL = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -17,45 +13,18 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   response!: any
-  users: User[] = [
-    {
-      name: 'Giacomo',
-      surname: 'Cappello',
-      username: "giaco.",
-      password: 'admin'
-    },
-    {
-      name: 'Sergio',
-      surname: 'Musumeci',
-      username: "sirjoh",
-      password: 'Administrator'
-    },
-    {
-      name: 'Mirko',
-      surname: 'Amato',
-      username: "disturbed",
-      password: 'Administrator'
-    }
-  ]
+  
   // LOGIN PER DATI DAL DATABASE
-  login(user: User) {
-    return this.http.post(`https://dummyjson.com/auth/login`, user).subscribe((res: any) => {
+  login(user: any) {
+    return this.http.post(`${URL}/auth/login`, user).subscribe((res: any) => {
       this.response = res.status
       localStorage.setItem('token', res.token);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/dashboard']);
+      console.log(res);
+      
     })
   }
-
-  // login(input: User) {
-  //   this.users.map((user) => {
-  //     if (user.name === input.name) {
-  //       localStorage.setItem('input', JSON.stringify(input));
-  //       this.router.navigate(['/dashboard']);
-  //     }
-  //     console.log(user);
-  //   })
-  // }
-
+  // LOGIN PER DATI MOCKATI
   // login(formUser: User) {
   //   this.users.find((user) => {
   //     if (user.username === formUser.username) {
@@ -68,14 +37,12 @@ export class AuthService {
   // }
 
   logout() {
-    // localStorage.removeItem('token')
-    localStorage.removeItem('user')
+    localStorage.removeItem('token')
     this.router.navigate(['/login'])
   }
 
   getToken() {
-    // return localStorage.getItem('token')
-    return localStorage.getItem('user')
+    return localStorage.getItem('token')
   }
 
   isLoggedIn() {
