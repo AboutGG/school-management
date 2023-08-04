@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using backend.Utils;
 
 namespace backend.Models;
 
@@ -12,6 +13,7 @@ public class Student
 
     [Column("classroom")]
     [JsonPropertyName("classroom")]
+    [StringValidator(2, ErrorMessage = "Classroom lenght can't be less then 2")]
     public string Classroom { get; set; }
 
     [Column("id_user")]
