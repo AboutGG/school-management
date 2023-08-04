@@ -52,7 +52,7 @@ public class UsersController : Controller
     [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
     public IActionResult GetUsers()
     {
-        return Ok(_mapper.Map<List<UserDto2>>(_userRepository.GetUsers()));
+        return Ok(_mapper.Map<List<UserDto>>(_userRepository.GetUsers()));
     }
 
     #endregion

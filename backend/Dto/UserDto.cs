@@ -2,7 +2,7 @@
 
 namespace backend.Dto;
 
-public class UserDto2
+public class UserDto
 {
     /// <summary> User username </summary>
     [StringValidator(3, ErrorMessage = "Username cannot contain less then 3 character")]

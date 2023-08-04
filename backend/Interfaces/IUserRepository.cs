@@ -20,7 +20,7 @@ public interface IUserRepository
     /// <returns>true if exist , false if not</returns>
     bool UserExists(string username);
 
-    bool CheckCredentials(UserDtoLogin user);
+    bool CheckCredentials(UserDto user);
     
     /// <summary> Create a user </summary>
     /// <param name="user"></param>
