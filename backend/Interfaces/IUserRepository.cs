@@ -1,3 +1,4 @@
+using backend.Dto;
 using backend.Models;
 namespace backend.Interfaces;
 
@@ -5,7 +6,9 @@ public interface IUserRepository
 {
     ICollection<User> GetUsers();
 
-    User GetUserById(Guid id);
+    User GetUser(Guid id);
+    
+    User GetUser(string username);
         
     /// <summary> UserExists check using userId </summary>
     /// <param name="userId"></param>
@@ -17,6 +20,8 @@ public interface IUserRepository
     /// <returns>true if exist , false if not</returns>
     bool UserExists(string username);
 
+    bool CheckCredentials(UserDto user);
+    
     /// <summary> Create a user </summary>
     /// <param name="user"></param>
     /// <returns>true successful, false not successful</returns>
