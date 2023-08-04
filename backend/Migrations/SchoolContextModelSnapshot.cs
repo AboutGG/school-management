@@ -44,7 +44,7 @@ namespace backend.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("exams");
+                    b.ToTable("exams", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Registry", b =>
@@ -95,7 +95,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("registries");
+                    b.ToTable("registries", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.RegistryExam", b =>
@@ -119,7 +119,7 @@ namespace backend.Migrations
 
                     b.HasIndex("RegistryId");
 
-                    b.ToTable("registries_exams");
+                    b.ToTable("registries_exams", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Student", b =>
@@ -154,7 +154,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("students");
+                    b.ToTable("students", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Subject", b =>
@@ -173,7 +173,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("subjects");
+                    b.ToTable("subjects", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Teacher", b =>
@@ -202,7 +202,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("teachers");
+                    b.ToTable("teachers", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.TeacherSubject", b =>
@@ -227,7 +227,7 @@ namespace backend.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("teachers_subjects");
+                    b.ToTable("teachers_subjects", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>
@@ -255,7 +255,7 @@ namespace backend.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Exam", b =>

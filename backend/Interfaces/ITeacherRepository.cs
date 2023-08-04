@@ -1,3 +1,4 @@
+using backend.Dto;
 using backend.Models;
 
 namespace backend.Interfaces;
