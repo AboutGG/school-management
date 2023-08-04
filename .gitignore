@@ -1,2 +1,12 @@
 
 frontend/src/environments/environment.ts
+/backend/.idea
+/backend/obj/
+.idea/.idea.school-management.dir/.idea/
+bin/
+backend/obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+backend/appsettings.json
