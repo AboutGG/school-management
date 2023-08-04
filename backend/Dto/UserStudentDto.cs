@@ -9,7 +9,5 @@ public class UserStudentDto
     
     public UserDto User { get; set; }
     public RegistryDto Registry { get; set; }
-    
-    
-    
+
 }

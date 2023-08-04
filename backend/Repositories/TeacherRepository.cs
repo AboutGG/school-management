@@ -42,12 +42,16 @@ public class TeacherRepository : ITeacherRepository
 
     public Teacher GetTeacherById(Guid id)
     {
-        return this._context.Teachers.Where(t => t.Id == id).FirstOrDefault();
+        var teacher = _context.Teachers.Where(s => s.Id == id)
+            .Include(s => s.User)
+            .Include(s => s.Registry)
+            .FirstOrDefault();
+        return teacher;
     }
 
     public bool TeacherExists(Guid id)
     {
-        return this._context.Users.Any(t => t.Id == id);
+        return this._context.Teachers.Any(t => t.Id == id);
     }
 
     public bool CreateTeacher(Teacher teacher)

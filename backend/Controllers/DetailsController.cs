@@ -27,25 +27,24 @@ public class DetailsController : Controller
 
     #region Api calls
 
+    #region Get user detail by id
+
     [HttpGet("{Id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public IActionResult GetUserDetail(Guid Id ,[FromQuery] bool isStudent)
+    public IActionResult GetUserDetail(Guid Id)
     {
         if (Id == null)
-        {
             return BadRequest("Id is null");
-        }
 
-        if (isStudent && _studentRepository.StudentExist(Id))
-        {
+        if (_studentRepository.StudentExist(Id))
             return Ok(_studentRepository.GetStudentById(Id));
-        } //else if (_teacherRepository.te)
-        // {
-        //     
-        // }
+        else if (_teacherRepository.TeacherExists(Id))
+            return Ok(_teacherRepository.GetTeacherById(Id));
         return NotFound();
     }
 
+    #endregion
+    
     #endregion
 }
