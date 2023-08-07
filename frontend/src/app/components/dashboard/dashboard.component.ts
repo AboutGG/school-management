@@ -7,8 +7,15 @@ import { Component } from "@angular/core";
 })
 export class DashboardComponent {
   pdfs: string[] = [
-    "/school-management/frontend/src/assets/dashboard/logoCircolari.jpg",
-    "/school-management/frontend/src/assets/dashboard/logoCircolari.jpg",
-    "/school-management/frontend/src/assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg",
+    "assets/dashboard/logoCircolari.jpg"
   ];
 }

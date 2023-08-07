@@ -1,75 +1,76 @@
-<div class="container-fluid py-3 bg-success">
+<div class="container-fluid py-3 bg-light">
   <div class="row">
-    <div class="col-sm-6 col-xl-3">
-      <div class="card card-body bg-blue-400 has-bg-image">
-        <div class="media">
-          <div class="media-body">
-            <h3 class="mb-0">37</h3>
-            <span class="text-uppercase font-size-xs font-weight-bold"
-              >Total Students</span
-            >
+    <div class="col-3">
+      <div class="card card-body bg-warning">
+        <div class="row justify-content-between">
+          <div class="col-10">
+            <h3 class="mb-0 text-white">37</h3>
+            <span class="text-uppercase text-white font-size-xs font-weight-bold">Total Administrators</span>
           </div>
-
-          <div class="ml-3 align-self-center">
-            <i class="icon-users4 icon-3x opacity-75"></i>
+          <div class="col-2 align-self-center">
+            <i class="bi bi-person-vcard-fill text-white"></i>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="col-sm-6 col-xl-3">
-      <div class="card card-body bg-danger-400 has-bg-image">
-        <div class="media">
-          <div class="media-body">
-            <h3 class="mb-0">4</h3>
-            <span class="text-uppercase font-size-xs">Total Teachers</span>
+    <div class="col-3">
+      <div class="card card-body bg-danger">
+        <div class="row">
+          <div class="col-10">
+            <h3 class="mb-0 text-white">4</h3>
+            <span class="text-uppercase text-white font-size-xs">Total Classes</span>
           </div>
-
-          <div class="ml-3 align-self-center">
-            <i class="icon-users2 icon-3x opacity-75"></i>
+          <div class="col-2 align-self-center">
+            <i class="bi bi-person-square text-white"></i>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="col-sm-6 col-xl-3">
-      <div class="card card-body bg-success-400 has-bg-image">
+    <div class="col-3">
+      <div class="card card-body bg-success">
         <div class="media">
-          <div class="mr-3 align-self-center">
+          <div class="align-self-center">
             <i class="icon-pointer icon-3x opacity-75"></i>
           </div>
-
           <div class="media-body text-right">
-            <h3 class="mb-0">4</h3>
-            <span class="text-uppercase font-size-xs"
-              >Total Administrators</span
-            >
+            <h3 class="mb-0 text-white">4</h3>
+            <span class="text-uppercase text-white font-size-xs">Total Students</span>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="col-sm-6 col-xl-3">
-      <div class="card card-body bg-indigo-400 has-bg-image">
+    <div class="col-3">
+      <div class="card card-body bg-info">
         <div class="media">
-          <div class="mr-3 align-self-center">
+          <div class="align-self-center">
             <i class="icon-user icon-3x opacity-75"></i>
           </div>
 
           <div class="media-body text-right">
-            <h3 class="mb-0">3</h3>
-            <span class="text-uppercase font-size-xs">Total Parents</span>
+            <h3 class="mb-0 text-white">3</h3>
+            <span class="text-uppercase text-white font-size-xs">Total Teachers</span>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div *ngFor="let pdf of pdfs" class="col-3">
-      <img
-        src="/school-management/frontend/src/assets/dashboard/logoCircolari.jpg"
-        alt="logo"
-      />
+  <div class="row py-5">
+    <h1>Circolari scolastiche</h1>
+    <div *ngFor="let pdf of pdfs" class="col-3 py-2">
+      <div class="bg-white d-flex justify-content-center align-items-center">
+        <img class="w-50 py-4" [src]="pdf" alt="logo"/>
+      </div>
+      <div class="bg-dark">
+        <div class="p-3">
+          <div class="d-flex justify-content-between py-2">
+            <h5 class="text-white m-0">Utente</h5>
+            <h5 class="text-white m-0">Data</h5>
+          </div>
+          <div class="d-flex py-2">
+            <h3 class="text-white m-0">Circolare n° X</h3>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
