@@ -9,6 +9,8 @@ public interface ITeacherRepository
 
     Teacher GetTeacherById(Guid id);
 
+    int CountTeachers();
+
     /// <summary> Check if user exist </summary>
     /// <param name="teacherId"></param>
     /// <returns>true if exist, false if not exist</returns>

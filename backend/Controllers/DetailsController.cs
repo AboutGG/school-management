@@ -1,3 +1,4 @@
+using System.Collections;
 using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
@@ -18,6 +19,7 @@ public class DetailsController : Controller
     private readonly IRegistryRepository _registryRepository;
     private readonly IUserRepository _userRepository;
     private readonly ITransactionRepository _transactionRepository;
+    private readonly IClassroomRepository _classroomRepository;
 
     #endregion
 
@@ -28,7 +30,8 @@ public class DetailsController : Controller
         ITeacherRepository teacherRepository,
         IRegistryRepository registryRepository,
         IUserRepository userRepository,
-        ITransactionRepository transactionRepository
+        ITransactionRepository transactionRepository,
+        IClassroomRepository classroomRepository
     )
     {
         _mapper = mapper;
@@ -37,6 +40,7 @@ public class DetailsController : Controller
         _registryRepository = registryRepository;
         _userRepository = userRepository;
         _transactionRepository = transactionRepository;
+        _classroomRepository = classroomRepository;
     }
 
     #endregion
@@ -129,6 +133,24 @@ public class DetailsController : Controller
         }
 
         return BadRequest("username already exist");
+    }
+
+    #endregion
+
+    #region Detail count
+
+    [HttpGet("count")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public IActionResult GetCount()
+    {
+        return Ok(new Dictionary<string, int>
+        {
+            { "Users", _userRepository.CountUsers() },
+            { "Students", _studentRepository.CountStudents() },
+            { "Teachers", _teacherRepository.CountTeachers() },
+            { "Classrooms", _classroomRepository.GetClassrooms() }
+        });
     }
 
     #endregion

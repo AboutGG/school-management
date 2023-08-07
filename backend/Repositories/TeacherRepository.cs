@@ -49,6 +49,11 @@ public class TeacherRepository : ITeacherRepository
         return teacher;
     }
 
+    public int CountTeachers()
+    {
+        return _context.Teachers.Count();
+    }
+
     public bool TeacherExists(Guid id)
     {
         return this._context.Teachers.Any(t => t.Id == id);

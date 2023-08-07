@@ -28,6 +28,11 @@ public class UserRepository : IUserRepository
         return this._context.Users.Where(u => u.Username.Trim().ToLower() == username.Trim().ToLower()).FirstOrDefault();
     }
 
+    public int CountUsers()
+    {
+        return _context.Users.Count();
+    }
+
     public bool CheckCredentials(UserDto user)
     {
         return this._context.Users.Any(u => u.Username.Trim().ToLower() == user.Username.Trim().ToLower() && u.Password == user.Password);
