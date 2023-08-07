@@ -19,17 +19,17 @@ export class AddUserComponent implements OnInit {
 
   ngOnInit() {
     this.usersForm = new FormGroup({
-      role: new FormControl('', Validators.required),
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      name: new FormControl('', Validators.required),
-      surname: new FormControl('', Validators.required),
-      birth: new FormControl(''),
-      gender: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.email),
-      address: new FormControl(''),
-      telephone: new FormControl(null, Validators.pattern("^[0-9]")),
-      classroom: new FormControl(''),
+      role: new FormControl(null, Validators.required),
+      username: new FormControl(null, Validators.required),
+      password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+      name: new FormControl(null, Validators.required),
+      surname: new FormControl(null, Validators.required),
+      birth: new FormControl(null),
+      gender: new FormControl(null, Validators.required),
+      email: new FormControl(null, Validators.email),
+      address: new FormControl(null),
+      telephone: new FormControl(null),
+      classroom: new FormControl(null),
     });   
   }
 
@@ -57,7 +57,7 @@ export class AddUserComponent implements OnInit {
   }
 
   onAddUser() {
-    this.serviceUsers.addTeacher(this.usersForm.value).subscribe({
+    this.serviceUsers.addTeacher(this.usersForm).subscribe({
       next: (res) => {
         console.log(res);
       },

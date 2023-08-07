@@ -1,5 +1,5 @@
 export interface Users {
-    classroom : string   
+    classroom ?: string   
     user: User
     registry: Registry
 }
