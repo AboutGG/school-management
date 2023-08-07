@@ -6,7 +6,7 @@ public class DateValidator : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        if (value != null)
+        if (value != null) 
         {
             if (value is not DateOnly dateValue)
             {
