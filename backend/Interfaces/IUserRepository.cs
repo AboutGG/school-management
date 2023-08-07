@@ -9,6 +9,8 @@ public interface IUserRepository
     User GetUser(Guid id);
     
     User GetUser(string username);
+
+    int CountUsers();
         
     /// <summary> UserExists check using userId </summary>
     /// <param name="userId"></param>
