@@ -1,18 +1,17 @@
 using System.Text;
 using backend.Interfaces;
-using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using backend.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found");
-
+var secretKey = builder.Configuration.GetValue<string>("JwtSettings:Key") ?? throw new InvalidOperationException("Secret key notfound");
+    
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SchoolContext>(options =>
@@ -29,7 +28,6 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITeacherSubjectRepository, TeacherSubjectRepository>();
 builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<JWT>();
-
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -62,7 +60,7 @@ builder.Services.AddAuthentication(x =>
             ValidateIssuer = false,
             ValidateActor = false,
             ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk="))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
         };
 });
 
