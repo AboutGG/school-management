@@ -12,7 +12,7 @@ export class UsersService {
   constructor(private http: HttpClient) { }
 
   addTeacher = (user: FormGroup): Observable<Users> => {
-    var dummy: Users = {
+    var newUser: Users = {
       user: {
         username: user.get('username')!.value,
         password: user.get('password')!.value
@@ -27,9 +27,8 @@ export class UsersService {
         telephone: user.get('telephone')!.value,
       },
     }
-    console.log(dummy);
     return this.http.post<Users>(
-      `https://localhost:7262/api/users/teacher`, dummy
+      `https://localhost:7262/api/users/teacher`, newUser
     );
   };
 

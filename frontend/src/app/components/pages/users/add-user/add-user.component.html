@@ -21,7 +21,6 @@
                     <ul class="dropdown-menu" formControlName="role">
                         <li><a class="dropdown-item" value="studente" (click)="onClickRole('studente')">Studente</a></li>
                         <li><a class="dropdown-item" value="insegnante" (click)="onClickRole('insegnante')">Insegnante</a></li>
-                        <li><a class="dropdown-item" value="admin" (click)="onClickRole('admin')">Admin</a></li>
                     </ul>
                 </div> 
                 <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
@@ -74,9 +73,9 @@
                         {{ (this.gender ? this.gender : 'Genere') | titlecase}}
                     </button>
                     <ul class="dropdown-menu" formControlName="gender">
-                        <li><a class="dropdown-item" value="male" (click)="onClickGender('male')">Maschio</a></li>
-                        <li><a class="dropdown-item" value="female" (click)="onClickGender('female')">Femmina</a></li>
-                        <li><a class="dropdown-item" value="other" (click)="onClickGender('other')">Altro</a></li>
+                        <li><a class="dropdown-item" value="male" (click)="onClickGender('Maschio')">Maschio</a></li>
+                        <li><a class="dropdown-item" value="female" (click)="onClickGender('Femmina')">Femmina</a></li>
+                        <li><a class="dropdown-item" value="other" (click)="onClickGender('Altro')">Altro</a></li>
                     </ul>
                 </div>
                 <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('gender')">

@@ -28,7 +28,7 @@ export class AddUserComponent implements OnInit {
       gender: new FormControl(null, Validators.required),
       email: new FormControl(null, Validators.email),
       address: new FormControl(null),
-      telephone: new FormControl(null),
+      telephone: new FormControl(null, Validators.pattern(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)),
       classroom: new FormControl(null),
     });   
   }
@@ -57,13 +57,27 @@ export class AddUserComponent implements OnInit {
   }
 
   onAddUser() {
-    this.serviceUsers.addTeacher(this.usersForm).subscribe({
-      next: (res) => {
-        console.log(res);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+    if(this.role === "") {
+      this.serviceUsers.addTeacher(this.usersForm).subscribe({
+        next: (res) => {
+          console.log(res);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    } else {
+      if(this.usersForm.value.classroom !== null) {
+        this.serviceUsers.addStudent(this.usersForm).subscribe({
+          next: (res) => {
+            console.log(res);
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        });
+    }
+    }
   }
+  
 }
