@@ -20,6 +20,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     NavbarComponent,
     SidebarComponent,
     DashboardComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
