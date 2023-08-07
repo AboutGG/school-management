@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.example';
-// import { User } from 'src/app/models/data';
+import { User } from '../models/users';
 
 const URL = environment.apiUrl;
 
@@ -15,7 +15,7 @@ export class AuthService {
   response!: any
   
   // LOGIN PER DATI DAL DATABASE
-  login(user: any) {
+  login(user: User) {
     return this.http.post(`${URL}/auth/login`, user).subscribe((res: any) => {
       this.response = res.status
       localStorage.setItem('token', res.token);
