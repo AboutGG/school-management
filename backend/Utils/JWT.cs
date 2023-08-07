@@ -8,11 +8,9 @@ namespace backend.Utils;
 
 public class JWT
 {
-    // Crea il token handler
-    private static JwtSecurityTokenHandler tokenHandler;
-    
     public static string GenerateJwtToken(User user)
     {
+        var tokenHandler = new JwtSecurityTokenHandler();
         // Definisci la chiave segreta come un array di byte
         byte[] key = Encoding.ASCII.GetBytes("DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
         
