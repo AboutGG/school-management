@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment'
+import { environment } from 'src/environments/environment.example';
 // import { User } from 'src/app/models/data';
 
 const URL = environment.apiUrl;
