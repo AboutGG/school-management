@@ -5,18 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
-
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : Controller
 {
-    public readonly JWT _jwt;
     private readonly IUserRepository _userRepository;
 
-    public AuthController(IUserRepository userRepository, JWT jwt)
+    public AuthController(IUserRepository userRepository)
     {
         this._userRepository = userRepository;
-        _jwt = jwt;
     }
 
     [HttpPost("login")]
@@ -27,7 +24,7 @@ public class AuthController : Controller
             var user = _userRepository.GetUser(request.Username);
             if (_userRepository.CheckCredentials(request))
             {
-                var token = _jwt.GenerateJwtToken(user);
+                var token = JWT.GenerateJwtToken(user);
                 return Ok(new { access_token = token });
             }
             else
