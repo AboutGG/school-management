@@ -2,12 +2,14 @@ using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+
 public class UsersController : Controller
 {
     #region Attributes
