@@ -2,6 +2,7 @@ using System.Text;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
+using backend.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +27,7 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITeacherSubjectRepository, TeacherSubjectRepository>();
 builder.Services.AddScoped<IExamRepository, ExamRepository>();
-
+builder.Services.AddScoped<JWT>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
