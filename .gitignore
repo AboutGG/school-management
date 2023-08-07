@@ -10,3 +10,12 @@ riderModule.iml
 /_ReSharper.Caches/
 
 backend/appsettings.json
+.idea/dataSources.local.xml
+.idea/dataSources.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/dataSources/fc76b373-2e4d-4331-ba2e-3ba264b31fe0.xml
+.idea/dataSources/fc76b373-2e4d-4331-ba2e-3ba264b31fe0/storage_v2/_src_/database/schoolmanagement.txKD_A.meta
+.idea/dataSources/fc76b373-2e4d-4331-ba2e-3ba264b31fe0/storage_v2/_src_/database/schoolmanagement.txKD_A/schema/information_schema.FNRwLQ.meta
+.idea/dataSources/fc76b373-2e4d-4331-ba2e-3ba264b31fe0/storage_v2/_src_/database/schoolmanagement.txKD_A/schema/pg_catalog.0S1ZNQ.meta
+.idea/dataSources/fc76b373-2e4d-4331-ba2e-3ba264b31fe0/storage_v2/_src_/database/schoolmanagement.txKD_A/schema/public.abK9xQ.meta
