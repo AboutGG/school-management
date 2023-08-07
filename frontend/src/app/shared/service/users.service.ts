@@ -56,4 +56,8 @@ export class UsersService {
       `https://localhost:7262/api/users/student`, dummy
     );
   };
+
+  getUsers(): Observable<any> {
+    return this.http.get<any>('https://localhost:7262/api/users')
+  }
 }
