@@ -8,9 +8,9 @@ import { AddUserComponent } from './components/pages/users/add-user/add-user.com
 // const routes: Routes = [];
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  { path: 'login', component: LoginComponent, pathMatch: 'full'},
-  { path: 'add-user', component: AddUserComponent, pathMatch:'full', canActivate: [AuthGuard] },
-  { path: 'dashboard', component: DashboardComponent, pathMatch: 'full', canActivate: [AuthGuard] }
+  { path: 'login', component: LoginComponent},
+  { path: 'add-user', component: AddUserComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
