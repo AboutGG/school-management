@@ -1,0 +1,194 @@
+<div class="container">
+  <h2 class="mt-3">Manage Classes</h2>
+  <div class="container d-flex justify-content-between mt-5">
+    <div class="classes-header">
+      <div class="input-container">
+        <span>Filter: </span>
+        <input type="text" name="" id="" placeholder="Type to filter..." />
+        <i class="bi bi-search"></i>
+      </div>
+    </div>
+    <div class="d-flex flex-row align-items-center">
+      <span>Show: </span>
+      <select name="values" id="values" class="btn btn-select">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+      <button class="btn btn-classes">Copy</button>
+      <button class="btn btn-classes">Excel</button>
+      <button class="btn btn-classes">PDF</button>
+    </div>
+  </div>
+  <table class="w-100 mt-5">
+    <thead class="text-center">
+      <tr>
+        <th>S/N</th>
+        <th>Name</th>
+        <th>Class Type</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>example</td>
+        <td style="cursor: pointer;" [routerLink]="['classes']">example</td>
+        <td>example</td>
+        <td>
+          <div class="dropdown">
+            <button
+              class="btn btn-drop"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="bi bi-list"></i><i class="bi bi-caret-down-fill"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <i class="bi bi-pencil"></i
+                ><a
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal2"
+                  class="dropdown-item"
+                  href="#"
+                  >Edit</a
+                >
+              </li>
+              <li>
+                <i class="bi bi-trash3"></i
+                ><a
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  class="dropdown-item"
+                  href="#"
+                  >Delete</a
+                >
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer d-flex align-items-center justify-content-end mt-5">
+    <i class="bi bi-arrow-left-short text-black fs-5"></i
+    ><button class="btn btn-page text-white">1</button
+    ><i class="bi bi-arrow-right-short text-black fs-5"></i>
+  </div>
+
+  <!-- Modal delete -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure?</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Once deleted, you will not be able to recover this item!
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal edit -->
+  <div
+    class="modal fade"
+    id="exampleModal2"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            [formGroup]="editForm"
+            (ngSubmit)="onEditSubmit()"
+            class="d-flex justify-content-center"
+          >
+            <div class="d-flex">
+              <div class="d-flex flex-column">
+                <label>Name: </label
+                ><input formControlName="name" type="text" />
+                <p
+                  class="text-danger"
+                  *ngIf="
+                    !editForm.get('name')!.valid &&
+                    editForm.get('name')!.touched
+                  "
+                >
+                  Insert a Name
+                </p>
+              </div>
+              <div class="d-flex flex-column">
+                <label>Class Type: </label
+                ><input formControlName="classType" type="text" />
+                <p
+                  class="text-danger"
+                  *ngIf="
+                    !editForm.get('classType')!.valid &&
+                    editForm.get('classType')!.touched
+                  "
+                >
+                  Insert a Class Type
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            [disabled]="!editForm.valid"
+            type="submit"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
