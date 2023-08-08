@@ -11,6 +11,7 @@ import { AuthInterceptor } from '../app/shared/helpers/auth.interceptor';
 import { NavbarComponent } from './components/layout/navbar/navbar.component';
 import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
 import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { DetailUserComponent } from './components/pages/users/detail-user/detail
     SidebarComponent,
     DashboardComponent,
     DashboardComponent,
+    ListUsersComponent,
     DetailUserComponent,
   ],
   imports: [
