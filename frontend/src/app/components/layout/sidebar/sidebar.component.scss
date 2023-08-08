@@ -1,131 +1,140 @@
 .sidebar {
-    left: 0;
-    height: 100%;
-    transition: 0.3s;
-    width: 60px;
-  
-    &.expanded {
-      width: 300px;
-  
-      .header {
-        h1 {
-          margin-left: 0px;
-        }
-      }
-  
-      .content {
-        .link {
-          .content {
-            .title {
-              max-width: 100px;
-            }
-  
-            .icon {
-              margin-right: 3px;
-            }
-          }
-  
-          .children {
-            .content {
-              padding-left: 30px;
-            }
-          }
-        }
-      }
-    }
-  
-    background: #1d1e2c;
-    color: #6d6e7e;
-  
+  z-index: -1;
+  left: 0;
+  height: 100%;
+  transition: 0.3s;
+  width: 60px;
+
+  &.expanded {
+    width: 250px;
+
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-  
-      background: #0f1017;
-  
       h1 {
-        font-size: 20px;
-        color: #6d6e7e;
-        margin: 0;
-        flex: 1;
-        transition: 0.3s;
-  
-        margin-left: -100px;
+        margin-left: 0px;
       }
-  
     }
-  
+
     .content {
       .link {
-        .children {
-          .content {
-            background: #27283a;
-            // padding-left: 30px;
-            padding-left: 10px;
-  
-            &.active {
-              background: #191a27;
-            }
+        .content {
+          .title {
+            max-width: 100px;
+          }
+
+          .icon {
+            margin-right: 3px;
           }
         }
-  
-        .content {
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          padding: 10px;
-  
-          cursor: pointer;
-  
-          transition: 0.3s;
-  
-          &:hover {
-            background: #0f1017;
-  
-            .title {
-              color: white;
-            }
-  
-            svg {
-              fill: white;
-            }
-          }
-  
-          &.active {
-            background: #0f1017;
-  
-            .title {
-              color: white;
-            }
-          }
-  
-          .icon {
-            flex: 0 0 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 0px;
-          }
-  
-          .title {
-            flex: 1;
-            // display: none;
-            color: #6d6e7e;
-            transition: 0.3s;
-            max-width: 0px;
-            overflow: hidden;
+
+        .children {
+          .content {
+            padding-left: 30px;
           }
         }
       }
     }
   }
 
-  .sidebar-content{
-    background-color: #f5f5f5 !important;
+  background: #1d1e2c;
+  color: #6d6e7e;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+
+    background: #0f1017;
+
+    h1 {
+      font-size: 20px;
+      color: #6d6e7e;
+      margin: 0;
+      flex: 1;
+      transition: 0.3s;
+
+      margin-left: -100px;
+    }
+
   }
 
-  .content:active {
-    background-color: orange !important;
+  .content {
+    .link {
+      .children {
+        .content {
+          background: #27283a;
+          padding-left: 10px;
+
+          &.active {
+            background: #191a27;
+          }
+        }
+      }
+
+      .content {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 10px;
+
+        cursor: pointer;
+
+        transition: 0.3s;
+
+        &:hover {
+          background: #0f1017;
+
+          .title {
+            color: white;
+          }
+
+          svg {
+            fill: white;
+          }
+        }
+
+        &.active {
+          background: #0f1017;
+
+          .title {
+            color: white;
+          }
+        }
+
+        .icon {
+          flex: 0 0 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 0px;
+        }
+
+        .title {
+          flex: 1;
+          color: #6d6e7e;
+          transition: 0.3s;
+          max-width: 0px;
+          overflow: hidden;
+        }
+      }
+    }
   }
+}
+
+.sidebar-content {
+  background-color: #f5f5f5 !important;
+}
+
+
+.alt{
+  position: fixed;
+  background-color: #1d1e2c;
+  transition: 0.3s;
+  width: 60px;
+  &.expanded {
+    width: 250px;
+    transition: 0.3s;
+  }
+}
+
+
