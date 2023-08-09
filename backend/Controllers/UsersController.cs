@@ -2,6 +2,7 @@ using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
+using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ public class UsersController : Controller
 
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly SchoolContext _context;
     private readonly ITeacherRepository _teacherRepository;
     private readonly IRegistryRepository _registryRepository;
     private readonly IStudentRepository _studentRepository;
@@ -31,11 +33,13 @@ public class UsersController : Controller
         ITeacherRepository teacherRepository,
         IRegistryRepository registryRepository,
         IStudentRepository studentRepository,
-        IMapper mapper
+        IMapper mapper,
+        SchoolContext context
     )
     {
         this._userRepository = userRepository;
         this._mapper = mapper;
+        _context = context;
         this._transactionRepository = transactionRepository;
         this._teacherRepository = teacherRepository;
         this._registryRepository = registryRepository;
@@ -51,10 +55,37 @@ public class UsersController : Controller
     /// <summary> get call on user breakpoint </summary>
     /// <returns>All User</returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
-    public IActionResult GetUsers()
+    [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
+    public IActionResult GetUsers([FromQuery] PaginationParams @params)
     {
-        return Ok(_mapper.Map<List<UserDto>>(_userRepository.GetUsers()));
+
+        if (@params.Role == null)
+        {
+            var registries = new GenericRepository<Registry>(_context);
+            return Ok(registries.GetAll(@params, registry => registry.Name.Trim().ToLower().Contains(@params.Search)
+                                                          || registry.Surname.Trim().ToLower()
+                                                              .Contains(@params.Search)));
+        }
+
+        switch (@params.Role.Trim().ToLower())
+        {
+            case "teacher":
+                var teachers = new GenericRepository<Teacher>(_context);
+                return Ok(teachers.GetAll(@params, teacher =>
+                        teacher.Registry.Name.Trim().ToLower().Contains(@params.Search)
+                        || teacher.Registry.Surname.Trim().ToLower().Contains(@params.Search),
+                    teacher => teacher.User, teacher => teacher.Registry
+                ));
+            case "student":
+                var students = new GenericRepository<Student>(_context);
+                return Ok(students.GetAll(@params, student =>
+                        student.Registry.Name.Trim().ToLower().Contains(@params.Search)
+                        || student.Registry.Surname.Trim().ToLower().Contains(@params.Search)
+                    , student => student.User, student => student.Registry
+                ));
+        }
+
+        return BadRequest(ModelState);
     }
 
     #endregion
