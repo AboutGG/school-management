@@ -63,12 +63,12 @@ public class UsersController : Controller
         if (@params.Role == null)
         {
             var registries = new GenericRepository<Registry>(_context);
-            var dummy = GetOrderStatement<Registry>(@params.Order);
+            var registryLambda = GetOrderStatement<Registry>(@params.Order);
             return Ok(registries.GetAll(@params, registry =>
                     registry.Name.Trim().ToLower().Contains(@params.Search)
                     || registry.Surname.Trim().ToLower()
                         .Contains(@params.Search),
-                dummy
+                registryLambda
             ));
         }
 
@@ -76,22 +76,22 @@ public class UsersController : Controller
         {
             case "teacher":
                 var teachers = new GenericRepository<Teacher>(_context);
-                var dummy2 = GetOrderStatement<Teacher>(@params.Order);
+                var teacherLambda = GetOrderStatement<Teacher>(@params.Order);
                 return Ok(teachers.GetAll(@params, teacher =>
                         teacher.Registry.Name.Trim().ToLower().Contains(@params.Search)
                         || teacher.Registry.Surname.Trim().ToLower()
                             .Contains(@params.Search),
-                    dummy2,
+                    teacherLambda,
                     teacher => teacher.User, teacher => teacher.Registry
                 ));
             case "student":
                 var students = new GenericRepository<Student>(_context);
-                var dummy3 = GetOrderStatement<Student>(@params.Order);
+                var studentLambda = GetOrderStatement<Student>(@params.Order);
                 return Ok(students.GetAll(@params, student =>
                         student.Registry.Name.Trim().ToLower().Contains(@params.Search) //contains
                         || student.Registry.Surname.Trim().ToLower().Contains(@params.Search),
-                     dummy3,//order
-                    student => student.User, student => student.Registry  //includes params
+                    studentLambda, //OrderBy
+                    student => student.User, student => student.Registry //includes params
                 ));
         }
 
