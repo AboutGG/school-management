@@ -1,3 +1,9 @@
 <div class="d-flex justify-content-center align-items-center p-5">
-    <h1>{{ statusCode }} - Page not found</h1>
-</div>
+    <h1>
+      Error {{ statusCode }} -
+      <ng-container *ngIf="statusCode === 400">Bad Request</ng-container>
+      <ng-container *ngIf="statusCode === 401">Unauthorized</ng-container>
+      <ng-container *ngIf="statusCode === 404">Page Not Found</ng-container>
+      <!-- Aggiungi altri messaggi di errore desiderati -->
+    </h1>
+  </div>  

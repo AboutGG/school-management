@@ -65,4 +65,3 @@ export class AuthService {
 function throwError(msg: string) {
   throw new Error('Function not implemented.');
 }
-
