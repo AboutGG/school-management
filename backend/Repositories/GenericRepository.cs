@@ -29,6 +29,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     #endregion
 
+    #region Methods
+
+    #region GetAll
+
     /// <summary>
     /// This function return all the element of a table taking a determinate condition
     /// </summary>
@@ -39,11 +43,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public ICollection<T> GetAll(PaginationParams @params, Expression<Func<T, bool>> predicate,
         Func<T, string> order,
         params Expression<Func<T, object>>[] includes
-        ) //i pass the lambda function, ex: p=> p.id == id
+    ) //i pass the lambda function, ex: p=> p.id == id
     {
         var query = _entities
             .Where(predicate);
-            
+
 
         if (@params.Role != null)
         {
@@ -63,8 +67,27 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
                     .Take(@params.ItemsPerPage).ToList();
             default:
                 return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
-                    .Take(@params.ItemsPerPage).ToList();;
+                    .Take(@params.ItemsPerPage).ToList();
         }
-        
     }
+
+    
+
+    #endregion
+
+    #region GetById
+
+    public T GetById(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+    {
+        var query = _entities.Where(predicate);
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+        return query.FirstOrDefault();
+    }
+
+    #endregion
+    #endregion
+
 }
