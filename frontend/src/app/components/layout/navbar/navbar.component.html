@@ -1,32 +1,34 @@
 <nav class="navbar navbar-dark bg-dark position-fixed vw-100">
-    <div class="container-fluid wrapper gx-0">
-  
-      <div class="container-left d-flex flex-row">
+  <div class="container-fluid wrapper">
 
-        <div> <img class="nav-logo ms-1" src="../../../../assets/logo.png" alt="logo"> </div>
-        <button (click)="handleSidebarToggle()" class="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-          aria-expanded="false" aria-label="Toggle navigation">
-          <i class="bi bi-list-nested text-white-img toggle-img"></i>
-        </button>
-  
+    <div class="container-left d-flex flex-row">
+
+      <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"> 
+        <img class="nav-logo" src="../../../../assets/logo.png" alt="logo"> 
       </div>
-  
-      <div class="container-right d-flex flex-row align align-items-center">
-        <i class="bi bi-person-circle text-white profile-img"></i>
-  
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle bg-transparent b-0" type="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            EHT Education Portrait
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#"> <i class="bi bi-person-plus-fill"></i> My Profile</a></li>
-            <li> <a class="dropdown-item" href="#"> <i class="bi bi-gear-fill"></i> Account Settings</a></li>
-            <li (click)="logout()"><a class="dropdown-item" href="#"> <i class="bi bi-escape"></i> Logout</a></li>
-          </ul>
-        </div>
+
+      <button (click)="handleSidebarToggle()" class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <i class="bi bi-list-nested text-white-img toggle-img"></i>
+      </button>
+
+    </div>
+
+    <div class="container-right d-flex flex-row align align-items-center">
+      <i class="bi bi-person-circle text-white profile-img"></i>
+
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle bg-transparent b-0" type="button" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          EHT Education Portfolio
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#"> <i class="bi bi-person-plus-fill"></i> Profilo </a></li>
+          <li> <a class="dropdown-item" href="#"> <i class="bi bi-gear-fill"></i> Impostazioni </a> </li>
+          <li (click)="logout()"><a class="dropdown-item" href="#"> <i class="bi bi-escape"></i> Logout</a> </li>
+        </ul>
       </div>
     </div>
-  </nav>
-  
+  </div>
+</nav>

@@ -14,6 +14,8 @@
       }
     }
 
+  
+
     .content {
       .link {
         .content {
@@ -33,6 +35,8 @@
         }
       }
     }
+
+
   }
 
   background: #1d1e2c;
@@ -108,6 +112,13 @@
           max-width: 0px;
           overflow: hidden;
         }
+
+        .expanded {
+          .bi-chevron-right{
+            display:none;
+          }
+        }
+
       }
     }
   }
@@ -139,7 +150,6 @@
   cursor: pointer;
 }
 
-
 .collapse-content {
   display: none;
 }
@@ -150,7 +160,7 @@
   .link {
     display: flex;
     align-items: center;
-    text-align: center;
+    text-align: left;
     justify-content: center;
     height: 40px;
 
@@ -159,6 +169,7 @@
     }
 
     p{
+      min-width: 125px;
       margin-bottom: 0 !important;
     }
     .content:hover{
@@ -169,4 +180,8 @@
       }
     }
   }
+}
+
+.collapsible-alt {
+  margin-left: 17px;
 }
