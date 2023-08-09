@@ -140,22 +140,33 @@
 }
 
 
-/* */
 .collapse-content {
   display: none;
 }
 
 .custom-collapse {
-  padding: 10px; 
   background-color: #2d2e42;
-}
 
-.link {
-  .content:hover{
-    color: black !important;
+  .link {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: 40px;
 
-    .title {
+    &:hover{
+      background-color: #dda200;
+    }
+
+    p{
+      margin-bottom: 0 !important;
+    }
+    .content:hover{
       color: black !important;
+  
+      .title {
+        color: black !important;
+      }
     }
   }
 }

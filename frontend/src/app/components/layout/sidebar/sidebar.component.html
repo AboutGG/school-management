@@ -30,8 +30,8 @@
     </div>
     
     <div [ngClass]="{'collapse-content': isCollapsed}" class="custom-collapse">
-      <div> <p [routerLink]="['/add-user']">Crea Utenti</p> </div>
-      <div> <p [routerLink]="['/list-users']">Gestisci Utenti</p> </div>
+      <div  [routerLink]="['/add-user']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"  class="link" class="link"> <p>Crea Utenti</p> </div>
+      <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"  class="link" class="link"> <p>Gestisci Utenti</p> </div>
     </div>
 
     <div [routerLink]="['/classes']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
