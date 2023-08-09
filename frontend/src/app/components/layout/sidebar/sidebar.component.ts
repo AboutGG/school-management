@@ -7,4 +7,9 @@ import { Component, Input } from "@angular/core";
 })
 export class SidebarComponent {
   @Input() isExpanded: boolean = false;
+  isCollapsed = true;
+
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+  }
 }

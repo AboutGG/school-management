@@ -36,7 +36,7 @@
   }
 
   background: #1d1e2c;
-  color: #6d6e7e;
+  color: white;
 
   .header {
     display: flex;
@@ -74,7 +74,7 @@
       .content {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-evenly;
         padding: 10px;
 
         cursor: pointer;
@@ -82,15 +82,7 @@
         transition: 0.3s;
 
         &:hover {
-          background: #0f1017;
-
-          .title {
-            color: white;
-          }
-
-          svg {
-            fill: white;
-          }
+          background: #ffb900;
         }
 
         &.active {
@@ -111,7 +103,7 @@
 
         .title {
           flex: 1;
-          color: #6d6e7e;
+          color: white;
           transition: 0.3s;
           max-width: 0px;
           overflow: hidden;
@@ -137,4 +129,33 @@
   }
 }
 
+.link {
+  &.active {
+    background-color: #ffb900; 
+  }
+}
 
+.link {
+  cursor: pointer;
+}
+
+
+/* */
+.collapse-content {
+  display: none;
+}
+
+.custom-collapse {
+  padding: 10px; 
+  background-color: #2d2e42;
+}
+
+.link {
+  .content:hover{
+    color: black !important;
+
+    .title {
+      color: black !important;
+    }
+  }
+}
