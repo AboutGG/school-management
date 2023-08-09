@@ -53,7 +53,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             }
         }
 
-        return query.OrderBy(order).Skip((@params.Page - 1) * @params.ItemsPerPage)
-            .Take(@params.ItemsPerPage).ToList();
+        switch (@params.OrderType)
+        {
+            case "asc":
+                return query.OrderBy(order).Skip((@params.Page - 1) * @params.ItemsPerPage)
+                    .Take(@params.ItemsPerPage).ToList();
+            case "desc":
+                return query.OrderByDescending(order).Skip((@params.Page - 1) * @params.ItemsPerPage)
+                    .Take(@params.ItemsPerPage).ToList();
+            default:
+                return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
+                    .Take(@params.ItemsPerPage).ToList();;
+        }
+        
     }
 }

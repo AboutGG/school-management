@@ -16,6 +16,7 @@ public class PaginationParams
         set => search = string.IsNullOrWhiteSpace(value) ? search : value;
     }
 
+    public string OrderType { get; set; }
     public string Order { get; set; } = "Name";
     public int ItemsPerPage
     {

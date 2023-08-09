@@ -77,6 +77,7 @@ public class UsersController : Controller
             case "teacher":
                 var teachers = new GenericRepository<Teacher>(_context);
                 var teacherLambda = GetOrderStatement<Teacher>(@params.Order);
+                
                 return Ok(teachers.GetAll(@params, teacher =>
                         teacher.Registry.Name.Trim().ToLower().Contains(@params.Search)
                         || teacher.Registry.Surname.Trim().ToLower()
