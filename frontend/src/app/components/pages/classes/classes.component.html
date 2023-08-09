@@ -1,22 +1,22 @@
 <div class="container">
-  <h2 class="mt-3">Manage Classes</h2>
+  <h2 class="mt-3">Gestione delle Classi</h2>
   <div class="container d-flex justify-content-between mt-5">
     <div class="classes-header">
       <div class="input-container">
-        <span>Filter: </span>
-        <input type="text" name="" id="" placeholder="Type to filter..." />
+        <span>Filtra: </span>
+        <input type="text" name="" id="" placeholder="Scrivi per filtrare..." />
         <i class="bi bi-search"></i>
       </div>
     </div>
     <div class="d-flex flex-row align-items-center">
-      <span>Show: </span>
+      <span>Mostra: </span>
       <select name="values" id="values" class="btn btn-select">
         <option value="10">10</option>
         <option value="25">25</option>
         <option value="50">50</option>
         <option value="100">100</option>
       </select>
-      <button class="btn btn-classes">Copy</button>
+      <button class="btn btn-classes">Copia</button>
       <button class="btn btn-classes">Excel</button>
       <button class="btn btn-classes">PDF</button>
     </div>
@@ -25,9 +25,9 @@
     <thead class="text-center">
       <tr>
         <th>S/N</th>
-        <th>Name</th>
-        <th>Class Type</th>
-        <th>Action</th>
+        <th>Nome</th>
+        <th>Tipo di Classe</th>
+        <th>Azioni</th>
       </tr>
     </thead>
     <tbody>
@@ -43,9 +43,15 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <i class="bi bi-list"></i><i class="bi bi-caret-down-fill"></i>
+              <i class="bi bi-list"></i><i  class="bi bi-caret-down-fill"></i>
             </button>
             <ul class="dropdown-menu">
+              <li style="cursor: pointer;" [routerLink]="['classes']">
+                <i class="bi bi-eye"></i><a
+                  class="dropdown-item"
+                  >Visualizza</a
+                >
+              </li>
               <li>
                 <i class="bi bi-pencil"></i
                 ><a
@@ -53,7 +59,7 @@
                   data-bs-target="#exampleModal2"
                   class="dropdown-item"
                   href="#"
-                  >Edit</a
+                  >Modifica</a
                 >
               </li>
               <li>
@@ -63,7 +69,7 @@
                   data-bs-target="#exampleModal"
                   class="dropdown-item"
                   href="#"
-                  >Delete</a
+                  >Elimina</a
                 >
               </li>
             </ul>
@@ -90,7 +96,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure?</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Sei sicuro?</h1>
           <button
             type="button"
             class="btn-close"
@@ -99,7 +105,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          Once deleted, you will not be able to recover this item!
+          Una volta eliminato, non potrai tornare indietro!
         </div>
         <div class="modal-footer">
           <button
@@ -107,10 +113,10 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Close
+            Chiudi
           </button>
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            Delete
+            Elimina
           </button>
         </div>
       </div>
@@ -143,7 +149,7 @@
           >
             <div class="d-flex">
               <div class="d-flex flex-column">
-                <label>Name: </label
+                <label>Nome: </label
                 ><input formControlName="name" type="text" />
                 <p
                   class="text-danger"
@@ -152,11 +158,11 @@
                     editForm.get('name')!.touched
                   "
                 >
-                  Insert a Name
+                  Inserisci un nome
                 </p>
               </div>
               <div class="d-flex flex-column">
-                <label>Class Type: </label
+                <label>Tipo di classe: </label
                 ><input formControlName="classType" type="text" />
                 <p
                   class="text-danger"
@@ -165,7 +171,7 @@
                     editForm.get('classType')!.touched
                   "
                 >
-                  Insert a Class Type
+                  Inserisci una classe
                 </p>
               </div>
             </div>
@@ -177,7 +183,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Close
+            Chiudi
           </button>
           <button
             [disabled]="!editForm.valid"
@@ -185,7 +191,7 @@
             class="btn btn-primary"
             data-bs-dismiss="modal"
           >
-            Submit
+            Invia
           </button>
         </div>
       </div>
