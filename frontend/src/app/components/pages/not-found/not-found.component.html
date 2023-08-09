@@ -1,9 +1,9 @@
-<div class="d-flex justify-content-center align-items-center p-5">
-    <h1>
-      Error {{ statusCode }} -
-      <ng-container *ngIf="statusCode === 400">Bad Request</ng-container>
-      <ng-container *ngIf="statusCode === 401">Unauthorized</ng-container>
-      <ng-container *ngIf="statusCode === 404">Page Not Found</ng-container>
-      <!-- Aggiungi altri messaggi di errore desiderati -->
-    </h1>
-  </div>  
+<div class="d-flex flex-column align-items-center vh-100">
+    <img class="py-5" src="../../../../assets/not-found/default_transparent_1000x1000-removebg-preview.png" alt="">
+    <div class="py-5" [ngSwitch]="statusCode">
+      <h1 *ngSwitchCase="400">Richiesta errata</h1>
+      <h1 *ngSwitchCase="404">Pagina non trovata</h1>
+      <h1 *ngSwitchCase="500">Errore lato server</h1>
+      <h1 *ngSwitchDefault>Impossibile elaborare la richiesta</h1>
+    </div>
+</div>

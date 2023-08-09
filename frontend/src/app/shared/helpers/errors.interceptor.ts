@@ -21,7 +21,7 @@ export class ErrorsInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err instanceof HttpErrorResponse) {
-          this.router.navigate(["/not-found"], { state: { statusCode: err.status } });
+          this.router.navigate(["/not-found/" + err.status]);
         }
         return throwError(err);
       })

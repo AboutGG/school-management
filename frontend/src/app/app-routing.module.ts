@@ -14,6 +14,7 @@ const routes: Routes = [
   },
   { path: "login", component: LoginComponent },
   { path: "add-user", component: AddUserComponent, canActivate: [AuthGuard] },
+  { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },
   { path: "**", redirectTo: "not-found" },
 ];

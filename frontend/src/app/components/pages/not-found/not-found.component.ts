@@ -7,15 +7,19 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./not-found.component.scss"],
 })
 export class NotFoundComponent implements OnInit {
-  statusCode: number = 404;
+  statusCode!: any;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
-  ngOnInit() {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { statusCode: number } | undefined;
-    if (state?.statusCode) {
-      this.statusCode = state.statusCode;
-    }
+  // ngOnInit() {
+  //   const navigation = this.router.getCurrentNavigation();
+  //   const state = navigation?.extras.state as { statusCode: number } | undefined;
+  //   if (state?.statusCode) {
+  //     this.statusCode = state.statusCode;
+  //   }
+  // }
+  ngOnInit(): void {
+    this.statusCode = this.route.snapshot.paramMap.get('statusCode');
+    console.log(this.statusCode);
   }
 }
