@@ -13,6 +13,7 @@ import { SidebarComponent } from './components/layout/sidebar/sidebar.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
 import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
+import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { DetailUserComponent } from './components/pages/users/detail-user/detail
     DashboardComponent,
     ListUsersComponent,
     DetailUserComponent,
+    EditUserComponent,
   ],
   imports: [
     BrowserModule,

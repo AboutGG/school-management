@@ -4,16 +4,32 @@
           <i class="bi bi-eye-fill eye-icon"></i>
       </span>
       <p class="text-personal-data mt-4 fw-bold">DETTAGLI UTENTE</p>
-      
-  </div>
-    <div class="card-body mt-3 text-center mt-5" >
-      <p class="card-title">MI PRESENTO:</p>
-      <p class="card-text">Sono</p>
-      <p class="card-text">Mirko</p>
-      <p class="card-text">Quindi chi sono?</p>
-      <div class="button">
+    <div class="d-flex w-100">
+      <div class="button m-4 d-flex w-100 justify-content-start">
+        <a class="btn btn-outline-dark mt-2" [routerLink]="['/list-users']"><i class="bi bi-caret-left-fill"></i>LISTA UTENTI</a>
       </div>
-      <a class="btn btn-outline-secondary mt-5" [routerLink]="['/list-users']">TORNA ALLA LISTA UTENTI</a>
+      <div class="button m-4 d-flex w-100 justify-content-end">
+        <a class="btn btn-outline-dark mt-2" [routerLink]="['/edit-user']"><i class="bi bi-pencil-square px-2"></i>MODIFICA UTENTE</a>
+      </div>
     </div>
+
+  <div class="card mb-5" style="width: 40rem;">
+    <div class="d-flex justify-content-center w-100 p-5">
+      <div class="icon-default-frame d-flex justify-content-center">
+        <img src="./../../../../../assets/users/icon-profile-default.png" class="icon-default card-img-top">
+      </div>
+    </div>
+    <ul class="list-group list-group-flush">
+      <div class="row m-0">
+        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6">Nome: <span class="">Value</span></li>
+        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6">Cognome: <span>Value</span></li>
+        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6">Ruolo: <span>Value</span></li>
+        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6">Genere: <span>Value</span></li>
+        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6">Data di Nascita: <span>Value</span></li>
+        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6">Email: <span>Value</span></li>
+        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6">Telefono: <span>Value</span></li>
+        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6">Classe: <span>Value</span></li>
+      </div>
+    </ul>
   </div>
   
