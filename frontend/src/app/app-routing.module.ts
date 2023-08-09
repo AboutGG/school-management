@@ -7,11 +7,8 @@ import { AddUserComponent } from "./components/pages/users/add-user/add-user.com
 import { NotFoundComponent } from "./components/pages/not-found/not-found.component";
 
 const routes: Routes = [
-  {
-    path: "dashboard",
-    component: DashboardComponent,
-    canActivate: [AuthGuard]
-  },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+  { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
   { path: "login", component: LoginComponent },
   { path: "add-user", component: AddUserComponent, canActivate: [AuthGuard] },
   { path: "not-found/:statusCode", component: NotFoundComponent },

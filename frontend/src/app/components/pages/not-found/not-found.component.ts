@@ -22,4 +22,8 @@ export class NotFoundComponent implements OnInit {
     this.statusCode = this.route.snapshot.paramMap.get('statusCode');
     console.log(this.statusCode);
   }
+
+  goHome() {
+    this.router.navigate(['']);
+  }
 }
