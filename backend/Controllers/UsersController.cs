@@ -277,7 +277,7 @@ public class UsersController : Controller
     /// <param name="propName"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    private static  Func<T, string> GetOrderStatement<T>(object propName)
+    private static  Func<T, string> GetOrderStatement<T>(string propName)
     {
         var type = Expression.Parameter(typeof(T), "iesim"); //expression parameter
 
@@ -285,11 +285,11 @@ public class UsersController : Controller
         if (typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)) //check if is a Teacher or Student
         {
             var registryProperty = Expression.PropertyOrField(type, "Registry"); //expression to access to Registry property
-            property = Expression.PropertyOrField(registryProperty, propName.ToString()); //Expression to access the attribute name contained in propName within Registry.
+            property = Expression.PropertyOrField(registryProperty, propName.Trim()); //Expression to access the attribute name contained in propName within Registry.
         }
         else
         {
-            property = Expression.PropertyOrField(type, propName.ToString());//same
+            property = Expression.PropertyOrField(type, propName);//same
         }
         
         return Expression.Lambda<Func<T, string>>(property, type).Compile();

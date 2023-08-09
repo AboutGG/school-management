@@ -37,7 +37,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <param name="includes"></param>
     /// <returns></returns>
     public ICollection<T> GetAll(PaginationParams @params, Expression<Func<T, bool>> predicate,
-        Func<T, object> order,
+        Func<T, string> order,
         params Expression<Func<T, object>>[] includes
         ) //i pass the lambda function, ex: p=> p.id == id
     {
