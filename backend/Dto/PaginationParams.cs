@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace backend.Dto;
 
 public class PaginationParams
@@ -7,13 +9,14 @@ public class PaginationParams
     private string search = string.Empty;
     public int Page { get; set; } = 1;
     public string? Role { get; set; } = null;
-
+    
     public string? Search
     {
         get => search; 
         set => search = string.IsNullOrWhiteSpace(value) ? search : value;
     }
-    
+
+    public object Order { get; set; } = "Name";
     public int ItemsPerPage
     {
         get => itemsPerPage; 

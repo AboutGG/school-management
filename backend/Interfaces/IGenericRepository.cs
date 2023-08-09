@@ -5,6 +5,6 @@ namespace backend.Interfaces;
 
 public interface IGenericRepository<T> where T : class
 {
-    ICollection<T> GetAll(PaginationParams @params, Expression<Func<T,bool>> predicate, params Expression<Func<T, object>>[] includes);
+    ICollection<T> GetAll(PaginationParams @params, Expression<Func<T,bool>> predicate, Func<T, object> order, params Expression<Func<T, object>>[] includes);
     
 }

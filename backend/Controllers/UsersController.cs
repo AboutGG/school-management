@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
@@ -52,8 +53,8 @@ public class UsersController : Controller
 
     #region Get all users
 
-    /// <summary> get call on user breakpoint </summary>
-    /// <returns>All User</returns>
+    /// <summary> Get call on user breakpoint </summary>
+    /// <returns>All User with filter by role and search</returns>
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
     public IActionResult GetUsers([FromQuery] PaginationParams @params)
@@ -62,26 +63,35 @@ public class UsersController : Controller
         if (@params.Role == null)
         {
             var registries = new GenericRepository<Registry>(_context);
-            return Ok(registries.GetAll(@params, registry => registry.Name.Trim().ToLower().Contains(@params.Search)
-                                                          || registry.Surname.Trim().ToLower()
-                                                              .Contains(@params.Search)));
+            var dummy = GetOrderStatement<Registry>(@params.Order);
+            return Ok(registries.GetAll(@params, registry =>
+                    registry.Name.Trim().ToLower().Contains(@params.Search)
+                    || registry.Surname.Trim().ToLower()
+                        .Contains(@params.Search),
+                dummy
+            ));
         }
 
         switch (@params.Role.Trim().ToLower())
         {
             case "teacher":
                 var teachers = new GenericRepository<Teacher>(_context);
+                var dummy2 = GetOrderStatement<Teacher>(@params.Order);
                 return Ok(teachers.GetAll(@params, teacher =>
                         teacher.Registry.Name.Trim().ToLower().Contains(@params.Search)
-                        || teacher.Registry.Surname.Trim().ToLower().Contains(@params.Search),
+                        || teacher.Registry.Surname.Trim().ToLower()
+                            .Contains(@params.Search),
+                    dummy2,
                     teacher => teacher.User, teacher => teacher.Registry
                 ));
             case "student":
                 var students = new GenericRepository<Student>(_context);
+                var dummy3 = GetOrderStatement<Student>(@params.Order);
                 return Ok(students.GetAll(@params, student =>
-                        student.Registry.Name.Trim().ToLower().Contains(@params.Search)
-                        || student.Registry.Surname.Trim().ToLower().Contains(@params.Search)
-                    , student => student.User, student => student.Registry
+                        student.Registry.Name.Trim().ToLower().Contains(@params.Search) //contains
+                        || student.Registry.Surname.Trim().ToLower().Contains(@params.Search),
+                     dummy3,//order
+                    student => student.User, student => student.Registry  //includes params
                 ));
         }
 
@@ -258,4 +268,34 @@ public class UsersController : Controller
     #endregion
 
     #endregion
+
+    #region Other methods
+
+    /// <summary>
+    /// Dating a property name it return a lambda which gain an Order Statement
+    /// </summary>
+    /// <param name="propName"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    private static  Func<T, string> GetOrderStatement<T>(object propName)
+    {
+        var type = Expression.Parameter(typeof(T), "iesim"); //expression parameter
+
+        Expression property;
+        if (typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)) //check if is a Teacher or Student
+        {
+            var registryProperty = Expression.PropertyOrField(type, "Registry"); //expression to access to Registry property
+            property = Expression.PropertyOrField(registryProperty, propName.ToString()); //Expression to access the attribute name contained in propName within Registry.
+        }
+        else
+        {
+            property = Expression.PropertyOrField(type, propName.ToString());//same
+        }
+        
+        return Expression.Lambda<Func<T, string>>(property, type).Compile();
+    }
+
+    #endregion
+    
+    
 }

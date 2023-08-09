@@ -37,12 +37,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <param name="includes"></param>
     /// <returns></returns>
     public ICollection<T> GetAll(PaginationParams @params, Expression<Func<T, bool>> predicate,
-        params Expression<Func<T, object>>[] includes) //i pass the lambda function, ex: p=> p.id == id
+        Func<T, object> order,
+        params Expression<Func<T, object>>[] includes
+        ) //i pass the lambda function, ex: p=> p.id == id
     {
         var query = _entities
-            .Where(predicate)
-            .Skip((@params.Page - 1) * @params.ItemsPerPage)
-            .Take(@params.ItemsPerPage);
+            .Where(predicate);
+            
 
         if (@params.Role != null)
         {
@@ -52,6 +53,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             }
         }
 
-        return query.ToList();
+        return query.OrderBy(order).Skip((@params.Page - 1) * @params.ItemsPerPage)
+            .Take(@params.ItemsPerPage).ToList();
     }
 }
