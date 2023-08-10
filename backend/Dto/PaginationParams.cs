@@ -4,8 +4,8 @@ namespace backend.Dto;
 
 public class PaginationParams
 {
-    private int _maxItemPerPage = 10;
-    private int itemsPerPage = 2;
+    private int _maxItemPerPage = 100;
+    private int itemsPerPage = 10;
     private string search = string.Empty;
     public int Page { get; set; } = 1;
     public string? Role { get; set; } = null;
