@@ -6,7 +6,7 @@
 <div class="container mt-6 bb">
     <div class="d-flex justify-content-center align-items-center w-100 flex-column">
         <span class="icon-data">
-            <i class="bi bi-pencil-fill pencil-icon"></i>
+            <i class="bi bi-card-list list-icon"></i>
         </span>
         <p class="text-personal-data mt-4">Dati Anagrafici</p>
     </div>
@@ -14,7 +14,7 @@
     <div class="col-md-2 mb-3">
         <div class="dropdown d-flex flex-column">
             <label for="role" class="form-label">Filtra per ruolo: </label>
-            <button class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
+            <button class="btn btn-outline-dark dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
                 {{ (this.role ? this.role : 'Utenti') | titlecase}}
             </button>
             <ul class="dropdown-menu">
