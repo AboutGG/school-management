@@ -20,10 +20,10 @@ const routes: Routes = [
   { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard]},
   { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },
-  { path: "**", redirectTo: "not-found" },
   { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard] },
   { path: 'edit-user', component: EditUserComponent, canActivate: [AuthGuard] },
   { path: 'details', component: DetailUserComponent, canActivate: [AuthGuard] },
+  { path: "**", redirectTo: "not-found" },
 ];
 
 

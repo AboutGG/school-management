@@ -11,18 +11,50 @@ import { UsersService } from "src/app/shared/service/users.service";
 export class DashboardComponent implements OnInit {
 
   count!: TypeCount
-  pdfs: string[] = [
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg",
-    "assets/dashboard/logoCircolari.jpg"
-  ];
+
+  pdfs = [
+    {
+      title: "Nuovo ordinamento scolastico",
+      data: "10/10/2023",
+      img: "assets/dashboard/logoCircolari.jpg"
+    },
+    {
+      title: "Fine anno scolastico",
+      data: "01/06/2023",
+      img: "assets/dashboard/logoCircolari.jpg"
+    },
+    {
+      title: "Programma esami di stato",
+      data: "16/05/2023",
+      img: "assets/dashboard/logoCircolari.jpg"
+    },
+    {
+      title: "Convocazione consiglio d'istituto",
+      data: "28/04/2023",
+      img: "assets/dashboard/logoCircolari.jpg"
+    },
+    {
+      title: "Assemblea d'istituto",
+      data: "10/04/2023",
+      img: "assets/dashboard/logoCircolari.jpg"
+
+    },
+    {
+      title: "Programma Carnevale a scuola",
+      data: "03/02/2023",
+      img: "assets/dashboard/logoCircolari.jpg"
+    },
+    {
+      title: "Incontro scuola famiglia",
+      data: "12/01/2023",
+      img: "assets/dashboard/logoCircolari.jpg"
+    },
+    {
+      title: "Circolare di fine anno solare",
+      data: "21/12/2023",
+      img: "assets/dashboard/logoCircolari.jpg"
+    },
+  ]
 
   constructor(private commonService: CommonService) { }
 
@@ -35,6 +67,8 @@ export class DashboardComponent implements OnInit {
       this.count = res
     })
   }
+
+
 
 
 }

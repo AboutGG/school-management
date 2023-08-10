@@ -57,16 +57,19 @@
     <h4>CIRCOLARI SCOLASTICHE</h4>
     <div *ngFor="let pdf of pdfs" class="col-2 py-2">
       <div class="bg-white d-flex justify-content-center align-items-center">
-        <img class="w-50 py-4" [src]="pdf" alt="logo"/>
+        <img class="w-50 py-4" [src]="pdf.img" alt="logo" />
       </div>
       <div class="bg-secondary bg-opacity-25">
-        <div class="p-3">
+        <div class="px-3">
           <div class="d-flex py-2">
-            <h5 class="m-0 pdfText">Circolare n° X</h5>
+            <h5 *ngIf="pdf.title.length < 17; else longPdfname" class="m-0 pdfText">{{pdfs}}</h5>
+            <ng-template #longPdfname>
+              <h5 class="m-0 pdfText">{{pdf.title.slice(0, 18)}}...</h5>
+            </ng-template>
           </div>
           <div class="d-flex justify-content-between py-2">
-            <small class="m-0">Utente</small>
-            <small class="m-0">Data</small>
+            <!-- <small class="m-0">Utente</small> -->
+            <small class="m-0">{{pdf.data}}</small>
           </div>
         </div>
       </div>
