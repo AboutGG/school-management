@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Users } from '../models/users';
+import { Registry, Users } from '../models/users';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -57,9 +57,11 @@ export class UsersService {
     );
   };
 
-  getUsers(): Observable<any> {
-    return this.http.get<any>('https://localhost:7262/api/users')
+  getUsers(orderType: string, page: number, itemsPerPage: number): Observable<Registry[]> {
+    return this.http.get<Registry[]>(`https://localhost:7262/api/users?OrderType=${orderType}&Page=${page}&ItemsPerPage=${itemsPerPage}`);
   }
+
+  
 
   
 }
