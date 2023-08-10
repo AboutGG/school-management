@@ -12,15 +12,15 @@
     </div>
 
     <div class="col-md-2 mb-3">
-        <div class="dropdown">
-            <label for="role" class="form-label">Filtra per ruolo</label>
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
+        <div class="dropdown d-flex flex-column">
+            <label for="role" class="form-label">Filtra per ruolo: </label>
+            <button class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
                 {{ (this.role ? this.role : 'Utenti') | titlecase}}
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" value="utenti" (click)="onClickRole('utenti')">Utenti</a></li>
-                <li><a class="dropdown-item" value="studenti" (click)="onClickRole('studenti')">Studenti</a></li>
-                <li><a class="dropdown-item" value="insegnanti" (click)="onClickRole('insegnanti')">Insegnanti</a></li>
+                <li><a class="dropdown-item" role="button" value="utenti" (click)="onClickRole('utenti')">Utenti</a></li>
+                <li><a class="dropdown-item" role="button" value="studenti" (click)="onClickRole('studenti')">Studenti</a></li>
+                <li><a class="dropdown-item" role="button" value="insegnanti" (click)="onClickRole('insegnanti')">Insegnanti</a></li>
             </ul>
         </div>
     </div>
