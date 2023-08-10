@@ -12,7 +12,12 @@ export interface User {
   password: string
 }
 
-
+export interface TypeCount {
+  Users: number,
+  Students: number,
+  Teachers: number,
+  Classrooms: number
+}
 
 export interface Registry {
   id?: string

@@ -10,7 +10,7 @@ import { ShowClassComponent } from './components/pages/classes/show-class/show-c
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard], pathMatch: 'full'},
   { path: "login", component: LoginComponent },
   { path: "add-user", component: AddUserComponent, canActivate: [AuthGuard] },
   { path: 'classes', component: ClassesComponent, canActivate: [AuthGuard] },
