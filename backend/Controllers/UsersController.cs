@@ -3,8 +3,8 @@ using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
-using backend.Utils;
 using backend.Repositories;
+using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -314,6 +314,4 @@ public class UsersController : Controller
     }
 
     #endregion
-    
-    
 }
