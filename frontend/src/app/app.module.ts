@@ -15,6 +15,7 @@ import { ShowClassComponent } from './components/pages/classes/show-class/show-c
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NotFoundComponent } from './components/pages/not-found/not-found.component';
 import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
+import { SubjectsComponent } from './components/pages/subjects/subjects.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
     DashboardComponent,
     DashboardComponent,
     NotFoundComponent,
+    SubjectsComponent,
   ],
   imports: [
     BrowserModule,

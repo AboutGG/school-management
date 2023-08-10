@@ -1,0 +1,98 @@
+.input-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .input-container input {
+    margin-left: 10px;
+    width: 12.5rem;
+    padding: 0.4375rem 0.875rem;
+    padding-right: 30px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.1875rem;
+  }
+  
+  .input-container i {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .bi-search {
+    color: unset;
+  }
+  
+  thead,
+  tbody {
+    border: 1px solid #ddd;
+    background-color: #fff;
+  }
+  
+  .btn-classes {
+    background-color: #fafafa;
+    border-color: #ddd;
+    padding: 0.4375rem 0.875rem;
+    border-radius: 0;
+    color: #333;
+  }
+  
+  .btn-select {
+    background-color: #fafafa;
+    border-color: #ddd;
+    padding: 0.4375rem 0.875rem;
+    border-radius: 0;
+    margin-left: 20px;
+    margin-right: 20px;
+    color: #333;
+  }
+  
+  .btn-drop {
+    background-color: #03a9f4;
+    border-color: #ddd;
+    padding: 0.4375rem 0.875rem;
+    border-radius: 0;
+    color: white;
+  
+  }
+  
+  .dropdown-menu {
+    background-color: #03a9f4;
+  
+  }
+  
+  .dropdown-menu a:hover {
+    background-color: #03a9f4;
+  
+  }
+  
+  .dropdown-menu a,
+  i {
+    color: white;
+  
+  }
+  
+  td {
+  
+    text-align: center;
+  }
+  
+  .li-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5%;
+  }
+  
+  table {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .btn-page {
+    background-color: #03a9f4;
+    display: flex;
+    align-items: center;
+    height: 30px;
+  }
