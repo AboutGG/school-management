@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment'
+import { environment } from '../../../environments/environment.example'
 // import { User } from 'src/app/models/data';
 
 const URL = environment.apiUrl;
@@ -65,4 +65,3 @@ export class AuthService {
 function throwError(msg: string) {
   throw new Error('Function not implemented.');
 }
-

@@ -48,6 +48,11 @@ public class StudentRepository : IStudentRepository
             .FirstOrDefault();
     }
 
+    public int CountStudents()
+    {
+        return _context.Students.Count();
+    }
+
     public bool StudentExist(Guid id)
     {
         return _context.Students.Any(s => s.Id == id);
