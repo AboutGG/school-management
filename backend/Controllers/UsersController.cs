@@ -227,6 +227,8 @@ public class UsersController : Controller
 
     #endregion
 
+    #region Pdf for circular and table
+    
     [HttpPost]
     [Route("pdf")]
     public IActionResult GetUsersOnPdf([FromBody] Circular? data, [FromQuery] string type = "table")
@@ -240,5 +242,7 @@ public class UsersController : Controller
 
     }
 
+    #endregion
+    
     #endregion
 }
