@@ -1,0 +1,29 @@
+.mt-6 {
+    margin-top: 100px;
+}
+
+.icon-data {
+    border: 2px solid;
+    border-radius: 50px;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pencil-icon {
+    font-size: 30px;
+}
+
+.text-personal-data {
+    margin-top: 20px;
+}
+
+.form-container {
+    margin-top: 50px;
+}
+
+.placeholder-input::placeholder {
+    color: rgb(186, 178, 178);
+}

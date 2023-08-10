@@ -11,6 +11,6 @@ public class StringValidator : ValidationAttribute
         
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        return Convert.ToString(value).Length >=lenght ? ValidationResult.Success : new ValidationResult($"Attribute lenght can't be less then {lenght}.");
+        return Convert.ToString(value).Length >=lenght || value == null ? ValidationResult.Success : new ValidationResult($"Attribute lenght can't be less then {lenght}.");
     }
 }

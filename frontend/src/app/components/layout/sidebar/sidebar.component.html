@@ -1,58 +1,87 @@
-<div class="sidebar" [ngClass]="{ 'expanded': isExpanded }">
-  <div class="content">
-    <div class="link">
+<div class="sidebar vh-100" [ngClass]="{ 'expanded': isExpanded }">
+  <div class="content alt vh-100" [ngClass]="{ 'expanded': isExpanded }">
+    <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link"
+      class="link">
       <div class="content">
         <div class="icon">
-          <i class="bi bi-house"></i> <!--dashboard-->
+          <i class="bi bi-house"></i>
+          <!--dashboard-->
         </div>
         <div class="title">Dashboard</div>
+        <i class="invisible" *ngIf="isExpanded"
+          [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
     </div>
 
-    <div class="link">
+    <!--students-->
+    <!-- <div [routerLink]="['/students']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"  class="link">
       <div class="content">
         <div class="icon">
-          <i class="bi bi-person-lines-fill"></i> <!--students-->
+          <i class="bi bi-person-lines-fill"></i> 
         </div>
         <div class="title">Students</div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="link">
+    <div (click)="toggleCollapse()" class="link">
       <div class="content">
         <div class="icon">
-          <i class="bi bi-people-fill"></i> <!--users-->
+          <i class="bi bi-book-fill"></i>
         </div>
-        <div class="title">Users</div>
+        <div class="title">Utenti</div>
+        <i *ngIf="isExpanded" [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
     </div>
 
-    <div class="link">
-      <div class="content">
-        <div [routerLink]="['/']" class="icon">
-          <i class="bi bi-newspaper"></i> <!--classes-->
-        </div>
-        <div class="title">Classes</div>
+    <div *ngIf="isExpanded" [ngClass]="{'collapse-content': isCollapsed}" [ngClass]="{ 'expanded': isExpanded }"
+      class="custom-collapse collapse-content">
+      <div [routerLink]="['/add-user']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link"
+        class="link">
+        <p>Crea Utenti</p>
+      </div>
+      <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+        class="link" class="link">
+        <p>Gestisci Utenti</p>
       </div>
     </div>
 
-    <div class="link">
+    <div [routerLink]="['/classes']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
         <div class="icon">
-          <i class="bi bi-geo-alt-fill"></i> <!--subjects-->
+          <i class="bi bi-newspaper"></i>
+          <!--classes-->
         </div>
-        <div class="title">Subjects</div>
+        <div class="title">Classi</div>
+        <i class="invisible" *ngIf="isExpanded"
+          [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
+      </div>
+    </div>
+
+    <div [routerLink]="['/subjects']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
+      <div class="content">
+        <div class="icon">
+          <i class="bi bi-geo-alt-fill"></i>
+          <!--subjects-->
+        </div>
+        <div class="title">Materie</div>
+        <i class="invisible" *ngIf="isExpanded"
+          [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
 
-      <div class="link">
+      <div [routerLink]="['/exams']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
         <div class="content">
           <div class="icon">
-            <i class="bi bi-book-fill"></i> <!--exams-->
+            <i class="bi bi-book-fill"></i>
+            <!--exams-->
           </div>
-          <div class="title">Exams</div>
+          <div class="title">Esami</div>
+          <i class="invisible" *ngIf="isExpanded"
+            [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
         </div>
+      </div>
 
     </div>
+
   </div>
 
   <div class="footer"></div>

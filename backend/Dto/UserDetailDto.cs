@@ -1,9 +1,12 @@
+using backend.Utils;
+
 namespace backend.Dto;
 
-public class UserTeacherDto
+public class UserDetailDto
 {
-    public UserDto User { get; set; }
-
-    public RegistryDto Registry { get; set; }
+    public string? Classroom { get; set; }
     
+    public UserDto User { get; set; }
+    public RegistryDto Registry { get; set; }
+
 }

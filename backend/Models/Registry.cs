@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using backend.Utils;
@@ -25,7 +26,7 @@ public class Registry
 
     [Column("gender")]
     [JsonPropertyName("gender")]
-    [Required]
+    [StringValidator(2)]
     public String Gender { get; set; } 
 
     [Column("birth")]
@@ -35,11 +36,13 @@ public class Registry
 
     [Column("email")]
     [JsonPropertyName("email")]
+    [StringValidator(2)]
     [EmailAddress]
     public string? Email { get; set; }
 
     [Column("address")]
     [JsonPropertyName("address")]
+    [StringValidator(2)]
     public string? Address { get; set; }
 
     [Column("telephone")]

@@ -1,24 +1,56 @@
-﻿using backend.Interfaces;
+﻿using AutoMapper;
+using backend.Dto;
+using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
 
 public class StudentRepository : IStudentRepository
 {
-    private readonly SchoolContext _context;
+    #region Attributes
 
-    public StudentRepository(SchoolContext context)
+    private readonly SchoolContext _context;
+    private readonly IMapper _mapper;
+
+    #endregion
+
+    #region Costructor
+
+    public StudentRepository(SchoolContext context, IMapper mapper)
     {
         this._context = context;
+        _mapper = mapper;
     }
-    
+
+    #endregion
+
+    #region Attributes
+
+    /// <summary> In this function i take All the Student including the User and Registry reference. </summary>
+    /// <returns>Returns Student with his data contains User and Registry related to it</returns>
     public ICollection<Student> GetStudents()
     {
-        return _context.Students.OrderBy(s => s.Id).ToList();
+        var student = _context.Students
+            .OrderBy(s => s.Id)
+            .Include(s => s.User) // Include il registro associato
+            .Include(s => s.Registry)
+            .ToList();
+
+        return student;
     }
+
     public Student GetStudentById(Guid id)
     {
-        return _context.Students.Where(s => s.Id == id).FirstOrDefault();
+        return _context.Students.Where(s => s.Id == id)
+            .Include(s => s.User)
+            .Include(s => s.Registry)
+            .FirstOrDefault();
+    }
+
+    public int CountStudents()
+    {
+        return _context.Students.Count();
     }
 
     public bool StudentExist(Guid id)
@@ -44,4 +76,7 @@ public class StudentRepository : IStudentRepository
     {
         return _context.SaveChanges() > 0 ? true : false;
     }
+
+    #endregion
+
 }

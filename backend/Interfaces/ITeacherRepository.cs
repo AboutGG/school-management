@@ -1,3 +1,4 @@
+using backend.Dto;
 using backend.Models;
 
 namespace backend.Interfaces;
@@ -7,6 +8,8 @@ public interface ITeacherRepository
     ICollection<Teacher> GetTeachers();
 
     Teacher GetTeacherById(Guid id);
+
+    int CountTeachers();
 
     /// <summary> Check if user exist </summary>
     /// <param name="teacherId"></param>

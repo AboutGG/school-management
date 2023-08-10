@@ -12,5 +12,10 @@ public class MappingProfiles : Profile
         CreateMap<UserDto, User>();
         CreateMap<Registry, RegistryDto>();
         CreateMap<RegistryDto, Registry>();
+        CreateMap<UserDetailDto, Student>();
+        CreateMap<UserDetailDto, Teacher>();
+        CreateMap<Student, UserDetailDto>();
+        CreateMap<Teacher, UserDetailDto>();
+        CreateMap<Teacher, UserDto>();
     }
 }
