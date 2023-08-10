@@ -24,17 +24,6 @@ export class AuthService {
       
     })
   }
-  // LOGIN PER DATI MOCKATI
-  // login(formUser: User) {
-  //   this.users.find((user) => {
-  //     if (user.username === formUser.username) {
-  //       this.router.navigate(['/dashboard']);
-  //       console.log(user);
-  //     } else {
-  //       this.response = false        
-  //     }
-  //   })
-  // }
 
   logout() {
     localStorage.removeItem('token')
@@ -48,21 +37,5 @@ export class AuthService {
   isLoggedIn() {
     return this.getToken() == null ? false : true
   }
-
-  handleError(error: HttpErrorResponse) {
-    let msg = '';
-    if (error.error instanceof ErrorEvent) {
-      // client-side error
-      msg = error.error.message;
-    } else {
-      // server-side error
-      msg = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(msg);
-  }
+  
 }
-
-function throwError(msg: string) {
-  throw new Error('Function not implemented.');
-}
-

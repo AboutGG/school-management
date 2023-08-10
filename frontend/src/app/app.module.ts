@@ -10,7 +10,11 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from '../app/shared/helpers/auth.interceptor';
 import { NavbarComponent } from './components/layout/navbar/navbar.component';
 import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
+import { ClassesComponent } from './components/pages/classes/classes.component';
+import { ShowClassComponent } from './components/pages/classes/show-class/show-class.component';
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
+import { NotFoundComponent } from './components/pages/not-found/not-found.component';
+import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
 
 @NgModule({
   declarations: [
@@ -19,8 +23,11 @@ import { DashboardComponent } from './components/pages/dashboard/dashboard.compo
     LoginComponent,
     NavbarComponent,
     SidebarComponent,
+    ClassesComponent,
+    ShowClassComponent,
     DashboardComponent,
     DashboardComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,8 +36,14 @@ import { DashboardComponent } from './components/pages/dashboard/dashboard.compo
     HttpClientModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS,
+    {
+      provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorsInterceptor,
       multi: true
     }
   ],
