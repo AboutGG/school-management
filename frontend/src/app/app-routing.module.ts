@@ -7,6 +7,9 @@ import { AddUserComponent } from "./components/pages/users/add-user/add-user.com
 import { NotFoundComponent } from "./components/pages/not-found/not-found.component";
 import { ClassesComponent } from './components/pages/classes/classes.component';
 import { ShowClassComponent } from './components/pages/classes/show-class/show-class.component';
+import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
+import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
+import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -18,7 +21,11 @@ const routes: Routes = [
   { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },
   { path: "**", redirectTo: "not-found" },
+  { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard] },
+  { path: 'edit-user', component: EditUserComponent, canActivate: [AuthGuard] },
+  { path: 'details', component: DetailUserComponent, canActivate: [AuthGuard] },
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
