@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/service/auth.service';
 
 @Component({
@@ -10,10 +11,10 @@ import { AuthService } from 'src/app/shared/service/auth.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   showInvalidInput: boolean = false;
-  response = this.authService.response
+  response: any
   error: boolean = false;
 
   ngOnInit(): void {
@@ -24,7 +25,20 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authService.login(this.loginForm.value)
+    if (this.loginForm.touched) {
+      this.response = 'valid';
+    }
+    this.authService.login(this.loginForm.value).subscribe((res: any) => {
+      this.response = res.status
+      localStorage.setItem('token', res.token);
+      this.router.navigate(['']);
+      console.log(res);
+    })
+    setTimeout(() => {
+      this.response = 'invalid';
+    }, 500);
+
+
   }
 }
 
