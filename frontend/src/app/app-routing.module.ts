@@ -14,17 +14,17 @@ import { EditUserComponent } from './components/pages/users/edit-user/edit-user.
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: "dashboard", component: DashboardComponent, /*canActivate: [AuthGuard]*/},
   { path: "login", component: LoginComponent },
-  { path: "add-user", component: AddUserComponent, canActivate: [AuthGuard] },
-  { path: 'classes', component: ClassesComponent, canActivate: [AuthGuard] },
-  { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard]},
-  { path: "subjects", component:SubjectsComponent, canActivate: [AuthGuard] },
+  { path: "add-user", component: AddUserComponent, /*canActivate: [AuthGuard]*/ },
+  { path: 'classes', component: ClassesComponent, /*canActivate: [AuthGuard]*/ },
+  { path: 'classes/:id', component: ShowClassComponent, /*canActivate: [AuthGuard]*/},
+  { path: "subjects", component:SubjectsComponent, /*canActivate: [AuthGuard]*/ },
   { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },
-  { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard] },
-  { path: 'edit-user', component: EditUserComponent, canActivate: [AuthGuard] },
-  { path: 'details', component: DetailUserComponent, canActivate: [AuthGuard] },
+  { path: 'list-users', component: ListUsersComponent, /*canActivate: [AuthGuard]*/ },
+  { path: 'edit-user', component: EditUserComponent, /*canActivate: [AuthGuard]*/ },
+  { path: 'details', component: DetailUserComponent, /*canActivate: [AuthGuard]*/ },
   { path: "**", redirectTo: "not-found" },
 ];
 
