@@ -5,6 +5,7 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -63,12 +64,9 @@ public class UsersController : Controller
         if (@params.Role == null)
         {
             var registries = new GenericRepository<Registry>(_context);
-            var registryLambda = GetOrderStatement<Registry>(@params.Order);
             return Ok(registries.GetAll(@params, registry =>
-                    registry.Name.Trim().ToLower().Contains(@params.Search)
-                    || registry.Surname.Trim().ToLower()
-                        .Contains(@params.Search),
-                registryLambda
+                registry.Name.Trim().ToLower().Contains(@params.Search)
+                || registry.Surname.Trim().ToLower().Contains(@params.Search)
             ));
         }
 
@@ -76,22 +74,18 @@ public class UsersController : Controller
         {
             case "teacher":
                 var teachers = new GenericRepository<Teacher>(_context);
-                var teacherLambda = GetOrderStatement<Teacher>(@params.Order);
                 
                 return Ok(teachers.GetAll(@params, teacher =>
                         teacher.Registry.Name.Trim().ToLower().Contains(@params.Search)
                         || teacher.Registry.Surname.Trim().ToLower()
                             .Contains(@params.Search),
-                    teacherLambda,
                     teacher => teacher.User, teacher => teacher.Registry
                 ));
             case "student":
                 var students = new GenericRepository<Student>(_context);
-                var studentLambda = GetOrderStatement<Student>(@params.Order);
                 return Ok(students.GetAll(@params, student =>
                         student.Registry.Name.Trim().ToLower().Contains(@params.Search) //contains
                         || student.Registry.Surname.Trim().ToLower().Contains(@params.Search),
-                    studentLambda, //OrderBy
                     student => student.User, student => student.Registry //includes params
                 ));
         }
@@ -284,34 +278,6 @@ public class UsersController : Controller
     }
 
     #endregion
-    
-    #endregion
-
-    #region Other methods
-
-    /// <summary>
-    /// Dating a property name it return a lambda which gain an Order Statement
-    /// </summary>
-    /// <param name="propName"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    private static  Func<T, string> GetOrderStatement<T>(string propName)
-    {
-        var type = Expression.Parameter(typeof(T), "iesim"); //expression parameter
-
-        Expression property;
-        if (typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)) //check if is a Teacher or Student
-        {
-            var registryProperty = Expression.PropertyOrField(type, "Registry"); //expression to access to Registry property
-            property = Expression.PropertyOrField(registryProperty, propName.Trim()); //Expression to access the attribute name contained in propName within Registry.
-        }
-        else
-        {
-            property = Expression.PropertyOrField(type, propName);//same
-        }
-        
-        return Expression.Lambda<Func<T, string>>(property, type).Compile();
-    }
 
     #endregion
 }
