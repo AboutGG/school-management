@@ -65,9 +65,8 @@ public class UsersController : Controller
         {
             var registries = new GenericRepository<Registry>(_context);
             return Ok(registries.GetAll(@params, registry =>
-                    registry.Name.Trim().ToLower().Contains(@params.Search)
-                    || registry.Surname.Trim().ToLower()
-                        .Contains(@params.Search)
+                registry.Name.Trim().ToLower().Contains(@params.Search)
+                || registry.Surname.Trim().ToLower().Contains(@params.Search)
             ));
         }
 
