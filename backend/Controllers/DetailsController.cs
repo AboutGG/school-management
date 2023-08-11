@@ -1,9 +1,10 @@
-using System.Collections;
 using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
+using backend.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -20,6 +21,7 @@ public class DetailsController : Controller
     private readonly IUserRepository _userRepository;
     private readonly ITransactionRepository _transactionRepository;
     private readonly IClassroomRepository _classroomRepository;
+    private readonly SchoolContext _context;
 
     #endregion
 
@@ -31,8 +33,8 @@ public class DetailsController : Controller
         IRegistryRepository registryRepository,
         IUserRepository userRepository,
         ITransactionRepository transactionRepository,
-        IClassroomRepository classroomRepository
-    )
+        IClassroomRepository classroomRepository,
+        SchoolContext context)
     {
         _mapper = mapper;
         _studentRepository = studentRepository;
@@ -41,6 +43,7 @@ public class DetailsController : Controller
         _userRepository = userRepository;
         _transactionRepository = transactionRepository;
         _classroomRepository = classroomRepository;
+        _context = context;
     }
 
     #endregion
@@ -49,18 +52,22 @@ public class DetailsController : Controller
 
     #region Get user detail by id
 
+    /// <summary> Get the user's detail </summary>
+    /// <param name="Id"></param>
+    /// <returns>The details of a single user</returns>
     [HttpGet("{Id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     public IActionResult GetUserDetail(Guid Id)
     {
-        if (Id == null)
-            return BadRequest("Id is null");
-
-        if (_studentRepository.StudentExist(Id))
-            return Ok(_studentRepository.GetStudentById(Id));
-        else if (_teacherRepository.TeacherExists(Id))
-            return Ok(_teacherRepository.GetTeacherById(Id));
+        if (string.IsNullOrWhiteSpace(Convert.ToString(Id)))
+            return BadRequest("Invalid Id");
+        var users = new GenericRepository<User>(_context);
+        if (users.Exist(u => u.Id == Id))
+            return Ok(users.GetById(u => u.Id == Id,
+                u => u.Teacher.Registry,
+                u => u.Student.Registry)
+            );
         return NotFound();
     }
 
@@ -139,6 +146,8 @@ public class DetailsController : Controller
 
     #region Detail count
 
+    /// <summary> Function which gives the Users, Students, Teachers and Classrooms' counts </summary>
+    /// <returns>Return the Users, Students, Teachers and Classrooms' number</returns>
     [HttpGet("count")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
