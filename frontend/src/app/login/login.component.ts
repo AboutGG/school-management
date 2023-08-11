@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   showInvalidInput: boolean = false;
   response = this.authService.response
+  error: boolean = false;
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -23,9 +24,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value)
-    }
+    this.authService.login(this.loginForm.value)
   }
 }
 
