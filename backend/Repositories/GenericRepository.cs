@@ -71,7 +71,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <summary> Having a predicate i search a record.  </summary>
     /// <param name="predicate">Used to do a condition in a search or more. </param>
     /// <param name="includes"> Used to includes the reference object of another table. </param>
-    /// <returns></returns>
+    /// <returns>Users detail: User, if its Student or teacher and his registry</returns>
     public T GetById(Expression<Func<T, bool>> predicate, //Predicate ex: u => u.Id == Id.
         params Expression<Func<T, object>>[] includes) //Include ex:  t => t.Id.
     {
