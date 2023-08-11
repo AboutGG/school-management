@@ -52,6 +52,9 @@ public class DetailsController : Controller
 
     #region Get user detail by id
 
+    /// <summary> Get the user's detail </summary>
+    /// <param name="Id"></param>
+    /// <returns>The details of a single user</returns>
     [HttpGet("{Id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
@@ -59,12 +62,11 @@ public class DetailsController : Controller
     {
         if (string.IsNullOrWhiteSpace(Convert.ToString(Id)))
             return BadRequest("Invalid Id");
-        
-        var registries = new GenericRepository<Registry>(_context);
-        if (_registryRepository.RegistryExists(Id))
-            return Ok(registries.GetById(r => r.Id == Id,
-                r => r.Teacher.User,
-                r => r.Student.User)
+        var users = new GenericRepository<User>(_context);
+        if (users.Exist(u => u.Id == Id))
+            return Ok(users.GetById(u => u.Id == Id,
+                u => u.Teacher.Registry,
+                u => u.Student.Registry)
             );
         return NotFound();
     }
@@ -144,6 +146,8 @@ public class DetailsController : Controller
 
     #region Detail count
 
+    /// <summary> Function which gives the Users, Students, Teachers and Classrooms' counts </summary>
+    /// <returns>Return the Users, Students, Teachers and Classrooms' number</returns>
     [HttpGet("count")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
