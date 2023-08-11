@@ -11,18 +11,10 @@ const URL = environment.apiUrl;
 })
 export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
-
-  response!: any
   
   // LOGIN PER DATI DAL DATABASE
   login(user: User) {
-    return this.http.post(`${URL}/auth/login`, user).subscribe((res: any) => {
-      this.response = res.status
-      localStorage.setItem('token', res.token);
-      this.router.navigate(['']);
-      console.log(res);
-      
-    })
+    return this.http.post(`${URL}/auth/login`, user);
   }
 
   logout() {

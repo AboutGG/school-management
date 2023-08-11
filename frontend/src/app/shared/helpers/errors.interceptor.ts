@@ -12,7 +12,7 @@ import { Router } from "@angular/router";
 
 @Injectable()
 export class ErrorsInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -21,7 +21,9 @@ export class ErrorsInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err instanceof HttpErrorResponse) {
-          this.router.navigate(["/not-found/" + err.status]);
+          if (this.router.url !== "/login") {
+            this.router.navigate(["/not-found/" + err.status]);
+          }
         }
         return throwError(err);
       })
