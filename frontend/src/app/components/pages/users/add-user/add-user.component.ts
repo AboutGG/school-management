@@ -57,7 +57,8 @@ export class AddUserComponent implements OnInit {
   }
 
   onAddUser() {
-    if(this.role === "") {
+    console.log("onAddUser", this.role, this.usersForm.value)
+    if(this.role === "insegnante") {
       this.serviceUsers.addTeacher(this.usersForm).subscribe({
         next: (res) => {
           console.log(res);
