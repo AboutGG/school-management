@@ -30,6 +30,7 @@ builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<JWT>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 
+builder.Services.AddScoped<PDF>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {

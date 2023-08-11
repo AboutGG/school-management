@@ -43,8 +43,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         var query = _entities
             .Where(predicate);
-
-
+        
         if (@params.Role != null)
         {
             foreach (var include in includes)
@@ -52,7 +51,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
                 query = query.Include(include);
             }
         }
-        return query.OrderBy($"{@params.Order} {@params.OrderType}").Skip((@params.Page - 1) * @params.ItemsPerPage)
+        query = typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)
+            ? query.OrderBy($"Registry.{@params.Order} {@params.OrderType}")
+            : query.OrderBy($"{@params.Order} {@params.OrderType}");
+        
+        return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
             .Take(@params.ItemsPerPage).ToList();
     }
 }

@@ -10,7 +10,14 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from '../app/shared/helpers/auth.interceptor';
 import { NavbarComponent } from './components/layout/navbar/navbar.component';
 import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ClassesComponent } from './components/pages/classes/classes.component';
+import { ShowClassComponent } from './components/pages/classes/show-class/show-class.component';
+import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
+import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
+import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
+import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
+import { NotFoundComponent } from './components/pages/not-found/not-found.component';
+import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
 
 @NgModule({
   declarations: [
@@ -19,8 +26,14 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     LoginComponent,
     NavbarComponent,
     SidebarComponent,
+    ClassesComponent,
+    ShowClassComponent,
     DashboardComponent,
     DashboardComponent,
+    ListUsersComponent,
+    DetailUserComponent,
+    EditUserComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,8 +42,14 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     HttpClientModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS,
+    {
+      provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorsInterceptor,
       multi: true
     }
   ],
