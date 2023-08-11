@@ -18,12 +18,11 @@ export class ListUsersComponent {
   }
 
   users: Registry[] = [];
-
   role: string = "";
   action: string = "";
   orderName: string = "";
   orderSurname: string = "";
-  // orderBirth: string = "";
+  orderBirth: string = "";
 
   onClickRole(role: string): void {
     this.role = role;
@@ -48,13 +47,25 @@ export class ListUsersComponent {
   // }
   
 
-  getData(type: string, order: string, id: string): void {
-    this.usersService.getUsers(type, order, 1).subscribe({
+  getData(order: string, type: string, id: string): void {
+    this.usersService.getUsers(order, type, 1).subscribe({
       next: (data: Registry[]) => {
         
         id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
-        id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc";       
+        id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
+        id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";       
         this.users = data;
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  getDataRole(order: string, type: string, role: string) {
+    this.usersService.getRole(order, type, role).subscribe({
+      next: (data: Registry[]) => {
+        this.users = data
       },
       error: (error) => {
         console.log(error);

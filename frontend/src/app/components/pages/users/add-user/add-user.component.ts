@@ -58,7 +58,7 @@ export class AddUserComponent implements OnInit {
 
   onAddUser() {
     console.log("onAddUser", this.role, this.usersForm.value)
-    if(this.role === "insegnante") {
+    if(this.usersForm.valid && this.role === "insegnante") {
       this.serviceUsers.addTeacher(this.usersForm).subscribe({
         next: (res) => {
           console.log(res);
@@ -68,7 +68,7 @@ export class AddUserComponent implements OnInit {
         }
       });
     } else {
-      if(this.usersForm.value.classroom !== null) {
+      if(this.usersForm.valid && this.usersForm.value.classroom !== null) {
         this.serviceUsers.addStudent(this.usersForm).subscribe({
           next: (res) => {
             console.log(res);

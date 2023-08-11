@@ -2,19 +2,19 @@
   <div class="p-5 divLogin border border-3 border-dark rounded-4">
     <div class="d-flex flex-column justify-content-center align-items-center pb-3">
       <img class="w-100 rounded-3 m-5" style="max-width: 100px;" src="/assets/login/logoScuola.png" alt="">
-      <h5>Nome della scuola</h5>
+      <h5>EHT Education</h5>
       <small>Inserisci le tue credenziali</small>
     </div>
     <form [formGroup]="loginForm" class="d-flex flex-column justify-content-center">
       <div class="mb-3">
         <input type="username" class="form-control border border-2 border-dark" formControlName="username" id="exampleInputEmail1"
-          aria-describedby="emailHelp" placeholder="Insert username or email" required>
+          aria-describedby="emailHelp" placeholder="Inserisci username o email" required>
           <small class="text-danger" *ngIf="showInvalidInput && !loginForm.get('username'||'email')?.valid">Campo obbligatorio</small>
           <small class="text-danger" *ngIf="showInvalidInput && response === 200 && loginForm.get('username'||'email')?.valid">Username o email errato</small>
       </div>
       <div class="mb-3">
         <input type="password" class="form-control border border-2 border-dark" formControlName="password" id="exampleInputPassword1"
-          placeholder="Insert password" required>
+          placeholder="Inserisci password" required>
           <small class="text-danger" *ngIf="showInvalidInput && !loginForm.get('password')?.valid">Campo obbligatorio</small>
       </div>
       <div class="mb-3 form-check row">

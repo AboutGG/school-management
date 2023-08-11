@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Linq.Dynamic.Core;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -37,14 +38,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <param name="includes"></param>
     /// <returns></returns>
     public ICollection<T> GetAll(PaginationParams @params, Expression<Func<T, bool>> predicate,
-        Func<T, string> order,
         params Expression<Func<T, object>>[] includes
-        ) //i pass the lambda function, ex: p=> p.id == id
+    ) //i pass the lambda function, ex: p=> p.id == id
     {
         var query = _entities
             .Where(predicate);
-            
-
+        
         if (@params.Role != null)
         {
             foreach (var include in includes)
@@ -52,19 +51,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
                 query = query.Include(include);
             }
         }
-
-        switch (@params.OrderType)
-        {
-            case "asc":
-                return query.OrderBy(order).Skip((@params.Page - 1) * @params.ItemsPerPage)
-                    .Take(@params.ItemsPerPage).ToList();
-            case "desc":
-                return query.OrderByDescending(order).Skip((@params.Page - 1) * @params.ItemsPerPage)
-                    .Take(@params.ItemsPerPage).ToList();
-            default:
-                return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
-                    .Take(@params.ItemsPerPage).ToList();;
-        }
+        query = typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)
+            ? query.OrderBy($"Registry.{@params.Order} {@params.OrderType}")
+            : query.OrderBy($"{@params.Order} {@params.OrderType}");
         
+        return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
+            .Take(@params.ItemsPerPage).ToList();
     }
 }
