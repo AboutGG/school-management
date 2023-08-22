@@ -1,5 +1,6 @@
 ﻿using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
 
@@ -14,7 +15,11 @@ public class TeacherSubjectRepository : ITeacherSubjectRepository
     
     public ICollection<TeacherSubject> GetTeachersSubjects()
     {
-        return _context.TeacherSubjects.OrderBy(ts => ts.TeacherId).ToList();
+        return _context.TeacherSubjects.OrderBy(ts => ts.TeacherId)
+            .Include(ts => ts.Teacher)
+                .ThenInclude(t => t.Registry)
+            .Include(ts => ts.Subject)
+            .ToList();
     }
 
     public bool CreateTeacherSubject(TeacherSubject teacherSubject)

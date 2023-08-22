@@ -34,6 +34,7 @@ public class TeachersController : Controller
     [ProducesResponseType(200, Type = typeof(IEnumerable<Teacher>))]
     public IActionResult GetTeachers()
     {
+        
         return Ok(_teacherRepository.GetTeachers());
     }
 
