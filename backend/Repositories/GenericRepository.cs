@@ -46,25 +46,23 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         var query = _entities
             .Where(predicate);
-
-        if (@params.Role != null)
-        {
+        
             foreach (var include in includes)
             {
                 query = query.Include(include);
             }
-        }
         
-        //@params.Oder default value: Name, @params.OderType default value: asc
+        //@params.Order default value: Name, @params.OderType default value: asc
         query = typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)
             ? query.OrderBy($"Registry.{@params.Order} {@params.OrderType}") 
-            : query.OrderBy($"{@params.Order} {@params.OrderType}");
+            : query.OrderBy($"{@params.Order} {@params.OrderType}") // Order to Student.Registry.{params order} and Teacher.Registry{params order}
+                .ThenBy($"Teacher.Registry.{@params.Order} {@params.OrderType}");
 
         //@params.Page default value: 1, @params.ItemsPerPage default value: 10
         return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
             .Take(@params.ItemsPerPage).ToList();
     }
-
+    
     #endregion
 
     #region GetById

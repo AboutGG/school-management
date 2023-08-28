@@ -1,11 +1,11 @@
-using System.Linq.Expressions;
 using AutoMapper;
+using System.Linq.Dynamic;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
-using Microsoft.AspNetCore.Authorization;
+using J2N.Text;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -60,16 +60,41 @@ public class UsersController : Controller
     [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
     public IActionResult GetUsers([FromQuery] PaginationParams @params)
     {
-
+        //check if the order type is valid
+        if (@params.OrderType.Trim().ToLower() != "asc" && @params.OrderType.Trim().ToLower() != "desc") 
+        {
+            return BadRequest($"{@params.OrderType} is not a valid order");
+        }
+        
+        //if the role is null returns all the users
         if (@params.Role == null)
         {
-            var registries = new GenericRepository<Registry>(_context);
-            return Ok(registries.GetAll(@params, registry =>
-                registry.Name.Trim().ToLower().Contains(@params.Search)
-                || registry.Surname.Trim().ToLower().Contains(@params.Search)
-            ));
+            // var users = new GenericRepository<User>(_context);
+            // var dummy = users.GetAll(@params, 
+            //     user => user.Student != null
+            //         ? user.Student.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
+            //         : user.Teacher.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
+            //           user.Student != null
+            //             ? user.Student.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
+            //             : user.Teacher.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
+            //     user => user.Student,
+            //     user => user.Student.Registry,
+            //     user => user.Teacher,
+            //     user => user.Teacher.Registry);
+
+            //i start from Registry to take all information at the same time
+            var registry = new GenericRepository<Registry>(_context);
+
+            //I take all the users using the params element and its includes
+            var dummyReg = registry.GetAll(@params,
+                reg => reg.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
+                       reg.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
+                reg => reg.Student,
+                reg => reg.Teacher);
+            return Ok(dummyReg);
         }
 
+        //if the role is not null return the users which have the role equal then params.role
         switch (@params.Role.Trim().ToLower())
         {
             case "teacher":
@@ -88,6 +113,8 @@ public class UsersController : Controller
                         || student.Registry.Surname.Trim().ToLower().Contains(@params.Search),
                     student => student.User, student => student.Registry //includes params
                 ));
+            default:
+                return NotFound($"The Role \"{@params.Role}\" has not found");
         }
 
         return BadRequest(ModelState);
