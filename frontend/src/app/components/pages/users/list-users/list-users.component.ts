@@ -20,9 +20,12 @@ export class ListUsersComponent {
   users: Registry[] = [];
   role: string = "";
   action: string = "";
-  orderName: string = "";
-  orderSurname: string = "";
-  orderBirth: string = "";
+  
+  orders = {
+    name: 'asc',
+    surname: 'asc',
+    birth: 'asc'
+  }
 
   onClickRole(role: string): void {
     this.role = role;
@@ -47,13 +50,19 @@ export class ListUsersComponent {
   // }
   
 
-  getData(order: string, type: string, id: string): void {
+  getData(order: string, type: 'asc' | 'desc', id: keyof typeof this.orders): void {
     this.usersService.getUsers(order, type, 1).subscribe({
       next: (data: Registry[]) => {
-        
-        id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
-        id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
-        id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";       
+        this.orders = {
+          name: 'asc',
+          surname: 'asc',
+          birth: 'asc',
+          [id]: type
+        };
+        // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
+        // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
+        // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
+
         this.users = data;
       },
       error: (error) => {
@@ -127,3 +136,4 @@ export class ListUsersComponent {
 
 
 }
+
