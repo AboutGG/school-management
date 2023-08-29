@@ -1,8 +1,3 @@
-.title {
-  text-transform: uppercase;
-  font-size: 600;
-}
-
 hr {
   margin: 1rem 0;
   color: inherit;
@@ -66,30 +61,18 @@ tbody {
   color: black;
 }
 
-.dropdown-menu a:hover {
-  text-decoration: underline;
-}
-
 .dropdown-menu a {
   font-weight: 500;
+  cursor: pointer;
 }
 .dropdown-menu i {
   font-weight: 500 !important;
 }
 
-td {
-  text-align: center;
-}
-
 .li-dropdown {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-left: 5%;
-}
-
-table {
-  border-bottom: 1px solid #ddd;
+  margin-left: 5px;
 }
 
 .page-item a:hover {
