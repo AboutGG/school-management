@@ -1,23 +1,22 @@
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-  <div class="p-5 divLogin border border-3 border-dark rounded-4">
+<div class="d-flex justify-content-center align-items-center vh-100 bg-warning">
+  <div class="p-5 bg-light border border-3 border-dark rounded-4">
     <div class="d-flex flex-column justify-content-center align-items-center pb-3">
-      <img class="w-100 rounded-3 m-5" style="max-width: 100px;" src="/assets/login/logoScuola.png" alt="">
+      <img class="w-100 rounded-3 mb-4" style="max-width: 100px;" src="../../assets/login/default_transparent_1000x1000-removebg-preview.png" alt="logo">
       <h5>EHT Education</h5>
-      <small>Inserisci le tue credenziali</small>
     </div>
-    <form [formGroup]="loginForm" class="d-flex flex-column justify-content-center">
+    <form [formGroup]="loginForm" class="d-flex flex-column justify-content-center my-3">
       <div class="mb-3">
         <input type="username" class="form-control border border-2 border-dark" formControlName="username" id="exampleInputEmail1"
           aria-describedby="emailHelp" placeholder="Inserisci username o email" required>
-          <small class="text-danger" *ngIf="showInvalidInput && !loginForm.get('username'||'email')?.valid">Campo obbligatorio</small>
-          <small class="text-danger" *ngIf="showInvalidInput && response === 200 && loginForm.get('username'||'email')?.valid">Username o email errato</small>
+          <small class="text-danger" *ngIf="this.showInvalidInput && !loginForm.get('username'||'email')?.valid">Campo obbligatorio</small>
       </div>
       <div class="mb-3">
         <input type="password" class="form-control border border-2 border-dark" formControlName="password" id="exampleInputPassword1"
           placeholder="Inserisci password" required>
-          <small class="text-danger" *ngIf="showInvalidInput && !loginForm.get('password')?.valid">Campo obbligatorio</small>
+          <small class="text-danger" *ngIf="this.showInvalidInput && !loginForm.get('password')?.valid">Campo obbligatorio</small>
       </div>
-      <div class="mb-3 form-check row">
+      <small class="text-danger text-center mb-3" *ngIf="response === 'invalid'">Username o password errati</small>
+      <div class="my-3 form-check row">
         <div class="col-6">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
           <label class="form-check-label" for="exampleCheck1">Ricordami</label>
@@ -28,7 +27,7 @@
       </div>
     </form>
     <div class="d-flex justify-content-center align-items-center">
-      <button (click)="[login(), showInvalidInput = true]" type="submit" class="btn btn-primary w-50">Accedi</button>
+      <button (click)="[login(), this.showInvalidInput = true]" type="submit" class="btn btn-primary w-50">Accedi</button>
     </div>
   </div>
 </div>
