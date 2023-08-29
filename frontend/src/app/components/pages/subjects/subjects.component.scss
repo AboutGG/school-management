@@ -1,3 +1,7 @@
+.title{
+  text-transform: uppercase;
+  font-size: 600;
+}
 hr{
   margin: 1rem 0;
   color: inherit;
@@ -59,12 +63,17 @@ hr{
   
   }
  
+  .dropdown-menu a:hover {
+    text-decoration:underline;
+  
+  }
   
   .dropdown-menu {
 
-    a {    
+    a {
+      
         font-weight: 500;
-        cursor: pointer;
+
     }
     i{
        
@@ -74,16 +83,22 @@ hr{
   
   }
 
-
+  
+  td {
+  
+    text-align: center;
+  }
   
   .li-dropdown {
     display: flex;
     justify-content: center;
-    
-    margin-left: 5px;
+    align-items: center;
+    margin-left: 5%;
+  }
+  
+  table {
+    border-bottom: 1px solid #ddd;
   }
   .page-item a:hover{
     background-color: #ffb900;
   }
- 
-
