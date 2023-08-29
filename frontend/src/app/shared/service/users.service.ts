@@ -57,12 +57,8 @@ export class UsersService {
     );
   };
 
-  getUsers(order: string, orderType: string, page: number): Observable<Registry[]> {
-    return this.http.get<Registry[]>(`https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Page=${page}&ItemsPerPage=10`);
-  }
-
-  getRole(order: string, orderType: string, role: string): Observable<Registry[]> {
-    return this.http.get<Registry[]>(`https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Role=${role}&ItemsPerPage=10`);
+  getUsers(order: string, orderType: string, page: number, role: string): Observable<Registry[]> {
+    return this.http.get<Registry[]>(`https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Page=${page}&Role=${role}&ItemsPerPage=10`);
   }
 
   

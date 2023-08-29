@@ -1,8 +1,8 @@
 .icon-data {
     border: 2px solid;
     border-radius: 50px;
-    width: 65px;
-    height: 65px;
+    width: 85px;
+    height: 85px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,7 +10,7 @@
 }
 
 .pencil-icon {
-    font-size: 30px;
+    font-size: 40px;
     color:#ffc107;
 }
 
@@ -24,4 +24,9 @@
 
 .placeholder-input::placeholder {
     color: rgb(186, 178, 178);
+}
+
+.btn-dark {
+    background-color: #ffc107;
+    color: black;
 }

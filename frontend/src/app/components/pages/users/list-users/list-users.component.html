@@ -1,25 +1,23 @@
-<div class="container mt-3">
-  <hr> 
+<div class="container mt-5">
     <div class="d-flex align-items-center justify-content-center fs-5 fw-bold">
       {{'Lista Utenti' | uppercase}}
       <span class="icon">
         <i class="bi bi-card-list"></i>
       </span>
-    </div>
-  <hr>   
+    </div> 
 </div>
 
 <div class="container mt-6 bb">
     <div class="col-md-2 mb-4 d-flex w-100 justify-content-center">
         <div class="dropdown d-flex flex-column w-100">
             <label for="role" class="form-label">Filtra per ruolo: </label>
-            <button class="btn btn-outline-dark dropdown-toggle w-25" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
+            <button class="btn btn-outline-warning dropdown-toggle w-25" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
                 {{ (this.role ? this.role : 'Utenti') | titlecase}}
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" role="button" value="utenti" (click)="[onClickRole('utenti'), getDataRole('Name', 'asc', '')]">Utenti</a></li>
-                <li><a class="dropdown-item" role="button" value="studenti" (click)="[onClickRole('studenti'), getDataRole('Name', 'asc', 'Student')]">Studenti</a></li>
-                <li><a class="dropdown-item" role="button" value="insegnanti" (click)="[onClickRole('insegnanti'), getDataRole('Name', 'asc', 'Teacher')]">Insegnanti</a></li>
+                <li><a class="dropdown-item" role="button" value="utenti" (click)="[onClickRole('')]">Utenti</a></li>
+                <li><a class="dropdown-item" role="button" value="studenti" (click)="[onClickRole('studenti')]">Studenti</a></li>
+                <li><a class="dropdown-item" role="button" value="insegnanti" (click)="[onClickRole('insegnanti')]">Insegnanti</a></li>
             </ul>
         </div>
         <div class="container d-flex justify-content-end mt-5">
@@ -31,7 +29,7 @@
             </div>
           </div>
           <div>
-            <button class="btn btn-outline-dark mx-3">PDF</button>
+            <button class="btn btn-warning mx-3">PDF</button>
           </div>
       </div>
     </div>
@@ -86,21 +84,21 @@
           Sei sicuro di voler eliminare questo utente?
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ELIMINA</button>
+          <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Annulla</button>
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">ELIMINA</button>
         </div>
       </div>
     </div>
   </div>
 
-  <nav aria-label="Page navigation example">
+  <nav aria-label="Page navigation example pag-nav">
     <ul class="pagination justify-content-center">
       <li class="page-item">
         <a class="page-link" href="#" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link">1</a></li>
       <li class="page-item"><a class="page-link" href="#">2</a></li>
       <li class="page-item"><a class="page-link" href="#">3</a></li>
       <li class="page-item">

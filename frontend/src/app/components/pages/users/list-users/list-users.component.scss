@@ -65,3 +65,17 @@ hr {
     color: unset;
 }
 
+thead,
+tbody {
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.dropdown-item:active {
+    background-color: #f8f9fa;
+    color: black;
+}
+
+.page-link {
+    color: black;
+}

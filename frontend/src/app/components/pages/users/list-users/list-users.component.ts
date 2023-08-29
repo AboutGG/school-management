@@ -21,7 +21,11 @@ export class ListUsersComponent {
   role: string = "";
   action: string = "";
   
-  orders = {
+  orders:{
+    name: 'asc' | 'desc',
+    surname: 'asc' | 'desc',
+    birth: 'asc' | 'desc'
+  } = {
     name: 'asc',
     surname: 'asc',
     birth: 'asc'
@@ -29,6 +33,7 @@ export class ListUsersComponent {
 
   onClickRole(role: string): void {
     this.role = role;
+    this.getData('Name', this.orders.name)
   }
 
   onClickAction(action: string): void {
@@ -50,31 +55,34 @@ export class ListUsersComponent {
   // }
   
 
-  getData(order: string, type: 'asc' | 'desc', id: keyof typeof this.orders): void {
-    this.usersService.getUsers(order, type, 1).subscribe({
+  getData(order: string, type: 'asc' | 'desc', id?: keyof typeof this.orders): void {
+
+    let role = "";
+
+    switch(this.role) {
+      case 'studenti':
+      role = 'Student';
+      break;
+      case 'insegnanti':
+      role = 'Teacher';
+      break;
+    }
+
+    this.usersService.getUsers(order, type, 1, role).subscribe({
       next: (data: Registry[]) => {
-        this.orders = {
-          name: 'asc',
-          surname: 'asc',
-          birth: 'asc',
-          [id]: type
-        };
+        if(id) {
+          this.orders = {
+            name: 'asc',
+            surname: 'asc',
+            birth: 'asc',
+            [id]: type
+          };
+        }
         // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
         // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
         // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
 
         this.users = data;
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
-  }
-
-  getDataRole(order: string, type: string, role: string) {
-    this.usersService.getRole(order, type, role).subscribe({
-      next: (data: Registry[]) => {
-        this.users = data
       },
       error: (error) => {
         console.log(error);
