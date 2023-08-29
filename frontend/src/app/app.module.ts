@@ -18,6 +18,7 @@ import { DetailUserComponent } from './components/pages/users/detail-user/detail
 import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
 import { NotFoundComponent } from './components/pages/not-found/not-found.component';
 import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
+import { ExamslistComponent } from './components/pages/examslist/examslist.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
     DetailUserComponent,
     EditUserComponent,
     NotFoundComponent,
+    ExamslistComponent,
   ],
   imports: [
     BrowserModule,
