@@ -69,6 +69,7 @@ public class UsersController : Controller
         //if the role is null returns all the users
         if (@params.Role == null)
         {
+            #region old code
             // var users = new GenericRepository<User>(_context);
             // var dummy = users.GetAll(@params, 
             //     user => user.Student != null
@@ -81,6 +82,7 @@ public class UsersController : Controller
             //     user => user.Student.Registry,
             //     user => user.Teacher,
             //     user => user.Teacher.Registry);
+#endregion
 
             //i start from Registry to take all information at the same time
             var registry = new GenericRepository<Registry>(_context);
@@ -306,5 +308,45 @@ public class UsersController : Controller
 
     #endregion
 
+    #region Delete an User
+
+    /// <summary> Delete a using an id </summary>
+    /// <param name="id">the id of an user which we delete</param>
+    /// <returns>Response ok if deleted, not found if the id not exists</returns>
+    [HttpDelete("{id}")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    public IActionResult DeleteUser(Guid id)
+    {
+        GenericRepository<User> users = new GenericRepository<User>(_context);
+        GenericRepository<Registry> registries = new GenericRepository<Registry>(_context);
+        
+        var transaction = _transactionRepository.BeginTransaction();
+        if (!users.Exist(user => user.Id == id))
+        {
+            return NotFound();
+        }
+
+        User userToDelete = users.GetById(user => user.Id == id, user => user.Student, user => user.Teacher);
+        Registry registryToDelete = registries.GetById(reg => reg.Id == userToDelete.Student.RegistryId);
+
+        //When i can't delete an Entity it returns a Throw exception error then i can rollback all
+        try
+        {
+            users.Delete(userToDelete);
+            registries.Delete(registryToDelete);
+            _transactionRepository.CommitTransaction(transaction);
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ModelState.AddModelError("response", "something wrong while deleting the user");
+            Console.WriteLine(e);
+        }
+        return Ok("User deleted");
+    }
+
+    #endregion
     #endregion
 }
