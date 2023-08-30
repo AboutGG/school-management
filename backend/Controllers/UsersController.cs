@@ -66,60 +66,33 @@ public class UsersController : Controller
             return BadRequest($"{@params.OrderType} is not a valid order");
         }
         
+        GenericRepository<Registry> registryRepo = new GenericRepository<Registry>(_context);
+        //I take all the users using the params element and its includes
+        
+        ICollection<Registry> registries = registryRepo.GetAll(@params,
+            reg => reg.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
+                   reg.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
+            reg => reg.Student,
+            reg => reg.Teacher);
+        
         //if the role is null returns all the users
         if (@params.Role == null)
         {
-            #region old code
-            // var users = new GenericRepository<User>(_context);
-            // var dummy = users.GetAll(@params, 
-            //     user => user.Student != null
-            //         ? user.Student.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
-            //         : user.Teacher.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
-            //           user.Student != null
-            //             ? user.Student.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
-            //             : user.Teacher.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
-            //     user => user.Student,
-            //     user => user.Student.Registry,
-            //     user => user.Teacher,
-            //     user => user.Teacher.Registry);
-#endregion
-
-            //i start from Registry to take all information at the same time
-            var registry = new GenericRepository<Registry>(_context);
-
-            //I take all the users using the params element and its includes
-            var dummyReg = registry.GetAll(@params,
-                reg => reg.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
-                       reg.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
-                reg => reg.Student,
-                reg => reg.Teacher);
-            return Ok(dummyReg);
+            return Ok(registries);
         }
 
         //if the role is not null return the users which have the role equal then params.role
         switch (@params.Role.Trim().ToLower())
         {
             case "teacher":
-                var teachers = new GenericRepository<Teacher>(_context);
-                
-                return Ok(teachers.GetAll(@params, teacher =>
-                        teacher.Registry.Name.Trim().ToLower().Contains(@params.Search)
-                        || teacher.Registry.Surname.Trim().ToLower()
-                            .Contains(@params.Search),
-                    teacher => teacher.User, teacher => teacher.Registry
-                ));
+                registries = registries.Where(reg => reg.Student == null).ToList();
+                return Ok(registries);
             case "student":
-                var students = new GenericRepository<Student>(_context);
-                return Ok(students.GetAll(@params, student =>
-                        student.Registry.Name.Trim().ToLower().Contains(@params.Search) //contains
-                        || student.Registry.Surname.Trim().ToLower().Contains(@params.Search),
-                    student => student.User, student => student.Registry //includes params
-                ));
+                registries = registries.Where(reg => reg.Teacher == null).ToList();
+                return Ok(registries);
             default:
                 return NotFound($"The Role \"{@params.Role}\" has not found");
         }
-
-        return BadRequest(ModelState);
     }
 
     #endregion
