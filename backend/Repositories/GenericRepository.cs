@@ -53,11 +53,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             }
         
         //@params.Order default value: Name, @params.OderType default value: asc
-        query = typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)
-            ? query.OrderBy($"Registry.{@params.Order} {@params.OrderType}")
-            : query.OrderBy($"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
-                
-
+        query = query.OrderBy($"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
+        
         //@params.Page default value: 1, @params.ItemsPerPage default value: 10
         return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
             .Take(@params.ItemsPerPage).ToList();
