@@ -1,6 +1,10 @@
+using System.Collections;
+using backend.Models;
+
 namespace backend.Interfaces;
 
 public interface IClassroomRepository
 {
-    int GetClassrooms();
+    int GetClassroomsCount();
+    
 }

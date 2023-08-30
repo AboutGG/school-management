@@ -28,7 +28,7 @@ public class PaginationParams
     public string OrderType { get; set; } = "asc";
     
     /// <summary> Order accept by default Name. This variable indicate the column name which you can order. </summary>
-    public string Order { get; set; } = "Name";
+    public string Order { get; set; } = "Id";
     
     /// <summary> The number of item per page, by default you can have 10 items per page</summary>
     public int ItemsPerPage

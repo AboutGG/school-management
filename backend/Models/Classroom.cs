@@ -3,20 +3,24 @@ using System.Text.Json.Serialization;
 
 namespace backend.Models;
 
-[Table("subjects")]
-public class Subject
+[Table("classrooms")]
+public class Classroom
 {
+    #region Id
     [Column("id")]
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
-
-    /// <summary> subject name </summary>
+    #endregion
+    
+    #region Name
     [Column("name")]
     [JsonPropertyName("name")]
     public string Name { get; set; }
+    #endregion
 
-    #region External ref
-    public IList<TeacherSubjectClassroom> TeacherSubjects { get; set; }
-    public virtual ICollection<Exam> Exams { get; set; }
+    #region External Keys
+    public virtual ICollection<Student> Students { get; set; }
+    public virtual IList<TeacherSubjectClassroom> TeacherSubjects { get; set; }
+    
     #endregion
 }

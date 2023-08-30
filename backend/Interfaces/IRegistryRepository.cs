@@ -33,8 +33,11 @@ public interface IRegistryRepository
     /// <returns>if the Registry is updated</returns>
     bool UpdateRegistry(Registry Registry);
 
+    #region obsolete
     /// <summary> Filter by classroom </summary>
     /// <param name="classroom"></param>
     /// <returns> A list of object taken and filtered, from Students and Teachers, by the classroom</returns>
-    IDictionary<string, List<Registry>> GetClassroom(string classroom);
+    //IDictionary<string, List<Registry>> GetClassroom(string classroom);
+    
+    #endregion
 }

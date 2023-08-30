@@ -1,5 +1,7 @@
-﻿using backend.Interfaces;
+﻿using backend.Dto;
 using backend.Models;
+using backend.Repositories;
+using iText.StyledXmlParser.Jsoup.Select;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -8,29 +10,42 @@ namespace backend.Controllers;
 [ApiController]
 public class ClassroomController : Controller
 {
-    private readonly ITeacherSubjectRepository _teacherSubjectRepository;
-    private readonly IStudentRepository _studentRepository;
+    private readonly SchoolContext _context;
 
-    public ClassroomController(ITeacherSubjectRepository teacherSubjectRepository, IStudentRepository studentRepository)
+    public ClassroomController(SchoolContext context)
     {
-        this._teacherSubjectRepository = teacherSubjectRepository;
-        this._studentRepository = studentRepository;
+        _context = context;
     }
-    
+
     [HttpGet]
-    [ProducesResponseType(200)]
-    public IActionResult GetClassroom(string classroom, int skip = 1, int take = 10)
+    [ProducesResponseType(200, Type = typeof(IEnumerable<Classroom>))]
+    public IActionResult GetClassroom([FromQuery] PaginationParams @params)
     {
-        var teacher = this._teacherSubjectRepository.GetTeachersSubjects()
-            .Where(el => el.Classroom == classroom)
-            .Select(el => new
-            {
-                id = el.Teacher.Registry.Id
-            });
-        this._studentRepository.GetStudents()
-            .Where(columns => columns.Classroom == classroom);
+        var classrooms = new GenericRepository<Classroom>(_context);
 
-        return Ok(teacher);
+        return Ok(classrooms.GetAll(@params,
+            classroom => classroom.Name.Trim().ToUpper().Contains(@params.Search.Trim().ToUpper())
+        ));
+    }
 
+
+    [HttpGet]
+    [Route("{id}")]
+    public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
+    {
+        var students = new GenericRepository<Student>(_context)
+            .GetAll(@params,
+                student => student.ClassroomId == id,
+                student => student.Registry);
+        @params.Order = "TeacherId";
+        var teachers = new GenericRepository<TeacherSubjectClassroom>(_context)
+            .GetAll(@params,
+                el => el.Classroom.Id == id, 
+                el=> el.Teacher.Registry, el => el.Subject);
+        return Ok(new
+        {
+            teachers,
+            students
+        });
     }
 }
