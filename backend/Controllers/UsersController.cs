@@ -1,10 +1,11 @@
-using System.Linq.Expressions;
 using AutoMapper;
+using System.Linq.Dynamic;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
+using J2N.Text;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -59,44 +60,39 @@ public class UsersController : Controller
     [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
     public IActionResult GetUsers([FromQuery] PaginationParams @params)
     {
-
+        //check if the order type is valid
+        if (@params.OrderType.Trim().ToLower() != "asc" && @params.OrderType.Trim().ToLower() != "desc") 
+        {
+            return BadRequest($"{@params.OrderType} is not a valid order");
+        }
+        
+        GenericRepository<Registry> registryRepo = new GenericRepository<Registry>(_context);
+        //I take all the users using the params element and its includes
+        
+        ICollection<Registry> registries = registryRepo.GetAll(@params,
+            reg => reg.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
+                   reg.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
+            reg => reg.Student,
+            reg => reg.Teacher);
+        
+        //if the role is null returns all the users
         if (@params.Role == null)
         {
-            var registries = new GenericRepository<Registry>(_context);
-            var registryLambda = GetOrderStatement<Registry>(@params.Order);
-            return Ok(registries.GetAll(@params, registry =>
-                    registry.Name.Trim().ToLower().Contains(@params.Search)
-                    || registry.Surname.Trim().ToLower()
-                        .Contains(@params.Search),
-                registryLambda
-            ));
+            return Ok(registries);
         }
 
+        //if the role is not null return the users which have the role equal then params.role
         switch (@params.Role.Trim().ToLower())
         {
             case "teacher":
-                var teachers = new GenericRepository<Teacher>(_context);
-                var teacherLambda = GetOrderStatement<Teacher>(@params.Order);
-                
-                return Ok(teachers.GetAll(@params, teacher =>
-                        teacher.Registry.Name.Trim().ToLower().Contains(@params.Search)
-                        || teacher.Registry.Surname.Trim().ToLower()
-                            .Contains(@params.Search),
-                    teacherLambda,
-                    teacher => teacher.User, teacher => teacher.Registry
-                ));
+                registries = registries.Where(reg => reg.Student == null).ToList();
+                return Ok(registries);
             case "student":
-                var students = new GenericRepository<Student>(_context);
-                var studentLambda = GetOrderStatement<Student>(@params.Order);
-                return Ok(students.GetAll(@params, student =>
-                        student.Registry.Name.Trim().ToLower().Contains(@params.Search) //contains
-                        || student.Registry.Surname.Trim().ToLower().Contains(@params.Search),
-                    studentLambda, //OrderBy
-                    student => student.User, student => student.Registry //includes params
-                ));
+                registries = registries.Where(reg => reg.Teacher == null).ToList();
+                return Ok(registries);
+            default:
+                return NotFound($"The Role \"{@params.Role}\" has not found");
         }
-
-        return BadRequest(ModelState);
     }
 
     #endregion
@@ -284,34 +280,46 @@ public class UsersController : Controller
     }
 
     #endregion
-    
-    #endregion
 
-    #region Other methods
+    #region Delete an User
 
-    /// <summary>
-    /// Dating a property name it return a lambda which gain an Order Statement
-    /// </summary>
-    /// <param name="propName"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    private static  Func<T, string> GetOrderStatement<T>(string propName)
+    /// <summary> Delete a using an id </summary>
+    /// <param name="id">the id of an user which we delete</param>
+    /// <returns>Response ok if deleted, not found if the id not exists</returns>
+    [HttpDelete("{id}")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    public IActionResult DeleteUser(Guid id)
     {
-        var type = Expression.Parameter(typeof(T), "iesim"); //expression parameter
-
-        Expression property;
-        if (typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)) //check if is a Teacher or Student
-        {
-            var registryProperty = Expression.PropertyOrField(type, "Registry"); //expression to access to Registry property
-            property = Expression.PropertyOrField(registryProperty, propName.Trim()); //Expression to access the attribute name contained in propName within Registry.
-        }
-        else
-        {
-            property = Expression.PropertyOrField(type, propName);//same
-        }
+        GenericRepository<User> users = new GenericRepository<User>(_context);
+        GenericRepository<Registry> registries = new GenericRepository<Registry>(_context);
         
-        return Expression.Lambda<Func<T, string>>(property, type).Compile();
+        var transaction = _transactionRepository.BeginTransaction();
+        if (!users.Exist(user => user.Id == id))
+        {
+            return NotFound();
+        }
+
+        User userToDelete = users.GetById(user => user.Id == id, user => user.Student, user => user.Teacher);
+        Registry registryToDelete = registries.GetById(reg => reg.Id == userToDelete.Student.RegistryId);
+
+        //When i can't delete an Entity it returns a Throw exception error then i can rollback all
+        try
+        {
+            users.Delete(userToDelete);
+            registries.Delete(registryToDelete);
+            _transactionRepository.CommitTransaction(transaction);
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ModelState.AddModelError("response", "something wrong while deleting the user");
+            Console.WriteLine(e);
+        }
+        return Ok("User deleted");
     }
 
+    #endregion
     #endregion
 }

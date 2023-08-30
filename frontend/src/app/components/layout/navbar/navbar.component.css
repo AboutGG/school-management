@@ -1,9 +1,9 @@
 .navbar-toggler {
-  margin-left: 10% !important;
+  margin-left: 20% !important;
 }
 
 .toggle-img {
-  font-size: 30px !important;
+  font-size: 35px !important;
 }
 
 .container-left {
@@ -39,9 +39,4 @@
 .nav-logo {
   width: 150px !important;
   height: 48px !important;
-  margin-left: -5px;
-}
-
-nav {
-  z-index: 1;
 }/*# sourceMappingURL=navbar.component.css.map */
