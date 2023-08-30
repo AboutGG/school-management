@@ -83,63 +83,46 @@ public class DetailsController : Controller
     [ProducesResponseType(400)]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
-    public IActionResult PutUserDetail(Guid Id,
-        [FromBody] UserDetailDto updatedUserDetail) // i pass the id of the teacher or student
+    public IActionResult UpdateUser(Guid Id,
+        [FromBody] RegistryDto updatedRegistry) // i pass the user's Id
     {
-        if (updatedUserDetail == null || Id == null || updatedUserDetail.User == null ||
-            updatedUserDetail.Registry == null)
+        if (updatedRegistry == null || Id == null)
             return BadRequest();
+
+        GenericRepository<Registry> registryRepo = new GenericRepository<Registry>(_context);
+
+        // take the registry which have the Teacher || Student .UserId == Id
+        Registry takenRegistry = registryRepo.GetById(
+            reg => reg.Student.UserId == Id || reg.Teacher.UserId == Id,
+            reg => reg.Student,
+            reg => reg.Teacher
+        );
 
         //start transaction
         var transaction = _transactionRepository.BeginTransaction();
-        if (!_userRepository.UserExists(updatedUserDetail.User.Username) &&
-            (_studentRepository.StudentExist(Id) || _teacherRepository.TeacherExists(Id)))
+
+        //Update taken registry
+        takenRegistry.Name = updatedRegistry.Name;
+        takenRegistry.Surname = updatedRegistry.Surname;
+        takenRegistry.Birth = updatedRegistry.Birth;
+        takenRegistry.Address = updatedRegistry.Address;
+        takenRegistry.Email = updatedRegistry.Email;
+        takenRegistry.Gender = updatedRegistry.Gender;
+        takenRegistry.Telephone = updatedRegistry.Telephone;
+
+        try
         {
-            //take student or teacher
-            var teacher = _teacherRepository.GetTeacherById(Id);
-            var student = _studentRepository.GetStudentById(Id);
-            if (teacher == null || student == null)
-            {
-                return NotFound();
-            }
-
-            //create new registry and user
-            Registry registry = new Registry()
-            {
-                Id = teacher?.RegistryId ?? student.RegistryId,
-                Name = updatedUserDetail.Registry.Name,
-                Surname = updatedUserDetail.Registry.Surname,
-                Birth = updatedUserDetail.Registry.Birth,
-                Address = updatedUserDetail.Registry.Address,
-                Email = updatedUserDetail.Registry.Email,
-                Gender = updatedUserDetail.Registry.Gender,
-                Telephone = updatedUserDetail.Registry.Telephone,
-
-            };
-            var user = new User()
-            {
-                Id = teacher?.UserId ?? student.UserId,
-                Username = updatedUserDetail.User.Username,
-                Password = updatedUserDetail.User.Password,
-            };
-            //update registry and user
-            if (_registryRepository.UpdateRegistry(registry) &&
-                _userRepository.UpdateUser(user))
-            {
-                //accept the changes
-                _transactionRepository.CommitTransaction(transaction);
-                return Ok("Edit successfully");
-            }
-            else
-            {
-                //rollback when i can't update an Entity
-                _transactionRepository.RollbackTransaction(transaction);
-                ModelState.AddModelError("response", "Something went wrong updating user");
-                return StatusCode(500, ModelState);
-            }
+            registryRepo.UpdateEntity(takenRegistry); //update the user's registry
+            _transactionRepository.CommitTransaction(transaction); //accept the changes
+            return Ok("Edit successfully");
         }
-
-        return BadRequest("username already exist");
+        catch (Exception e)
+        {
+            //rollback when i can't update an Entity
+            _transactionRepository.RollbackTransaction(transaction);
+            ModelState.AddModelError("response", "Something went wrong updating user");
+            return StatusCode(500, ModelState);
+        }
     }
 
     #endregion
