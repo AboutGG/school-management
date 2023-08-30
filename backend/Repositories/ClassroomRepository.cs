@@ -8,6 +8,7 @@ public class ClassroomRepository : IClassroomRepository
     #region Attributes
 
     private readonly SchoolContext _context;
+    private IClassroomRepository _classroomRepositoryImplementation;
 
     #endregion
 
@@ -19,14 +20,12 @@ public class ClassroomRepository : IClassroomRepository
     }
 
     #endregion
-
-
-    public int GetClassrooms()
+    
+    public int GetClassroomsCount()
     {
-       return _context.Students
-           .Select(s => s.Classroom)
-           .Distinct()
+       return _context.Classrooms
+           .Select(s => s.Name)
            .Count();
-       
     }
+    
 }
