@@ -59,7 +59,11 @@ export class UsersService {
 
   getUsers(order: string, orderType: string, page: number, role: string): Observable<Registry[]> {
     return this.http.get<Registry[]>(`https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Page=${page}&Role=${role}&ItemsPerPage=10`);
-  }
+  };
+
+  deleteUser = (id: string): Observable<string> => {
+    return this.http.delete(`https://localhost:7262/api/users/${id}`);
+  };
 
   
 

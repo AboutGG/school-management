@@ -12,14 +12,16 @@ export class ListUsersComponent {
   constructor(private usersService: UsersService) {}
 
   ngOnInit(): void {
+    this.page = 1;
     this.getData("Name", "asc", "name");
-    // this.getDataSurnameAsc();
     
   }
 
   users: Registry[] = [];
   role: string = "";
   action: string = "";
+  id!: string;
+  page: number = 1;
   
   orders:{
     name: 'asc' | 'desc',
@@ -36,23 +38,16 @@ export class ListUsersComponent {
     this.getData('Name', this.orders.name)
   }
 
-  onClickAction(action: string): void {
+  onClickAction(action: string, id: string): void {
     this.action = action;
+    this.id = id;
   }
 
-  
-  // getDataNameDesc(): void {
-  //   this.usersService.getUsers("Name", "desc", 1).subscribe({
-  //     next: (data: Registry[]) => {
-        
-  //       this.orderName = "asc";
-  //       this.users = data;
-  //     },
-  //     error: (error) => {
-  //       console.log(error);
-  //     }
-  //   });
-  // }
+  onClickPage(page: number) {
+    this.page = page;
+    console.log(this.page)
+    this.getData('Name', this.orders.name)
+  }
   
 
   getData(order: string, type: 'asc' | 'desc', id?: keyof typeof this.orders): void {
@@ -68,20 +63,23 @@ export class ListUsersComponent {
       break;
     }
 
-    this.usersService.getUsers(order, type, 1, role).subscribe({
+    this.usersService.getUsers(order, type, this.page, role).subscribe({
       next: (data: Registry[]) => {
+       
         if(id) {
           this.orders = {
             name: 'asc',
             surname: 'asc',
             birth: 'asc',
+            
             [id]: type
           };
+          
         }
         // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
         // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
         // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
-
+        
         this.users = data;
       },
       error: (error) => {
@@ -90,58 +88,18 @@ export class ListUsersComponent {
     });
   }
 
-  // getDataSurnameAsc(): void {
-  //   this.usersService.getUsers("Surname", "asc", 1).subscribe({
-  //     next: (data: Registry[]) => {
-        
-  //       this.orderSurname = "desc";
-  //       this.users = data;
-  //     },
-  //     error: (error) => {
-  //       console.log(error);
-  //     }
-  //   });
-  // }
-
-  // getDataSurnameDesc(): void {
-  //   this.usersService.getUsers("Surname", "desc", 1).subscribe({
-  //     next: (data: Registry[]) => {
-        
-  //       this.orderSurname = "asc";
-  //       this.users = data;
-  //     },
-  //     error: (error) => {
-  //       console.log(error);
-  //     }
-  //   });
-  // }
-
-  // getDataBirthAsc(): void {
-  //   this.usersService.getUsers("Birth", "asc", 1).subscribe({
-  //     next: (data: Registry[]) => {
-        
-  //       this.orderBirth = "desc";
-  //       this.users = data;
-  //     },
-  //     error: (error) => {
-  //       console.log(error);
-  //     }
-  //   });
-  // }
-
-  // getDataBirthDesc(): void {
-  //   this.usersService.getUsers("Birth", "desc", 1).subscribe({
-  //     next: (data: Registry[]) => {
-        
-  //       this.orderBirth = "asc";
-  //       this.users = data;
-  //     },
-  //     error: (error) => {
-  //       console.log(error);
-  //     }
-  //   });
-  // }
-
-
+  dUser(id: string): void {
+    console.log(id)
+    this.usersService.deleteUser(id).subscribe({
+      next: (res) => {
+        this.page = 1; 
+        this.getData("Name", "asc", "name");
+        console.log(res);
+      },
+      error: (error) => {
+        console.log('error',error);
+      }
+    });
+  }
 }
 

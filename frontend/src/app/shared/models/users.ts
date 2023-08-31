@@ -28,4 +28,20 @@ export interface Registry {
   email?: string
   address?: string
   telephone?: string //date format "yyyy-mm-dd"
+
+  teacher?: Teacher;
+  student?: Student;
+}
+
+export interface Teacher {
+  id: string,
+  registryId: string,
+  userId: string
+}
+
+export interface Student {
+  id: string,
+  registryId: string,
+  userId: string
+  classroom: string
 }
