@@ -163,7 +163,7 @@ public class UsersController : Controller
             if (this._teacherRepository.CreateTeacher(teacher))
             {
                 _transactionRepository.CommitTransaction(transaction);
-                return Ok("Teacher successfully created");
+                return Ok(teacher);
             }
             else
             {
@@ -247,7 +247,7 @@ public class UsersController : Controller
             if (this._studentRepository.CreateStudent(student))
             {
                 _transactionRepository.CommitTransaction(transaction);
-                return Ok("Student successfully created");
+                return Ok(student);
             }
             else
             {
@@ -318,7 +318,7 @@ public class UsersController : Controller
             ModelState.AddModelError("response", "something wrong while deleting the user");
             Console.WriteLine(e);
         }
-        return Ok("User deleted");
+        return Ok(userToDelete);
     }
 
     #endregion
