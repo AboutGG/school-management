@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using System.Linq.Dynamic;
 using backend.Dto;
@@ -162,7 +163,7 @@ public class UsersController : Controller
             if (this._teacherRepository.CreateTeacher(teacher))
             {
                 _transactionRepository.CommitTransaction(transaction);
-                return Ok("Teacher successfully created");
+                return Ok(teacher);
             }
             else
             {
@@ -200,17 +201,17 @@ public class UsersController : Controller
         {
             return BadRequest(ModelState);
         }
-
-
+    
+    
         if (_userRepository.UserExists(userStudent.User.Username))
         {
             ModelState.AddModelError("response", "User already exist");
             return StatusCode(422, ModelState);
         }
-
+    
         ///<summary> start transaction </summary>
         var transaction = _transactionRepository.BeginTransaction();
-
+    
         ///<summary> Create the user to add on db, taking the attributes from userStudent</summary>
         var user = new User
         {
@@ -218,7 +219,7 @@ public class UsersController : Controller
             Username = userStudent.User.Username,
             Password = userStudent.User.Password,
         };
-
+    
         ///<summary> Create the Registry to add on db, taking the attributes from userStudent</summary>
         var registry = new Registry
         {
@@ -231,7 +232,7 @@ public class UsersController : Controller
             Address = userStudent.Registry.Address ?? null,
             Telephone = userStudent.Registry.Telephone ?? null,
         };
-
+    
         ///<summary> Try to create an user and registry</summary>
         if (_userRepository.CreateUser(user) && _registryRepository.CreateRegistry(registry))
         {
@@ -240,13 +241,13 @@ public class UsersController : Controller
                 Id = new Guid(),
                 UserId = user.Id,
                 RegistryId = registry.Id,
-                Classroom = userStudent.Classroom,
+                ClassroomId = userStudent.Classroom.Id,
             };
-
+    
             if (this._studentRepository.CreateStudent(student))
             {
                 _transactionRepository.CommitTransaction(transaction);
-                return Ok("Student successfully created");
+                return Ok(student);
             }
             else
             {
@@ -317,7 +318,7 @@ public class UsersController : Controller
             ModelState.AddModelError("response", "something wrong while deleting the user");
             Console.WriteLine(e);
         }
-        return Ok("User deleted");
+        return Ok(userToDelete);
     }
 
     #endregion

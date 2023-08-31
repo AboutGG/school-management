@@ -141,7 +141,7 @@ public class DetailsController : Controller
             { "Users", _userRepository.CountUsers() },
             { "Students", _studentRepository.CountStudents() },
             { "Teachers", _teacherRepository.CountTeachers() },
-            { "Classrooms", _classroomRepository.GetClassrooms() }
+            { "Classrooms", _classroomRepository.GetClassroomsCount() }
         });
     }
 
