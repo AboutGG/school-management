@@ -29,14 +29,13 @@
           <i class="bi bi-book-fill"></i>
         </div>
         <div class="title">Utenti</div>
-        <i *ngIf="isExpanded" [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
+        <i *ngIf="isExpanded" [ngClass]="!isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
     </div>
 
-    <div *ngIf="isExpanded" [ngClass]="{'collapse-content': isCollapsed}" [ngClass]="{ 'expanded': isExpanded }"
+    <div *ngIf="isExpanded" [ngClass]="{'collapse-content': !isCollapsed}" [ngClass]="{ 'expanded': isExpanded }"
       class="custom-collapse collapse-content">
-      <div [routerLink]="['/add-user']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link"
-        class="link">
+      <div [routerLink]="['/add-user']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
         <p>Crea Utenti</p>
       </div>
       <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"

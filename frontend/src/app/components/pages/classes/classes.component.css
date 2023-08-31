@@ -1,3 +1,28 @@
+hr {
+  margin: 1rem 0;
+  color: inherit;
+  border: 0;
+  border-top: var(--bs-border-width) solid;
+  opacity: 0.25;
+}
+
+.icon {
+  border: 2px solid;
+  border-radius: 50px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffb900;
+  margin-left: 20px;
+}
+
+.bi-person-vcard {
+  font-size: 30px;
+  color: #ffb900;
+}
+
 .input-container {
   position: relative;
   display: inline-block;

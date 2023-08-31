@@ -1,98 +1,75 @@
-.input-container {
-  position: relative;
-  display: inline-block;
+hr{
+  margin: 1rem 0;
+  color: inherit;
+  border: 0;
+  border-top: var(--bs-border-width) solid;
+  opacity: 0.25;
 }
-
-.input-container input {
-  margin-left: 10px;
-  width: 12.5rem;
-  padding: 0.4375rem 0.875rem;
-  padding-right: 30px;
-  color: #333;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 0.1875rem;
-}
-
-.input-container i {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.bi-search {
-  color: unset;
-}
-
-thead,
-tbody {
-  border: 1px solid #ddd;
-  background-color: #fff;
-}
-
-.btn-classes {
-  background-color: #fafafa;
-  border-color: #ddd;
-  padding: 0.4375rem 0.875rem;
-  border-radius: 0;
-  color: #333;
-}
-
-.btn-select {
-  background-color: #fafafa;
-  border-color: #ddd;
-  padding: 0.4375rem 0.875rem;
-  border-radius: 0;
-  margin-left: 20px;
-  margin-right: 20px;
-  color: #333;
-}
-
-.btn-drop {
-  background-color: #03a9f4;
-  border-color: #ddd;
-  padding: 0.4375rem 0.875rem;
-  border-radius: 0;
-  color: white;
-
-}
-
-.dropdown-menu {
-  background-color: #03a9f4;
-
-}
-
-.dropdown-menu a:hover {
-  background-color: #03a9f4;
-
-}
-
-.dropdown-menu a,
-i {
-  color: white;
-
-}
-
-td {
-
-  text-align: center;
-}
-
-.li-dropdown {
+.icon {
+  border: 2px solid;
+  border-radius: 50px;
+  width: 60px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 5%;
+  color: #ffb900;
+  margin-left: 20px;
 }
+.bi-person-vcard{
+  font-size: 30px;
+    color: #ffb900;
+}
+.input-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .input-container input {
+    margin-left: 10px;
+    width: 12.5rem;
+    padding: 0.4375rem 0.875rem;
+    padding-right: 30px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.1875rem;
+  }
+  
+  .input-container i {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .bi-search {
+    color: unset;
+  }
+  
+  thead,
+  tbody {
+    border: 1px solid #ddd;
+    background-color: #fff;
+  }
+  
+  td{
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  table {
+    border-bottom: 1px solid #ddd;
+  }
+  .page-item a:hover{
+    background-color: #ffb900;
+  }
+  .btn {
+    font-weight: 600;
+    border: 2px solid;
+    border-color: #ffb900;
 
-table {
-  border-bottom: 1px solid #ddd;
-}
-
-.btn-page {
-  background-color: #03a9f4;
-  display: flex;
-  align-items: center;
-  height: 30px;
-}
+  }
+  .btn:hover{
+    background-color: #ffc422;
+  }
