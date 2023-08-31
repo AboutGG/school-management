@@ -11,10 +11,10 @@ public class Student
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
 
-    [Column("classroom")]
-    [JsonPropertyName("classroom")]
-    [StringValidator(2, ErrorMessage = "Classroom lenght can't be less then 2")]
-    public string Classroom { get; set; }
+    [Column("id_classroom")]
+    [JsonPropertyName("id_classroom")]
+    public Guid ClassroomId { get; set; }
+    public virtual Classroom Classroom { get; set; }
 
     [Column("id_user")]
     [JsonPropertyName("id_user")]

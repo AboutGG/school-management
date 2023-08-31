@@ -7,9 +7,6 @@ namespace backend.Dto;
 
 public class RegistryDto
 {
-    /// <summary> User id </summary>
-    public Guid Id { get; set; }
-
     /// <summary> name </summary>
     [StringValidator(3, ErrorMessage ="Name cannot contain less then 3 character")]
     public string Name { get; set; }
