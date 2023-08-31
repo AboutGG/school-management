@@ -318,7 +318,7 @@ public class UsersController : Controller
             ModelState.AddModelError("response", "something wrong while deleting the user");
             Console.WriteLine(e);
         }
-        return Ok("User deleted");
+        return Ok(userToDelete);
     }
 
     #endregion
