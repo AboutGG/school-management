@@ -26,7 +26,7 @@
     <div (click)="toggleCollapse()" class="link">
       <div class="content">
         <div class="icon">
-          <i class="bi bi-book-fill"></i>
+          <i class="bi bi-person"></i>
         </div>
         <div class="title">Utenti</div>
         <i *ngIf="isExpanded" [ngClass]="!isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
@@ -59,7 +59,7 @@
     <div [routerLink]="['/subjects']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
         <div class="icon">
-          <i class="bi bi-geo-alt-fill"></i>
+          <i class="bi bi-journals"></i>
           <!--subjects-->
         </div>
         <div class="title">Materie</div>
@@ -71,7 +71,7 @@
       <div [routerLink]="['/exams']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
         <div class="content">
           <div class="icon">
-            <i class="bi bi-book-fill"></i>
+            <i class="bi bi-book"></i>
             <!--exams-->
           </div>
           <div class="title">Esami</div>
