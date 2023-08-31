@@ -1,7 +1,6 @@
 ﻿using backend.Dto;
 using backend.Models;
 using backend.Repositories;
-using iText.StyledXmlParser.Jsoup.Select;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;

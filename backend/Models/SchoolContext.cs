@@ -23,6 +23,8 @@ public class SchoolContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        MyDataSeeder.SeedData(modelBuilder);
+        
         #region Uniques
 
         modelBuilder.Entity<User>()
