@@ -5,11 +5,11 @@ namespace backend.Dto;
 public class ClassroomStudentCount
 {
     [JsonPropertyName("id_classroom")]
-    public Guid ClassroomId { get; set; }
+    public Guid id_classroom { get; set; }
 
     [JsonPropertyName("name_classroom")]
-    public string Name { get; set; }
+    public string name_classroom { get; set; }
 
     [JsonPropertyName("student_count")]
-    public int StudentCount { get; set; }
+    public int student_count { get; set; }
 }

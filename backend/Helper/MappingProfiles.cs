@@ -17,9 +17,15 @@ public class MappingProfiles : Profile
         CreateMap<Student, UserDetailDto>();
         CreateMap<Teacher, UserDetailDto>();
         CreateMap<Teacher, UserDto>();
-        
+
         CreateMap<Classroom, ClassroomStudentCount>()
-            .ForMember(dest => dest.StudentCount,
+            .ForMember(dest => dest.id_classroom,
+                opt => opt
+                    .MapFrom(src => src.Id))
+            .ForMember(dest => dest.name_classroom, 
+                opt => opt
+                    .MapFrom(src => src.Name))
+            .ForMember(dest => dest.student_count,
                 opt => opt
                     .MapFrom(src => src.Students.Count()));
 
