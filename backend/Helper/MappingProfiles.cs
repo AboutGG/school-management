@@ -22,5 +22,8 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.StudentCount,
                 opt => opt
                     .MapFrom(src => src.Students.Count()));
+
+        CreateMap<Classroom, ClassroomDto>();
+
     }
 }

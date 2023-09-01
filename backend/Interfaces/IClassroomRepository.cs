@@ -6,5 +6,6 @@ namespace backend.Interfaces;
 public interface IClassroomRepository
 {
     int GetClassroomsCount();
-    
+    List<Classroom> GetClassrooms();
+
 }

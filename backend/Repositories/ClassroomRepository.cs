@@ -27,5 +27,11 @@ public class ClassroomRepository : IClassroomRepository
            .Select(s => s.Name)
            .Count();
     }
-    
+
+    public List<Classroom> GetClassrooms()
+    {
+        return _context.Classrooms
+            .OrderBy(el => el.Name)
+            .ToList();
+    }
 }
