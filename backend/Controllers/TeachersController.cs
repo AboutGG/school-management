@@ -57,7 +57,7 @@ public class TeachersController : Controller
 
     [HttpGet]
     [Route("{id}/classroom")]
-    [ProducesResponseType(200, Type = typeof(ICollection<Classroom>))]
+    [ProducesResponseType(200, Type = typeof(List<Classroom>))]
     [ProducesResponseType(400)]
     public IActionResult GetClassrooms([FromRoute] Guid id)
     {
