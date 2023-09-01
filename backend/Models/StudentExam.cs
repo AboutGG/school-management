@@ -3,15 +3,15 @@ using System.Text.Json.Serialization;
 
 namespace backend.Models;
 
-[Table("registries_exams")]
-public class RegistryExam
+[Table("students_exams")]
+public class StudentExam
 {
-    /// <summary> Registries_exam Foreign Key id_registry </summary>
-    [Column("id_registry")]
-    [JsonPropertyName("id_registry")]
-    public Guid RegistryId { get; set; }
+    /// <summary> Registries_exam Foreign Key id_student </summary>
+    [Column("id_student")]
+    [JsonPropertyName("id_student")]
+    public Guid StudentId { get; set; }
 
-    public virtual Registry Registry { get; set; }
+    public virtual Student Student { get; set; }
 
     /// <summary> Registries_exam Foreign Key id_subject </summary>
     [Column("id_exam")]

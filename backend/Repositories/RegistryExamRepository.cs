@@ -12,14 +12,14 @@ public class RegistryExamRepository : IRegistryExamRepository
         this._context = context;
     }
     
-    public ICollection<RegistryExam> GetRegistriesExams()
+    public ICollection<StudentExam> GetRegistriesExams()
     {
         return this._context.RegistryExams.OrderBy(re => re.ExamId).ToList();
     }
 
-    public bool CreateRegistryExam(RegistryExam registryExam)
+    public bool CreateRegistryExam(StudentExam studentExam)
     {
-        this._context.RegistryExams.Add(registryExam);
+        this._context.RegistryExams.Add(studentExam);
         return Save();
     }
     

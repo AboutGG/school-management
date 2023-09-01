@@ -109,7 +109,7 @@ public class DetailsController : Controller
         takenRegistry.Email = updatedRegistry.Email;
         takenRegistry.Gender = updatedRegistry.Gender;
         takenRegistry.Telephone = updatedRegistry.Telephone;
-
+        
         try
         {
             registryRepo.UpdateEntity(takenRegistry); //update the user's registry
