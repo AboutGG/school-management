@@ -1,7 +1,8 @@
-﻿using backend.Dto;
+﻿using AutoMapper;
+using backend.Dto;
+using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
-using iText.StyledXmlParser.Jsoup.Select;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -11,21 +12,24 @@ namespace backend.Controllers;
 public class ClassroomController : Controller
 {
     private readonly SchoolContext _context;
+    private readonly IClassroomRepository _classroomRepository;
+    private readonly IMapper _mapper;
 
-    public ClassroomController(SchoolContext context)
+    public ClassroomController(
+        SchoolContext context, 
+        IClassroomRepository classroomRepository,
+        IMapper mapper)
     {
         _context = context;
+        _classroomRepository = classroomRepository;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<Classroom>))]
-    public IActionResult GetClassroom([FromQuery] PaginationParams @params)
+    [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
+    public IActionResult GetClassroom()
     {
-        var classrooms = new GenericRepository<Classroom>(_context);
-
-        return Ok(classrooms.GetAll(@params,
-            classroom => classroom.Name.Trim().ToUpper().Contains(@params.Search.Trim().ToUpper())
-        ));
+        return Ok(_mapper.Map<List<ClassroomDto>>(_classroomRepository.GetClassrooms()));
     }
 
 

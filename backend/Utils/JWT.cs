@@ -13,7 +13,6 @@ public class JWT
         var tokenHandler = new JwtSecurityTokenHandler();
         // Definisci la chiave segreta come un array di byte
         byte[] key = Encoding.ASCII.GetBytes("DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
-        
         // Crea una lista di claims (informazioni) per il token
         var claims = new List<Claim>
         {
@@ -40,7 +39,26 @@ public class JWT
 
         // Converte il token in una stringa
         var tokenString = tokenHandler.WriteToken(token);
-
         return tokenString;
+    }
+    
+    public static JwtSecurityToken DecodeJwtToken(string token, string secretKey)
+    {
+        // Definisci la chiave segreta come un array di byte
+        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = key,
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+
+        SecurityToken decodedToken;
+        tokenHandler.ValidateToken(token, tokenValidationParameters, out decodedToken);
+
+        return decodedToken as JwtSecurityToken;
     }
 }
