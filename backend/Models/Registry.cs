@@ -58,7 +58,6 @@ public class Registry
     public virtual Teacher Teacher { get; set; }
 
     public virtual Student Student { get; set; }
-    public virtual IList<RegistryExam> RegistryExams { get; set; }
 
     #endregion
 }
