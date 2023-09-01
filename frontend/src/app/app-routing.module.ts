@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: "not-found", component: NotFoundComponent },
   { path: 'list-users', component: ListUsersComponent },
   { path: 'edit-user', component: EditUserComponent, canActivate: [AuthGuard] },
-  { path: 'details', component: DetailUserComponent, canActivate: [AuthGuard] },
+  { path: 'details/:id', component: DetailUserComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "not-found" },
 ];
 

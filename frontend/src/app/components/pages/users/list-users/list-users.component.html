@@ -24,8 +24,8 @@
           <div class="classes-header">
             <div class="input-container">
               <span>Cerca: </span>
-              <input type="text" name="" id="" placeholder="Scrivi per cercare..." />
-              <i class="bi bi-search"></i>
+              <input type="text" name="" id="search" placeholder="Scrivi per cercare..." #filter>
+              <i class="bi bi-search" type="button" (click)="saveSearch(filter.value)"></i>
             </div>
           </div>
           <div>
@@ -39,16 +39,16 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col" id="name">Nome
-          <i *ngIf="this.orders.name === 'desc'" class="bi bi-caret-down-fill" (click)="getData('Name', 'asc','name')"></i>
-          <i *ngIf="this.orders.name === 'asc'" class="bi bi-caret-up-fill" (click)="getData('Name', 'desc','name')"></i>
+          <i *ngIf="this.orders.name === 'desc'" class="bi bi-caret-down-fill" (click)="getData('Name', 'asc', 'name')"></i>
+          <i *ngIf="this.orders.name === 'asc'" class="bi bi-caret-up-fill" (click)="getData('Name', 'desc', 'name')"></i>
         </th>
         <th scope="col" id="surname">Cognome
-          <i *ngIf="this.orders.surname === 'asc'" class="bi bi-caret-up-fill" (click)="getData('Surname', 'desc','surname')"></i>
-          <i *ngIf="this.orders.surname === 'desc'" class="bi bi-caret-down-fill" (click)="getData('Surname', 'asc','surname')"></i>
+          <i *ngIf="this.orders.surname === 'asc'" class="bi bi-caret-up-fill" (click)="getData('Surname', 'desc', 'surname')"></i>
+          <i *ngIf="this.orders.surname === 'desc'" class="bi bi-caret-down-fill" (click)="getData('Surname', 'asc', 'surname')"></i>
         </th>
         <th scope="col" id="birth">Data di nascita
-          <i *ngIf="this.orders.birth === 'asc'" class="bi bi-caret-up-fill" (click)="getData('Birth', 'desc','birth')"></i>
-          <i *ngIf="this.orders.birth === 'desc'" class="bi bi-caret-down-fill" (click)="getData('Birth', 'asc','birth')"></i>
+          <i *ngIf="this.orders.birth === 'asc'" class="bi bi-caret-up-fill" (click)="getData('Birth', 'desc', 'birth')"></i>
+          <i *ngIf="this.orders.birth === 'desc'" class="bi bi-caret-down-fill" (click)="getData('Birth', 'asc', 'birth')"></i>
         </th>
         <th scope="col">Azioni</th>
       </tr>
@@ -64,8 +64,8 @@
               <i class="bi bi-gear-fill" data-bs-toggle="dropdown" aria-expanded="false" type="button"></i>  
               <div class="dropdown-toggle ps-3" data-bs-toggle="dropdown" aria-expanded="false"></div>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" value="dettagli" (click)="onClickAction('dettagli', user.teacher!.userId || user.student!.userId)" [routerLink]="['/details']"><i class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
-                    <li><a class="dropdown-item" value="modifica" (click)="onClickAction('modifica', user.teacher!.userId || user.student!.userId)" [routerLink]="['/edit']"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
+                    <li><a class="dropdown-item" value="dettagli" (click)="onClickAction('dettagli', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)" [routerLink]="['/details/', user.teacher != null ? user!.teacher!.userId : user!.student!.userId]"><i class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
+                    <li><a class="dropdown-item" value="modifica" (click)="onClickAction('modifica', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)" [routerLink]="['/edit/']"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
                     <li><a role="button" class="dropdown-item" value="elimina" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="onClickAction('elimina', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
                 </ul>
             </div>

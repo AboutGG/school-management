@@ -22,8 +22,9 @@ export class ListUsersComponent {
   action: string = "";
   id!: string;
   page: number = 1;
+  text: string = "";
   
-  orders:{
+  orders: {
     name: 'asc' | 'desc',
     surname: 'asc' | 'desc',
     birth: 'asc' | 'desc'
@@ -41,6 +42,7 @@ export class ListUsersComponent {
   onClickAction(action: string, id: string): void {
     this.action = action;
     this.id = id;
+    console.log(this.id)
   }
 
   onClickPage(page: number) {
@@ -50,9 +52,10 @@ export class ListUsersComponent {
   }
   
 
-  getData(order: string, type: 'asc' | 'desc', id?: keyof typeof this.orders): void {
+  getData(order: string, type: 'asc' | 'desc', id?: keyof typeof this.orders, search?: string): void {
 
     let role = "";
+    search = this.text;
 
     switch(this.role) {
       case 'studenti':
@@ -62,9 +65,11 @@ export class ListUsersComponent {
       role = 'Teacher';
       break;
     }
+    console.log(this.text)
 
-    this.usersService.getUsers(order, type, this.page, role).subscribe({
+    this.usersService.getUsers(order, type, this.page, role, search).subscribe({
       next: (data: Registry[]) => {
+        console.log(id)
        
         if(id) {
           this.orders = {
@@ -73,9 +78,10 @@ export class ListUsersComponent {
             birth: 'asc',
             
             [id]: type
-          };
-          
+            
+          };          
         }
+        console.log("orders", this.orders);
         // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
         // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
         // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
@@ -100,6 +106,11 @@ export class ListUsersComponent {
         console.log('error',error);
       }
     });
+  }
+
+  saveSearch(text: string) {
+    this.text = text;
+    this.getData("Name", "asc", "name", this.text);
   }
 }
 
