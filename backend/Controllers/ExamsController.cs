@@ -32,7 +32,6 @@ public class ExamsController : Controller
     [HttpGet]
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]
-    [ProducesResponseType(404)]
     public IActionResult GetExams([FromHeader] string token)
     {
         
