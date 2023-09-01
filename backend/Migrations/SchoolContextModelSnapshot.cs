@@ -41,7 +41,7 @@ namespace backend.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("classrooms");
+                    b.ToTable("classrooms", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Exam", b =>
@@ -66,7 +66,7 @@ namespace backend.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("exams");
+                    b.ToTable("exams", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Registry", b =>
@@ -117,17 +117,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("registries");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d7f23f33-ebf2-4716-8c3f-b997ba2da125"),
-                            Birth = new DateOnly(1996, 9, 15),
-                            Gender = "Vipera",
-                            Name = "Giordana",
-                            Surname = "Pistorio"
-                        });
+                    b.ToTable("registries", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.RegistryExam", b =>
@@ -151,7 +141,7 @@ namespace backend.Migrations
 
                     b.HasIndex("RegistryId");
 
-                    b.ToTable("registries_exams");
+                    b.ToTable("registries_exams", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Student", b =>
@@ -187,7 +177,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("students");
+                    b.ToTable("students", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Subject", b =>
@@ -206,7 +196,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("subjects");
+                    b.ToTable("subjects", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Teacher", b =>
@@ -235,7 +225,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("teachers");
+                    b.ToTable("teachers", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.TeacherSubjectClassroom", b =>
@@ -261,7 +251,7 @@ namespace backend.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("teachers_subjects_classrooms");
+                    b.ToTable("teachers_subjects_classrooms", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>
@@ -289,21 +279,7 @@ namespace backend.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("1346712f-a66d-4b25-9ff6-cf6b7cd8c954"),
-                            Password = "123",
-                            Username = "giop5"
-                        },
-                        new
-                        {
-                            Id = new Guid("affab63e-dec6-4626-abfb-1e52b258cc6c"),
-                            Password = "123",
-                            Username = "aboutgg"
-                        });
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Exam", b =>
@@ -397,7 +373,7 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.HasOne("backend.Models.Teacher", "Teacher")
-                        .WithMany("TeacherSubjectsClassrooms")
+                        .WithMany("TeacherSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -441,7 +417,7 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Teacher", b =>
                 {
-                    b.Navigation("TeacherSubjectsClassrooms");
+                    b.Navigation("TeacherSubjects");
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>
