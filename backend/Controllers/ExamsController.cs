@@ -48,7 +48,8 @@ public class ExamsController : Controller
             //Take the student using the id
             Student takenStudent = userRepository.GetById(
                 el => el.UserId.ToString() == takenId,
-                el => el.StudentExams
+                el => el.StudentExams,
+                el => el.Classroom
             );
             GenericRepository<Exam> examRepo = new GenericRepository<Exam>(_context);
             foreach (StudentExam iesim in takenStudent.StudentExams)

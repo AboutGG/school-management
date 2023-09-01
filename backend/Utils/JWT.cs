@@ -44,6 +44,7 @@ public class JWT
     
     public static JwtSecurityToken DecodeJwtToken(string token, string secretKey)
     {
+        // Definisci la chiave segreta come un array di byte
         var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -56,7 +57,7 @@ public class JWT
         };
 
         SecurityToken decodedToken;
-        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out decodedToken);
+        tokenHandler.ValidateToken(token, tokenValidationParameters, out decodedToken);
 
         return decodedToken as JwtSecurityToken;
     }

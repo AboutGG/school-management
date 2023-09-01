@@ -28,7 +28,7 @@ public class Student
 
     #region Foreign Keys
 
-    public virtual IList<StudentExam> StudentExams{ get; set; }
+    public virtual List<StudentExam> StudentExams{ get; set; }
 
     #endregion
 }
