@@ -20,6 +20,6 @@ public class Exam
     public DateOnly ExamDate { get; set; }
 
     #region Foreign Key reference
-    public virtual IList<RegistryExam> RegistryExams { get; set; }
+    public virtual IList<StudentExam> StudentExams { get; set; }
     #endregion
 }

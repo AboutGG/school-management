@@ -25,4 +25,10 @@ public class Student
     [JsonPropertyName("id_registry")]
     public Guid RegistryId { get; set; }
     public virtual Registry Registry { get; set; }
+
+    #region Foreign Keys
+
+    public virtual IList<StudentExam> StudentExams{ get; set; }
+
+    #endregion
 }
