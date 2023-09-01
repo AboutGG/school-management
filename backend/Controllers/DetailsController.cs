@@ -64,10 +64,14 @@ public class DetailsController : Controller
             return BadRequest("Invalid Id");
         var users = new GenericRepository<User>(_context);
         if (users.Exist(u => u.Id == Id))
-            return Ok(users.GetById(u => u.Id == Id,
+        {
+            var takenUser = users.GetById(u => u.Id == Id,
                 u => u.Teacher.Registry,
-                u => u.Student.Registry)
-            );
+                u => u.Student.Registry);
+
+            return Ok(takenUser?.Student.Registry == null ? takenUser.Teacher.Registry : takenUser.Student.Registry);
+        }
+
         return NotFound();
     }
 
@@ -109,7 +113,7 @@ public class DetailsController : Controller
         takenRegistry.Email = updatedRegistry.Email;
         takenRegistry.Gender = updatedRegistry.Gender;
         takenRegistry.Telephone = updatedRegistry.Telephone;
-        
+
         try
         {
             registryRepo.UpdateEntity(takenRegistry); //update the user's registry
