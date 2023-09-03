@@ -8,5 +8,5 @@ public class AnotherDto
     
     public String surname { get; set; }
 
-    public String subject { get; set; }
+    public String[] subject { get; set; }
 }

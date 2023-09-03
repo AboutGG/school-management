@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Dynamic.Core;
+using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -30,7 +31,8 @@ public class ClassroomController : Controller
     [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
     public IActionResult GetClassroom()
     {
-        return Ok(_mapper.Map<List<ClassroomDto>>(_classroomRepository.GetClassrooms()));
+        var classrooms = new GenericRepository<Classroom>(_context).GetAll(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null);
+        return Ok(_mapper.Map<List<ClassroomDto>>(classrooms));
     }
 
 
@@ -44,13 +46,15 @@ public class ClassroomController : Controller
                 student => student.Registry);
 
         var teachers = new GenericRepository<Teacher>(_context)
-            .GetAllM(@params,
-                el => el.TeacherSubjectsClassrooms.Any(tsc => tsc.ClassroomId == id),
-                c =>
-                    c.Include(s => s.Registry)
-                        .Include(s => s.TeacherSubjectsClassrooms)
-                        .ThenInclude(s => s.Subject));
-        
+            .GetAll(
+                @params,
+                //el => el.TeacherSubjectsClassrooms.Any(tsc => tsc.ClassroomId == id),
+                c => c
+                    .Include(s => s.Registry)
+                    .Include(s => s.TeacherSubjectsClassrooms
+                        .Where(tsc => tsc.ClassroomId == id))
+                    .ThenInclude(s => s.Subject));
+
         var lol = _mapper.Map<List<AnotherDto>>(teachers);
 
         var sex = students.Select(el => new
@@ -66,5 +70,6 @@ public class ClassroomController : Controller
             lol,
             sex
         });
+
     }
 }

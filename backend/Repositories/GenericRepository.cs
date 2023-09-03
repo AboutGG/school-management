@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using backend.Dto;
@@ -39,7 +40,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <param name="predicate"> Used to do a condition in a search or more.</param>
     /// <param name="includes"> Used to includes the reference object of another table. </param>
     /// <returns>All users using the params, predicate and includes</returns>
-    public ICollection<T> GetAll(PaginationParams @params,
+    
+    public ICollection<T> GetAll(PaginationParams? @params,
         Expression<Func<T, bool>> predicate, //Predicate ex:  t => t.Id == Id
         params Expression<Func<T, object>>[] includes //Include ex:  t => t.Id<
     )
@@ -62,22 +64,29 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     }
 
     #endregion
-
-    public List<T> GetAllM(PaginationParams? @params,
-        Expression<Func<T, bool>> predicate, //Predicate ex:  t => t.Id == Id
-        Func<IQueryable<T>, IQueryable<T>> includeFunc
+    
+    public List<T> GetAll(@PaginationParams? @params,
+        Func<IQueryable<T>, IQueryable<T>>? queryFunc
     )
     {
-        var query = _entities.Where(predicate);
-        query = includeFunc(query);
+        var query = _entities.AsQueryable();
         
-        //@params.Order default value: Name, @params.OderType default value: asc
-        query = query.OrderBy(
-            $"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
+        if (queryFunc != null)
+        {
+            query = queryFunc.Invoke(query);
+        }
 
-        //@params.Page default value: 1, @params.ItemsPerPage default value: 10
-        return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
-            .Take(@params.ItemsPerPage).ToList();
+        if (@params != null)
+        {
+            query = query.OrderBy(
+                $"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
+
+            //@params.Page default value: 1, @params.ItemsPerPage default value: 10
+            query.Skip((@params.Page - 1) * @params.ItemsPerPage)
+                .Take(@params.ItemsPerPage);
+        }
+        
+        return query.ToList();
     }
 
     #region GetById
@@ -152,5 +161,5 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     #endregion
 
     #endregion
-
+    
 }

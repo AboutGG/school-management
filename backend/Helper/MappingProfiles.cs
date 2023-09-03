@@ -22,14 +22,17 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.id_classroom,
                 opt => opt
                     .MapFrom(src => src.Id))
-            .ForMember(dest => dest.name_classroom, 
+            .ForMember(dest => dest.name_classroom,
                 opt => opt
                     .MapFrom(src => src.Name))
             .ForMember(dest => dest.student_count,
                 opt => opt
                     .MapFrom(src => src.Students.Count()));
 
-        CreateMap<Classroom, ClassroomDto>();
+        CreateMap<Classroom, ClassroomDto>()
+            .ForMember(dest => dest.ClassroomId,
+                opt => opt
+                    .MapFrom(src => src.Id));
 
         CreateMap<Teacher, AnotherDto>()
             .ForMember(destinationMember => destinationMember.id,
@@ -43,7 +46,9 @@ public class MappingProfiles : Profile
                     .MapFrom(src => src.Registry.Surname))
             .ForMember(destinationMember => destinationMember.subject,
                 opt =>
-                    opt.MapFrom(src => src.TeacherSubjectsClassrooms.First().Subject.Name));
+                    opt.MapFrom(src =>
+                        src.TeacherSubjectsClassrooms.Select(
+                            tsc => tsc.Subject.Name).ToList()));
 
     }
 }
