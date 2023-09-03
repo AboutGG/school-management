@@ -323,19 +323,6 @@ public class UsersController : Controller
     }
 
     #endregion
-
-    [HttpGet]
-    [Route("test")]
-    public IActionResult Test()
-    {
-        GenericRepository<User> users = new GenericRepository<User>(_context);
-        var user = users.GetAll(
-            user => user.Student.ClassroomId == Guid.Parse("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
-            s =>
-                s.Include(user => user.Student)
-                    .ThenInclude(S => S.Registry));
-        return Ok(user);
-    }
     
     #endregion
 }
