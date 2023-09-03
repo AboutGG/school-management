@@ -31,7 +31,8 @@ public class ClassroomController : Controller
     [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
     public IActionResult GetClassroom()
     {
-        var classrooms = new GenericRepository<Classroom>(_context).GetAll(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null);
+        var classrooms = new GenericRepository<Classroom>(_context)
+            .GetAll(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null);
         return Ok(_mapper.Map<List<ClassroomDto>>(classrooms));
     }
 
@@ -42,20 +43,18 @@ public class ClassroomController : Controller
     {
         var students = new GenericRepository<Student>(_context)
             .GetAll(@params,
-                student => student.ClassroomId == id,
-                student => student.Registry);
+                query => query
+                    .Where(student => student.ClassroomId == id)
+                    .Include(student => student.Registry));
 
-        var teachers = new GenericRepository<Teacher>(_context)
+        var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
             .GetAll(
-                @params,
-                //el => el.TeacherSubjectsClassrooms.Any(tsc => tsc.ClassroomId == id),
-                c => c
-                    .Include(s => s.Registry)
-                    .Include(s => s.TeacherSubjectsClassrooms
+                null, 
+                query => query
+                    .Include(teacher => teacher.Registry)
+                    .Include(teacher => teacher.TeacherSubjectsClassrooms
                         .Where(tsc => tsc.ClassroomId == id))
-                    .ThenInclude(s => s.Subject));
-
-        var lol = _mapper.Map<List<AnotherDto>>(teachers);
+                    .ThenInclude(tsc => tsc.Subject)));
 
         var sex = students.Select(el => new
         {
@@ -67,7 +66,7 @@ public class ClassroomController : Controller
 
         return Ok(new
         {
-            lol,
+            teachers,
             sex
         });
 
