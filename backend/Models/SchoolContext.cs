@@ -10,9 +10,10 @@ public class SchoolContext : DbContext
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Subject> Subjects { get; set; }
-    public DbSet<TeacherSubject> TeacherSubjects { get; set; }
+    public DbSet<TeacherSubjectClassroom> TeachersSubjectsClassrooms{ get; set; }
     public DbSet<Exam> Exams { get; set; }
-    public DbSet<RegistryExam> RegistryExams { get; set; }
+    public DbSet<StudentExam> RegistryExams { get; set; }
+    public DbSet<Classroom> Classrooms { get; set; }
     #endregion
     
     public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
@@ -22,10 +23,16 @@ public class SchoolContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region User
+        Seeder.SeedData(modelBuilder);
+        
+        #region Uniques
 
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Username)
+            .IsUnique();
+
+        modelBuilder.Entity<Classroom>()
+            .HasIndex(c => c.Name)
             .IsUnique();
 
         #endregion
@@ -60,22 +67,33 @@ public class SchoolContext : DbContext
             .WithOne(r => r.Student)
             .HasForeignKey<Student>(s => s.RegistryId);
 
+        /// <summary> Student relation with classroom one-to-many</summary>
+        modelBuilder.Entity<Student>()
+            .HasOne<Classroom>(s => s.Classroom)
+            .WithMany(c => c.Students)
+            .HasForeignKey(s => s.ClassroomId);
+            
         #endregion
 
-        #region TeacherSubject relations
+        #region TeacherSubjectClassroom relations
 
         ///<summary> TrecherSubject relation many-to-many</summary>
-        modelBuilder.Entity<TeacherSubject>().HasKey(ts => new { ts.TeacherId, ts.SubjectId });
+        modelBuilder.Entity<TeacherSubjectClassroom>().HasKey(ts => new { ts.TeacherId, ts.SubjectId, ts.ClassroomId });
 
-        modelBuilder.Entity<TeacherSubject>()
+        modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Teacher>(ts => ts.Teacher)
-            .WithMany(t => t.TeacherSubjects)
+            .WithMany(t => t.TeacherSubjectsClassrooms)
             .HasForeignKey(ts => ts.TeacherId);
 
-        modelBuilder.Entity<TeacherSubject>()
+        modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Subject>(ts => ts.Subject)
             .WithMany(s => s.TeacherSubjects)
             .HasForeignKey(ts => ts.SubjectId);
+
+        modelBuilder.Entity<TeacherSubjectClassroom>()
+            .HasOne<Classroom>(ts => ts.Classroom)
+            .WithMany(c => c.TeacherSubjects)
+            .HasForeignKey(ts => ts.ClassroomId);
 
         #endregion
 
@@ -89,20 +107,20 @@ public class SchoolContext : DbContext
 
         #endregion
 
-        #region RegistryExam relations
+        #region StudentExam relations
 
-        ///<summary> RegistryExam relation many-to-many</summary>
-        modelBuilder.Entity<RegistryExam>().HasKey(re => new { re.ExamId, re.RegistryId });
+        ///<summary> StudentExam relation many-to-many</summary>
+        modelBuilder.Entity<StudentExam>().HasKey(re => new { re.ExamId, re.StudentId });
 
-        modelBuilder.Entity<RegistryExam>()
+        modelBuilder.Entity<StudentExam>()
             .HasOne<Exam>(re => re.Exam)
-            .WithMany(e => e.RegistryExams)
+            .WithMany(e => e.StudentExams)
             .HasForeignKey(re => re.ExamId);
 
-        modelBuilder.Entity<RegistryExam>()
-            .HasOne<Registry>(re => re.Registry)
-            .WithMany(r => r.RegistryExams)
-            .HasForeignKey(re => re.RegistryId);
+        modelBuilder.Entity<StudentExam>()
+            .HasOne<Student>(re => re.Student)
+            .WithMany(r => r.StudentExams)
+            .HasForeignKey(re => re.StudentId);
 
         #endregion
     }

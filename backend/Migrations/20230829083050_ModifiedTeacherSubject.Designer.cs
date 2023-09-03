@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -11,9 +12,11 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20230829083050_ModifiedTeacherSubject")]
+    partial class ModifiedTeacherSubject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,23 +45,6 @@ namespace backend.Migrations
                         .IsUnique();
 
                     b.ToTable("classrooms");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e"),
-                            Name = "1A"
-                        },
-                        new
-                        {
-                            Id = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
-                            Name = "1B"
-                        },
-                        new
-                        {
-                            Id = new Guid("70f432dc-2a6c-499b-9326-52d1506befa5"),
-                            Name = "2A"
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.Exam", b =>
@@ -135,48 +121,30 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("registries");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d7f23f33-ebf2-4716-8c3f-b997ba2da125"),
-                            Birth = new DateOnly(1996, 9, 15),
-                            Gender = "Vipera",
-                            Name = "Giordana",
-                            Surname = "Pistorio"
-                        },
-                        new
-                        {
-                            Id = new Guid("153afc1d-f63f-45aa-ae55-534d4ceeb737"),
-                            Birth = new DateOnly(2002, 1, 3),
-                            Gender = "Sirenetta",
-                            Name = "Gabriele",
-                            Surname = "Giuliano"
-                        },
-                        new
-                        {
-                            Id = new Guid("c976d8c8-3aa5-4164-be7c-884ebe29ee1e"),
-                            Birth = new DateOnly(2001, 9, 25),
-                            Gender = "M",
-                            Name = "Francesco",
-                            Surname = "Limonelli"
-                        },
-                        new
-                        {
-                            Id = new Guid("f833e6a7-f617-4683-a772-b5bcd1971da8"),
-                            Birth = new DateOnly(1993, 5, 6),
-                            Gender = "F",
-                            Name = "Francesca",
-                            Surname = "Scollo"
-                        },
-                        new
-                        {
-                            Id = new Guid("634477e4-1eeb-4a0d-bb07-c9bd2e3f9702"),
-                            Birth = new DateOnly(2001, 9, 23),
-                            Gender = "M",
-                            Name = "Angelo",
-                            Surname = "Lombardo"
-                        });
+            modelBuilder.Entity("backend.Models.RegistryExam", b =>
+                {
+                    b.Property<Guid>("ExamId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_exam")
+                        .HasAnnotation("Relational:JsonPropertyName", "id_exam");
+
+                    b.Property<Guid>("RegistryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_registry")
+                        .HasAnnotation("Relational:JsonPropertyName", "id_registry");
+
+                    b.Property<int?>("Grade")
+                        .HasColumnType("integer")
+                        .HasColumnName("grade")
+                        .HasAnnotation("Relational:JsonPropertyName", "grade");
+
+                    b.HasKey("ExamId", "RegistryId");
+
+                    b.HasIndex("RegistryId");
+
+                    b.ToTable("registries_exams");
                 });
 
             modelBuilder.Entity("backend.Models.Student", b =>
@@ -213,53 +181,6 @@ namespace backend.Migrations
                         .IsUnique();
 
                     b.ToTable("students");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("007d3bca-d81d-42bd-9194-9c1d9f1f5ed7"),
-                            ClassroomId = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e"),
-                            RegistryId = new Guid("c976d8c8-3aa5-4164-be7c-884ebe29ee1e"),
-                            UserId = new Guid("8af66697-aaf2-44d3-ac9e-b051451fa2ea")
-                        },
-                        new
-                        {
-                            Id = new Guid("8767fd02-7891-4b47-8b02-3cc0d07ac334"),
-                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
-                            RegistryId = new Guid("f833e6a7-f617-4683-a772-b5bcd1971da8"),
-                            UserId = new Guid("37ce79ab-5b93-44ce-8189-e49ab8e377e2")
-                        },
-                        new
-                        {
-                            Id = new Guid("78362ba2-29ea-472b-9878-f55dad233e21"),
-                            ClassroomId = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e"),
-                            RegistryId = new Guid("634477e4-1eeb-4a0d-bb07-c9bd2e3f9702"),
-                            UserId = new Guid("c98b3291-bd68-4f9e-a906-1a273ac9046b")
-                        });
-                });
-
-            modelBuilder.Entity("backend.Models.StudentExam", b =>
-                {
-                    b.Property<Guid>("ExamId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id_exam")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_exam");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id_student")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_student");
-
-                    b.Property<int?>("Grade")
-                        .HasColumnType("integer")
-                        .HasColumnName("grade")
-                        .HasAnnotation("Relational:JsonPropertyName", "grade");
-
-                    b.HasKey("ExamId", "StudentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("students_exams");
                 });
 
             modelBuilder.Entity("backend.Models.Subject", b =>
@@ -279,33 +200,6 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("subjects");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("be1816ff-41be-4620-a48c-ac18b71e3bf8"),
-                            Name = "Italiano"
-                        },
-                        new
-                        {
-                            Id = new Guid("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                            Name = "Inglese"
-                        },
-                        new
-                        {
-                            Id = new Guid("46fd8c9d-b689-47cb-b9fd-44a19c5291a4"),
-                            Name = "Matematica"
-                        },
-                        new
-                        {
-                            Id = new Guid("b55de490-fcdd-43d3-9146-94774e96cfe6"),
-                            Name = "Storia"
-                        },
-                        new
-                        {
-                            Id = new Guid("336d920e-273f-40bd-aed3-17212e2fb2a3"),
-                            Name = "Geografia"
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.Teacher", b =>
@@ -335,20 +229,6 @@ namespace backend.Migrations
                         .IsUnique();
 
                     b.ToTable("teachers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
-                            RegistryId = new Guid("d7f23f33-ebf2-4716-8c3f-b997ba2da125"),
-                            UserId = new Guid("1346712f-a66d-4b25-9ff6-cf6b7cd8c954")
-                        },
-                        new
-                        {
-                            Id = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
-                            RegistryId = new Guid("153afc1d-f63f-45aa-ae55-534d4ceeb737"),
-                            UserId = new Guid("affab63e-dec6-4626-abfb-1e52b258cc6c")
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.TeacherSubjectClassroom", b =>
@@ -375,26 +255,6 @@ namespace backend.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("teachers_subjects_classrooms");
-
-                    b.HasData(
-                        new
-                        {
-                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
-                            SubjectId = new Guid("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
-                        },
-                        new
-                        {
-                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
-                            SubjectId = new Guid("be1816ff-41be-4620-a48c-ac18b71e3bf8"),
-                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
-                        },
-                        new
-                        {
-                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
-                            SubjectId = new Guid("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                            ClassroomId = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e")
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>
@@ -423,38 +283,6 @@ namespace backend.Migrations
                         .IsUnique();
 
                     b.ToTable("users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("1346712f-a66d-4b25-9ff6-cf6b7cd8c954"),
-                            Password = "123",
-                            Username = "giop5"
-                        },
-                        new
-                        {
-                            Id = new Guid("affab63e-dec6-4626-abfb-1e52b258cc6c"),
-                            Password = "123",
-                            Username = "aboutgg"
-                        },
-                        new
-                        {
-                            Id = new Guid("8af66697-aaf2-44d3-ac9e-b051451fa2ea"),
-                            Password = "nonloso",
-                            Username = "sidectrl"
-                        },
-                        new
-                        {
-                            Id = new Guid("c98b3291-bd68-4f9e-a906-1a273ac9046b"),
-                            Password = "nonticonosco",
-                            Username = "angelarmstrong"
-                        },
-                        new
-                        {
-                            Id = new Guid("37ce79ab-5b93-44ce-8189-e49ab8e377e2"),
-                            Password = "ilsegreto",
-                            Username = "donnafrancisca"
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.Exam", b =>
@@ -466,6 +294,25 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("backend.Models.RegistryExam", b =>
+                {
+                    b.HasOne("backend.Models.Exam", "Exam")
+                        .WithMany("RegistryExams")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Registry", "Registry")
+                        .WithMany("RegistryExams")
+                        .HasForeignKey("RegistryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+
+                    b.Navigation("Registry");
                 });
 
             modelBuilder.Entity("backend.Models.Student", b =>
@@ -493,25 +340,6 @@ namespace backend.Migrations
                     b.Navigation("Registry");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("backend.Models.StudentExam", b =>
-                {
-                    b.HasOne("backend.Models.Exam", "Exam")
-                        .WithMany("StudentExams")
-                        .HasForeignKey("ExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("backend.Models.Student", "Student")
-                        .WithMany("StudentExams")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Exam");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("backend.Models.Teacher", b =>
@@ -548,7 +376,7 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.HasOne("backend.Models.Teacher", "Teacher")
-                        .WithMany("TeacherSubjectsClassrooms")
+                        .WithMany("TeacherSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -569,21 +397,18 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Exam", b =>
                 {
-                    b.Navigation("StudentExams");
+                    b.Navigation("RegistryExams");
                 });
 
             modelBuilder.Entity("backend.Models.Registry", b =>
                 {
+                    b.Navigation("RegistryExams");
+
                     b.Navigation("Student")
                         .IsRequired();
 
                     b.Navigation("Teacher")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("backend.Models.Student", b =>
-                {
-                    b.Navigation("StudentExams");
                 });
 
             modelBuilder.Entity("backend.Models.Subject", b =>
@@ -595,7 +420,7 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Teacher", b =>
                 {
-                    b.Navigation("TeacherSubjectsClassrooms");
+                    b.Navigation("TeacherSubjects");
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>

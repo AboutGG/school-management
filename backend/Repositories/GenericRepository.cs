@@ -39,7 +39,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <param name="predicate"> Used to do a condition in a search or more.</param>
     /// <param name="includes"> Used to includes the reference object of another table. </param>
     /// <returns>All users using the params, predicate and includes</returns>
-    public ICollection<T> GetAll(PaginationParams @params, 
+    public ICollection<T> GetAll(PaginationParams @params,
         Expression<Func<T, bool>> predicate, //Predicate ex:  t => t.Id == Id
         params Expression<Func<T, object>>[] includes //Include ex:  t => t.Id<
     )
@@ -47,18 +47,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         var query = _entities
             .Where(predicate);
 
-        if (@params.Role != null)
+        foreach (var include in includes)
         {
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
+            query = query.Include(include);
         }
-        
-        //@params.Oder default value: Name, @params.OderType default value: asc
-        query = typeof(T) == typeof(Student) || typeof(T) == typeof(Teacher)
-            ? query.OrderBy($"Registry.{@params.Order} {@params.OrderType}") 
-            : query.OrderBy($"{@params.Order} {@params.OrderType}");
+
+        //@params.Order default value: Name, @params.OderType default value: asc
+        query = query.OrderBy(
+            $"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
 
         //@params.Page default value: 1, @params.ItemsPerPage default value: 10
         return query.Skip((@params.Page - 1) * @params.ItemsPerPage)
@@ -68,6 +64,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     #endregion
 
     #region GetById
+
     /// <summary> Having a predicate i search a record.  </summary>
     /// <param name="predicate">Used to do a condition in a search or more. </param>
     /// <param name="includes"> Used to includes the reference object of another table. </param>
@@ -80,6 +77,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         {
             query = query.Include(include);
         }
+
         return query.FirstOrDefault();
     }
 
@@ -95,6 +93,43 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public bool Exist(Expression<Func<T, bool>> predicate) //predicate ex: u => u.Id == Id
     {
         return _entities.Any(predicate);
+    }
+
+    #endregion
+
+    #region Update
+
+    public bool UpdateEntity(T value)
+    {
+        _context.Update(value);
+        return Save();
+    }
+
+    #endregion
+
+    #region Delete
+
+    /// <summary> Delete an user taking the Id </summary>;
+    /// <param name="Id">Is the id of an user</param>
+    /// <returns>A boolean which indicate if was deleted</returns>
+    public bool Delete(T value)
+    {
+        _context.Remove(value);
+        return Save();
+    }
+
+    #endregion
+
+    #region Save
+
+    public bool Save()
+    {
+        if (_context.SaveChanges() > 0)
+        {
+            return true;
+        }
+
+        throw new Exception();
     }
 
     #endregion

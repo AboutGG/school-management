@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Linq.Dynamic.Core;
+using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
+using iText.StyledXmlParser.Jsoup.Select;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
@@ -49,6 +51,18 @@ public class TeacherRepository : ITeacherRepository
         return teacher;
     }
 
+    public ICollection<Classroom> GetClassroomByTeacherId(Guid id)
+    {
+        var classrooms = _context.Teachers
+            .Where(el => el.Id == id)
+            .Include(el => el.TeacherSubjectsClassrooms)
+            .ThenInclude(el => el.Classroom.Students)
+            .SelectMany(el => el.TeacherSubjectsClassrooms
+                .Select(c => c.Classroom)).ToList();
+        return classrooms;
+    }
+    
+    
     public int CountTeachers()
     {
         return _context.Teachers.Count();

@@ -31,7 +31,7 @@ public class StudentsController : Controller
     /// <summary> Get All Teachers with its Registry and user </summary>
     /// <returns>ICollection<TeacherDto></returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<Student>))]
+    [ProducesResponseType(200, Type = typeof(List<Student>))]
     public IActionResult GetStudents()
     {
         return Ok(_studentRepository.GetStudents());

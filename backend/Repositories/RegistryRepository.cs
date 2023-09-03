@@ -71,20 +71,20 @@ public class RegistryRepository : IRegistryRepository
         return Save();
     }
 
-    public IDictionary<string, List<Registry>> GetClassroom(string classroom)
-    {
-        var studentRegistries = _context.Registries.Where(r => r.Student.Classroom.Trim().ToLower().Contains(classroom))
-            .ToList();
-        var teacherRegistries = _context.Registries.Where(r =>
-            r.Teacher.TeacherSubjects.Any(ts => ts.Classroom.Trim().ToLower().Contains(classroom))).ToList();
-        ///<summary>concats the two results in an unique List </summary>
-        IDictionary<string, List<Registry>> result = new Dictionary<string, List<Registry>>
-        {
-            { "students", studentRegistries },
-            { "teachers", teacherRegistries }
-        };
-        return result;
-    }
+    // public IDictionary<string, List<Registry>> GetClassroom(string classroom)
+    // {
+    //     var studentRegistries = _context.Registries.Where(r => r.Student.Classroom.Trim().ToLower().Contains(classroom))
+    //         .ToList();
+    //     var teacherRegistries = _context.Registries.Where(r =>
+    //         r.Teacher.TeacherSubjects.Any(ts => ts.Classroom.Trim().ToLower().Contains(classroom))).ToList();
+    //     ///<summary>concats the two results in an unique List </summary>
+    //     IDictionary<string, List<Registry>> result = new Dictionary<string, List<Registry>>
+    //     {
+    //         { "students", studentRegistries },
+    //         { "teachers", teacherRegistries }
+    //     };
+    //     return result;
+    // }
 
     #endregion
 }
