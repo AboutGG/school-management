@@ -1,9 +1,6 @@
-﻿using System.Linq.Dynamic.Core;
-using AutoMapper;
-using backend.Dto;
+﻿using AutoMapper;
 using backend.Interfaces;
 using backend.Models;
-using iText.StyledXmlParser.Jsoup.Select;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
@@ -31,7 +28,7 @@ public class TeacherRepository : ITeacherRepository
 
     /// <summary> In this function i take All the Teachers including the User and Registry reference. </summary>
     /// <returns>Returns Teacher with his data contains User and Registry related to it</returns>
-    public ICollection<Teacher> GetTeachers()
+    public List<Teacher> GetTeachers()
     {
         var teachers =_context.Teachers
             .OrderBy(t => t.Id)
@@ -51,14 +48,15 @@ public class TeacherRepository : ITeacherRepository
         return teacher;
     }
 
-    public ICollection<Classroom> GetClassroomByTeacherId(Guid id)
+    public List<Classroom> GetClassroomByTeacherId(Guid id)
     {
         var classrooms = _context.Teachers
             .Where(el => el.Id == id)
             .Include(el => el.TeacherSubjectsClassrooms)
             .ThenInclude(el => el.Classroom.Students)
             .SelectMany(el => el.TeacherSubjectsClassrooms
-                .Select(c => c.Classroom)).ToList();
+                .Select(c => c.Classroom))
+            .ToList();
         return classrooms;
     }
     

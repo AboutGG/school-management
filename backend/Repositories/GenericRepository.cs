@@ -63,6 +63,19 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     #endregion
 
+    public List<T> GetAll( //PaginationParams? @params,
+        Expression<Func<T, bool>> predicate, //Predicate ex:  t => t.Id == Id
+        Func<IQueryable<T>, IQueryable<T>> includeFunc
+        //params Expression<Func<T, object>>[] includes //Include ex:  t => t.Id<
+    )
+    {
+        
+        var query = _entities.AsQueryable();
+        query = includeFunc(query);
+        query = query.Where(predicate);
+        return query.ToList();
+    }
+
     #region GetById
 
     /// <summary> Having a predicate i search a record.  </summary>
