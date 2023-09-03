@@ -31,5 +31,19 @@ public class MappingProfiles : Profile
 
         CreateMap<Classroom, ClassroomDto>();
 
+        CreateMap<Teacher, AnotherDto>()
+            .ForMember(destinationMember => destinationMember.id,
+                opt => opt
+                    .MapFrom(src => src.UserId))
+            .ForMember(destinationMember => destinationMember.name,
+                opt => opt
+                    .MapFrom(src => src.Registry.Name))
+            .ForMember(destinationMember => destinationMember.surname,
+                opt => opt
+                    .MapFrom(src => src.Registry.Surname))
+            .ForMember(destinationMember => destinationMember.subject,
+                opt =>
+                    opt.MapFrom(src => src.TeacherSubjectsClassrooms.First().Subject.Name));
+
     }
 }

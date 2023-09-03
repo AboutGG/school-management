@@ -4,6 +4,7 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -41,15 +42,29 @@ public class ClassroomController : Controller
             .GetAll(@params,
                 student => student.ClassroomId == id,
                 student => student.Registry);
-        @params.Order = "TeacherId";
-        var teachers = new GenericRepository<TeacherSubjectClassroom>(_context)
-            .GetAll(@params,
-                el => el.Classroom.Id == id, 
-                el=> el.Teacher.Registry, el => el.Subject);
+
+        var teachers = new GenericRepository<Teacher>(_context)
+            .GetAllM(@params,
+                el => el.TeacherSubjectsClassrooms.Any(tsc => tsc.ClassroomId == id),
+                c =>
+                    c.Include(s => s.Registry)
+                        .Include(s => s.TeacherSubjectsClassrooms)
+                        .ThenInclude(s => s.Subject));
+        
+        var lol = _mapper.Map<List<AnotherDto>>(teachers);
+
+        var sex = students.Select(el => new
+        {
+            id = el.UserId,
+            name = el.Registry.Name,
+            surname = el.Registry.Surname,
+            gender = el.Registry.Gender
+        }).ToList();
+
         return Ok(new
         {
-            teachers,
-            students
+            lol,
+            sex
         });
     }
 }
