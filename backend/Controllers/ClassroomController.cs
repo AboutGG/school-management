@@ -1,9 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Linq.Dynamic.Core;
+using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -29,7 +31,9 @@ public class ClassroomController : Controller
     [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
     public IActionResult GetClassroom()
     {
-        return Ok(_mapper.Map<List<ClassroomDto>>(_classroomRepository.GetClassrooms()));
+        var classrooms = new GenericRepository<Classroom>(_context)
+            .GetAll(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null);
+        return Ok(_mapper.Map<List<ClassroomDto>>(classrooms));
     }
 
 
@@ -37,19 +41,34 @@ public class ClassroomController : Controller
     [Route("{id}")]
     public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
     {
-        var students = new GenericRepository<Student>(_context)
+        var studentsRepo = new GenericRepository<Student>(_context)
             .GetAll(@params,
-                student => student.ClassroomId == id,
-                student => student.Registry);
-        @params.Order = "TeacherId";
-        var teachers = new GenericRepository<TeacherSubjectClassroom>(_context)
-            .GetAll(@params,
-                el => el.Classroom.Id == id, 
-                el=> el.Teacher.Registry, el => el.Subject);
+                query => query
+                    .Where(student => student.ClassroomId == id)
+                    .Include(student => student.Registry));
+
+        var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
+            .GetAll(
+                null, 
+                query => query
+                    .Include(teacher => teacher.Registry)
+                    .Include(teacher => teacher.TeacherSubjectsClassrooms
+                        .Where(tsc => tsc.ClassroomId == id))
+                    .ThenInclude(tsc => tsc.Subject)));
+
+        var students = studentsRepo.Select(el => new
+        {
+            id = el.UserId,
+            name = el.Registry.Name,
+            surname = el.Registry.Surname,
+            gender = el.Registry.Gender
+        }).ToList();
+
         return Ok(new
         {
             teachers,
             students
         });
+
     }
 }

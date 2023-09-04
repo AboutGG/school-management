@@ -1,11 +1,10 @@
-using backend.Dto;
 using backend.Models;
 
 namespace backend.Interfaces;
 
 public interface ITeacherRepository
 {
-    ICollection<Teacher> GetTeachers();
+    List<Teacher> GetTeachers();
 
     Teacher GetTeacherById(Guid id);
 
@@ -25,7 +24,7 @@ public interface ITeacherRepository
     
     bool UpdateTeacher(Teacher teacher);
 
-    ICollection<Classroom> GetClassroomByTeacherId(Guid id);
+    List<Classroom> GetClassroomByTeacherId(Guid id);
     
     bool Save();
 }

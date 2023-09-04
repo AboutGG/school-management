@@ -8,6 +8,7 @@ using backend.Repositories;
 using backend.Utils;
 using J2N.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -322,5 +323,6 @@ public class UsersController : Controller
     }
 
     #endregion
+    
     #endregion
 }
