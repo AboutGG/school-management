@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -11,9 +12,11 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20230901145440_Seeder")]
+    partial class Seeder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -305,11 +308,6 @@ namespace backend.Migrations
                         {
                             Id = new Guid("336d920e-273f-40bd-aed3-17212e2fb2a3"),
                             Name = "Geografia"
-                        },
-                        new
-                        {
-                            Id = new Guid("47e8b0b5-1b53-46be-a0a9-9954958d3071"),
-                            Name = "Spagnola"
                         });
                 });
 
@@ -392,12 +390,6 @@ namespace backend.Migrations
                         {
                             TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
                             SubjectId = new Guid("be1816ff-41be-4620-a48c-ac18b71e3bf8"),
-                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
-                        },
-                        new
-                        {
-                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
-                            SubjectId = new Guid("336d920e-273f-40bd-aed3-17212e2fb2a3"),
                             ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
                         },
                         new

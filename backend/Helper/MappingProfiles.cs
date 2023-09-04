@@ -18,7 +18,40 @@ public class MappingProfiles : Profile
         CreateMap<Teacher, UserDetailDto>();
         CreateMap<Teacher, UserDto>();
 
-        CreateMap<Classroom, ClassroomDto>();
+        CreateMap<Classroom, ClassroomStudentCount>()
+            .ForMember(dest => dest.id_classroom,
+                opt => opt
+                    .MapFrom(src => src.Id))
+            .ForMember(dest => dest.name_classroom,
+                opt => opt
+                    .MapFrom(src => src.Name))
+            .ForMember(dest => dest.student_count,
+                opt => opt
+                    .MapFrom(src => src.Students.Count()));
+
+        CreateMap<Classroom, ClassroomDto>()
+            .ForMember(dest => dest.id_classroom,
+                opt => opt
+                    .MapFrom(src => src.Id))
+            .ForMember(dest => dest.name_classroom,
+                opt => opt
+                    .MapFrom(src => src.Name));
+
+        CreateMap<Teacher, TeacherDto>()
+            .ForMember(destinationMember => destinationMember.id,
+                opt => opt
+                    .MapFrom(src => src.UserId))
+            .ForMember(destinationMember => destinationMember.name,
+                opt => opt
+                    .MapFrom(src => src.Registry.Name))
+            .ForMember(destinationMember => destinationMember.surname,
+                opt => opt
+                    .MapFrom(src => src.Registry.Surname))
+            .ForMember(destinationMember => destinationMember.subject,
+                opt =>
+                    opt.MapFrom(src =>
+                        src.TeacherSubjectsClassrooms.Select(
+                            tsc => tsc.Subject.Name).ToList()));
 
     }
 }

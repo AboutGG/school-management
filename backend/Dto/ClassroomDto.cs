@@ -4,9 +4,7 @@ namespace backend.Dto;
 
 public class ClassroomDto
 {
-    [JsonPropertyName("id_classroom")]
-    public Guid Id { get; set; }
-
-    [JsonPropertyName("name_classroom")]
-    public String Name { get; set; }
+    public Guid id_classroom { get; set; }
+    
+    public String name_classroom { get; set; }
 }
