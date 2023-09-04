@@ -101,11 +101,8 @@ public class TeachersController : Controller
             decodedToken = JWT.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
             
-            //Prendo lo user tramite l'id che ricavo dal Token
-            takenUser = usersRepository.GetById(el => el.Id == takenId, el => el.Teacher, el => el.Student);
-            
-            //Controllo il ruolo dello User
-            role = takenUser.Student != null ? "student" : takenUser.Teacher != null ? "teacher" : "unknow";
+            //Controllo il ruolo dello User tramite l'Id
+            role = RoleSearcher.GetRole(takenId, _context);
             
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
             if (role == "student" || role == "unknow")
