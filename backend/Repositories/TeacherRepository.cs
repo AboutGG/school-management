@@ -61,8 +61,28 @@ public class TeacherRepository : ITeacherRepository
                 .Select(c => c.Classroom)).ToList();
         return classrooms;
     }
-    
-    
+
+    public object GetTeacherSubjectClassroom(Guid id)
+    {
+        //prendo il professore che ha come id quello proveniente dal token
+        var reult = _context.Teachers.Where(el => el.UserId == id)
+                .Include(el => el.TeacherSubjectsClassrooms)
+                .ThenInclude(el => el.Classroom)
+                .Include(el => el.TeacherSubjectsClassrooms)
+                .ThenInclude(el => el.Subject)
+                .Select(el => new
+                {
+                    Classrooms = el.TeacherSubjectsClassrooms.Select(el => new
+                        {
+                            section = el.Classroom.Name,
+                            subject = el.Subject.Name
+                        })
+                })
+            ;
+        return reult;
+    }
+
+
     public int CountTeachers()
     {
         return _context.Teachers.Count();

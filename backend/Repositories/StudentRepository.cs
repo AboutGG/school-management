@@ -82,7 +82,7 @@ public class StudentRepository : IStudentRepository
     {
         //prendo lo studente che ha come id quello proveniente dal token
         var result = _context.Students.Where(el => el.UserId == id)
-            //includo TeacherSubjectClassroom con la materia e l'anagrafica per ogni elemento
+            //includo TeacherSubjectClassroom con la materia e l'anagrafica del professore per ogni elemento
             .Include(el => el.Classroom.TeacherSubjectsClassrooms)
             .ThenInclude(el => el.Subject)
             .Include(el => el.Classroom.TeacherSubjectsClassrooms)

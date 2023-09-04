@@ -26,6 +26,7 @@ public interface ITeacherRepository
     bool UpdateTeacher(Teacher teacher);
 
     ICollection<Classroom> GetClassroomByTeacherId(Guid id);
-    
+
+    object GetTeacherSubjectClassroom(Guid id);
     bool Save();
 }
