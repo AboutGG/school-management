@@ -41,7 +41,7 @@ public class ClassroomController : Controller
     [Route("{id}")]
     public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
     {
-        var students = new GenericRepository<Student>(_context)
+        var studentsRepo = new GenericRepository<Student>(_context)
             .GetAll(@params,
                 query => query
                     .Where(student => student.ClassroomId == id)
@@ -56,7 +56,7 @@ public class ClassroomController : Controller
                         .Where(tsc => tsc.ClassroomId == id))
                     .ThenInclude(tsc => tsc.Subject)));
 
-        var sex = students.Select(el => new
+        var students = studentsRepo.Select(el => new
         {
             id = el.UserId,
             name = el.Registry.Name,
@@ -67,7 +67,7 @@ public class ClassroomController : Controller
         return Ok(new
         {
             teachers,
-            sex
+            students
         });
 
     }

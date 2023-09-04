@@ -12,8 +12,8 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20230903211712_prova")]
-    partial class prova
+    [Migration("20230904115152_ModifiedSeeder")]
+    partial class ModifiedSeeder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
