@@ -29,3 +29,9 @@ export interface Registry {
   address?: string
   telephone?: string //date format "yyyy-mm-dd"
 }
+
+export interface Classroom {
+  classroomId: string;
+  name: string;
+}
+

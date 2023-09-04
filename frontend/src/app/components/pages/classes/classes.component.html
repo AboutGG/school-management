@@ -27,10 +27,11 @@
       <th>Azioni</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>example</td>
+  <tbody  *ngFor="let classroom of class; let i = index" >
+    <tr> 
+      <th scope="row">{{i + 1}}</th>
+      <td>{{classroom.classroomId}}</td>
+      <td>{{classroom.name}}</td>
       <td>example</td>
       <td>       
         <button class="btn " value="dettagli"  [routerLink]="['/classes/:id']">Visualizza<i class="bi bi-eye-fill px-1"></i></button>
@@ -57,116 +58,5 @@
   </ul>
   </nav>
 
-  <!-- Modal delete -->
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Sei sicuro?</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          Una volta eliminato, non potrai tornare indietro!
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Chiudi
-          </button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            Elimina
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal edit -->
-  <div
-    class="modal fade"
-    id="exampleModal2"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <form
-            [formGroup]="editForm"
-            (ngSubmit)="onEditSubmit()"
-            class="d-flex justify-content-center"
-          >
-            <div class="d-flex">
-              <div class="d-flex flex-column">
-                <label>Nome: </label
-                ><input formControlName="name" type="text" />
-                <p
-                  class="text-danger"
-                  *ngIf="
-                    !editForm.get('name')!.valid &&
-                    editForm.get('name')!.touched
-                  "
-                >
-                  Inserisci un nome
-                </p>
-              </div>
-              <div class="d-flex flex-column">
-                <label>Tipo di classe: </label
-                ><input formControlName="classType" type="text" />
-                <p
-                  class="text-danger"
-                  *ngIf="
-                    !editForm.get('classType')!.valid &&
-                    editForm.get('classType')!.touched
-                  "
-                >
-                  Inserisci una classe
-                </p>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Chiudi
-          </button>
-          <button
-            [disabled]="!editForm.valid"
-            type="submit"
-            class="btn btn-primary"
-            data-bs-dismiss="modal"
-          >
-            Invia
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+ 
 </div>
