@@ -90,7 +90,7 @@ public class SchoolContext : DbContext
 
         modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Classroom>(ts => ts.Classroom)
-            .WithMany(c => c.TeacherSubjects)
+            .WithMany(c => c.TeacherSubjectsClassrooms)
             .HasForeignKey(ts => ts.ClassroomId);
 
         #endregion

@@ -70,11 +70,38 @@ public class StudentRepository : IStudentRepository
         _context.Students.Remove(student);
         return Save();
     }
+    
 
     //save the changes on db
     public bool Save()
     {
         return _context.SaveChanges() > 0 ? true : false;
+    }
+
+    public object GetStudentSubjects(Guid id)
+    {
+        //prendo lo studente che ha come id quello proveniente dal token
+        var result = _context.Students.Where(el => el.UserId == id)
+            //includo TeacherSubjectClassroom con la materia e l'anagrafica per ogni elemento
+            .Include(el => el.Classroom.TeacherSubjectsClassrooms)
+            .ThenInclude(el => el.Subject)
+            .Include(el => el.Classroom.TeacherSubjectsClassrooms)
+            .ThenInclude(el => el.Teacher.Registry)
+            .Select(el => //uso la select per creare un nuovo oggetto contenente gli attributi che mi interessano
+                new
+                {
+                    classroomName = el.Classroom.Name,
+                    TeacherSubjectClassrooms = el.Classroom.TeacherSubjectsClassrooms
+                        .Select( el => 
+                            new
+                            {
+                                TeacherName = el.Teacher.Registry.Name,
+                                TeahcerSurname = el.Teacher.Registry.Surname,
+                                Subject = el.Subject.Name
+                            })
+                }
+            );
+        return result;
     }
 
     #endregion
