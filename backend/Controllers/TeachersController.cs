@@ -18,6 +18,7 @@ public class TeachersController : Controller
     private readonly SchoolContext _context;
     private readonly ITeacherRepository _teacherRepository;
     private readonly IMapper _mapper;
+
     #endregion
 
     #region Costructor
@@ -45,7 +46,7 @@ public class TeachersController : Controller
     }
 
     #endregion
-    
+
     #region Get classroom by teacher id
 
     /// <summary>
@@ -69,7 +70,7 @@ public class TeachersController : Controller
         //     .ToList();
         return Ok(_mapper.Map<List<ClassroomStudentCount>>(_teacherRepository.GetClassroomByTeacherId(id)));
     }
-    
+
     #endregion
 
     #region Get Subjects
@@ -81,23 +82,21 @@ public class TeachersController : Controller
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromHeader] string Token)
     {
-        #region Decode the token
-
         JwtSecurityToken decodedToken;
         Guid takenId;
         string role;
         User takenUser;
         IGenericRepository<User> usersRepository = new GenericRepository<User>(_context);
-        
+
         try
         {
             //Decode the token
             decodedToken = JWT.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
-            
+
             //Controllo il ruolo dello User tramite l'Id
             role = RoleSearcher.GetRole(takenId, _context);
-            
+
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
             if (role == "student" || role == "unknow")
                 throw new Exception();
@@ -112,11 +111,9 @@ public class TeachersController : Controller
         {
             return Unauthorized("The token is not valid");
         }
-
-        #endregion
-        
     }
 
     #endregion
+
     #endregion
 }
