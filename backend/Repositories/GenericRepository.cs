@@ -107,6 +107,17 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return query.FirstOrDefault();
     }
 
+    public T GetById2(Func<IQueryable<T>, IQueryable<T>>? queryFunc) //Include ex:  t => t.Id.
+    {
+        var query = _entities.AsQueryable();
+        
+        if (queryFunc != null)
+        {
+            query = queryFunc.Invoke(query);
+        }
+
+        return query.FirstOrDefault();
+    }
     #endregion
 
     #region Exists

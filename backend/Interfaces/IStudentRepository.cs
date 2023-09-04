@@ -13,5 +13,5 @@ public interface IStudentRepository
     bool DeleteStudent(Guid id);
     bool Save();
 
-    Object GetStudentSubjects(Guid id);
+    //Object GetStudentSubjects(Guid id);
 }

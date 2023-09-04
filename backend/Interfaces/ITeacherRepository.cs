@@ -27,6 +27,6 @@ public interface ITeacherRepository
 
     List<Classroom> GetClassroomByTeacherId(Guid id);
     
-    object GetTeacherSubjectClassroom(Guid id);
+    //object GetTeacherSubjectClassroom(Guid id);
     bool Save();
 }

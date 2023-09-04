@@ -6,6 +6,7 @@ using backend.Models;
 using backend.Repositories;
 using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -85,9 +86,6 @@ public class TeachersController : Controller
         JwtSecurityToken decodedToken;
         Guid takenId;
         string role;
-        User takenUser;
-        IGenericRepository<User> usersRepository = new GenericRepository<User>(_context);
-
         try
         {
             //Decode the token
@@ -99,17 +97,31 @@ public class TeachersController : Controller
 
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
             if (role == "student" || role == "unknow")
-                throw new Exception();
+                throw new Exception("NOT_FOUND");
             else
             {
                 //Prendo le materie che insegna il professore con le relative classi
-                var resultTeacher = _teacherRepository.GetTeacherSubjectClassroom(takenId);
+                var resultTeacher = new GenericRepository<Teacher>(_context).
+                    GetById2(query => query
+                        .Include(el => el.TeacherSubjectsClassrooms)
+                        .ThenInclude(el => el.Classroom)
+                        .Include(el => el.TeacherSubjectsClassrooms)
+                        .ThenInclude(el => el.Subject)
+                    );
                 return Ok(resultTeacher);
             }
         }
         catch (Exception e)
         {
-            return Unauthorized("The token is not valid");
+            switch (e.Message)
+            {
+                case "NOT_FOUND":
+                    return StatusCode(StatusCodes.Status404NotFound);
+                case "UNAUTHORIZED":
+                    return StatusCode(StatusCodes.Status401Unauthorized, "The token in not valid");
+                default:
+                    return StatusCode(StatusCodes.Status400BadRequest);
+            }
         }
     }
 

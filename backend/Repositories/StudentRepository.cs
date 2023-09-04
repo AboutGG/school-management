@@ -70,7 +70,7 @@ public class StudentRepository : IStudentRepository
         _context.Students.Remove(student);
         return Save();
     }
-    
+
 
     //save the changes on db
     public bool Save()
@@ -78,31 +78,21 @@ public class StudentRepository : IStudentRepository
         return _context.SaveChanges() > 0 ? true : false;
     }
 
-    public object GetStudentSubjects(Guid id)
-    {
-        //prendo lo studente che ha come id quello proveniente dal token
-        var result = _context.Students.Where(el => el.UserId == id)
-            //includo TeacherSubjectClassroom con la materia e l'anagrafica del professore per ogni elemento
-            .Include(el => el.Classroom.TeacherSubjectsClassrooms)
-            .ThenInclude(el => el.Subject)
-            .Include(el => el.Classroom.TeacherSubjectsClassrooms)
-            .ThenInclude(el => el.Teacher.Registry)
-            .Select(el => //uso la select per creare un nuovo oggetto contenente gli attributi che mi interessano
-                new
-                {
-                    classroomName = el.Classroom.Name,
-                    TeacherSubjectClassrooms = el.Classroom.TeacherSubjectsClassrooms
-                        .Select( el => 
-                            new
-                            {
-                                TeacherName = el.Teacher.Registry.Name,
-                                TeahcerSurname = el.Teacher.Registry.Surname,
-                                Subject = el.Subject.Name
-                            })
-                }
-            );
-        return result;
-    }
+    #region Old GetStudentSubjects
+    
+    // public object GetStudentSubjects(Guid id)
+    // {
+    //     //prendo la classe dello studente studente che ha come id quello proveniente dal token
+    //     var studentclassroomId = _context.Students.FirstOrDefault(el => el.UserId == id).ClassroomId;
+    //     var resultTeacherSubjectClassrooms = _context.TeachersSubjectsClassrooms
+    //         .Where(el=> el.ClassroomId == studentclassroomId)
+    //         .Include(el=>el.Classroom)
+    //         .Include(el=>el.Teacher.Registry)
+    //         .Include(el=>el.Subject).ToList();
+    //     return resultTeacherSubjectClassrooms;
+    // }
+
+    #endregion
 
     #endregion
 
