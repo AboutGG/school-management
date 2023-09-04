@@ -93,7 +93,8 @@ public static class Seeder
             new Subject() {Id = Guid.Parse("a907ec00-1577-4a50-ab10-579e071f1e59"), Name = "Inglese"},
             new Subject() {Id = Guid.Parse("46fd8c9d-b689-47cb-b9fd-44a19c5291a4"), Name = "Matematica"},
             new Subject() {Id = Guid.Parse("b55de490-fcdd-43d3-9146-94774e96cfe6"), Name = "Storia"},
-            new Subject() {Id = Guid.Parse("336d920e-273f-40bd-aed3-17212e2fb2a3"), Name = "Geografia"}
+            new Subject() {Id = Guid.Parse("336d920e-273f-40bd-aed3-17212e2fb2a3"), Name = "Geografia"},
+            new Subject() {Id = Guid.Parse("47e8b0b5-1b53-46be-a0a9-9954958d3071"), Name = "Spagnola"}
         );
 
         modelBuilder.Entity<Student>().HasData(
@@ -124,7 +125,7 @@ public static class Seeder
             new Teacher()
             {
                 Id = Guid.Parse("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
-                RegistryId = Guid.Parse("d7f23f33-ebf2-4716-8c3f-b997ba2da125"),
+                RegistryId = Guid.Parse("d7f23f33-ebf2-4716-8c3f-b997ba2da125"), //Giordana
                 UserId = Guid.Parse("1346712f-a66d-4b25-9ff6-cf6b7cd8c954")
             },
             new Teacher()
@@ -146,6 +147,12 @@ public static class Seeder
             {
                 TeacherId = Guid.Parse("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
                 SubjectId = Guid.Parse("be1816ff-41be-4620-a48c-ac18b71e3bf8"),
+                ClassroomId = Guid.Parse("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
+            },
+            new TeacherSubjectClassroom()
+            {
+                TeacherId = Guid.Parse("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
+                SubjectId = Guid.Parse("336d920e-273f-40bd-aed3-17212e2fb2a3"),
                 ClassroomId = Guid.Parse("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
             },
             new TeacherSubjectClassroom()
