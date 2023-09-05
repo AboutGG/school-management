@@ -53,5 +53,12 @@ public class MappingProfiles : Profile
                         src.TeacherSubjectsClassrooms.Select(
                             tsc => tsc.Subject.Name).ToList()));
 
+        CreateMap<TeacherSubjectClassroom, TeacherSubjectClassroomDto>()
+            .ForMember(destinationMember => destinationMember.teacher,
+                opt => opt
+                    .MapFrom(src => src.Teacher));
+
+
+
     }
 }

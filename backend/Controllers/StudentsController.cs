@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Dynamic.Core;
+using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -18,15 +19,17 @@ public class StudentsController : Controller
 
     private readonly SchoolContext _context;
     private readonly IStudentRepository _studentRepository;
+    private readonly IMapper _mapper;
 
     #endregion
 
     #region Costructor
 
-    public StudentsController(IStudentRepository studentRepository, SchoolContext context)
+    public StudentsController(IStudentRepository studentRepository, SchoolContext context, IMapper mapper)
     {
         _studentRepository = studentRepository;
         _context = context;
+        _mapper = mapper;
     }
 
     #endregion
@@ -98,7 +101,8 @@ public class StudentsController : Controller
                         .Include(el => el.Teacher.Registry)
                         .Include(el => el.Subject)
                         );
-                return Ok(resultStudent);
+                
+                return Ok(_mapper.Map<List<TeacherSubjectClassroomDto>>(resultStudent.DistinctBy(el => el.TeacherId)));
             }
         }
         catch (Exception e)
