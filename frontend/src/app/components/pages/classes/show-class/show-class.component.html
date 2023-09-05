@@ -9,53 +9,65 @@
   </div>
   <hr class="mb-5"/>
  
-  <h3 class="text-start">Lista Insegnanti</h3>
-    <div class="d-flex align-items-center justify-content-start">
-    <table class="table table-teachers mb-5 w-50">
+ 
+    <div class="row justify-content-center">
+     
+      <div class="col-md-5">
+        <table class="table table-teachers table-hover mb-5">
+          <thead class="text-center">
+            <tr>
+              <th scope="col-1">#</th>
+              <th scope="col-2">Docente</th>
+              <th scope="col-3">Materie</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
+            <tr style="cursor: pointer" [routerLink]="'/details/'">
+              <td scope="row">{{i + 1}}</td>
+               <td>{{ teacher.name +' '+ teacher.surname}}</td>             
+               <td>{{ teacher.subject.join(', ') }}</td>
+            </tr>
+            <tr>
+             
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+
+  <div class="col-md-7">
+    <table class="table table-students table-hover w-100">
       <thead class="text-center">
         <tr>
-          <th scope="col">Dati Anagrafici</th>
-          <th scope="col">Materia</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Nome Cognome</td>
-          <td>Matematica</td>
-        </tr>
-        <tr>
-          <td>Nome Cognome</td>
-          <td>Inglese</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  <h3 class="text-center">Lista Alunni</h3>
-  <div class="d-flex align-items-right justify-content-start">
-    <table class="table table-students w-100">
-      <thead class="text-center">
-        <tr>
-          <th>Nome</th>
+          <th>#</th>
           <th>Cognome</th>
-          <th>Data di Nascita</th>
+          <th>Nome</th>
           <th>Azioni</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>Example</td>
-          <td>Example</td>
-          <td>Example</td>
+      <tbody *ngFor="let student of classDetails?.students; let i = index">
+        <tr >
+          <td scope="row">{{i + 1}}</td> 
+          <td style="cursor: pointer" [routerLink]="'/details/'">{{student.surname}}</td>
+          <td style="cursor: pointer" [routerLink]="'/details/'">{{student.name}}</td>
+          
           <td>
-            <button class="btn btn-delete"  data-bs-toggle="modal" data-bs-target="#exampleModal">
-              Elimina<i class="bi bi-trash3-fill px-1"></i>
-            </button>
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-gear-fill"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill px-2"></i>Visualizza</a></li>
+                <li><a class="dropdown-item" [routerLink]="'/esami/'"><i class="bi bi-book-fill px-2"></i>Vai a Esami</a></li>
+                <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
+              </ul>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+</div>
 
   <!-- Modal delete -->
   <div

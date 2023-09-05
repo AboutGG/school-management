@@ -18,7 +18,7 @@
 </div>
   
 
-<table class="w-100 table table-hover mt-4">
+<table class="w-100 table mt-4">
   <thead class="text-center" >
     <tr class="fw-bold">
       <th>#</th>
@@ -27,14 +27,13 @@
       <th>Azioni</th>
     </tr>
   </thead>
-  <tbody  *ngFor="let classroom of class; let i = index" >
+  <tbody *ngFor="let classroom of class; let i = index" >
     <tr> 
-      <th scope="row">{{i + 1}}</th>
-      <td>{{classroom.classroomId}}</td>
-      <td>{{classroom.name}}</td>
+      <td scope="row">{{i + 1}}</td>    
+      <td>{{classroom.name_classroom}}</td>
       <td>example</td>
       <td>       
-        <button class="btn " value="dettagli"  [routerLink]="['/classes/:id']">Visualizza<i class="bi bi-eye-fill px-1"></i></button>
+        <button class="btn " value="dettagli"  [routerLink]="['/showclasses/', classroom.id_classroom]"><i class="bi bi-eye-fill"></i>Visualizza</button>
       </td>
     </tr>
   </tbody>

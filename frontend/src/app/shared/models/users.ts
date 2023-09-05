@@ -31,7 +31,25 @@ export interface Registry {
 }
 
 export interface Classroom {
-  classroomId: string;
+  id_classroom?: string;
+  name_classroom: string;
+}
+
+export interface Teachers {
+  id?: string;
   name: string;
+  surname: string;
+  subject: string[];
+}
+
+export interface Students {
+  id?: string;
+  name: string;
+  surname: string;
+  gender: string;
+}
+export interface ClassDetails {
+  teachers: Teachers[];
+  students: Students[];
 }
 

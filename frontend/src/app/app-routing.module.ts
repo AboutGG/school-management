@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "add-user", component: AddUserComponent, canActivate: [AuthGuard] },
   { path: 'classes', component: ClassesComponent, canActivate: [AuthGuard] },
-  { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard]},
+  { path: 'showclasses/:id', component: ShowClassComponent, canActivate: [AuthGuard]},
   { path: "subjects", component:SubjectsComponent, canActivate: [AuthGuard] },
   { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },

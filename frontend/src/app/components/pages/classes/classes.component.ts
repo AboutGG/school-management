@@ -14,6 +14,9 @@ export class ClassesComponent {
 
   constructor(private classroomService: ClassroomService) {}
 
+  ngOnInit(){
+    this.fetchData();
+  }
 
     // get dati api classroom
     fetchData() {
