@@ -18,4 +18,6 @@ public interface IGenericRepository<T> where T : class
 
     List<T> GetAll(PaginationParams? @params,
         Func<IQueryable<T>, IQueryable<T>>? includeFunc);
+
+    T GetById2(Func<IQueryable<T>, IQueryable<T>>? includeFunc);
 }
