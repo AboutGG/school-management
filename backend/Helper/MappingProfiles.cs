@@ -67,21 +67,15 @@ public class MappingProfiles : Profile
                     .MapFrom(src => src.Registry.Name))
             .ForMember(destinationMember => destinationMember.Surname,
                 opt => opt
-                    .MapFrom(src => src.Registry.Surname))
-            .ForMember(destinationMember => destinationMember.Classroom,
-                opt => opt
-                    .MapFrom(src => src.Classroom.Name));
+                    .MapFrom(src => src.Registry.Surname));
 
         CreateMap<Student, StudentExamDto>()
-            .ForMember(destinationMember => destinationMember.Student,
+            .ForPath(dest => dest.Student.Name, 
                 opt => opt
-                    .MapFrom(src =>
-                        new StudentDto
-                        {
-                            Id = src.UserId,
-                            Name = src.Registry.Name,
-                            Surname = src.Registry.Surname
-                        }))
+                    .MapFrom(src => src.Registry.Name))
+            .ForPath(dest => dest.Student.Surname,
+                opt => opt
+                    .MapFrom(src => src.Registry.Surname))
             .ForMember(destinationMember => destinationMember.Exams,
                 opt => opt
                     .MapFrom(src => src.StudentExams
