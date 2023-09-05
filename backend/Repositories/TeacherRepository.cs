@@ -30,7 +30,7 @@ public class TeacherRepository : ITeacherRepository
     /// <returns>Returns Teacher with his data contains User and Registry related to it</returns>
     public List<Teacher> GetTeachers()
     {
-        var teachers =_context.Teachers
+        var teachers = _context.Teachers
             .OrderBy(t => t.Id)
             .Include(t => t.Registry) // Include il registro associato
             .Include(t => t.User)
@@ -59,8 +59,32 @@ public class TeacherRepository : ITeacherRepository
             .ToList();
         return classrooms;
     }
-    
-    
+
+    #region Old GetTeacherSubjectClassroom
+
+    // public object GetTeacherSubjectClassroom(Guid id)
+    // {
+    //prendo il professore che ha come id quello proveniente dal token
+    //     var result = _context.Teachers.Where(el => el.UserId == id)
+    //         .Include(el => el.TeacherSubjectsClassrooms)
+    //         .ThenInclude(el => el.Classroom)
+    //         .Include(el => el.TeacherSubjectsClassrooms)
+    //         .ThenInclude(el => el.Subject)
+    //         .Select(el => new
+    //         {
+    //             Classrooms = el.TeacherSubjectsClassrooms.Select(el => new
+    //             {
+    //                 section = el.Classroom.Name,
+    //                 subject = el.Subject.Name
+    //             })
+    //         }).ToList();
+    //
+    //     return result;
+    // }
+
+    #endregion
+
+
     public int CountTeachers()
     {
         return _context.Teachers.Count();

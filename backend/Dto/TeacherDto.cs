@@ -7,5 +7,5 @@ public class TeacherDto
     public String surname { get; set; }
 
     public String? Gender { get; set; }
-    public String[] subject { get; set; }
+    public Object[] subjects { get; set; }
 }
