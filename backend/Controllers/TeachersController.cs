@@ -103,12 +103,13 @@ public class TeachersController : Controller
                 //Prendo le materie che insegna il professore con le relative classi
                 var resultTeacher = new GenericRepository<Teacher>(_context).
                     GetById2(query => query
+                        .Include(el => el.Registry)
                         .Include(el => el.TeacherSubjectsClassrooms)
                         .ThenInclude(el => el.Classroom)
                         .Include(el => el.TeacherSubjectsClassrooms)
                         .ThenInclude(el => el.Subject)
                     );
-                return Ok(resultTeacher);
+                return Ok(_mapper.Map<TeacherDto>(resultTeacher));
             }
         }
         catch (Exception e)
