@@ -122,6 +122,70 @@ public class StudentsController : Controller
     }
 
     #endregion
+    
+    #region Get Exams
+    /// <summary> Having the token take the userId then takes the related exams </summary>
+    /// <param name="token"></param>
+    /// <returns>Return a list of Exams performed by the Student</returns>
+    [HttpGet]
+    [Route("exams")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    public IActionResult GetStudentExams([FromHeader] string token)
+    {
+        
+        try
+        {
+            //Decode the token
+            JwtSecurityToken idFromToken = JWT.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            
+            //Take the userId from the token
+            var takenId = new Guid (idFromToken.Payload["userid"].ToString());
+            
+            IGenericRepository<Student> userRepository = new GenericRepository<Student>(_context);
+            
+            //Take the student using the id
+            Student takenStudent = userRepository.GetById(
+                el => el.UserId == takenId,
+                el => el.StudentExams,
+                el => el.Classroom, 
+                el => el.Registry
+            );
+            if (takenStudent == null)
+            {
+                throw new Exception("NOT_FOUND");
+            }
+
+            string role = RoleSearcher.GetRole(takenId, _context);
+
+            if (role == "teacher" || role == "unknow")
+                throw new Exception("UNAUTHORIZED");
+            
+            GenericRepository<Exam> examRepo = new GenericRepository<Exam>(_context);
+            foreach (StudentExam iesim in takenStudent.StudentExams)
+            {
+                iesim.Exam = examRepo.GetById(el => el.Id == iesim.ExamId, 
+                    el => el.Subject);
+            }
+
+            var dummy = _mapper.Map<StudentExamDto>(takenStudent);
+            return Ok(dummy);
+        }
+        catch (Exception e)
+        {
+            switch (e.Message)
+            {
+                case "NOT_FOUND":
+                    return StatusCode(StatusCodes.Status404NotFound);
+                case "UNAUTHORIZED":
+                    return StatusCode(StatusCodes.Status401Unauthorized);
+                default:
+                    return StatusCode(StatusCodes.Status400BadRequest);
+            }
+        }
+    }
+
+    #endregion
 
     #endregion
 }
