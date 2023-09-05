@@ -48,30 +48,6 @@ public class TeachersController : Controller
 
     #endregion
 
-    #region Get classroom by teacher id
-
-    /// <summary>
-    /// Get all classrooms of a teacher TODO add pagination
-    /// </summary>
-    /// <returns> List<Id, Name, StudentCount> </returns>
-
-    [HttpGet]
-    [Route("{id}/classroom")]
-    [ProducesResponseType(200, Type = typeof(List<Classroom>))]
-    [ProducesResponseType(400)]
-    public IActionResult GetClassrooms([FromRoute] Guid id)
-    {
-        // var classroomWithStudentCount = _teacherRepository.GetClassroomByTeacherId(id)
-        //     .Select(el => new ClassroomStudentCount()
-        //     {
-        //         ClassroomId = el.Id,
-        //         Name = el.Name,
-        //         StudentCount = el.Students.Count()
-        //     })
-        //     .ToList();
-        return Ok(_mapper.Map<List<ClassroomStudentCount>>(_teacherRepository.GetClassroomByTeacherId(id)));
-    }
-
     #endregion
 
     #region Get Subjects
@@ -104,9 +80,9 @@ public class TeachersController : Controller
                 var resultTeacher = new GenericRepository<Teacher>(_context).
                     GetById2(query => query
                         .Include(el => el.Registry)
-                        .Include(el => el.TeacherSubjectsClassrooms)
+                        .Include(el => el.TeachersSubjectsClassrooms)
                         .ThenInclude(el => el.Classroom)
-                        .Include(el => el.TeacherSubjectsClassrooms)
+                        .Include(el => el.TeachersSubjectsClassrooms)
                         .ThenInclude(el => el.Subject)
                     );
                 return Ok(_mapper.Map<TeacherDto>(resultTeacher));
@@ -128,5 +104,5 @@ public class TeachersController : Controller
 
     #endregion
 
-    #endregion
+    
 }
