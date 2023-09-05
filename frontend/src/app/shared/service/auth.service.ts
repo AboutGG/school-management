@@ -12,22 +12,28 @@ const URL = environment.apiUrl;
 export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
   
-  // LOGIN PER DATI DAL DATABASE
   login(user: User) {
     return this.http.post(`${URL}/auth/login`, user);
   }
 
   logout() {
     localStorage.removeItem('token')
-    this.router.navigate(['/login'])
   }
 
   getToken() {
     return localStorage.getItem('token')
   }
 
+  getRole() {
+    return localStorage.getItem('role')
+  }
+
   isLoggedIn() {
     return this.getToken() == null ? false : true
+  }
+
+  isTeacher() {
+    return this.getRole() == 'teacher'.toLowerCase() ? true : false
   }
   
 }

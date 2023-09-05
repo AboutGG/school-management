@@ -67,22 +67,19 @@
         <i class="invisible" *ngIf="isExpanded"
           [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
-
-      <div [routerLink]="['/exams']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
-        <div class="content">
-          <div class="icon">
-            <i class="bi bi-book-fill"></i>
-            <!--exams-->
-          </div>
-          <div class="title">Esami</div>
-          <i class="invisible" *ngIf="isExpanded"
-            [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
-        </div>
-      </div>
-
     </div>
-
+    
+    <div [routerLink]="[linkByRole]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
+      <div class="content">
+        <div class="icon">
+          <i class="bi bi-book-fill"></i>
+          <!--exams-->
+        </div>
+        <div class="title">Esami</div>
+        <i class="invisible" *ngIf="isExpanded"
+          [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
+      </div>
+    </div>
   </div>
-
   <div class="footer"></div>
 </div>

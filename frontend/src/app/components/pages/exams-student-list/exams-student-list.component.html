@@ -1,0 +1,59 @@
+<div class="container mt-3">
+	<hr>
+	<span class="d-flex justify-content-center fw-bold fs-5">LISTA ESAMI</span>
+	<hr>
+</div>
+<div class="container mt-6 bb">
+	<div class="d-flex justify-content-center align-items-center w-100 flex-column">
+		<span class="icon-data">
+			<i class="bi bi-card-list list-icon"></i>
+		</span>
+	</div>
+</div>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col" id="date">Data Esame
+				<i *ngIf="this.orders.date === 'asc'" class="bi bi-caret-up-fill"
+					(click)="getExams('asc', 'desc', 'date')"></i>
+				<i *ngIf="this.orders.date === 'desc'" class="bi bi-caret-down-fill"
+					(click)="getExams('asc', 'asc', 'date')"></i>
+			</th>
+			<th scope="col" id="matter">Materia
+				<i *ngIf="this.orders.matter === 'asc'" class="bi bi-caret-up-fill"
+					(click)="getExams('Matter', 'desc', 'matter')"></i>
+				<i *ngIf="this.orders.matter === 'desc'" class="bi bi-caret-down-fill"
+					(click)="getExams('Matter', 'asc', 'matter')"></i>
+			</th>
+			<th scope="col" id="grade">Voto
+				<i *ngIf="this.orders.grade === 'asc'" class="bi bi-caret-up-fill"
+						(click)="getExams('Grade', 'desc', 'grade')"></i>
+				<i *ngIf="this.orders.grade === 'desc'" class="bi bi-caret-down-fill"
+						(click)="getExams('Grade', 'asc', 'grade')"></i>
+		</th>
+			<th scope="col-2">Azioni</th>
+		</tr>
+	</thead>
+	<tbody >
+		<tr>
+			<th scope="row"></th>
+			<td>{{examsList.studentExams}}</td>
+
+
+			<div class="dropdown d-flex">
+				<i class="bi bi-gear-fill" data-bs-toggle="dropdown" aria-expanded="false" type="button"></i>
+				<div class="dropdown-toggle ps-3" data-bs-toggle="dropdown" aria-expanded="false"></div>
+				<!-- <ul class="dropdown-menu">
+					<li><a class="dropdown-item" value="dettagli" (click)="onClickAction('dettagli')"
+							[routerLink]="['/details']"><i class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
+					<li><a class="dropdown-item" value="modifica" (click)="onClickAction('modifica')" [routerLink]="['/edit']"><i
+								class="bi bi-pencil-square px-2"></i>Modifica</a></li>
+					<li><a role="button" class="dropdown-item" value="elimina" data-bs-toggle="modal"
+							data-bs-target="#deleteModal" (click)="onClickAction('elimina')"><i
+								class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
+				</ul> -->
+			</div>
+		</tr>
+	</tbody>
+</table>
