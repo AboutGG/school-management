@@ -71,11 +71,28 @@ public class StudentRepository : IStudentRepository
         return Save();
     }
 
+
     //save the changes on db
     public bool Save()
     {
         return _context.SaveChanges() > 0 ? true : false;
     }
+
+    #region Old GetStudentSubjects
+    
+    // public object GetStudentSubjects(Guid id)
+    // {
+    //     //prendo la classe dello studente studente che ha come id quello proveniente dal token
+    //     var studentclassroomId = _context.Students.FirstOrDefault(el => el.UserId == id).ClassroomId;
+    //     var resultTeacherSubjectClassrooms = _context.TeachersSubjectsClassrooms
+    //         .Where(el=> el.ClassroomId == studentclassroomId)
+    //         .Include(el=>el.Classroom)
+    //         .Include(el=>el.Teacher.Registry)
+    //         .Include(el=>el.Subject).ToList();
+    //     return resultTeacherSubjectClassrooms;
+    // }
+
+    #endregion
 
     #endregion
 

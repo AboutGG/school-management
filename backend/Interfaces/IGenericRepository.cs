@@ -13,6 +13,11 @@ public interface IGenericRepository<T> where T : class
     T GetById(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
     bool Exist(Expression<Func<T, bool>> predicate);
     bool Delete(T value);
-    public bool UpdateEntity(T value);
-    public bool Save();
+    bool UpdateEntity(T value);
+    bool Save();
+
+    List<T> GetAll(PaginationParams? @params,
+        Func<IQueryable<T>, IQueryable<T>>? includeFunc);
+
+    T GetById2(Func<IQueryable<T>, IQueryable<T>>? includeFunc);
 }

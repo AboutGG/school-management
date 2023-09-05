@@ -1,5 +1,6 @@
 ﻿using backend.Dto;
 using backend.Interfaces;
+using backend.Models;
 using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +11,11 @@ namespace backend.Controllers;
 public class AuthController : Controller
 {
     private readonly IUserRepository _userRepository;
-
-    public AuthController(IUserRepository userRepository)
+    private readonly SchoolContext _context;
+    public AuthController(SchoolContext context ,IUserRepository userRepository)
     {
-        this._userRepository = userRepository;
+        _userRepository = userRepository;
+        _context = context;
     }
 
     [HttpPost("login")]
@@ -25,11 +27,11 @@ public class AuthController : Controller
             if (_userRepository.CheckCredentials(request))
             {
                 var token = JWT.GenerateJwtToken(user);
-                return Ok(new { access_token = token });
+                return StatusCode(StatusCodes.Status200OK, new { access_token = token, role = RoleSearcher.GetRole(user.Id, _context)});
             }
             else
             {
-                return Unauthorized(); // Utente non autenticato
+                return StatusCode(StatusCodes.Status401Unauthorized); // Utente non autenticato
             }
         }
         return BadRequest();

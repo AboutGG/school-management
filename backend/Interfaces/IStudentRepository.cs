@@ -12,4 +12,6 @@ public interface IStudentRepository
     bool CreateStudent(Student student);
     bool DeleteStudent(Guid id);
     bool Save();
+
+    //Object GetStudentSubjects(Guid id);
 }
