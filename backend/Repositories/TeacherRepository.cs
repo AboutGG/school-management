@@ -51,10 +51,10 @@ public class TeacherRepository : ITeacherRepository
     public List<Classroom> GetClassroomByTeacherId(Guid id)
     {
         var classrooms = _context.Teachers
-            .Where(el => el.Id == id)
-            .Include(el => el.TeacherSubjectsClassrooms)
+            .Where(el => el.UserId == id)
+            .Include(el => el.TeachersSubjectsClassrooms)
             .ThenInclude(el => el.Classroom.Students)
-            .SelectMany(el => el.TeacherSubjectsClassrooms
+            .SelectMany(el => el.TeachersSubjectsClassrooms
                 .Select(c => c.Classroom))
             .ToList();
         return classrooms;

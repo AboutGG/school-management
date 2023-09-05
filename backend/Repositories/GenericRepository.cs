@@ -35,7 +35,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     #region GetAll
 
-    /// <summary> This function return all the element of a table taking a determinate condition </summary>
+    /*/// <summary> This function return all the element of a table taking a determinate condition </summary>
     /// <param name="params"> The params are used to do Skip and Take, the order and order's type, the page number and more </param>
     /// <param name="predicate"> Used to do a condition in a search or more.</param>
     /// <param name="includes"> Used to includes the reference object of another table. </param>
@@ -63,6 +63,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             .Take(@params.ItemsPerPage).ToList();
     }
 
+    */
     #endregion
     
     public List<T> GetAll(@PaginationParams? @params,

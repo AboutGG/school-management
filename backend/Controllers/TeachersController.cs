@@ -34,6 +34,53 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
+    
+    #region Get classroom by teacher id
+
+    /// <summary>
+    /// Get all classrooms of a teacher 
+    /// </summary>
+    /// <returns> List<Id, Name, StudentCount> </returns>
+
+    [HttpGet]
+    [Route("Classrooms")]
+    [ProducesResponseType(200, Type = typeof(List<ClassroomStudentCount>))]
+    [ProducesResponseType(400)]
+    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string token)
+    {
+        JwtSecurityToken decodedToken;
+        try
+        {
+            //Decode the token
+            decodedToken = JWT.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
+
+            //Controllo il ruolo dello User tramite l'Id
+            var role = RoleSearcher.GetRole(takenId, _context);
+
+            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            if (role == "student" || role == "unknow")
+                throw new Exception("NOT_FOUND");
+
+            var classrooms = new GenericRepository<Teacher>(_context)
+                .GetAll(@params,
+                    query => query
+                        .Include(teacher => teacher.TeachersSubjectsClassrooms)
+                        .ThenInclude(tsc => tsc.Classroom.Students)
+                        .Where(tsc => tsc.UserId == takenId))
+                .SelectMany(teacher => teacher.TeachersSubjectsClassrooms
+                    .Select(tsc => tsc.Classroom)).ToList();
+            return Ok(_mapper.Map<List<ClassroomStudentCount>>(classrooms));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+       
+    }
+    
+    #endregion
 
     #region Get Teachers
 

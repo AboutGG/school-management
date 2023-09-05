@@ -1,5 +1,4 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Linq.Dynamic.Core;
 using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
@@ -8,6 +7,7 @@ using backend.Repositories;
 using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Guid = System.Guid;
 
 namespace backend.Controllers;
 
@@ -18,15 +18,18 @@ public class ClassroomsController : Controller
     private readonly SchoolContext _context;
     private readonly IClassroomRepository _classroomRepository;
     private readonly IMapper _mapper;
+    private readonly ITeacherRepository _teacherRepository;
 
     public ClassroomsController(
         SchoolContext context, 
         IClassroomRepository classroomRepository,
-        IMapper mapper)
+        IMapper mapper,
+        ITeacherRepository teacherRepository)
     {
         _context = context;
         _classroomRepository = classroomRepository;
         _mapper = mapper;
+        _teacherRepository = teacherRepository;
     }
 
     [HttpGet]
@@ -55,7 +58,7 @@ public class ClassroomsController : Controller
                 null, 
                 query => query
                     .Include(teacher => teacher.Registry)
-                    .Include(teacher => teacher.TeacherSubjectsClassrooms
+                    .Include(teacher => teacher.TeachersSubjectsClassrooms
                         .Where(tsc => tsc.ClassroomId == id))
                     .ThenInclude(tsc => tsc.Subject)));
         
@@ -63,48 +66,5 @@ public class ClassroomsController : Controller
 
     }
     
-    #region Get classroom by teacher id
-
-    /// <summary>
-    /// Get all classrooms of a teacher TODO add pagination
-    /// </summary>
-    /// <returns> List<Id, Name, StudentCount> </returns>
-
-    [HttpGet]
-    [ProducesResponseType(200, Type = typeof(List<Classroom>))]
-    [ProducesResponseType(400)]
-    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string token)
-    {
-        JwtSecurityToken decodedToken;
-        try
-        {
-            //Decode the token
-            decodedToken = JWT.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
-            Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
-
-            //Controllo il ruolo dello User tramite l'Id
-            var role = RoleSearcher.GetRole(takenId, _context);
-
-            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknow")
-                throw new Exception("NOT_FOUND");
-
-            var classrooms = new GenericRepository<Teacher>(_context)
-                .GetAll(@params,
-                    query => query
-                        .Include(teacher => teacher.TeachersSubjectsClassrooms)
-                        .ThenInclude(tsc => tsc.Classroom)
-                        .Select());
-
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-       // return Ok(_mapper.Map<List<ClassroomStudentCount>>(_teacherRepository.GetClassroomByTeacherId(id)));
-    }
-    
-    #endregion
+   
 }

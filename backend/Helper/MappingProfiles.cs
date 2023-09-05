@@ -49,7 +49,7 @@ public class MappingProfiles : Profile
                     .MapFrom(src => src.Registry.Surname))
             .ForMember(destinationMember => destinationMember.subjects,
                 opt =>
-                    opt.MapFrom(src => src.TeacherSubjectsClassrooms.Select(
+                    opt.MapFrom(src => src.TeachersSubjectsClassrooms.Select(
                             tsc => tsc.Subject.Name).ToList()));
 
         CreateMap<TeacherSubjectClassroom, TeacherSubjectClassroomDto>()
