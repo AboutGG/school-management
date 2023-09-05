@@ -47,11 +47,11 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember => destinationMember.surname,
                 opt => opt
                     .MapFrom(src => src.Registry.Surname))
-            .ForMember(destinationMember => destinationMember.subject,
+            .ForMember(destinationMember => destinationMember.subjects ,
                 opt =>
                     opt.MapFrom(src =>
                         src.TeacherSubjectsClassrooms.Select(
-                            tsc => tsc.Subject.Name).ToList()));
+                            tsc => new {subject = tsc.Subject.Name, Classroom = tsc.Classroom.Name}).ToList()));
 
         CreateMap<TeacherSubjectClassroom, TeacherSubjectClassroomDto>()
             .ForMember(destinationMember => destinationMember.teacher,
