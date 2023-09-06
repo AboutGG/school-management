@@ -78,7 +78,6 @@ public class SchoolContext : DbContext
         #region TeacherSubjectClassroom relations
 
         ///<summary> TrecherSubject relation many-to-many</summary>
-        modelBuilder.Entity<TeacherSubjectClassroom>().HasKey(ts => new { ts.TeacherId, ts.SubjectId, ts.ClassroomId });
 
         modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Teacher>(ts => ts.Teacher)
@@ -99,11 +98,11 @@ public class SchoolContext : DbContext
 
         #region Exam relations
 
-        ///<summary> Exam relation with subject one-to-many </summary>
+        ///<summary> Exam relation with subject one-to-one </summary>
         modelBuilder.Entity<Exam>()
-            .HasOne<Subject>(e => e.Subject)
-            .WithMany(s => s.Exams)
-            .HasForeignKey(e => e.SubjectId);
+            .HasOne<TeacherSubjectClassroom>(e => e.TeacherSubjectClassroom)
+            .WithOne(tsc => tsc.Exam)
+            .HasForeignKey<Exam>(e => e.TeacherSubjectClassroomId);
 
         #endregion
 

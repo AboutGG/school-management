@@ -145,23 +145,30 @@ public class TeachersController : Controller
             
             //Dal token decodificato prendo l'id dello user
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
+            role = RoleSearcher.GetRole(takenId, _context);
+            if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknow")
+            {
+                throw new Exception("UNAUTHORIZED");
+            }
             
             //prendo il professore che come userId ha quello ricavato dal token
-            Teacher teacher = teacherGenericRepository.GetById2(
-                query => query.Where(el => el.UserId == takenId)
-                    .Include(el => el.TeacherSubjectsClassrooms));
-            List<Guid> classroomsId = teacher.TeacherSubjectsClassrooms.Select(el => el.ClassroomId).ToList();
-            List<Guid> subjectsId = teacher.TeacherSubjectsClassrooms.Select(el => el.SubjectId).ToList();
-
+            Teacher takenTeacher = teacherGenericRepository.GetById2(query => 
+            query.Where(el => el.UserId == takenId)
+                .Include(el => el.TeacherSubjectsClassrooms)
+                .ThenInclude(el => el.Exam)
+                .Include(el => el.TeacherSubjectsClassrooms)
+                .ThenInclude(el => el.Classroom)
+                );
             var dummy = examGenericRepository.GetById2(query =>
-                query.Where(el => el.SubjectId == subjectsId.First())
-            );
+                query.Where(el => el.TeacherSubjectClassroom.Teacher.UserId == takenId));
+
+            return Ok(dummy);
+
         }
         catch (Exception e)
         {
             return BadRequest(ErrorManager.Error(e.Message));
         }
-        return Ok();
     }
 
     #endregion
