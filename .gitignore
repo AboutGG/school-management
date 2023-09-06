@@ -3,7 +3,7 @@ frontend/src/environments/environment.ts
 /backend/.idea
 /backend/obj/
 .idea/.idea.school-management.dir/.idea/
-.idea
+.idea/
 bin/
 backend/obj/
 /packages/
