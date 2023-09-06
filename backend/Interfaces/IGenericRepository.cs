@@ -16,7 +16,7 @@ public interface IGenericRepository<T> where T : class
     bool UpdateEntity(T value);
     bool Save();
 
-    List<T> GetAll(PaginationParams? @params,
+    List<T> GetAll2(PaginationParams? @params,
         Func<IQueryable<T>, IQueryable<T>>? includeFunc);
 
     T GetById2(Func<IQueryable<T>, IQueryable<T>>? includeFunc);

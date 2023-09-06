@@ -129,8 +129,7 @@ public class TeachersController : Controller
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    [Authorize]
-    public IActionResult GetTeacherExams([FromHeader] string Token)
+    public IActionResult GetTeacherExams([FromHeader] string Token, [FromQuery] PaginationParams @params)
     {
         IGenericRepository<Teacher> teacherGenericRepository = new GenericRepository<Teacher>(_context);
         IGenericRepository<Exam> examGenericRepository = new GenericRepository<Exam>(_context);
@@ -142,7 +141,7 @@ public class TeachersController : Controller
         {
             //Decodifico il token
             decodedToken = JWT.DecodeJwtToken(Token);
-            
+
             //Dal token decodificato prendo l'id dello user
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
             role = RoleSearcher.GetRole(takenId, _context);
@@ -150,20 +149,17 @@ public class TeachersController : Controller
             {
                 throw new Exception("UNAUTHORIZED");
             }
-            
-            //prendo il professore che come userId ha quello ricavato dal token
-            Teacher takenTeacher = teacherGenericRepository.GetById2(query => 
-            query.Where(el => el.UserId == takenId)
-                .Include(el => el.TeacherSubjectsClassrooms)
-                .ThenInclude(el => el.Exam)
-                .Include(el => el.TeacherSubjectsClassrooms)
-                .ThenInclude(el => el.Classroom)
-                );
-            var dummy = examGenericRepository.GetById2(query =>
-                query.Where(el => el.TeacherSubjectClassroom.Teacher.UserId == takenId));
 
-            return Ok(dummy);
+            //Prendo la lista di esami eseguiti dal professore che come userId ha 
+            var dummy = examGenericRepository.GetAll(@params,
+                el => el.TeacherSubjectClassroom.Teacher.UserId == takenId &&
+                      el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Role,
+                el => el.TeacherSubjectClassroom,
+                el => el.TeacherSubjectClassroom.Classroom,
+                el => el.TeacherSubjectClassroom.Subject
+            );
 
+            return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
         }
         catch (Exception e)
         {

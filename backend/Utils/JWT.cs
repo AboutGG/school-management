@@ -8,7 +8,7 @@ namespace backend.Utils;
 
 public class JWT
 {
-    private static readonly string secretKey = "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=";
+    private static string secretKey = "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=";
     public static string GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

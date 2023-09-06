@@ -94,7 +94,7 @@ public class StudentsController : Controller
                 }
                 
                 //Prendo le materie che pratica lo studente nella sua classe
-                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAll(@params,
+                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAll2(@params,
                     query => query
                         .Where(el => el.ClassroomId == studentclassroomId)
                         .Include(el => el.Classroom)

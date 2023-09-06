@@ -9,7 +9,7 @@ public static class ErrorManager
         switch (e)
         {
             case "NOT_FOUND":
-                return new ErrorResponse(StatusCodes.Status404NotFound,String.Empty);
+                return new ErrorResponse(StatusCodes.Status404NotFound,"Items not found");
             case "UNAUTHORIZED":
                 return new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid");
             default:

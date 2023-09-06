@@ -65,7 +65,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     #endregion
     
-    public List<T> GetAll(@PaginationParams? @params,
+    public List<T> GetAll2(@PaginationParams? @params,
         Func<IQueryable<T>, IQueryable<T>>? queryFunc
     )
     {
