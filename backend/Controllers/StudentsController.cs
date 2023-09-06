@@ -67,7 +67,7 @@ public class StudentsController : Controller
         try
         {
             //Decode the token
-            decodedToken = JWT.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            decodedToken = JWT.DecodeJwtToken(Token);
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //tramite lo user ricavo il ruolo tramite l'Id

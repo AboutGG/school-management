@@ -38,7 +38,7 @@ public class ExamsController : Controller
         try
         {
             //Decode the token
-            JwtSecurityToken idFromToken = JWT.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            JwtSecurityToken idFromToken = JWT.DecodeJwtToken(token);
             
             //Take the userId from the token
             var takenId = idFromToken.Payload["userid"].ToString();

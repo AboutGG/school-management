@@ -5,6 +5,7 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -89,7 +90,7 @@ public class TeachersController : Controller
         try
         {
             //Decode the token
-            decodedToken = JWT.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            decodedToken = JWT.DecodeJwtToken(Token);
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //Controllo il ruolo dello User tramite l'Id
@@ -114,19 +115,55 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            switch (e.Message)
-            {
-                case "NOT_FOUND":
-                    return StatusCode(StatusCodes.Status404NotFound);
-                case "UNAUTHORIZED":
-                    return StatusCode(StatusCodes.Status401Unauthorized, "The token in not valid");
-                default:
-                    return StatusCode(StatusCodes.Status400BadRequest);
-            }
+            return BadRequest(ErrorManager.Error(e.Message));
         }
     }
 
     #endregion
 
+    #region GetExams
+
+    [HttpGet]
+    [Route("exams")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    [Authorize]
+    public IActionResult GetTeacherExams([FromHeader] string Token)
+    {
+        IGenericRepository<Teacher> teacherGenericRepository = new GenericRepository<Teacher>(_context);
+        IGenericRepository<Exam> examGenericRepository = new GenericRepository<Exam>(_context);
+        JwtSecurityToken decodedToken;
+        Guid takenId;
+        string role;
+
+        try
+        {
+            //Decodifico il token
+            decodedToken = JWT.DecodeJwtToken(Token);
+            
+            //Dal token decodificato prendo l'id dello user
+            takenId = new Guid(decodedToken.Payload["userid"].ToString());
+            
+            //prendo il professore che come userId ha quello ricavato dal token
+            Teacher teacher = teacherGenericRepository.GetById2(
+                query => query.Where(el => el.UserId == takenId)
+                    .Include(el => el.TeacherSubjectsClassrooms));
+            List<Guid> classroomsId = teacher.TeacherSubjectsClassrooms.Select(el => el.ClassroomId).ToList();
+            List<Guid> subjectsId = teacher.TeacherSubjectsClassrooms.Select(el => el.SubjectId).ToList();
+
+            var dummy = examGenericRepository.GetById2(query =>
+                query.Where(el => el.SubjectId == subjectsId.First())
+            );
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ErrorManager.Error(e.Message));
+        }
+        return Ok();
+    }
+
+    #endregion
     #endregion
 }
