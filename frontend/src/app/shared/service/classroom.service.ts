@@ -11,7 +11,7 @@ export class ClassroomService {
   constructor(private http: HttpClient) { }
 
   getDataClassroom(): Observable<Classroom[]>{
-    return this.http.get<Classroom[]>('https://localhost:7262/api/classroom')
+    return this.http.get<Classroom[]>(`https://localhost:7262/api/teachers/classroom`)
 
   }
 
