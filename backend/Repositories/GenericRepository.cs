@@ -63,24 +63,26 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             .Take(@params.ItemsPerPage).ToList();
     }
 
+    
     #endregion
     
     public List<T> GetAll(@PaginationParams? @params,
-        Func<IQueryable<T>, IQueryable<T>>? queryFunc
-    )
+        Func<IQueryable<T>, IQueryable<T>>? queryFunc)
     {
         var query = _entities.AsQueryable();
-        
+
         if (queryFunc != null)
         {
             query = queryFunc.Invoke(query);
         }
+        
+        
 
         if (@params != null)
         {
             query = query.OrderBy(
                 $"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
-
+            
             //@params.Page default value: 1, @params.ItemsPerPage default value: 10
             query.Skip((@params.Page - 1) * @params.ItemsPerPage)
                 .Take(@params.ItemsPerPage);
@@ -106,6 +108,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
         return query.FirstOrDefault();
     }
+    
 
     public T GetById2(Func<IQueryable<T>, IQueryable<T>>? queryFunc) //Include ex:  t => t.Id.
     {
@@ -172,5 +175,4 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     #endregion
 
     #endregion
-    
 }
