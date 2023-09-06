@@ -39,13 +39,14 @@ public class ClassroomController : Controller
 
     [HttpGet]
     [Route("{id}")]
+    [ProducesResponseType(200, Type = typeof(List<StudentDto>))]
     public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
     {
-        var studentsRepo = new GenericRepository<Student>(_context)
+        var students = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
             .GetAll(@params,
                 query => query
                     .Where(student => student.ClassroomId == id)
-                    .Include(student => student.Registry));
+                    .Include(student => student.Registry)));
 
         var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
             .GetAll(
@@ -55,15 +56,6 @@ public class ClassroomController : Controller
                     .Include(teacher => teacher.TeacherSubjectsClassrooms
                         .Where(tsc => tsc.ClassroomId == id))
                     .ThenInclude(tsc => tsc.Subject)));
-
-        var students = studentsRepo.Select(el => new
-        {
-            id = el.UserId,
-            name = el.Registry.Name,
-            surname = el.Registry.Surname,
-            gender = el.Registry.Gender
-        }).ToList();
-
         return Ok(new
         {
             teachers,

@@ -44,7 +44,7 @@ public class StudentsController : Controller
     [ProducesResponseType(200, Type = typeof(List<Student>))]
     public IActionResult GetStudents()
     {
-        return Ok(_studentRepository.GetStudents());
+        return Ok(_mapper.Map<List<StudentDto>>(_studentRepository.GetStudents()));
     }
 
     #endregion
