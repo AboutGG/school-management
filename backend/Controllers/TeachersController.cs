@@ -5,6 +5,7 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
+using J2N.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,7 +53,7 @@ public class TeachersController : Controller
         try
         {
             //Decode the token
-            decodedToken = JWT.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            decodedToken = JWTHandler.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
             Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //Controllo il ruolo dello User tramite l'Id
@@ -61,16 +62,20 @@ public class TeachersController : Controller
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
             if (role == "student" || role == "unknow")
                 throw new Exception("NOT_FOUND");
-
+            
             var classrooms = new GenericRepository<Teacher>(_context)
                 .GetAll(@params,
                     query => query
                         .Include(teacher => teacher.TeachersSubjectsClassrooms)
                         .ThenInclude(tsc => tsc.Classroom.Students)
                         .Where(tsc => tsc.UserId == takenId))
-                .SelectMany(teacher => teacher.TeachersSubjectsClassrooms
+                .SelectMany(teacher =>
+                    teacher.TeachersSubjectsClassrooms
                     .Select(tsc => tsc.Classroom)).ToList();
-            return Ok(_mapper.Map<List<ClassroomStudentCount>>(classrooms));
+            
+            var filterclassroom = classrooms
+                .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())).ToList();
+            return Ok(_mapper.Map<List<ClassroomStudentCount>>(filterclassroom));
         }
         catch (Exception e)
         {
@@ -112,7 +117,7 @@ public class TeachersController : Controller
         try
         {
             //Decode the token
-            decodedToken = JWT.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            decodedToken = JWTHandler.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //Controllo il ruolo dello User tramite l'Id

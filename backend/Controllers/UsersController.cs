@@ -56,7 +56,7 @@ public class UsersController : Controller
 
     #region Get all users
 
-    /*/// <summary> Get call on user breakpoint </summary>
+    /// <summary> Get call on user breakpoint </summary>
     /// <returns>All User with filter by role and search</returns>
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
@@ -95,7 +95,7 @@ public class UsersController : Controller
             default:
                 return NotFound($"The Role \"{@params.Role}\" has not found");
         }
-    }*/
+    }
 
     #endregion
 

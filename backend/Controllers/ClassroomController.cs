@@ -55,15 +55,15 @@ public class ClassroomsController : Controller
 
         var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
             .GetAll(
-                null, 
+                null,
                 query => query
-                    .Include(teacher => teacher.Registry)
-                    .Include(teacher => teacher.TeachersSubjectsClassrooms
-                        .Where(tsc => tsc.ClassroomId == id))
-                    .ThenInclude(tsc => tsc.Subject)));
+                    .Where(teacher => teacher.TeachersSubjectsClassrooms
+                        .Any(tsc => tsc.ClassroomId == id))
+                    .Include(teacher => teacher.TeachersSubjectsClassrooms)
+                    .ThenInclude(tsc => tsc.Subject)
+                    .Include(teacher => teacher.Registry)));
         
         return Ok(new { students, teachers });
-
     }
     
    

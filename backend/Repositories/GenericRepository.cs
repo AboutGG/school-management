@@ -35,7 +35,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     #region GetAll
 
-    /*/// <summary> This function return all the element of a table taking a determinate condition </summary>
+    /// <summary> This function return all the element of a table taking a determinate condition </summary>
     /// <param name="params"> The params are used to do Skip and Take, the order and order's type, the page number and more </param>
     /// <param name="predicate"> Used to do a condition in a search or more.</param>
     /// <param name="includes"> Used to includes the reference object of another table. </param>
@@ -63,25 +63,26 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             .Take(@params.ItemsPerPage).ToList();
     }
 
-    */
+    
     #endregion
     
     public List<T> GetAll(@PaginationParams? @params,
-        Func<IQueryable<T>, IQueryable<T>>? queryFunc
-    )
+        Func<IQueryable<T>, IQueryable<T>>? queryFunc)
     {
         var query = _entities.AsQueryable();
-        
+
         if (queryFunc != null)
         {
             query = queryFunc.Invoke(query);
         }
+        
+        
 
         if (@params != null)
         {
             query = query.OrderBy(
                 $"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
-
+            
             //@params.Page default value: 1, @params.ItemsPerPage default value: 10
             query.Skip((@params.Page - 1) * @params.ItemsPerPage)
                 .Take(@params.ItemsPerPage);
@@ -107,6 +108,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
         return query.FirstOrDefault();
     }
+    
 
     public T GetById2(Func<IQueryable<T>, IQueryable<T>>? queryFunc) //Include ex:  t => t.Id.
     {
@@ -173,5 +175,4 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     #endregion
 
     #endregion
-    
 }

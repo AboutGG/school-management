@@ -50,7 +50,7 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember => destinationMember.subjects,
                 opt =>
                     opt.MapFrom(src => src.TeachersSubjectsClassrooms.Select(
-                            tsc => tsc.Subject.Name).ToList()));
+                            tsc => tsc.Subject.Name).Distinct().ToList()));
 
         CreateMap<TeacherSubjectClassroom, TeacherSubjectClassroomDto>()
             .ForMember(destinationMember => destinationMember.teacher,
