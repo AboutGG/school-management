@@ -5,6 +5,7 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
+using J2N.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,57 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
+    
+    #region Get classroom by teacher id
+
+    /// <summary>
+    /// Get all classrooms of a teacher 
+    /// </summary>
+    /// <returns> List<Id, Name, StudentCount> </returns>
+
+    [HttpGet]
+    [Route("Classrooms")]
+    [ProducesResponseType(200, Type = typeof(List<ClassroomStudentCount>))]
+    [ProducesResponseType(400)]
+    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string token)
+    {
+        JwtSecurityToken decodedToken;
+        try
+        {
+            //Decode the token
+            decodedToken = JWTHandler.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
+
+            //Controllo il ruolo dello User tramite l'Id
+            var role = RoleSearcher.GetRole(takenId, _context);
+
+            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            if (role == "student" || role == "unknow")
+                throw new Exception("NOT_FOUND");
+            
+            var classrooms = new GenericRepository<Teacher>(_context)
+                .GetAll(@params,
+                    query => query
+                        .Include(teacher => teacher.TeachersSubjectsClassrooms)
+                        .ThenInclude(tsc => tsc.Classroom.Students)
+                        .Where(tsc => tsc.UserId == takenId))
+                .SelectMany(teacher =>
+                    teacher.TeachersSubjectsClassrooms
+                    .Select(tsc => tsc.Classroom)).ToList();
+            
+            var filterclassroom = classrooms
+                .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())).ToList();
+            return Ok(_mapper.Map<List<ClassroomStudentCount>>(filterclassroom));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+       
+    }
+    
+    #endregion
 
     #region Get Teachers
 
@@ -47,30 +99,6 @@ public class TeachersController : Controller
     }
 
     #endregion
-
-    #region Get classroom by teacher id
-
-    /// <summary>
-    /// Get all classrooms of a teacher TODO add pagination
-    /// </summary>
-    /// <returns> List<Id, Name, StudentCount> </returns>
-
-    [HttpGet]
-    [Route("{id}/classroom")]
-    [ProducesResponseType(200, Type = typeof(List<Classroom>))]
-    [ProducesResponseType(400)]
-    public IActionResult GetClassrooms([FromRoute] Guid id)
-    {
-        // var classroomWithStudentCount = _teacherRepository.GetClassroomByTeacherId(id)
-        //     .Select(el => new ClassroomStudentCount()
-        //     {
-        //         ClassroomId = el.Id,
-        //         Name = el.Name,
-        //         StudentCount = el.Students.Count()
-        //     })
-        //     .ToList();
-        return Ok(_mapper.Map<List<ClassroomStudentCount>>(_teacherRepository.GetClassroomByTeacherId(id)));
-    }
 
     #endregion
 
@@ -89,7 +117,7 @@ public class TeachersController : Controller
         try
         {
             //Decode the token
-            decodedToken = JWT.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            decodedToken = JWTHandler.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //Controllo il ruolo dello User tramite l'Id
@@ -104,9 +132,9 @@ public class TeachersController : Controller
                 var resultTeacher = new GenericRepository<Teacher>(_context).
                     GetById2(query => query
                         .Include(el => el.Registry)
-                        .Include(el => el.TeacherSubjectsClassrooms)
+                        .Include(el => el.TeachersSubjectsClassrooms)
                         .ThenInclude(el => el.Classroom)
-                        .Include(el => el.TeacherSubjectsClassrooms)
+                        .Include(el => el.TeachersSubjectsClassrooms)
                         .ThenInclude(el => el.Subject)
                     );
                 return Ok(_mapper.Map<TeacherDto>(resultTeacher));
@@ -128,5 +156,5 @@ public class TeachersController : Controller
 
     #endregion
 
-    #endregion
+    
 }

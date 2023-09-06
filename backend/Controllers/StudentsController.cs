@@ -67,7 +67,7 @@ public class StudentsController : Controller
         try
         {
             //Decode the token
-            decodedToken = JWT.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            decodedToken = JWTHandler.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //tramite lo user ricavo il ruolo tramite l'Id
@@ -94,13 +94,13 @@ public class StudentsController : Controller
                 }
                 
                 //Prendo le materie che pratica lo studente nella sua classe
-                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAll(@params,
+                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAll(
+                    @params,
                     query => query
                         .Where(el => el.ClassroomId == studentclassroomId)
                         .Include(el => el.Classroom)
                         .Include(el => el.Teacher.Registry)
-                        .Include(el => el.Subject)
-                        );
+                        .Include(el => el.Subject));
                 
                 return Ok(_mapper.Map<List<TeacherSubjectClassroomDto>>(resultStudent.DistinctBy(el => el.TeacherId)));
             }
@@ -137,7 +137,7 @@ public class StudentsController : Controller
         try
         {
             //Decode the token
-            JwtSecurityToken idFromToken = JWT.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            JwtSecurityToken idFromToken = JWTHandler.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
             
             //Take the userId from the token
             var takenId = new Guid (idFromToken.Payload["userid"].ToString());
