@@ -41,7 +41,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <param name="includes"> Used to includes the reference object of another table. </param>
     /// <returns>All users using the params, predicate and includes</returns>
 
-    public ICollection<T> GetAll(PaginationParams? @params,
+    public List<T> GetAll(PaginationParams? @params,
         Expression<Func<T, bool>> predicate, //Predicate ex:  t => t.Id == Id
         params Expression<Func<T, object>>[] includes //Include ex:  t => t.Id<
     )

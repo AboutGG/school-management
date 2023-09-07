@@ -36,7 +36,7 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
-    
+
     #region Get classroom by teacher id
 
     /// <summary>
@@ -63,7 +63,7 @@ public class TeachersController : Controller
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
             if (role == "student" || role == "unknow")
                 throw new Exception("NOT_FOUND");
-            
+
             var classrooms = new GenericRepository<Teacher>(_context)
                 .GetAll2(@params,
                     query => query
@@ -72,8 +72,8 @@ public class TeachersController : Controller
                         .Where(tsc => tsc.UserId == takenId))
                 .SelectMany(teacher =>
                     teacher.TeachersSubjectsClassrooms
-                    .Select(tsc => tsc.Classroom)).ToList();
-            
+                        .Select(tsc => tsc.Classroom)).ToList();
+
             var filterclassroom = classrooms
                 .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())).ToList();
             return Ok(_mapper.Map<List<ClassroomStudentCount>>(filterclassroom));
@@ -83,9 +83,9 @@ public class TeachersController : Controller
             Console.WriteLine(e);
             throw;
         }
-       
+
     }
-    
+
     #endregion
 
     #region Get Teachers
@@ -98,8 +98,6 @@ public class TeachersController : Controller
     {
         return Ok(_teacherRepository.GetTeachers());
     }
-
-    #endregion
 
     #endregion
 
@@ -130,14 +128,13 @@ public class TeachersController : Controller
             else
             {
                 //Prendo le materie che insegna il professore con le relative classi
-                var resultTeacher = new GenericRepository<Teacher>(_context).
-                    GetById2(query => query
-                        .Include(el => el.Registry)
-                        .Include(el => el.TeachersSubjectsClassrooms)
-                        .ThenInclude(el => el.Classroom)
-                        .Include(el => el.TeachersSubjectsClassrooms)
-                        .ThenInclude(el => el.Subject)
-                    );
+                var resultTeacher = new GenericRepository<Teacher>(_context).GetById2(query => query
+                    .Include(el => el.Registry)
+                    .Include(el => el.TeachersSubjectsClassrooms)
+                    .ThenInclude(el => el.Classroom)
+                    .Include(el => el.TeachersSubjectsClassrooms)
+                    .ThenInclude(el => el.Subject)
+                );
                 return Ok(_mapper.Map<TeacherDto>(resultTeacher));
             }
         }
@@ -153,7 +150,7 @@ public class TeachersController : Controller
 
     [HttpGet]
     [Route("exams")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(List<TeacherExamDto>))]
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
@@ -179,7 +176,7 @@ public class TeachersController : Controller
             }
 
             //Prendo la lista di esami eseguiti dal professore che come userId ha 
-            var dummy = examGenericRepository.GetAll(@params,
+            List<Exam> dummy = examGenericRepository.GetAll(@params,
                 el => el.TeacherSubjectClassroom.Teacher.UserId == takenId,
                 el => el.TeacherSubjectClassroom,
                 el => el.TeacherSubjectClassroom.Classroom,
@@ -187,8 +184,7 @@ public class TeachersController : Controller
             );
             if (@params.Filter != null)
                 dummy = dummy.Where(el =>
-                    el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
-            
+                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
             return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
         }
         catch (Exception e)
@@ -199,5 +195,5 @@ public class TeachersController : Controller
 
     #endregion
 
-    
+    #endregion
 }

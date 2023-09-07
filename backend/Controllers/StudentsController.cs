@@ -53,7 +53,7 @@ public class StudentsController : Controller
 
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(List<TeacherSubjectClassroomDto>))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromQuery] PaginationParams @params, [FromHeader] string Token)
@@ -63,7 +63,6 @@ public class StudentsController : Controller
         JwtSecurityToken decodedToken;
         Guid takenId;
         string role;
-        User takenUser;
         try
         {
             //Decode the token
@@ -129,8 +128,10 @@ public class StudentsController : Controller
     /// <returns>Return a list of Exams performed by the Student</returns>
     [HttpGet]
     [Route("exams")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(StudentExamDto))]
     [ProducesResponseType(401)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
     public IActionResult GetStudentExams([FromHeader] string token)
     {
         
