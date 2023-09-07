@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace backend.Models;
@@ -6,6 +7,14 @@ namespace backend.Models;
 [Table("teachers_subjects_classrooms")]
 public class TeacherSubjectClassroom
 {
+    #region Id
+    [Required]
+    [Column("id")]
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
+
+    #endregion
+    
     #region Teacher
     [Column("id_teacher")]
     [JsonPropertyName("id_techer")]
@@ -25,5 +34,11 @@ public class TeacherSubjectClassroom
     [JsonPropertyName("id_classroom")]
     public Guid ClassroomId { get; set; }
     public virtual Classroom Classroom { get; set; }
+    #endregion
+
+    #region Foreign Key
+
+    public virtual Exam Exam { get; set; }
+
     #endregion
 }
