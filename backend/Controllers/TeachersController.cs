@@ -5,10 +5,9 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
-using Microsoft.AspNetCore.Authorization;
-using J2N.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace backend.Controllers;
 
@@ -102,7 +101,10 @@ public class TeachersController : Controller
     #endregion
 
     #region Get Subjects
-
+    /// <summary> A method that return a Teacher's subjects list </summary>
+    /// <param name="Token">Token to take the user id of the Teacher and checks the role</param>
+    /// <returns>A list of Subject and his classrooms</returns>
+    /// <exception cref="Exception">Errors if the token is not valid or more.</exception>
     [HttpGet]
     [Route("subjects")]
     [ProducesResponseType(200)]
@@ -129,6 +131,7 @@ public class TeachersController : Controller
             {
                 //Prendo le materie che insegna il professore con le relative classi
                 var resultTeacher = new GenericRepository<Teacher>(_context).GetById2(query => query
+                    .Where(el=> el.UserId == takenId)
                     .Include(el => el.Registry)
                     .Include(el => el.TeachersSubjectsClassrooms)
                     .ThenInclude(el => el.Classroom)
@@ -186,6 +189,43 @@ public class TeachersController : Controller
                 dummy = dummy.Where(el =>
                         el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
             return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ErrorManager.Error(e.Message));
+        }
+    }
+
+    #endregion
+
+    #region Get exam detail
+    
+    /// <summary> A method that returns, based on an exam, the list of students who take it. </summary>
+    /// <param name="params">Pagination params for pagination, orders etc..</param>
+    /// <param name="id">The Id of the Exam which i want to see</param>
+    /// <returns>An Exam and his Student list with the grade</returns>
+    [HttpGet]
+    [Route("exams/{id}")]
+    [ProducesResponseType(200, Type = typeof(ExamDto))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public IActionResult GetTeacherExamsDetail([FromQuery]PaginationParams @params, string id)
+    {
+        IGenericRepository<Exam> examGenericRepository = new GenericRepository<Exam>(_context);
+        IGenericRepository<StudentExam> studentExamGenericRepository = new GenericRepository<StudentExam>(_context);
+        try
+        {
+            var takenExam = examGenericRepository.GetById2(query => query
+                .Where(el => el.Id.ToString() == id)
+                .Include(el => el.TeacherSubjectClassroom.Subject)
+                .Include(el => el.StudentExams)
+                .ThenInclude(el => el.Student)
+                .ThenInclude(el => el.Registry)
+            );
+            
+            var dummy = _mapper.Map<ExamDto>(takenExam);
+            dummy.StudentExams = dummy.StudentExams.AsQueryable().OrderBy($"Student.{@params.Order} {@params.OrderType}").ToList();
+            return Ok(dummy);
         }
         catch (Exception e)
         {

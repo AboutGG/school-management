@@ -103,5 +103,24 @@ public class MappingProfiles : Profile
                             }
                         )
                     ));
+
+        CreateMap<StudentExam, TeacherStudentExamDto>()
+            .ForMember(destinationMember => destinationMember.Grade,
+                opt => opt
+                    .MapFrom(src => src.Grade))
+            .ForMember(destinationMember => destinationMember.Student,
+                opt => opt
+                    .MapFrom(src => src.Student));
+        
+        CreateMap<Exam, ExamDto>()
+            .ForMember(destinationMember => destinationMember.StudentExams,
+                opt => opt
+                    .MapFrom(src => src.StudentExams))
+            .ForMember(destinationMember => destinationMember.ExamDate,
+                opt => opt
+                    .MapFrom(src => src.ExamDate))
+            .ForMember(destinationMember => destinationMember.Subject,
+                opt => opt
+                    .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
     }
 }
