@@ -107,7 +107,7 @@ public class TeachersController : Controller
     /// <exception cref="Exception">Errors if the token is not valid or more.</exception>
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(TeacherDto))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromHeader] string Token)
@@ -150,7 +150,11 @@ public class TeachersController : Controller
     #endregion
 
     #region GetExams
-
+    /// <summary> Api call to take the Exams of a teacher. </summary>
+    /// <param name="Token">To check the role, authorization and to take the userId</param>
+    /// <param name="params">Orders, filter, search etc../param>
+    /// <returns>A list of exam planned by the Teacher</returns>
+    /// <exception cref="Exception"></exception>
     [HttpGet]
     [Route("exams")]
     [ProducesResponseType(200, Type = typeof(List<TeacherExamDto>))]
