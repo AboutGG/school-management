@@ -225,10 +225,24 @@ public class TeachersController : Controller
                 .Include(el => el.StudentExams)
                 .ThenInclude(el => el.Student)
                 .ThenInclude(el => el.Registry)
-            );
             
+            );
+            @params.Order = "Student.Registry." + $"{@params.Order}";
+            var pippo = new GenericRepository<StudentExam>(_context)
+                .GetAll2(@params, el => 
+                    takenExam.StudentExams.AsQueryable()
+                        .OrderBy($"{@params.Order} {@params.OrderType}")
+                        .Skip((@params.Page - 1) * @params.ItemsPerPage)
+                        .Take(@params.ItemsPerPage)
+                    );
+            takenExam.StudentExams = pippo;
+            /* .Select(el => el.Student).AsQueryable()
+                    .OrderBy($"Registry.{@params.Order} {@params.OrderType}")
+                    .Skip((@params.Page - 1) * @params.ItemsPerPage)
+                    .Take(@params.ItemsPerPage) */
+            // dummy.StudentExams.AsQueryable().OrderBy($"Student.{@params.Order} {@params.OrderType}")
             var dummy = _mapper.Map<ExamDto>(takenExam);
-            dummy.StudentExams = dummy.StudentExams.AsQueryable().OrderBy($"Student.{@params.Order} {@params.OrderType}").ToList();
+
             return Ok(dummy);
         }
         catch (Exception e)
