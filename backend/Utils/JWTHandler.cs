@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Utils;
 
-public class JWT
+public class JWTHandler
 {
     private static string secretKey = "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=";
     public static string GenerateJwtToken(User user)

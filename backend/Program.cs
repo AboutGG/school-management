@@ -27,7 +27,7 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITeacherSubjectClassroomRepository, TeacherSubjectClassroomRepository>();
 builder.Services.AddScoped<IExamRepository, ExamRepository>();
-builder.Services.AddScoped<JWT>();
+builder.Services.AddScoped<JWTHandler>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 
 builder.Services.AddScoped<PDF>();

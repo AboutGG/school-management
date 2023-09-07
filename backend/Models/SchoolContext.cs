@@ -81,7 +81,7 @@ public class SchoolContext : DbContext
 
         modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Teacher>(ts => ts.Teacher)
-            .WithMany(t => t.TeacherSubjectsClassrooms)
+            .WithMany(t => t.TeachersSubjectsClassrooms)
             .HasForeignKey(ts => ts.TeacherId);
 
         modelBuilder.Entity<TeacherSubjectClassroom>()

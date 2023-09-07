@@ -47,11 +47,10 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember => destinationMember.surname,
                 opt => opt
                     .MapFrom(src => src.Registry.Surname))
-            .ForMember(destinationMember => destinationMember.subjects ,
+            .ForMember(destinationMember => destinationMember.subjects,
                 opt =>
-                    opt.MapFrom(src =>
-                        src.TeacherSubjectsClassrooms.Select(
-                            tsc => new {subject = tsc.Subject.Name, Classroom = tsc.Classroom.Name}).ToList()));
+                    opt.MapFrom(src => src.TeachersSubjectsClassrooms.Select(
+                            tsc => tsc.Subject.Name).Distinct().ToList()));
 
         CreateMap<TeacherSubjectClassroom, TeacherSubjectClassroomDto>()
             .ForMember(destinationMember => destinationMember.teacher,
@@ -72,5 +71,37 @@ public class MappingProfiles : Profile
                 opt => opt
                     .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
         
+        CreateMap<Student, StudentDto>()
+            .ForMember(destinationMember => destinationMember.id,
+                opt => opt
+                    .MapFrom(src => src.UserId))
+            .ForMember(destinationMember => destinationMember.name,
+                opt => opt
+                    .MapFrom(src => src.Registry.Name))
+            .ForMember(destinationMember => destinationMember.surname,
+                opt => opt
+                    .MapFrom(src => src.Registry.Surname));
+
+        CreateMap<Student, StudentExamDto>()
+            .ForPath(dest => dest.Student.id,
+                opt => opt
+                    .MapFrom(src => src.UserId))
+            .ForPath(dest => dest.Student.name, 
+                opt => opt
+                    .MapFrom(src => src.Registry.Name))
+            .ForPath(dest => dest.Student.surname,
+                opt => opt
+                    .MapFrom(src => src.Registry.Surname))
+            .ForMember(destinationMember => destinationMember.Exams,
+                opt => opt
+                    .MapFrom(src => src.StudentExams
+                        .Select(el => new
+                            {
+                                subject = el.Exam.TeacherSubjectClassroom.Subject.Name,
+                                date = el.Exam.ExamDate,
+                                grade = el.Grade,
+                            }
+                        )
+                    ));
     }
 }
