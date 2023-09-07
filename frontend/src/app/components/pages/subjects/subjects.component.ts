@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ClassroomService } from 'src/app/shared/service/classroom.service';
 
 @Component({
   selector: 'app-subjects',
@@ -7,18 +8,30 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./subjects.component.scss']
 })
 export class SubjectsComponent {
-  public editForm!: FormGroup;
 
-  ngOnInit(): void {
-    this.editForm = new FormGroup({
-      name: new FormControl("", Validators.required),
-      teacher: new FormControl("", Validators.required)
-    });
-  }
+  teacherSubjects : any;
 
-onEditSubmit(){
-  
-}
+  constructor(private classroomService: ClassroomService) {}
+
+
+  ngOnInit(){
+    this.fetchData();
+  }
+
+    // get dati api classroom
+    fetchData() {
+      this.classroomService.getDataClassroom().subscribe({
+        next: (data: any) => {
+          this.teacherSubjects = data;
+          console.log(data);
+        },
+        error: (err) => { 
+          console.log("errore",err);
+      }
+    })
+    }
+
+
 
 
 

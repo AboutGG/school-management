@@ -40,14 +40,14 @@ export interface Teachers {
   id?: string;
   name: string;
   surname: string;
-  subject: string[];
+  subjects: string[];
 }
 
 export interface Students {
+  subscribe(arg0: { next: () => void }): unknown
   id?: string;
   name: string;
   surname: string;
-  gender: string;
 }
 export interface ClassDetails {
   teachers: Teachers[];
