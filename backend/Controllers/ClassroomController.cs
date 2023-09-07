@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Linq.Dynamic.Core;
 using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
@@ -37,7 +37,7 @@ public class ClassroomsController : Controller
     public IActionResult GetClassroomsList()
     {
         var classrooms = new GenericRepository<Classroom>(_context)
-            .GetAll(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null);
+            .GetAll2(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null);
         return Ok(_mapper.Map<List<ClassroomDto>>(classrooms));
     }
 
@@ -48,14 +48,14 @@ public class ClassroomsController : Controller
     public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
     {
         var students = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
-            .GetAll(@params,
+            .GetAll2(@params,
                 query => query
                     .Where(student => student.ClassroomId == id)
                     .Include(student => student.Registry)));
 
         var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
-            .GetAll(
-                null,
+            .GetAll2(
+                null, 
                 query => query
                     .Where(teacher => teacher.TeachersSubjectsClassrooms
                         .Any(tsc => tsc.ClassroomId == id))

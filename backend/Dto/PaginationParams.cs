@@ -15,7 +15,7 @@ public class PaginationParams
     }
     
     /// <summary> This variable contains the roles to filter the element in a table. The default value is null</summary>
-    public string? Role { get; set; } = null;
+    public string? Filter { get; set; } = null;
     
     /// <summary> This variable contains the string to search in a table record</summary>
     public string? Search

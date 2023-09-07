@@ -53,7 +53,7 @@ public class StudentsController : Controller
 
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(List<TeacherSubjectClassroomDto>))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromQuery] PaginationParams @params, [FromHeader] string Token)
@@ -63,11 +63,10 @@ public class StudentsController : Controller
         JwtSecurityToken decodedToken;
         Guid takenId;
         string role;
-        User takenUser;
         try
         {
             //Decode the token
-            decodedToken = JWTHandler.DecodeJwtToken(Token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //tramite lo user ricavo il ruolo tramite l'Id
@@ -94,7 +93,7 @@ public class StudentsController : Controller
                 }
                 
                 //Prendo le materie che pratica lo studente nella sua classe
-                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAll(
+                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAll2(
                     @params,
                     query => query
                         .Where(el => el.ClassroomId == studentclassroomId)
@@ -129,15 +128,17 @@ public class StudentsController : Controller
     /// <returns>Return a list of Exams performed by the Student</returns>
     [HttpGet]
     [Route("exams")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(StudentExamDto))]
     [ProducesResponseType(401)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
     public IActionResult GetStudentExams([FromHeader] string token)
     {
         
         try
         {
             //Decode the token
-            JwtSecurityToken idFromToken = JWTHandler.DecodeJwtToken(token, "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+            JwtSecurityToken idFromToken = JWTHandler.DecodeJwtToken(token);
             
             //Take the userId from the token
             var takenId = new Guid (idFromToken.Payload["userid"].ToString());
@@ -165,7 +166,8 @@ public class StudentsController : Controller
             foreach (StudentExam iesim in takenStudent.StudentExams)
             {
                 iesim.Exam = examRepo.GetById(el => el.Id == iesim.ExamId, 
-                    el => el.Subject);
+                    el => el.TeacherSubjectClassroom,
+                    el=> el.TeacherSubjectClassroom.Subject);
             }
 
             var dummy = _mapper.Map<StudentExamDto>(takenStudent);
