@@ -152,13 +152,15 @@ public class TeachersController : Controller
 
             //Prendo la lista di esami eseguiti dal professore che come userId ha 
             var dummy = examGenericRepository.GetAll(@params,
-                el => el.TeacherSubjectClassroom.Teacher.UserId == takenId &&
-                      el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Role,
+                el => el.TeacherSubjectClassroom.Teacher.UserId == takenId,
                 el => el.TeacherSubjectClassroom,
                 el => el.TeacherSubjectClassroom.Classroom,
                 el => el.TeacherSubjectClassroom.Subject
             );
-
+            if (@params.Filter != null)
+                dummy = dummy.Where(el =>
+                    el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
+            
             return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
         }
         catch (Exception e)

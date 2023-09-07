@@ -13,7 +13,7 @@ public static class ErrorManager
             case "UNAUTHORIZED":
                 return new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid");
             default:
-                return new ErrorResponse(StatusCodes.Status400BadRequest, string.Empty);
+                return new ErrorResponse(StatusCodes.Status400BadRequest, e);
         }
     }
 }
