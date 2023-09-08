@@ -140,6 +140,7 @@ public class StudentsController : Controller
                 .GetById2(
                     query => query
                         .Where(el => el.UserId == takenId)
+                        .Include(el=> el.Registry)
                         .Include(el => el.StudentExams)
                         .ThenInclude(el => el.Exam)
                         .ThenInclude(el => el.TeacherSubjectClassroom.Subject)
