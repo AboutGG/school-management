@@ -2,8 +2,8 @@ namespace backend.Utils;
 
 public class ErrorResponse
 {
-    private readonly int statusCode;
-    private readonly string message;
+    public readonly int statusCode;
+    public readonly string message;
     
     public ErrorResponse(int statusCode, string message)
     {

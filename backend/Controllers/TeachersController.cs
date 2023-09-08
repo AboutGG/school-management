@@ -124,7 +124,7 @@ public class TeachersController : Controller
 
             //Controllo il ruolo dello User tramite l'Id
             role = RoleSearcher.GetRole(takenId, _context);
-
+            //TODO:
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
             if (role == "student" || role == "unknown")
                 throw new Exception("NOT_FOUND");
@@ -144,7 +144,8 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e.Message));
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
         }
     }
 
@@ -199,7 +200,7 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e.Message));
+            return BadRequest(ErrorManager.Error(e));
         }
     }
 
@@ -244,7 +245,7 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e.Message));
+            return BadRequest(ErrorManager.Error(e));
         }
     }
 
