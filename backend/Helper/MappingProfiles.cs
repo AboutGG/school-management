@@ -100,6 +100,7 @@ public class MappingProfiles : Profile
                                 subject = el.Exam.TeacherSubjectClassroom.Subject.Name,
                                 date = el.Exam.ExamDate,
                                 grade = el.Grade,
+                                teacher = $"{el.Exam.TeacherSubjectClassroom.Teacher.Registry.Name} {el.Exam.TeacherSubjectClassroom.Teacher.Registry.Surname}"
                             }
                         )
                     ));
