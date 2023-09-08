@@ -139,7 +139,7 @@ public class TeachersController : Controller
                     .Include(el => el.TeachersSubjectsClassrooms)
                     .ThenInclude(el => el.Subject)
                 );
-                return Ok(_mapper.Map<TeacherDto>(resultTeacher));
+                return Ok(_mapper.Map<TeacherSubjectDto>(resultTeacher));
             }
         }
         catch (Exception e)
