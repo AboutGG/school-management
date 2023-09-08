@@ -11,7 +11,7 @@ export class ClassroomService {
   constructor(private http: HttpClient) { }
 
  // const headers = new HttpHeaders({
- //   'Authorization': `Bearer ${}`
+ //   'Authorization': `Token ${}`
  // });
 
   getDataClassroom(): Observable<Classroom[]>{
@@ -24,8 +24,8 @@ export class ClassroomService {
     
   }
 
-  getTeacherSubjects(): Observable<any>{
-    return this.http.get<any>(`https://localhost:7262/api/teachers/subjects`)
+  getTeacherSubjects(): Observable<Teachers[]>{
+    return this.http.get<Teachers[]>(`https://localhost:7262/api/teachers/subjects`)
   }
 
   

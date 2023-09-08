@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Teachers } from 'src/app/shared/models/users';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 
 @Component({
@@ -15,13 +16,13 @@ export class SubjectsComponent {
 
 
   ngOnInit(){
-    this.fetchData();
+    
   }
 
     // get dati api classroom
     fetchData() {
-      this.classroomService.getDataClassroom().subscribe({
-        next: (data: any) => {
+      this.classroomService.getTeacherSubjects().subscribe({
+        next: (data: any []) => {
           this.teacherSubjects = data;
           console.log(data);
         },

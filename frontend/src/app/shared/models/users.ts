@@ -44,7 +44,6 @@ export interface Teachers {
 }
 
 export interface Students {
-  subscribe(arg0: { next: () => void }): unknown
   id?: string;
   name: string;
   surname: string;
