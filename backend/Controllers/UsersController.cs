@@ -8,6 +8,7 @@ using backend.Repositories;
 using backend.Utils;
 using J2N.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -77,13 +78,13 @@ public class UsersController : Controller
             reg => reg.Teacher);
         
         //if the role is null returns all the users
-        if (@params.Role == null)
+        if (@params.Filter == null)
         {
             return Ok(registries);
         }
 
         //if the role is not null return the users which have the role equal then params.role
-        switch (@params.Role.Trim().ToLower())
+        switch (@params.Filter.Trim().ToLower())
         {
             case "teacher":
                 registries = registries.Where(reg => reg.Student == null).ToList();
@@ -92,7 +93,7 @@ public class UsersController : Controller
                 registries = registries.Where(reg => reg.Teacher == null).ToList();
                 return Ok(registries);
             default:
-                return NotFound($"The Role \"{@params.Role}\" has not found");
+                return NotFound($"The Role \"{@params.Filter}\" has not found");
         }
     }
 
@@ -322,5 +323,6 @@ public class UsersController : Controller
     }
 
     #endregion
+    
     #endregion
 }

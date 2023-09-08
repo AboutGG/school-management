@@ -22,14 +22,86 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.id_classroom,
                 opt => opt
                     .MapFrom(src => src.Id))
-            .ForMember(dest => dest.name_classroom, 
+            .ForMember(dest => dest.name_classroom,
                 opt => opt
                     .MapFrom(src => src.Name))
             .ForMember(dest => dest.student_count,
                 opt => opt
                     .MapFrom(src => src.Students.Count()));
 
-        CreateMap<Classroom, ClassroomDto>();
+        CreateMap<Classroom, ClassroomDto>()
+            .ForMember(dest => dest.id_classroom,
+                opt => opt
+                    .MapFrom(src => src.Id))
+            .ForMember(dest => dest.name_classroom,
+                opt => opt
+                    .MapFrom(src => src.Name));
 
+        CreateMap<Teacher, TeacherDto>()
+            .ForMember(destinationMember => destinationMember.id,
+                opt => opt
+                    .MapFrom(src => src.UserId))
+            .ForMember(destinationMember => destinationMember.name,
+                opt => opt
+                    .MapFrom(src => src.Registry.Name))
+            .ForMember(destinationMember => destinationMember.surname,
+                opt => opt
+                    .MapFrom(src => src.Registry.Surname))
+            .ForMember(destinationMember => destinationMember.subjects,
+                opt =>
+                    opt.MapFrom(src => src.TeachersSubjectsClassrooms.Select(
+                            tsc => tsc.Subject.Name).Distinct().ToList()));
+
+        CreateMap<TeacherSubjectClassroom, TeacherSubjectClassroomDto>()
+            .ForMember(destinationMember => destinationMember.teacher,
+                opt => opt
+                    .MapFrom(src => src.Teacher));
+
+        CreateMap<Exam, TeacherExamDto>()
+            .ForMember(destinationMember => destinationMember.ExamId,
+                opt => opt
+                    .MapFrom(src => src.Id))
+            .ForMember(destinationMember => destinationMember.ExamDate, 
+                opt => opt
+                    .MapFrom(src => src.ExamDate))
+            .ForMember(destinationMember => destinationMember.Classroom,
+                opt => opt
+                    .MapFrom(src => src.TeacherSubjectClassroom.Classroom.Name))
+            .ForMember(destinationMember => destinationMember.Subject,
+                opt => opt
+                    .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
+        
+        CreateMap<Student, StudentDto>()
+            .ForMember(destinationMember => destinationMember.id,
+                opt => opt
+                    .MapFrom(src => src.UserId))
+            .ForMember(destinationMember => destinationMember.name,
+                opt => opt
+                    .MapFrom(src => src.Registry.Name))
+            .ForMember(destinationMember => destinationMember.surname,
+                opt => opt
+                    .MapFrom(src => src.Registry.Surname));
+
+        CreateMap<Student, StudentExamDto>()
+            .ForPath(dest => dest.Student.id,
+                opt => opt
+                    .MapFrom(src => src.UserId))
+            .ForPath(dest => dest.Student.name, 
+                opt => opt
+                    .MapFrom(src => src.Registry.Name))
+            .ForPath(dest => dest.Student.surname,
+                opt => opt
+                    .MapFrom(src => src.Registry.Surname))
+            .ForMember(destinationMember => destinationMember.Exams,
+                opt => opt
+                    .MapFrom(src => src.StudentExams
+                        .Select(el => new
+                            {
+                                subject = el.Exam.TeacherSubjectClassroom.Subject.Name,
+                                date = el.Exam.ExamDate,
+                                grade = el.Grade,
+                            }
+                        )
+                    ));
     }
 }

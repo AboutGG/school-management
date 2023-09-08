@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using backend.Dto;
@@ -39,7 +40,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <param name="predicate"> Used to do a condition in a search or more.</param>
     /// <param name="includes"> Used to includes the reference object of another table. </param>
     /// <returns>All users using the params, predicate and includes</returns>
-    public ICollection<T> GetAll(PaginationParams @params,
+
+    public List<T> GetAll(PaginationParams? @params,
         Expression<Func<T, bool>> predicate, //Predicate ex:  t => t.Id == Id
         params Expression<Func<T, object>>[] includes //Include ex:  t => t.Id<
     )
@@ -63,6 +65,30 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     #endregion
 
+    public List<T> GetAll2(@PaginationParams? @params,
+        Func<IQueryable<T>, IQueryable<T>>? queryFunc
+    )
+    {
+        var query = _entities.AsQueryable();
+
+        if (queryFunc != null)
+        {
+            query = queryFunc.Invoke(query);
+        }
+
+        if (@params != null)
+        {
+            query = query.OrderBy(
+                $"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
+
+            //@params.Page default value: 1, @params.ItemsPerPage default value: 10
+            query.Skip((@params.Page - 1) * @params.ItemsPerPage)
+                .Take(@params.ItemsPerPage);
+        }
+
+        return query.ToList();
+    }
+
     #region GetById
 
     /// <summary> Having a predicate i search a record.  </summary>
@@ -76,6 +102,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         foreach (var include in includes)
         {
             query = query.Include(include);
+        }
+
+        return query.FirstOrDefault();
+    }
+
+    public T GetById2(Func<IQueryable<T>, IQueryable<T>>? queryFunc) //Include ex:  t => t.Id.
+    {
+        var query = _entities.AsQueryable();
+
+        if (queryFunc != null)
+        {
+            query = queryFunc.Invoke(query);
         }
 
         return query.FirstOrDefault();

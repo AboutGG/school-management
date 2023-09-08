@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -11,9 +12,11 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20230904115152_ModifiedSeeder")]
+    partial class ModifiedSeeder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,37 +77,16 @@ namespace backend.Migrations
                         .HasColumnName("exam_date")
                         .HasAnnotation("Relational:JsonPropertyName", "exam_date");
 
-                    b.Property<Guid>("TeacherSubjectClassroomId")
+                    b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid")
-                        .HasColumnName("id_teacherSubjectClassroom")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_teacherSubjectClassroom");
+                        .HasColumnName("id_subject")
+                        .HasAnnotation("Relational:JsonPropertyName", "id_subject");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TeacherSubjectClassroomId")
-                        .IsUnique();
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("exams");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("55988821-2bc3-4122-aa50-e0fb3b8f42ad"),
-                            ExamDate = new DateOnly(2023, 9, 6),
-                            TeacherSubjectClassroomId = new Guid("0f69c148-07ab-47a8-838a-0c9dfce974bf")
-                        },
-                        new
-                        {
-                            Id = new Guid("06dec5ca-003e-4b39-af43-c745746d23e0"),
-                            ExamDate = new DateOnly(2023, 9, 10),
-                            TeacherSubjectClassroomId = new Guid("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa")
-                        },
-                        new
-                        {
-                            Id = new Guid("20ad1b3e-af97-4a45-815b-af9f34e52dc3"),
-                            ExamDate = new DateOnly(2023, 9, 25),
-                            TeacherSubjectClassroomId = new Guid("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d")
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.Registry", b =>
@@ -379,65 +361,53 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.TeacherSubjectClassroom", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("TeacherId")
                         .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
-
-                    b.Property<Guid>("ClassroomId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id_classroom")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_classroom");
+                        .HasColumnName("id_teacher")
+                        .HasAnnotation("Relational:JsonPropertyName", "id_techer");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid")
                         .HasColumnName("id_subject")
                         .HasAnnotation("Relational:JsonPropertyName", "id_subject");
 
-                    b.Property<Guid>("TeacherId")
+                    b.Property<Guid>("ClassroomId")
                         .HasColumnType("uuid")
-                        .HasColumnName("id_teacher")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_techer");
+                        .HasColumnName("id_classroom")
+                        .HasAnnotation("Relational:JsonPropertyName", "id_classroom");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeacherId", "SubjectId", "ClassroomId");
 
                     b.HasIndex("ClassroomId");
 
                     b.HasIndex("SubjectId");
-
-                    b.HasIndex("TeacherId");
 
                     b.ToTable("teachers_subjects_classrooms");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0f69c148-07ab-47a8-838a-0c9dfce974bf"),
-                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
+                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
                             SubjectId = new Guid("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335")
+                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
                         },
                         new
                         {
-                            Id = new Guid("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa"),
-                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
+                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
                             SubjectId = new Guid("be1816ff-41be-4620-a48c-ac18b71e3bf8"),
-                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d")
+                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
                         },
                         new
                         {
-                            Id = new Guid("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d"),
-                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
+                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
                             SubjectId = new Guid("336d920e-273f-40bd-aed3-17212e2fb2a3"),
-                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d")
+                            ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
                         },
                         new
                         {
-                            Id = new Guid("0ac0626c-802a-4e59-a54d-8ddc3eab0b61"),
-                            ClassroomId = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e"),
+                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
                             SubjectId = new Guid("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335")
+                            ClassroomId = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e")
                         });
                 });
 
@@ -503,13 +473,13 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Exam", b =>
                 {
-                    b.HasOne("backend.Models.TeacherSubjectClassroom", "TeacherSubjectClassroom")
-                        .WithOne("Exam")
-                        .HasForeignKey("backend.Models.Exam", "TeacherSubjectClassroomId")
+                    b.HasOne("backend.Models.Subject", "Subject")
+                        .WithMany("Exams")
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TeacherSubjectClassroom");
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("backend.Models.Student", b =>
@@ -580,7 +550,7 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.TeacherSubjectClassroom", b =>
                 {
                     b.HasOne("backend.Models.Classroom", "Classroom")
-                        .WithMany("TeacherSubjectsClassrooms")
+                        .WithMany("TeacherSubjects")
                         .HasForeignKey("ClassroomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -608,7 +578,7 @@ namespace backend.Migrations
                 {
                     b.Navigation("Students");
 
-                    b.Navigation("TeacherSubjectsClassrooms");
+                    b.Navigation("TeacherSubjects");
                 });
 
             modelBuilder.Entity("backend.Models.Exam", b =>
@@ -632,18 +602,14 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Subject", b =>
                 {
+                    b.Navigation("Exams");
+
                     b.Navigation("TeacherSubjects");
                 });
 
             modelBuilder.Entity("backend.Models.Teacher", b =>
                 {
                     b.Navigation("TeacherSubjectsClassrooms");
-                });
-
-            modelBuilder.Entity("backend.Models.TeacherSubjectClassroom", b =>
-                {
-                    b.Navigation("Exam")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>

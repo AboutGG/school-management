@@ -93,7 +93,8 @@ public static class Seeder
             new Subject() {Id = Guid.Parse("a907ec00-1577-4a50-ab10-579e071f1e59"), Name = "Inglese"},
             new Subject() {Id = Guid.Parse("46fd8c9d-b689-47cb-b9fd-44a19c5291a4"), Name = "Matematica"},
             new Subject() {Id = Guid.Parse("b55de490-fcdd-43d3-9146-94774e96cfe6"), Name = "Storia"},
-            new Subject() {Id = Guid.Parse("336d920e-273f-40bd-aed3-17212e2fb2a3"), Name = "Geografia"}
+            new Subject() {Id = Guid.Parse("336d920e-273f-40bd-aed3-17212e2fb2a3"), Name = "Geografia"},
+            new Subject() {Id = Guid.Parse("47e8b0b5-1b53-46be-a0a9-9954958d3071"), Name = "Spagnola"}
         );
 
         modelBuilder.Entity<Student>().HasData(
@@ -124,7 +125,7 @@ public static class Seeder
             new Teacher()
             {
                 Id = Guid.Parse("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
-                RegistryId = Guid.Parse("d7f23f33-ebf2-4716-8c3f-b997ba2da125"),
+                RegistryId = Guid.Parse("d7f23f33-ebf2-4716-8c3f-b997ba2da125"), //Giordana
                 UserId = Guid.Parse("1346712f-a66d-4b25-9ff6-cf6b7cd8c954")
             },
             new Teacher()
@@ -138,25 +139,55 @@ public static class Seeder
         modelBuilder.Entity<TeacherSubjectClassroom>().HasData(
             new TeacherSubjectClassroom()
             {
+                Id = Guid.Parse("0f69c148-07ab-47a8-838a-0c9dfce974bf"),
                 TeacherId = Guid.Parse("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
                 SubjectId = Guid.Parse("a907ec00-1577-4a50-ab10-579e071f1e59"),
                 ClassroomId = Guid.Parse("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
             },
             new TeacherSubjectClassroom()
             {
+                Id = Guid.Parse("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa"),
                 TeacherId = Guid.Parse("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
                 SubjectId = Guid.Parse("be1816ff-41be-4620-a48c-ac18b71e3bf8"),
                 ClassroomId = Guid.Parse("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
             },
             new TeacherSubjectClassroom()
             {
+                Id = Guid.Parse("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d"),
+                TeacherId = Guid.Parse("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
+                SubjectId = Guid.Parse("336d920e-273f-40bd-aed3-17212e2fb2a3"),
+                ClassroomId = Guid.Parse("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
+            },
+            new TeacherSubjectClassroom()
+            {
+                Id = Guid.Parse("0ac0626c-802a-4e59-a54d-8ddc3eab0b61"),
                 TeacherId = Guid.Parse("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
                 SubjectId = Guid.Parse("a907ec00-1577-4a50-ab10-579e071f1e59"),
                 ClassroomId = Guid.Parse("612ce7d2-c15f-4dca-ac34-676e93f6bb0e")
             }
         );
-        
-        
+
+        modelBuilder.Entity<Exam>().HasData(
+            new Exam
+            {
+                Id = Guid.Parse("55988821-2bc3-4122-aa50-e0fb3b8f42ad"),
+                ExamDate = DateOnly.Parse("06/09/2023"),
+                TeacherSubjectClassroomId = Guid.Parse("0f69c148-07ab-47a8-838a-0c9dfce974bf")
+            },
+            new Exam
+            {
+                Id = Guid.Parse("06dec5ca-003e-4b39-af43-c745746d23e0"),
+                ExamDate = DateOnly.Parse("10/09/2023"),
+                TeacherSubjectClassroomId = Guid.Parse("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa")
+            },
+            new Exam
+            {
+                Id = Guid.Parse("20ad1b3e-af97-4a45-815b-af9f34e52dc3"),
+                ExamDate = DateOnly.Parse("25/09/2023"),
+                TeacherSubjectClassroomId = Guid.Parse("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d")
+            }
+        );
+
 
     }
 }

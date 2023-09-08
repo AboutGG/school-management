@@ -6,13 +6,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Utils;
 
-public class JWT
+public class JWTHandler
 {
+    private static string secretKey = "DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=";
     public static string GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         // Definisci la chiave segreta come un array di byte
-        byte[] key = Encoding.ASCII.GetBytes("DZq7JkJj+z0O8TNTvOnlmj3SpJqXKRW44Qj8SmsW8bk=");
+        byte[] key = Encoding.ASCII.GetBytes(secretKey);
         // Crea una lista di claims (informazioni) per il token
         var claims = new List<Claim>
         {
@@ -42,7 +43,7 @@ public class JWT
         return tokenString;
     }
     
-    public static JwtSecurityToken DecodeJwtToken(string token, string secretKey)
+    public static JwtSecurityToken DecodeJwtToken(string token)
     {
         // Definisci la chiave segreta come un array di byte
         var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));

@@ -1,9 +1,6 @@
-﻿using System.Linq.Dynamic.Core;
-using AutoMapper;
-using backend.Dto;
+﻿using AutoMapper;
 using backend.Interfaces;
 using backend.Models;
-using iText.StyledXmlParser.Jsoup.Select;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
@@ -31,9 +28,9 @@ public class TeacherRepository : ITeacherRepository
 
     /// <summary> In this function i take All the Teachers including the User and Registry reference. </summary>
     /// <returns>Returns Teacher with his data contains User and Registry related to it</returns>
-    public ICollection<Teacher> GetTeachers()
+    public List<Teacher> GetTeachers()
     {
-        var teachers =_context.Teachers
+        var teachers = _context.Teachers
             .OrderBy(t => t.Id)
             .Include(t => t.Registry) // Include il registro associato
             .Include(t => t.User)
@@ -51,18 +48,43 @@ public class TeacherRepository : ITeacherRepository
         return teacher;
     }
 
-    public ICollection<Classroom> GetClassroomByTeacherId(Guid id)
+    public List<Classroom> GetClassroomByTeacherId(Guid id)
     {
         var classrooms = _context.Teachers
-            .Where(el => el.Id == id)
-            .Include(el => el.TeacherSubjectsClassrooms)
+            .Where(el => el.UserId == id)
+            .Include(el => el.TeachersSubjectsClassrooms)
             .ThenInclude(el => el.Classroom.Students)
-            .SelectMany(el => el.TeacherSubjectsClassrooms
-                .Select(c => c.Classroom)).ToList();
+            .SelectMany(el => el.TeachersSubjectsClassrooms
+                .Select(c => c.Classroom))
+            .ToList();
         return classrooms;
     }
-    
-    
+
+    #region Old GetTeacherSubjectClassroom
+
+    // public object GetTeacherSubjectClassroom(Guid id)
+    // {
+    //prendo il professore che ha come id quello proveniente dal token
+    //     var result = _context.Teachers.Where(el => el.UserId == id)
+    //         .Include(el => el.TeacherSubjectsClassrooms)
+    //         .ThenInclude(el => el.Classroom)
+    //         .Include(el => el.TeacherSubjectsClassrooms)
+    //         .ThenInclude(el => el.Subject)
+    //         .Select(el => new
+    //         {
+    //             Classrooms = el.TeacherSubjectsClassrooms.Select(el => new
+    //             {
+    //                 section = el.Classroom.Name,
+    //                 subject = el.Subject.Name
+    //             })
+    //         }).ToList();
+    //
+    //     return result;
+    // }
+
+    #endregion
+
+
     public int CountTeachers()
     {
         return _context.Teachers.Count();
