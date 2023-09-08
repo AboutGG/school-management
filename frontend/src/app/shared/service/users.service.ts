@@ -71,5 +71,8 @@ export class UsersService {
   };
   
 
+  getClassroom(classroom: string) {
+    return this.http.get<Registry>(`https://localhost:7262/api/classroom`);
+  }
   
 }
