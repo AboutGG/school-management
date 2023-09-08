@@ -10,6 +10,7 @@ import { ShowClassComponent } from './components/pages/classes/show-class/show-c
 import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
 import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
 import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
+import { SubjectsComponent } from "./components/pages/subjects/subjects.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "add-user", component: AddUserComponent, canActivate: [AuthGuard] },
   { path: 'classes', component: ClassesComponent, canActivate: [AuthGuard] },
-  { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard]},
+  { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard] },
+  { path: "subjects", component: SubjectsComponent,canActivate: [AuthGuard]},
   { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },
   { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard] },
