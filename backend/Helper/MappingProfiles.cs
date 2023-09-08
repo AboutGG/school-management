@@ -10,12 +10,25 @@ public class MappingProfiles : Profile
     {
         CreateMap<User, UserDto>();
         CreateMap<UserDto, User>();
-        CreateMap<Registry, RegistryDto>();
         CreateMap<RegistryDto, Registry>();
-        CreateMap<UserDetailDto, Student>();
-        CreateMap<UserDetailDto, Teacher>();
-        CreateMap<Student, UserDetailDto>();
-        CreateMap<Teacher, UserDetailDto>();
+        CreateMap<Registry, RegistryDto>();
+        
+        
+        
+        // CreateMap<User, UserDetailDto>()
+        //     .ForMember(dest => dest.Registry,
+        //         opt => opt
+        //             .MapFrom(src => src.Teacher != null ? src.Teacher.Registry : src.Student.Registry))
+        //     .ForPath(dest => dest.User.Id,
+        //         opt => opt
+        //             .MapFrom(user => user.Id))
+        //     .ForPath(dest => dest.User.Username,
+        //         opt => opt
+        //             .MapFrom(user => user.Username))
+        //     .ForPath(dest => dest.User.Password,
+        //         opt => opt
+        //             .MapFrom(user => user.Password));
+        
         CreateMap<Teacher, UserDto>();
 
         CreateMap<Classroom, ClassroomStudentCount>()

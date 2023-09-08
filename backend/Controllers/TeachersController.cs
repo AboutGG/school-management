@@ -72,7 +72,7 @@ public class TeachersController : Controller
                         .Where(tsc => tsc.UserId == takenId))
                 .SelectMany(teacher =>
                     teacher.TeachersSubjectsClassrooms
-                        .Select(tsc => tsc.Classroom)).ToList();
+                        .Select(tsc => tsc.Classroom)).Distinct().ToList();
 
             var filterclassroom = classrooms
                 .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())).ToList();
