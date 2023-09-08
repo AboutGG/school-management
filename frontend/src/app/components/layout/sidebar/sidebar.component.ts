@@ -26,6 +26,6 @@ export class SidebarComponent implements OnInit{
   }
 
   routerSwitchByRole () {
-    this.linkByRole = this.isTeacher ? 'teachers' : 'students';
+    this.linkByRole = this.isTeacher ? 'teachers' : 'students';    
   }
 }
