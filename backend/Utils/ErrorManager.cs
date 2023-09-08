@@ -4,16 +4,20 @@ namespace backend.Utils;
 
 public static class ErrorManager
 {
-    public static ErrorResponse Error(string e)
+    public static ErrorResponse Error(Exception e)
     {
-        switch (e)
+        ErrorResponse dummy;
+        switch (e.Message)
         {
             case "NOT_FOUND":
-                return new ErrorResponse(StatusCodes.Status404NotFound,"Items not found");
+                dummy = new ErrorResponse(StatusCodes.Status404NotFound,"Item not found", e.StackTrace);
+                return dummy;
             case "UNAUTHORIZED":
-                return new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid");
+                dummy = new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid", e.StackTrace);
+                return dummy;
             default:
-                return new ErrorResponse(StatusCodes.Status400BadRequest, e);
+                dummy = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
+                return dummy;
         }
     }
 }
