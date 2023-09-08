@@ -3,6 +3,7 @@ using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
+using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,23 +57,47 @@ public class DetailsController : Controller
     /// <param name="Id"></param>
     /// <returns>The details of a single user</returns>
     [HttpGet("{Id}")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(RegistryDto))]
+    [ProducesResponseType(404)]
     [ProducesResponseType(400)]
-    public IActionResult GetUserDetail(Guid Id)
+    public IActionResult GetUserDetail([FromRoute]Guid Id)
     {
-        if (string.IsNullOrWhiteSpace(Convert.ToString(Id)))
-            return BadRequest("Invalid Id");
-        var users = new GenericRepository<User>(_context);
-        if (users.Exist(u => u.Id == Id))
+        var role = RoleSearcher.GetRole(Id, _context);
+        Registry response = null;
+        if (role == "teacher")
         {
-            var takenUser = users.GetById(u => u.Id == Id,
-                u => u.Teacher.Registry,
-                u => u.Student.Registry);
-
-            return Ok(takenUser?.Student.Registry == null ? takenUser.Teacher.Registry : takenUser.Student.Registry);
+            response = new GenericRepository<Teacher>(_context)
+                .GetAll2(null,
+                    query => query
+                        .Include(t => t.Registry)
+                ).FirstOrDefault(u => u.UserId ==  Id).Registry;
         }
 
-        return NotFound();
+        if (role == "student")
+        {
+            response = new GenericRepository<Student>(_context)
+                .GetAll2(null,
+                    query => query
+                        .Include(t => t.Registry)
+                ).FirstOrDefault(u => u.UserId ==  Id).Registry;
+        }
+
+        if (response == null)
+        {
+            return NotFound();
+        }
+
+        var x = new 
+        {
+            name = response.Name,
+            surname = response.Surname,
+            gender = response.Gender,
+            email = response.Email,
+            telephone = response.Telephone,
+            address = response.Address,
+            birth = response.Birth.ToString()
+        };
+        return Ok(x);
     }
 
     #endregion
