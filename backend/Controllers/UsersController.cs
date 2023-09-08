@@ -187,7 +187,7 @@ public class UsersController : Controller
     /// <summary>
     /// This call is used to create an user which is a Teacher
     /// </summary>
-    /// <param name="userDetail"></param> TODO NON TU SCUDDARI
+    /// <param name="userDetail"></param>
     /// <returns></returns>
     [HttpPost("student")]
     [ProducesResponseType(204)]
