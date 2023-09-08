@@ -65,7 +65,7 @@
               <div class="dropdown-toggle ps-3" data-bs-toggle="dropdown" aria-expanded="false"></div>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" value="dettagli" (click)="onClickAction('dettagli', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)" [routerLink]="['/details/', user.teacher != null ? user!.teacher!.userId : user!.student!.userId]"><i class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
-                    <li><a class="dropdown-item" value="modifica" (click)="onClickAction('modifica', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)" [routerLink]="['/edit/']"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
+                    <li><a class="dropdown-item" value="modifica" (click)="onClickAction('modifica', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)" [routerLink]="['/add-user']" [queryParams]="{ mode: 'edit' }"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
                     <li><a role="button" class="dropdown-item" value="elimina" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="onClickAction('elimina', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
                 </ul>
             </div>

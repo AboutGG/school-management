@@ -1,4 +1,3 @@
-
     <div class="container mt-5">
         <div class="d-flex align-items-center justify-content-center fs-5 fw-bold">
             {{'creazione nuovo utente' | uppercase}}
@@ -104,25 +103,23 @@
             </div>
         </div>
 
-        <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
+
+        <!-- <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
             <div class="dropdown">
                 <label for="classroom" class="form-label">Classe:*<span class="text-danger">*</span></label>
-                <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
-                    {{ (this.role ? this.role : 'Ruolo') | titlecase}}
-                </button>
-                <ul class="dropdown-menu" formControlName="role">
-                    <li><a class="dropdown-item" value="studente" (click)="onClickRole('studente')">Studente</a></li>
-                    <li><a class="dropdown-item" value="insegnante" (click)="onClickRole('insegnante')">Insegnante</a></li>
-                </ul>
-            </div> 
-            <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
-                <span>Campo obbligatorio</span>
-            </div>     
-        </div>
+                 <select class="form-control" title="classroom" formControlName="classroom">
+                    <option value="" disabled selected>Seleziona una classe</option>
+                    <option *ngFor="let className of classes" [value]="className">{{className}}</option>
+                </select>
+                <div class="text-danger position-absolute" *ngIf="alert && showAlerts('classroom')">
+                    <span>Campo obbligatorio</span>
+                </div>     
+            </div>
+        </div> -->
 
         <div class="d-flex justify-content-end mb-5 pe-5">
             <div class="col-md-2">
-                <button (click)="this.alert=true" type="submit" class="btn btn-warning form-control" >INVIA</button>
+                <button (click)="this.alert=true" type="submit" class="btn btn-warning form-control">INVIA</button>
             </div>
         </div>
     </form>

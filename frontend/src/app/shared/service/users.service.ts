@@ -5,74 +5,72 @@ import { Registry, Users } from '../models/users';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UsersService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   addTeacher = (user: FormGroup): Observable<Users> => {
     let newUser: Users = {
       user: {
-        username: user.get('username')!.value,
-        password: user.get('password')!.value
+        username: user.get("username")!.value,
+        password: user.get("password")!.value,
       },
       registry: {
-        name: user.get('name')!.value,
-        surname: user.get('surname')!.value,
-        gender: user.get('gender')!.value,
-        birth: user.get('birth')!.value,
-        email: user.get('email')!.value,
-        address: user.get('address')!.value,
-        telephone: user.get('telephone')!.value,
+        name: user.get("name")!.value,
+        surname: user.get("surname")!.value,
+        gender: user.get("gender")!.value,
+        birth: user.get("birth")!.value,
+        email: user.get("email")!.value,
+        address: user.get("address")!.value,
+        telephone: user.get("telephone")!.value,
       },
-    }
+    };
     return this.http.post<Users>(
-      `https://localhost:7262/api/users/teacher`, newUser
+      `https://localhost:7262/api/users/teacher`,
+      newUser
     );
   };
 
   addStudent = (user: FormGroup): Observable<Users> => {
     let newUser: Users = {
-      classroom: user.get('classroom')!.value,
+      classroom: user.get("classroom")!.value,
       user: {
-        username: user.get('username')!.value,
-        password: user.get('password')!.value,
-        
+        username: user.get("username")!.value,
+        password: user.get("password")!.value,
       },
       registry: {
-        name: user.get('name')!.value,
-        surname: user.get('surname')!.value,
-        gender: user.get('gender')!.value,
-        birth: user.get('birth')!.value,
-        email: user.get('email')!.value,
-        address: user.get('address')!.value,
-        telephone: user.get('telephone')!.value,
-
+        name: user.get("name")!.value,
+        surname: user.get("surname")!.value,
+        gender: user.get("gender")!.value,
+        birth: user.get("birth")!.value,
+        email: user.get("email")!.value,
+        address: user.get("address")!.value,
+        telephone: user.get("telephone")!.value,
       },
-    }
-    
+    };
+
     return this.http.post<Users>(
-      `https://localhost:7262/api/users/student`, newUser
+      `https://localhost:7262/api/users/student`,
+      newUser
     );
   };
 
   getUsers(order: string, orderType: string, page: number, role: string, search: string): Observable<Registry[]> {
-    return this.http.get<Registry[]>(`https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Page=${page}&Role=${role}&Search=${search}&ItemsPerPage=10`);
-
-  };
+    return this.http.get<Registry[]>(
+      `https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Page=${page}&Role=${role}&Search=${search}&ItemsPerPage=10`
+    );
+  }
 
   deleteUser = (id: string): Observable<Registry> => {
     return this.http.delete<Registry>(`https://localhost:7262/api/users/${id}`);
   };
-  
+
   getDetailsUser(id: string): Observable<Registry> {
     return this.http.get<Registry>(`https://localhost:7262/api/details/${id}`);
-  };
-  
-
-  getClassroom(classroom: string) {
-    return this.http.get<Registry>(`https://localhost:7262/api/classroom`);
   }
-  
+
+//   getClassroom(): Observable<string[]> {
+//     return this.http.get<string[]>(`https://localhost:7262/api/classroom`);
+//   }
 }

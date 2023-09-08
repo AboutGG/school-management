@@ -9,7 +9,7 @@
         <a class="btn btn-warning" [routerLink]="['/list-users']"><i class="bi bi-caret-left-fill"></i>LISTA UTENTI</a>
       </div>
       <div class="button m-4 d-flex w-100 justify-content-end">
-        <a class="btn btn-warning" [routerLink]="['/edit-user']"><i class="bi bi-pencil-square px-2"></i>MODIFICA UTENTE</a>
+        <a class="btn btn-warning" [routerLink]="['/add-user']" [queryParams]="{ mode: 'edit' }"><i class="bi bi-pencil-square px-2"></i>MODIFICA UTENTE</a>
       </div>
     </div>
 
