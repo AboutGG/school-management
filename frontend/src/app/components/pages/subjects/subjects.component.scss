@@ -16,7 +16,7 @@ hr{
   color: #ffb900;
   margin-left: 20px;
 }
-.bi-person-vcard{
+.bi-book{
   font-size: 30px;
     color: #ffb900;
 }
@@ -53,9 +53,37 @@ hr{
     background-color: #fff;
   }
   
+  .btn-drop {
+    padding: 0.4375rem 0.875rem;
+    color: black;
+  
+  }
+  
+  .dropdown-menu {
+
+    a {
+      
+        font-weight: 500;
+        cursor: pointer;
+
+    }
+    i{
+       
+        font-weight: 500 !important;
+
+    }
+  
+  }
   td{
     text-align: center;
     vertical-align: middle;
+  }
+  
+  .li-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5%;
   }
   
   table {
@@ -72,7 +100,4 @@ hr{
   }
   .btn:hover{
     background-color: #ffc422;
-  }
-  .bi-eye-fill{
-    margin-right: 10px;
   }
