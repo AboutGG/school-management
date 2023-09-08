@@ -31,31 +31,23 @@ export interface Registry {
 }
 
 export interface StudentExams {
-  id: string,
-  classroomId: string,
-  classroom: {
+  student: {
     id: string,
     name: string,
-    students: []
+    surname: string
   },
-  userId: string,
-  registryId: string,
-  studentExams: [
+  exams: [
     {
-      studentId: string,
-      examId: string,
-      exam: {
-        id: string,
-        subjectId: string,
-        subject: {
-          id: string,
-          name: string,
-          exams: []
-        },
-        examDate: string,
-        studentExams: []
-      },
-      grade: number
+      subject: string,
+      teacher: string,
+      date: string,
+      grade?: number
     }
   ]
+}
+
+export interface Classroom {
+  id_classroom?: string;
+  name_classroom: string;
+  student_count: number;
 }

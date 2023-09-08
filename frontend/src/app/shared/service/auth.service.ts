@@ -10,7 +10,7 @@ const URL = environment.apiUrl;
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient) { }
   
   login(user: User) {
     return this.http.post(`${URL}/auth/login`, user);
@@ -29,7 +29,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return this.getToken() == null ? false : true
+    return this.getToken() !== null ? true : false
   }
 
   isTeacher() {

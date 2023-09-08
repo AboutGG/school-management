@@ -25,8 +25,8 @@ const routes: Routes = [
   { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard] },
   { path: 'edit-user', component: EditUserComponent, canActivate: [AuthGuard] },
   { path: 'details', component: DetailUserComponent, canActivate: [AuthGuard] },
-  { path: 'student/exams', component: ExamsStudentListComponent, canActivate: [AuthGuard] },
-  { path: 'teacher/exams', component: ExamslistComponent, canActivate: [AuthGuard] },
+  { path: 'students/exams', component: ExamsStudentListComponent, canActivate: [AuthGuard] },
+  { path: 'teachers/exams', component: ExamslistComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "not-found" },
 ];
 
