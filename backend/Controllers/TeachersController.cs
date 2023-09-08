@@ -101,6 +101,7 @@ public class TeachersController : Controller
     #endregion
 
     #region Get Subjects
+
     /// <summary> A method that return a Teacher's subjects list </summary>
     /// <param name="Token">Token to take the user id of the Teacher and checks the role</param>
     /// <returns>A list of Subject and his classrooms</returns>
@@ -131,7 +132,7 @@ public class TeachersController : Controller
             {
                 //Prendo le materie che insegna il professore con le relative classi
                 var resultTeacher = new GenericRepository<Teacher>(_context).GetById2(query => query
-                    .Where(el=> el.UserId == takenId)
+                    .Where(el => el.UserId == takenId)
                     .Include(el => el.Registry)
                     .Include(el => el.TeachersSubjectsClassrooms)
                     .ThenInclude(el => el.Classroom)
@@ -150,6 +151,7 @@ public class TeachersController : Controller
     #endregion
 
     #region GetExams
+
     /// <summary> Api call to take the Exams of a teacher. </summary>
     /// <param name="Token">To check the role, authorization and to take the userId</param>
     /// <param name="params">Orders, filter, search etc../param>
@@ -191,7 +193,8 @@ public class TeachersController : Controller
             );
             if (@params.Filter != null)
                 dummy = dummy.Where(el =>
-                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
+                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower())
+                    .ToList();
             return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
         }
         catch (Exception e)
@@ -219,13 +222,12 @@ public class TeachersController : Controller
         IGenericRepository<StudentExam> studentExamGenericRepository = new GenericRepository<StudentExam>(_context);
         try
         {
-            var takenExam = examGenericRepository.GetById2(query => query
+            Exam takenExam = examGenericRepository.GetById2(query => query
                 .Where(el => el.Id.ToString() == id)
                 .Include(el => el.TeacherSubjectClassroom.Subject)
                 .Include(el => el.StudentExams)
                 .ThenInclude(el => el.Student)
                 .ThenInclude(el => el.Registry)
-
             );
             @params.Order = "Student.Registry." + $"{@params.Order}";
             takenExam.StudentExams = new GenericRepository<StudentExam>(_context)
@@ -234,12 +236,12 @@ public class TeachersController : Controller
                         .Where(el => el.Student.Registry.Name.Trim().ToLower()
                                          .Contains(@params.Search.Trim().ToLower())
                                      || el.Student.Registry.Surname.Trim().ToLower()
-                                         .Contains(@params.Search.Trim().ToLower()))
-                );
+                                         .Contains(@params.Search.Trim().ToLower())
+                        ));
 
-            var dummy = _mapper.Map<ExamDto>(takenExam);
+            var mappedExams = _mapper.Map<ExamDto>(takenExam);
 
-            return Ok(dummy);
+            return Ok(mappedExams);
         }
         catch (Exception e)
         {
