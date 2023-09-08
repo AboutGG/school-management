@@ -106,15 +106,8 @@ public class StudentsController : Controller
         }
         catch (Exception e)
         {
-            switch (e.Message)
-            {
-                case "NOT_FOUND":
-                    return StatusCode(StatusCodes.Status404NotFound);
-                case "UNAUTHORIZED":
-                    return StatusCode(StatusCodes.Status401Unauthorized, "The token in not valid");
-                default:
-                    return StatusCode(StatusCodes.Status400BadRequest);
-            }
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
         }
 
         #endregion
@@ -147,6 +140,7 @@ public class StudentsController : Controller
                 .GetById2(
                     query => query
                         .Where(el => el.UserId == takenId)
+                        .Include(el=> el.Registry)
                         .Include(el => el.StudentExams)
                         .ThenInclude(el => el.Exam)
                         .ThenInclude(el => el.TeacherSubjectClassroom.Subject)
@@ -179,7 +173,7 @@ public class StudentsController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e.Message));
+            return BadRequest(ErrorManager.Error(e));
         }
     }
 
