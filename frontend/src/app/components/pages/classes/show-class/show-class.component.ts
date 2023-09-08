@@ -11,7 +11,7 @@ import { ClassroomService } from 'src/app/shared/service/classroom.service';
 export class ShowClassComponent {
 
   classId!: string;
-  classDetails: ClassDetails | undefined;
+  classDetails!: ClassDetails;
 
   constructor(private classroomService: ClassroomService, private route: ActivatedRoute) {}
 

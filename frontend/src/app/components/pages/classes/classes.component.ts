@@ -11,6 +11,7 @@ import { ClassroomService } from 'src/app/shared/service/classroom.service';
 export class ClassesComponent {
 
   class: Classroom[] = [];
+  searchTerm!: string;
 
   constructor(private classroomService: ClassroomService) {}
 
@@ -30,5 +31,13 @@ export class ClassesComponent {
       }
     })
     }
+
+    //funzione per ricerca
+    onSearch() {
+      this.classroomService.searchClassrooms(this.searchTerm).subscribe((data) => {
+        this.class = data;
+      });
+    }
+    
 
 }
