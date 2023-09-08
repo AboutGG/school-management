@@ -5,10 +5,9 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
-using Microsoft.AspNetCore.Authorization;
-using J2N.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace backend.Controllers;
 
@@ -61,7 +60,7 @@ public class TeachersController : Controller
             var role = RoleSearcher.GetRole(takenId, _context);
 
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknow")
+            if (role == "student" || role == "unknown")
                 throw new Exception("NOT_FOUND");
 
             var classrooms = new GenericRepository<Teacher>(_context)
@@ -103,9 +102,13 @@ public class TeachersController : Controller
 
     #region Get Subjects
 
+    /// <summary> A method that return a Teacher's subjects list </summary>
+    /// <param name="Token">Token to take the user id of the Teacher and checks the role</param>
+    /// <returns>A list of Subject and his classrooms</returns>
+    /// <exception cref="Exception">Errors if the token is not valid or more.</exception>
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(TeacherDto))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromHeader] string Token)
@@ -123,12 +126,13 @@ public class TeachersController : Controller
             role = RoleSearcher.GetRole(takenId, _context);
 
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknow")
+            if (role == "student" || role == "unknown")
                 throw new Exception("NOT_FOUND");
             else
             {
                 //Prendo le materie che insegna il professore con le relative classi
                 var resultTeacher = new GenericRepository<Teacher>(_context).GetById2(query => query
+                    .Where(el => el.UserId == takenId)
                     .Include(el => el.Registry)
                     .Include(el => el.TeachersSubjectsClassrooms)
                     .ThenInclude(el => el.Classroom)
@@ -148,6 +152,11 @@ public class TeachersController : Controller
 
     #region GetExams
 
+    /// <summary> Api call to take the Exams of a teacher. </summary>
+    /// <param name="Token">To check the role, authorization and to take the userId</param>
+    /// <param name="params">Orders, filter, search etc../param>
+    /// <returns>A list of exam planned by the Teacher</returns>
+    /// <exception cref="Exception"></exception>
     [HttpGet]
     [Route("exams")]
     [ProducesResponseType(200, Type = typeof(List<TeacherExamDto>))]
@@ -170,7 +179,7 @@ public class TeachersController : Controller
             //Dal token decodificato prendo l'id dello user
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
             role = RoleSearcher.GetRole(takenId, _context);
-            if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknow")
+            if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknown")
             {
                 throw new Exception("UNAUTHORIZED");
             }
@@ -184,8 +193,54 @@ public class TeachersController : Controller
             );
             if (@params.Filter != null)
                 dummy = dummy.Where(el =>
-                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
+                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower())
+                    .ToList();
             return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ErrorManager.Error(e.Message));
+        }
+    }
+
+    #endregion
+
+    #region Get exam detail
+
+    /// <summary> A method that returns, based on an exam, the list of students who take it. </summary>
+    /// <param name="params">Pagination params for pagination, orders etc..</param>
+    /// <param name="id">The Id of the Exam which i want to see</param>
+    /// <returns>An Exam and his Student list with the grade</returns>
+    [HttpGet]
+    [Route("exams/{id}")]
+    [ProducesResponseType(200, Type = typeof(ExamDto))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public IActionResult GetTeacherExamsDetail([FromQuery] PaginationParams @params, string id)
+    {
+        IGenericRepository<Exam> examGenericRepository = new GenericRepository<Exam>(_context);
+        IGenericRepository<StudentExam> studentExamGenericRepository = new GenericRepository<StudentExam>(_context);
+        try
+        {
+            Exam takenExam = examGenericRepository.GetById2(query => query
+                .Where(el => el.Id.ToString() == id)
+                .Include(el => el.TeacherSubjectClassroom.Subject)
+                .Include(el => el.StudentExams)
+                .ThenInclude(el => el.Student)
+                .ThenInclude(el => el.Registry)
+            );
+            @params.Order = "Student.Registry." + $"{@params.Order}";
+            takenExam.StudentExams = new GenericRepository<StudentExam>(_context)
+                .GetAll2(@params, el => takenExam.StudentExams.AsQueryable()
+                    .Where(el => el.Student.Registry.Name.Trim().ToLower()
+                                     .Contains(@params.Search.Trim().ToLower())
+                                 || el.Student.Registry.Surname.Trim().ToLower()
+                                     .Contains(@params.Search.Trim().ToLower())
+                    ));
+
+            ExamDto mappedExams = _mapper.Map<ExamDto>(takenExam);
+
+            return Ok(mappedExams);
         }
         catch (Exception e)
         {
