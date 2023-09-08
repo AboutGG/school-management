@@ -231,13 +231,12 @@ public class TeachersController : Controller
             );
             @params.Order = "Student.Registry." + $"{@params.Order}";
             takenExam.StudentExams = new GenericRepository<StudentExam>(_context)
-                .GetAll2(@params, el =>
-                    takenExam.StudentExams.AsQueryable()
-                        .Where(el => el.Student.Registry.Name.Trim().ToLower()
-                                         .Contains(@params.Search.Trim().ToLower())
-                                     || el.Student.Registry.Surname.Trim().ToLower()
-                                         .Contains(@params.Search.Trim().ToLower())
-                        ));
+                .GetAll2(@params, el => takenExam.StudentExams.AsQueryable()
+                    .Where(el => el.Student.Registry.Name.Trim().ToLower()
+                                     .Contains(@params.Search.Trim().ToLower())
+                                 || el.Student.Registry.Surname.Trim().ToLower()
+                                     .Contains(@params.Search.Trim().ToLower())
+                    ));
 
             ExamDto mappedExams = _mapper.Map<ExamDto>(takenExam);
 
