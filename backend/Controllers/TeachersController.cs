@@ -60,7 +60,7 @@ public class TeachersController : Controller
             var role = RoleSearcher.GetRole(takenId, _context);
 
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknow")
+            if (role == "student" || role == "unknown")
                 throw new Exception("NOT_FOUND");
 
             var classrooms = new GenericRepository<Teacher>(_context)
@@ -125,7 +125,7 @@ public class TeachersController : Controller
             role = RoleSearcher.GetRole(takenId, _context);
 
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknow")
+            if (role == "student" || role == "unknown")
                 throw new Exception("NOT_FOUND");
             else
             {
@@ -177,7 +177,7 @@ public class TeachersController : Controller
             //Dal token decodificato prendo l'id dello user
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
             role = RoleSearcher.GetRole(takenId, _context);
-            if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknow")
+            if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknown")
             {
                 throw new Exception("UNAUTHORIZED");
             }
@@ -203,7 +203,7 @@ public class TeachersController : Controller
     #endregion
 
     #region Get exam detail
-    
+
     /// <summary> A method that returns, based on an exam, the list of students who take it. </summary>
     /// <param name="params">Pagination params for pagination, orders etc..</param>
     /// <param name="id">The Id of the Exam which i want to see</param>
@@ -213,7 +213,7 @@ public class TeachersController : Controller
     [ProducesResponseType(200, Type = typeof(ExamDto))]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
-    public IActionResult GetTeacherExamsDetail([FromQuery]PaginationParams @params, string id)
+    public IActionResult GetTeacherExamsDetail([FromQuery] PaginationParams @params, string id)
     {
         IGenericRepository<Exam> examGenericRepository = new GenericRepository<Exam>(_context);
         IGenericRepository<StudentExam> studentExamGenericRepository = new GenericRepository<StudentExam>(_context);
@@ -225,22 +225,18 @@ public class TeachersController : Controller
                 .Include(el => el.StudentExams)
                 .ThenInclude(el => el.Student)
                 .ThenInclude(el => el.Registry)
-            
+
             );
             @params.Order = "Student.Registry." + $"{@params.Order}";
-            var pippo = new GenericRepository<StudentExam>(_context)
-                .GetAll2(@params, el => 
+            takenExam.StudentExams = new GenericRepository<StudentExam>(_context)
+                .GetAll2(@params, el =>
                     takenExam.StudentExams.AsQueryable()
-                        .OrderBy($"{@params.Order} {@params.OrderType}")
-                        .Skip((@params.Page - 1) * @params.ItemsPerPage)
-                        .Take(@params.ItemsPerPage)
-                    );
-            takenExam.StudentExams = pippo;
-            /* .Select(el => el.Student).AsQueryable()
-                    .OrderBy($"Registry.{@params.Order} {@params.OrderType}")
-                    .Skip((@params.Page - 1) * @params.ItemsPerPage)
-                    .Take(@params.ItemsPerPage) */
-            // dummy.StudentExams.AsQueryable().OrderBy($"Student.{@params.Order} {@params.OrderType}")
+                        .Where(el => el.Student.Registry.Name.Trim().ToLower()
+                                         .Contains(@params.Search.Trim().ToLower())
+                                     || el.Student.Registry.Surname.Trim().ToLower()
+                                         .Contains(@params.Search.Trim().ToLower()))
+                );
+
             var dummy = _mapper.Map<ExamDto>(takenExam);
 
             return Ok(dummy);
