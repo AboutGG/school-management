@@ -239,7 +239,7 @@ public class TeachersController : Controller
                                          .Contains(@params.Search.Trim().ToLower())
                         ));
 
-            var mappedExams = _mapper.Map<ExamDto>(takenExam);
+            ExamDto mappedExams = _mapper.Map<ExamDto>(takenExam);
 
             return Ok(mappedExams);
         }
