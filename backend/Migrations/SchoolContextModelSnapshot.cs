@@ -41,7 +41,7 @@ namespace backend.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("classrooms");
+                    b.ToTable("classrooms", (string)null);
 
                     b.HasData(
                         new
@@ -84,7 +84,7 @@ namespace backend.Migrations
                     b.HasIndex("TeacherSubjectClassroomId")
                         .IsUnique();
 
-                    b.ToTable("exams");
+                    b.ToTable("exams", (string)null);
 
                     b.HasData(
                         new
@@ -155,7 +155,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("registries");
+                    b.ToTable("registries", (string)null);
 
                     b.HasData(
                         new
@@ -233,7 +233,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("students");
+                    b.ToTable("students", (string)null);
 
                     b.HasData(
                         new
@@ -280,7 +280,7 @@ namespace backend.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("students_exams");
+                    b.ToTable("students_exams", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Subject", b =>
@@ -299,7 +299,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("subjects");
+                    b.ToTable("subjects", (string)null);
 
                     b.HasData(
                         new
@@ -360,7 +360,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("teachers");
+                    b.ToTable("teachers", (string)null);
 
                     b.HasData(
                         new
@@ -408,7 +408,7 @@ namespace backend.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("teachers_subjects_classrooms");
+                    b.ToTable("teachers_subjects_classrooms", (string)null);
 
                     b.HasData(
                         new
@@ -466,7 +466,7 @@ namespace backend.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
 
                     b.HasData(
                         new

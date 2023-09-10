@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
+
 namespace backend.Models;
 
 [Table("classrooms")]
@@ -19,8 +20,10 @@ public class Classroom
     #endregion
 
     #region External Keys
-    public virtual ICollection<Student> Students { get; set; }
-    public virtual IList<TeacherSubjectClassroom> TeacherSubjectsClassrooms { get; set; }
-    
+    public virtual ICollection<Student> Students { get; } = new List<Student>();
+
+    public virtual ICollection<TeacherSubjectClassroom> TeachersSubjectsClassrooms { get; } =
+         new List<TeacherSubjectClassroom>();
+
     #endregion
 }

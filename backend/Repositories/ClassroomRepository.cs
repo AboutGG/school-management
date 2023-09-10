@@ -1,5 +1,6 @@
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
 
@@ -32,6 +33,10 @@ public class ClassroomRepository : IClassroomRepository
     {
         return _context.Classrooms
             .OrderBy(el => el.Name)
+            // .Include(c => c.Students)
+            // .ThenInclude(c => c.Registry)
+            // .Include(c => c.TeachersSubjectsClassrooms)
+            // .AsSplitQuery()
             .ToList();
     }
 }

@@ -91,7 +91,7 @@ public class SchoolContext : DbContext
 
         modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Classroom>(ts => ts.Classroom)
-            .WithMany(c => c.TeacherSubjectsClassrooms)
+            .WithMany(c => c.TeachersSubjectsClassrooms)
             .HasForeignKey(ts => ts.ClassroomId);
 
         #endregion
@@ -122,5 +122,9 @@ public class SchoolContext : DbContext
             .HasForeignKey(re => re.StudentId);
 
         #endregion
+
+        modelBuilder.Entity<Classroom>()
+            .Navigation(e => e.Students)
+            .UsePropertyAccessMode(PropertyAccessMode.Property);
     }
 }

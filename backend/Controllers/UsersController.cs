@@ -323,6 +323,13 @@ public class UsersController : Controller
     }
 
     #endregion
-    
+
+
+    [HttpGet]
+    [Route("test")]
+    public IActionResult Test()
+    {
+        return Ok( _context.Users.ToList());
+    }
     #endregion
 }

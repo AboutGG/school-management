@@ -3,7 +3,6 @@ using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
-using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,42 +61,16 @@ public class DetailsController : Controller
     [ProducesResponseType(400)]
     public IActionResult GetUserDetail([FromRoute]Guid Id)
     {
-        var role = RoleSearcher.GetRole(Id, _context);
-        Registry response = null;
-        if (role == "teacher")
-        {
-            response = new GenericRepository<Teacher>(_context)
-                .GetAll2(null,
-                    query => query
-                        .Include(t => t.Registry)
-                ).FirstOrDefault(u => u.UserId ==  Id).Registry;
-        }
-
-        if (role == "student")
-        {
-            response = new GenericRepository<Student>(_context)
-                .GetAll2(null,
-                    query => query
-                        .Include(t => t.Registry)
-                ).FirstOrDefault(u => u.UserId ==  Id).Registry;
-        }
-
-        if (response == null)
-        {
-            return NotFound();
-        }
-
-        var x = new 
-        {
-            name = response.Name,
-            surname = response.Surname,
-            gender = response.Gender,
-            email = response.Email,
-            telephone = response.Telephone,
-            address = response.Address,
-            birth = response.Birth.ToString()
-        };
-        return Ok(x);
+        var response = new GenericRepository<Registry>(_context)
+            .GetAll2(
+                null,
+                query => query
+                    .Include(r => r.Teacher)
+                    .Include(r => r.Student)
+            )
+            .FirstOrDefault(r => r.Teacher.UserId == Id || r.Student.UserId == Id);
+        
+        return Ok(_mapper.Map<RegistryDto>(response));
     }
 
     #endregion

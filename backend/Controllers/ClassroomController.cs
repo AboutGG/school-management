@@ -65,6 +65,13 @@ public class ClassroomsController : Controller
         
         return Ok(new { students, teachers });
     }
-    
+
+    [HttpGet]
+    [Route("test")]
+    public IActionResult TEST()
+    {
+        
+        return Ok(_classroomRepository.GetClassrooms());
+    }
    
 }

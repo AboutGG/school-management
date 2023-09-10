@@ -29,7 +29,6 @@ builder.Services.AddScoped<ITeacherSubjectClassroomRepository, TeacherSubjectCla
 builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<JWTHandler>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
-
 builder.Services.AddScoped<PDF>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
@@ -37,6 +36,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; // Remove null field from json response
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
