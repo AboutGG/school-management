@@ -95,18 +95,34 @@
             <label for="birth" class="form-label">Data di nascita:</label>
             <input type="date" class="form-control placeholder-input" title="birth" formControlName="birth">
         </div>
-        <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
+        <!-- <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
             <label for="classroom" class="form-label">Classe:*</label>
             <input type="text" class="form-control placeholder-input" title="classroom" formControlName="classroom" placeholder="5^C">
             <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('classroom')">
                 <span>Campo obbligatorio</span>
             </div>
-        </div>
+        </div> -->
 
 
-        <!-- <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
-            <div class="dropdown">
+         <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
+            <div *ngFor="let class of classes">
+
+            <select class="form-select">
+                <label>Scegli la classe:</label>
+                <option>{{class.name_classroom}}</option>
+            </select>
+
+
+            
+
+            <!-- <div class="dropdown">
                 <label for="classroom" class="form-label">Classe:*<span class="text-danger">*</span></label>
+                <button (click)="getClassroom()" class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="classroom">
+                      {{ (this.classes ? this.classes.name_classes : 'Classe') | titlecase}} 
+                    </button>
+                    <ul class="dropdown-menu" formControlName="classroom">
+                        <li *ngFor="let class of classes"><a class="dropdown-item" value="classroom" (click)="onClickClassroom(class.name_classroom)">{{class.name_classroom}}</a></li>
+                    </ul>
                  <select class="form-control" title="classroom" formControlName="classroom">
                     <option value="" disabled selected>Seleziona una classe</option>
                     <option *ngFor="let className of classes" [value]="className">{{className}}</option>
@@ -114,8 +130,9 @@
                 <div class="text-danger position-absolute" *ngIf="alert && showAlerts('classroom')">
                     <span>Campo obbligatorio</span>
                 </div>     
+            </div> -->
             </div>
-        </div> -->
+        </div>
 
         <div class="d-flex justify-content-end mb-5 pe-5">
             <div class="col-md-2">

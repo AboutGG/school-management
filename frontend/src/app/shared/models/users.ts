@@ -20,20 +20,36 @@ export interface TypeCount {
 }
 
 export interface Registry {
-  id?: string
-  name: string
-  surname: string
-  gender: string
-  birth?: string
-  email?: string
-  address?: string
-  telephone?: string //date format "yyyy-mm-dd"
+  id?: string;
+  name: string;
+  surname: string;
+  gender: string;
+  birth?: string;
+  email?: string;
+  address?: string;
+  telephone?: string; //date format "yyyy-mm-dd"
+
+  teacher?: Teacher;
+  student?: Student;
+}
+
+export interface Teacher {
+  id: string;
+  registryId: string;
+  userId: string;
+}
+
+export interface Student {
+  id: string;
+  registryId: string;
+  userId: string;
+  classroom: string;
 }
 
 export interface Classroom {
   id_classroom?: string;
   name_classroom: string;
-  student_count: number;
+  student_count?: number;
 }
 
 export interface Teachers {

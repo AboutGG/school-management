@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UsersService } from 'src/app/shared/service/users.service';
-import { ActivatedRoute } from '@angular/router';
-
+import { Component, OnInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { UsersService } from "src/app/shared/service/users.service";
+import { ActivatedRoute } from "@angular/router";
+import { Classroom } from "src/app/shared/models/users";
 
 @Component({
   selector: "app-add-user",
@@ -14,9 +14,12 @@ export class AddUserComponent implements OnInit {
   role: string = "";
   gender: string = "";
   alert: boolean = false;
-  // classes: string[] = [];
+  classes: Classroom[] = [];
 
-  constructor( private serviceUsers: UsersService, private route: ActivatedRoute) {}
+  constructor(
+    private serviceUsers: UsersService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.usersForm = new FormGroup({
@@ -51,7 +54,7 @@ export class AddUserComponent implements OnInit {
         this.usersForm.reset();
       }
     });
-    // this.getClassroom("classroom");
+    this.getClassroom();
   }
 
   onClickRole(role: string): void {
@@ -68,6 +71,14 @@ export class AddUserComponent implements OnInit {
     this.usersForm.get("gender")!.setValue(this.gender);
   }
 
+  onClickClassroom(className: string) {
+    this.classes.map(classroom => {
+      classroom.name_classroom = className 
+      this.usersForm.get(className)!.setValue(classroom.name_classroom)
+    })
+  }
+
+
   getClassroomValidators(): any {
     if (this.role === "studente") {
       return Validators.required;
@@ -79,22 +90,26 @@ export class AddUserComponent implements OnInit {
     return !!formControl && formControl.invalid;
   }
 
+
   onAddUser() {
-    console.log("onAddUser", this.role, this.usersForm.value);
-    if (this.usersForm.valid && this.role === "insegnante") {
-      this.serviceUsers.addTeacher(this.usersForm).subscribe({
+    if (this.usersForm.valid && this.role === "insegnante") {this.role = "teacher"
+      this.serviceUsers.addUser(this.usersForm.value, this.role).subscribe({
         next: (res) => {
-          console.log(res);
+          console.log("ruolo", this.role);
+          
+          console.log("tentativo", res);
         },
         error: (error) => {
           console.log(error);
         },
       });
     } else {
-      if (this.usersForm.valid && this.usersForm.value.classroom !== null) {
-        this.serviceUsers.addStudent(this.usersForm).subscribe({
+      if (this.usersForm.valid && this.usersForm.value.classroom !== null) { this.role = "student"
+        this.serviceUsers.addUser(this.usersForm.value, this.role).subscribe({
           next: (res) => {
             console.log(res);
+                      console.log("ruolo", this.role);
+
           },
           error: (error) => {
             console.log(error);
@@ -103,16 +118,40 @@ export class AddUserComponent implements OnInit {
       }
     }
   }
+  
+  // onAddUser() {
+  //   console.log("onAddUser", this.role, this.usersForm.value);
+  //   if (this.usersForm.valid && this.role === "insegnante") {
+  //     this.serviceUsers.addTeacher(this.usersForm.value, this.role).subscribe({
+  //       next: (res) => {
+  //         console.log("tentativo", res);
+  //       },
+  //       error: (error) => {
+  //         console.log(error);
+  //       },
+  //     });
+  //   } else {
+  //     if (this.usersForm.valid && this.usersForm.value.classroom !== null) {
+  //       this.serviceUsers.addStudent(this.usersForm.value, this.role).subscribe({
+  //         next: (res) => {
+  //           console.log(res);
+  //         },
+  //         error: (error) => {
+  //           console.log(error);
+  //         },
+  //       });
+  //     }
+  //   }
+  // }
 
   getDataUser() {
     this.serviceUsers.getUsers;
   }
 
-
-
-//   getClassroom(classes: string) {
-//     this.serviceUsers.getClassroom().subscribe((data) => {
-//     this.classes = data;
-//   });
-// }
+  getClassroom() {
+    this.serviceUsers.getClassroom().subscribe((data) => {
+      this.classes = data;
+      console.log(this.classes);
+    });
+  }
 }
