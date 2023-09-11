@@ -43,10 +43,10 @@ public class MappingProfiles : Profile
                     .MapFrom(src => src.Students.Count()));
 
         CreateMap<Classroom, ClassroomDto>()
-            .ForMember(dest => dest.id_classroom,
+            .ForMember(dest => dest.Id,
                 opt => opt
                     .MapFrom(src => src.Id))
-            .ForMember(dest => dest.name_classroom,
+            .ForMember(dest => dest.Name,
                 opt => opt
                     .MapFrom(src => src.Name));
 
@@ -81,10 +81,18 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember => destinationMember.subjects,
                 opt => opt
                     .MapFrom(src => src.TeachersSubjectsClassrooms
-                        .Select( el => new SubjectDto
+                        .Select( el => new SubjectClassroomDto
                         {
-                            Subject = el.Subject.Name,
-                            Classroom = el.Classroom.Name
+                            Subject = new SubjectDto
+                            {
+                                Id = el.SubjectId,
+                                Name = el.Subject.Name
+                            },
+                            Classroom = new ClassroomDto
+                            {
+                                Id = el.ClassroomId,
+                                Name = el.Classroom.Name
+                            }
                         })
                     ));
 

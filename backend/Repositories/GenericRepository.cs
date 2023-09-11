@@ -158,6 +158,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     #endregion
 
+    public bool Create(T value)
+    {
+        _context.Add(value);
+        return Save();
+    }
+
     #region Save
 
     public bool Save()

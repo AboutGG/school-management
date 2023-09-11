@@ -38,7 +38,7 @@ public class TeacherSubjectClassroom
 
     #region Foreign Key
 
-    public virtual Exam Exam { get; set; }
+    public virtual ICollection<Exam> Exam { get; } = new List<Exam>();
 
     #endregion
 }
