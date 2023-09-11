@@ -30,6 +30,21 @@ export interface Registry {
   telephone?: string //date format "yyyy-mm-dd"
 }
 
+export interface StudentExams {
+  student: {
+    id: string,
+    name: string,
+    surname: string
+  },
+  exams: [
+    {
+      subject: string,
+      teacher: string,
+      date: string,
+      grade?: number
+    }
+  ]
+}
 export interface Classroom {
   id_classroom?: string;
   name_classroom: string;
