@@ -1,3 +1,4 @@
+import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
@@ -9,7 +10,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class NotFoundComponent implements OnInit {
   statusCode!: any;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router, private location: Location) {}
 
   // ngOnInit() {
   //   const navigation = this.router.getCurrentNavigation();
@@ -25,5 +26,9 @@ export class NotFoundComponent implements OnInit {
 
   goHome() {
     this.router.navigate(['']);
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

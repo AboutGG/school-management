@@ -8,14 +8,14 @@
       <div class="mb-3">
         <input type="username" class="form-control border border-2 border-dark" formControlName="username" id="exampleInputEmail1"
           aria-describedby="emailHelp" placeholder="Inserisci username o email" required>
-          <small class="text-danger" *ngIf="this.showInvalidInput && !loginForm.get('username'||'email')?.valid">Campo obbligatorio</small>
+          <small class="text-danger" *ngIf="this.showInvalidInput && !loginForm.get('username')?.valid">Campo obbligatorio</small>
       </div>
       <div class="mb-3">
         <input type="password" class="form-control border border-2 border-dark" formControlName="password" id="exampleInputPassword1"
           placeholder="Inserisci password" required>
           <small class="text-danger" *ngIf="this.showInvalidInput && !loginForm.get('password')?.valid">Campo obbligatorio</small>
       </div>
-      <small class="text-danger text-center mb-3" *ngIf="response === 'invalid'">Username o password errati</small>
+      <small class="text-danger text-center mb-3" *ngIf="error && loginForm.get('username' && 'password')?.valid && loginForm.get('username' && 'password')?.touched">Username o password errati</small>
       <div class="my-3 form-check row">
         <div class="col-6">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">

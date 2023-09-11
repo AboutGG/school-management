@@ -11,6 +11,8 @@ import { SubjectsComponent } from "./components/pages/subjects/subjects.componen
 import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
 import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
 import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
+import { ExamsStudentListComponent } from "./components/pages/exams-student-list/exams-student-list.component";
+import { ExamslistComponent } from "./components/pages/examslist/examslist.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -25,6 +27,8 @@ const routes: Routes = [
   { path: 'list-users', component: ListUsersComponent },
   { path: 'edit-user', component: EditUserComponent, canActivate: [AuthGuard] },
   { path: 'details/:id', component: DetailUserComponent, canActivate: [AuthGuard] },
+  { path: 'students/exams', component: ExamsStudentListComponent, canActivate: [AuthGuard] },
+  { path: 'teachers/exams', component: ExamslistComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "not-found" },
 ];
 

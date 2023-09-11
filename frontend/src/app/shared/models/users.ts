@@ -46,6 +46,21 @@ export interface Student {
   classroom: string;
 }
 
+export interface StudentExams {
+  student: {
+    id: string,
+    name: string,
+    surname: string
+  },
+  exams: [
+    {
+      subject: string,
+      teacher: string,
+      date: string,
+      grade?: number
+    }
+  ]
+}
 export interface Classroom {
   id_classroom?: string;
   name_classroom: string;
