@@ -179,5 +179,55 @@ public class StudentsController : Controller
 
     #endregion
 
+    #region Get Classroom
+    /// <summary>
+    /// Get the classroom Details of a student
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="params"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    [HttpGet]
+    [Route("Classroom")]
+    [ProducesResponseType(200, Type = typeof(ClassroomDetails))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public IActionResult GetClassroom([FromHeader] string token, [FromQuery] PaginationParams @params)
+    {
+        Guid userid, classroomId;
+        try
+        {
+            userid = Guid.Parse(JWTHandler.DecodeJwtToken(token).Payload["userid"].ToString());
+            classroomId = new GenericRepository<Student>(_context).GetById2(
+                s => s.Where(el => el.UserId == userid)).ClassroomId;
+            if (userid == null || classroomId == null)
+                throw new Exception("NOT_FOUND");
+
+            var students = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
+                .GetAll2(@params,
+                    query => query
+                        .Where(student => student.ClassroomId == classroomId)
+                        .Include(student => student.Registry)));
+
+            var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
+                .GetAll2(
+                    null,
+                    query => query
+                        .Where(teacher => teacher.TeachersSubjectsClassrooms
+                            .Any(tsc => tsc.ClassroomId == classroomId))
+                        .Include(teacher => teacher.TeachersSubjectsClassrooms)
+                        .ThenInclude(tsc => tsc.Subject)
+                        .Include(teacher => teacher.Registry)));
+            return Ok(new { students, teachers });
+        }
+        catch (Exception e)
+        {
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
+        }
+
+    }
+    #endregion
+    
     #endregion
 }

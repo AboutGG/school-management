@@ -20,7 +20,7 @@ public class Student
     [JsonPropertyName("id_user")]
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
-
+    
     [Column("id_registry")]
     [JsonPropertyName("id_registry")]
     public Guid RegistryId { get; set; }

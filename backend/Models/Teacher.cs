@@ -24,5 +24,6 @@ public class Teacher
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
 
-    public IList<TeacherSubjectClassroom> TeachersSubjectsClassrooms { get; set; }
+    public ICollection<TeacherSubjectClassroom> TeachersSubjectsClassrooms { get; } =
+        new List<TeacherSubjectClassroom>();
 }
