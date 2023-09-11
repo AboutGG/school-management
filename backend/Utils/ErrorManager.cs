@@ -18,6 +18,9 @@ public static class ErrorManager
             case "NOT_CREATED":
                 error = new ErrorResponse(StatusCodes.Status400BadRequest, "The entity is not created", e.StackTrace);
                 return error;
+            case "NOT_UPDATED":
+                error = new ErrorResponse(StatusCodes.Status400BadRequest, "The entity is not updated", e.StackTrace);
+                return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
                 return error;

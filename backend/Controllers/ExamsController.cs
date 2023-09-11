@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.Tokenizer;
 using backend.Dto;
 using backend.Interfaces;
@@ -103,14 +104,14 @@ public class ExamsController : Controller
 
             //Prendo l'id del professore tramite l'id utente ricavato dal token
             Guid teacherId = new GenericRepository<Teacher>(_context)
-                .GetById2(
+                .GetByIdUsingIQueryable(
                     query => query
                         .Where(el => el.UserId == takenId)
                 ).Id;
 
             //Prendo l'id di teacherSubjectClassroom in modo da poter procedere con la creazione dell'esame 
             Guid teacherSubjectClassroomId = new GenericRepository<TeacherSubjectClassroom>(_context)
-                .GetById2(query => query
+                .GetByIdUsingIQueryable(query => query
                     .Where(el => el.ClassroomId == InputExam.ClassroomId
                                  && el.SubjectId == InputExam.SubjectId
                                  && el.TeacherId == teacherId)).Id;
@@ -130,7 +131,7 @@ public class ExamsController : Controller
             }
 
             //Prendo la lista di studenti che appartengono alla classe nella quale il prof vuole svolgere l'esame
-            List<Student> students = new GenericRepository<Student>(_context).GetAll2(
+            List<Student> students = new GenericRepository<Student>(_context).GetAllUsingIQueryable(
                 null,
                 query => query
                     .Where(el => el.ClassroomId == InputExam.ClassroomId)
@@ -152,6 +153,70 @@ public class ExamsController : Controller
             
             _transactionRepository.CommitTransaction(transaction);
             return StatusCode(StatusCodes.Status201Created);
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
+        }
+    }
+
+    #endregion
+
+    #region Put Exam
+
+    [HttpPut]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public IActionResult PutExam([FromHeader] string Token, [FromBody] InputStudentExamDto InputStudentExam)
+    {
+        JwtSecurityToken decodedToken;
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        Guid takenId;
+        string role;
+        
+        try
+        {
+            //Decode the token
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
+            takenId = new Guid(decodedToken.Payload["userid"].ToString());
+
+            //Controllo il ruolo dello User tramite l'Id
+            role = RoleSearcher.GetRole(takenId, _context);
+
+            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            if (role == "student" || role == "unknown")
+                throw new Exception("UNAUTHORIZED");
+
+            //Prendo l'id dello studente
+            var takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(
+                query => query
+                    .Where(el => el.UserId == InputStudentExam.Id)
+                );
+            
+            //Prendo l'instanza di studentExam
+            var studentExam = new GenericRepository<StudentExam>(_context).GetByIdUsingIQueryable(
+                query => query
+                    .Where(el => el.StudentId == takenStudent.Id && el.ExamId == InputStudentExam.ExamId));
+
+            studentExam.Grade = InputStudentExam.Grade;
+            //Modifico i parametri 
+            
+            // StudentExam studentExam = new StudentExam
+            // {
+            //     ExamId = TakenStudentExam.ExamId,
+            //     StudentId = takenStudentId,
+            //     Grade = TakenStudentExam.Grade ?? null
+            // };
+            
+            if (! new GenericRepository<StudentExam>(_context).UpdateEntity(studentExam))
+            {
+                throw new Exception("NOT_UPDATED");
+            }
+            
+            _transactionRepository.CommitTransaction(transaction);
+            return StatusCode(StatusCodes.Status200OK, "Grade successfully updated.");
         }
         catch (Exception e)
         {
