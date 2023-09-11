@@ -1,0 +1,31 @@
+.icon-data {
+  border: 2px solid;
+  border-radius: 50px;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffc107;
+}
+
+.pencil-icon {
+  font-size: 30px;
+  color: #ffc107;
+}
+
+.text-personal-data {
+  margin-top: 20px;
+}
+
+.form-container {
+  margin-top: 50px;
+}
+
+.placeholder-input::-moz-placeholder {
+  color: rgb(186, 178, 178);
+}
+
+.placeholder-input::placeholder {
+  color: rgb(186, 178, 178);
+}/*# sourceMappingURL=add-user.component.css.map */

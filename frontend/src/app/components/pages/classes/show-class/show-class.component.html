@@ -1,48 +1,109 @@
 <div class="container">
-<h2 class="mt-2 mb-4">Mostra Classe</h2>
-<div class="d-flex align-items-center justify-content-center flex-column">
-  <h3>Insegnanti</h3>
-<table style="width: 50%;" class="table table-teachers mb-5">
-  <thead>
-    <tr>
-      <th scope="col">Insegnante</th>
-      <th scope="col">Materia</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Nome Cognome</td>
-      <td>Matematica</td>
-    </tr>
-    <tr>
-      <td>Nome Cognome</td>
-      <td>Inglese</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-<h3 class="text-center">Alunni</h3>
-<div
-  class=" d-flex align-items-center justify-content-center "
->
+  <hr />
+  <div
+    class="title d-flex align-items-center justify-content-center fs-5 fw-bold"
+  >
+    <div class="d-flex align-items-center justify-content-center "></div>
+    {{ "Mostra Classe" | uppercase }}
+    <span class="icon"><i class="bi bi-person-vcard"></i> </span>
+  </div>
+  <hr class="mb-5"/>
+ 
+ 
+    <div class="row justify-content-center">
+     
+      <div class="col-md-5">
+        <table class="table table-teachers table-hover mb-5">
+          <thead class="text-center">
+            <tr>
+              <th scope="col-1">#</th>
+              <th scope="col-2">Docente</th>
+              <th scope="col-3">Materie</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
+            <tr style="cursor: pointer" [routerLink]="'/details/'">
+              <td scope="row">{{i + 1}}</td>
+               <td>{{ teacher.name +' '+ teacher.surname}}</td>             
+               <td>{{ teacher.subjects.join(', ') }}</td>
+            </tr>
+            <tr>
+             
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
 
-  <table class="w-100">
-    <thead class="text-center ">
-      <tr>
-        <th>Nome</th>
-        <th>Cognome</th>
-        <th>Data di Nascita</th>
-        <th>Altro</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Example</td>
-        <td>Example</td>
-        <td>Example</td>
-        <td>Example</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="col-md-7">
+    <table class="table table-students table-hover w-100">
+      <thead class="text-center">
+        <tr>
+          <th>#</th>
+          <th>Cognome</th>
+          <th>Nome</th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let student of classDetails?.students; let i = index">
+        <tr >
+          <td scope="row">{{i + 1}}</td> 
+          <td style="cursor: pointer" [routerLink]="'/details/'">{{student.surname}}</td>
+          <td style="cursor: pointer" [routerLink]="'/details/'">{{student.name}}</td>
+          
+          <td>
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-gear-fill"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill px-2"></i>Visualizza</a></li>
+                <li><a class="dropdown-item" [routerLink]="'/esami/'"><i class="bi bi-book-fill px-2"></i>Vai a Esami</a></li>
+                <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+
+  <!-- Modal delete -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Sei sicuro?</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Una volta eliminato, non potrai tornare indietro!
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Chiudi
+          </button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+            Elimina
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -28,20 +28,27 @@ export interface Registry {
   email?: string
   address?: string
   telephone?: string //date format "yyyy-mm-dd"
-
-  teacher?: Teacher;
-  student?: Student;
 }
 
-export interface Teacher {
-  id: string,
-  registryId: string,
-  userId: string
+export interface Classroom {
+  id_classroom?: string;
+  name_classroom: string;
+  student_count: number;
 }
 
-export interface Student {
-  id: string,
-  registryId: string,
-  userId: string
-  classroom: string
+export interface Teachers {
+  id?: string;
+  name: string;
+  surname: string;
+  subjects: string[];
+}
+
+export interface Students {
+  id?: string;
+  name: string;
+  surname: string;
+}
+export interface ClassDetails {
+  teachers: Teachers[];
+  students: Students[];
 }
