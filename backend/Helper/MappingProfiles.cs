@@ -42,13 +42,7 @@ public class MappingProfiles : Profile
                 opt => opt
                     .MapFrom(src => src.Students.Count()));
 
-        CreateMap<Classroom, ClassroomDto>()
-            .ForMember(dest => dest.id_classroom,
-                opt => opt
-                    .MapFrom(src => src.Id))
-            .ForMember(dest => dest.name_classroom,
-                opt => opt
-                    .MapFrom(src => src.Name));
+        CreateMap<Classroom, ClassroomDto>();
 
         CreateMap<Teacher, TeacherDto>()
             .ForMember(destinationMember => destinationMember.id,

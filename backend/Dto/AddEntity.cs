@@ -4,9 +4,9 @@ namespace backend.Dto;
 
 public class AddEntity
 {
-    public Registry Registry { get; set; }
+    public RegistryDto Registry { get; set; }
 
-    public User User { get; set; }
+    public UserDto User { get; set; }
 
-    public Classroom? Classroom { get; set; }
+    public ClassroomDto? Classroom { get; set; }
 }
