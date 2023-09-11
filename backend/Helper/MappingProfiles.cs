@@ -75,10 +75,18 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember => destinationMember.subjects,
                 opt => opt
                     .MapFrom(src => src.TeachersSubjectsClassrooms
-                        .Select( el => new SubjectDto
+                        .Select( el => new SubjectClassroomDto
                         {
-                            Subject = el.Subject.Name,
-                            Classroom = el.Classroom.Name
+                            Subject = new SubjectDto
+                            {
+                                Id = el.SubjectId,
+                                Name = el.Subject.Name
+                            },
+                            Classroom = new ClassroomDto
+                            {
+                                Id = el.ClassroomId,
+                                Name = el.Classroom.Name
+                            }
                         })
                     ));
 

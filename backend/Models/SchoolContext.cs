@@ -97,12 +97,13 @@ public class SchoolContext : DbContext
         #endregion
 
         #region Exam relations
-
+        
         ///<summary> Exam relation with subject one-to-one </summary>
+
         modelBuilder.Entity<Exam>()
-            .HasOne<TeacherSubjectClassroom>(e => e.TeacherSubjectClassroom)
-            .WithOne(tsc => tsc.Exam)
-            .HasForeignKey<Exam>(e => e.TeacherSubjectClassroomId);
+            .HasOne(e => e.TeacherSubjectClassroom)
+            .WithMany(tsc => tsc.Exam)
+            .HasForeignKey(e => e.TeacherSubjectClassroomId);
 
         #endregion
 

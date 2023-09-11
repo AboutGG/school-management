@@ -124,10 +124,10 @@ public class TeachersController : Controller
 
             //Controllo il ruolo dello User tramite l'Id
             role = RoleSearcher.GetRole(takenId, _context);
-            //TODO:
+            
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
             if (role == "student" || role == "unknown")
-                throw new Exception("NOT_FOUND");
+                throw new Exception("UNAUTHORIZED");
             else
             {
                 //Prendo le materie che insegna il professore con le relative classi

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -11,9 +12,11 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20230911103006_FixRelationOnTeacherSubjectClassroom")]
+    partial class FixRelationOnTeacherSubjectClassroom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace backend.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("classrooms", (string)null);
+                    b.ToTable("classrooms");
 
                     b.HasData(
                         new
@@ -83,7 +86,7 @@ namespace backend.Migrations
 
                     b.HasIndex("TeacherSubjectClassroomId");
 
-                    b.ToTable("exams", (string)null);
+                    b.ToTable("exams");
 
                     b.HasData(
                         new
@@ -154,7 +157,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("registries", (string)null);
+                    b.ToTable("registries");
 
                     b.HasData(
                         new
@@ -232,7 +235,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("students", (string)null);
+                    b.ToTable("students");
 
                     b.HasData(
                         new
@@ -279,7 +282,7 @@ namespace backend.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("students_exams", (string)null);
+                    b.ToTable("students_exams");
                 });
 
             modelBuilder.Entity("backend.Models.Subject", b =>
@@ -298,7 +301,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("subjects", (string)null);
+                    b.ToTable("subjects");
 
                     b.HasData(
                         new
@@ -359,7 +362,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("teachers", (string)null);
+                    b.ToTable("teachers");
 
                     b.HasData(
                         new
@@ -407,7 +410,7 @@ namespace backend.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("teachers_subjects_classrooms", (string)null);
+                    b.ToTable("teachers_subjects_classrooms");
 
                     b.HasData(
                         new
@@ -465,7 +468,7 @@ namespace backend.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
 
                     b.HasData(
                         new
