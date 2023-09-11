@@ -3,12 +3,12 @@
   <!-- navbar component -->
   <app-navbar *ngIf="!(router.url === '/login')" (toggleSidebar)="handleSidebarToggle()"> </app-navbar>
 
-  <div class="side-content-wrapper d-flex flex-row">
+  <div [ngClass]="{'position-static' : router.url === '/login'}" class="side-content-wrapper d-flex flex-row">
     <!-- sidebar component -->
     <app-sidebar *ngIf="!(router.url === '/login')" class="sidebar" [isExpanded]="sidebarExpanded"></app-sidebar>
     <div class="sidebar-content w-100" [ngClass]="{ 'sidebarExpanded': sidebarExpanded }">
-      <router-outlet class=""></router-outlet>
+      <router-outlet></router-outlet>
     </div>
-  </div>
+  </div>
 
 </div>

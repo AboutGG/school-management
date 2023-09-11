@@ -148,7 +148,7 @@ public class UsersController : Controller
             Gender = userTeacher.Registry.Gender,
             Email = userTeacher.Registry.Email ?? null,
             Address = userTeacher.Registry.Address ?? null,
-            Telephone = userTeacher?.Registry.Telephone,
+            Telephone = userTeacher.Registry.Telephone ?? null,
         };
 
         ///<summary> Try to create an user and registry</summary>
