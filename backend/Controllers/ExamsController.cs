@@ -84,7 +84,7 @@ public class ExamsController : Controller
     public IActionResult CreateExam([FromHeader] string Token, CreateExamDto InputExam)
     {
         JwtSecurityToken decodedToken;
-        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();;
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         Guid takenId;
         string role;
         try
@@ -115,6 +115,7 @@ public class ExamsController : Controller
                                  && el.SubjectId == InputExam.SubjectId
                                  && el.TeacherId == teacherId)).Id;
             
+            //Creo l'esame che tramite i dati che passerà il FE
             Exam createdExam = new Exam
             {
                 Id = new Guid(),
@@ -122,17 +123,20 @@ public class ExamsController : Controller
                 ExamDate = InputExam.ExamDate
             };
 
+            //Nel caso non dovesse essere creato genererà un'eccezione
             if (!new GenericRepository<Exam>(_context).Create(createdExam))
             {
                 throw new Exception("NOT_CREATED");
             }
 
+            //Prendo la lista di studenti che appartengono alla classe nella quale il prof vuole svolgere l'esame
             List<Student> students = new GenericRepository<Student>(_context).GetAll2(
                 null,
                 query => query
                     .Where(el => el.ClassroomId == InputExam.ClassroomId)
             );
             
+            //Creo record di StudentExam per tutti gli studenti della classe, inserendoli poi nel database
             foreach (var el in students)
             {
                 var createdStudentExams = new StudentExam
@@ -145,6 +149,9 @@ public class ExamsController : Controller
                     throw new Exception("NOT_CREATED");
                 }
             }
+            
+            _transactionRepository.CommitTransaction(transaction);
+            return StatusCode(StatusCodes.Status201Created);
         }
         catch (Exception e)
         {
@@ -152,8 +159,6 @@ public class ExamsController : Controller
             ErrorResponse error = ErrorManager.Error(e);
             return BadRequest(error);
         }
-        _transactionRepository.CommitTransaction(transaction);
-        return StatusCode(StatusCodes.Status201Created);
     }
 
     #endregion
