@@ -1,7 +1,3 @@
-.mt-6 {
-  margin-top: 100px;
-}
-
 .icon-data {
   border: 2px solid;
   border-radius: 50px;
@@ -10,10 +6,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #ffc107;
 }
 
 .pencil-icon {
   font-size: 30px;
+  color: #ffc107;
 }
 
 .text-personal-data {
