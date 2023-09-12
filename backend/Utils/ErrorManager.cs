@@ -6,18 +6,24 @@ public static class ErrorManager
 {
     public static ErrorResponse Error(Exception e)
     {
-        ErrorResponse dummy;
+        ErrorResponse error;
         switch (e.Message)
         {
             case "NOT_FOUND":
-                dummy = new ErrorResponse(StatusCodes.Status404NotFound,"Item not found", e.StackTrace);
-                return dummy;
+                error = new ErrorResponse(StatusCodes.Status404NotFound,"Item not found", e.StackTrace);
+                return error;
             case "UNAUTHORIZED":
-                dummy = new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid", e.StackTrace);
-                return dummy;
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid", e.StackTrace);
+                return error;
+            case "NOT_CREATED":
+                error = new ErrorResponse(StatusCodes.Status400BadRequest, "The entity is not created", e.StackTrace);
+                return error;
+            case "NOT_UPDATED":
+                error = new ErrorResponse(StatusCodes.Status400BadRequest, "The entity is not updated", e.StackTrace);
+                return error;
             default:
-                dummy = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
-                return dummy;
+                error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
+                return error;
         }
     }
 }

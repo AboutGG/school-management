@@ -1,11 +1,17 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Dynamic.Core;
+using System.Linq.Dynamic.Core.Tokenizer;
+using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class ExamsController : Controller
@@ -13,19 +19,24 @@ public class ExamsController : Controller
     #region Attributes
 
     private readonly SchoolContext _context;
+    private readonly ITransactionRepository _transactionRepository;
 
     #endregion
 
     #region Constructor
 
-    public ExamsController(SchoolContext context)
-        {
-            _context = context;
-        }
-
-    #endregion
+    public ExamsController(SchoolContext context,ITransactionRepository transactionRepository)
+    {
+        _context = context;
+        _transactionRepository = transactionRepository;
+    }
     
+    #endregion
+
     #region Api calls
+
+    #region Old
+    
     // /// <summary> Having the token take the userId then takes the related exams </summary>
     // /// <param name="token"></param>
     // /// <returns>Return a list of Exams performed by the Student</returns>
@@ -64,8 +75,156 @@ public class ExamsController : Controller
     //         return Unauthorized("The Token is not valid" );
     //     }
     // }
-   
 
     #endregion
-    
+
+    #region Create Exam
+
+    /// <summary> Api call which plan an Exam </summary>
+    /// <param name="Token">token to autenticate the role</param>
+    /// <param name="InputExam">The exam to add on the Db</param>
+    /// <returns>201 if the exams is created, 400 if not</returns>
+    /// <exception cref="Exception"></exception>
+    [HttpPost]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
+    public IActionResult CreateExam([FromHeader] string Token, CreateExamDto InputExam)
+    {
+        JwtSecurityToken decodedToken;
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        Guid takenId;
+        string role;
+        try
+        {
+            //Decode the token
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
+            takenId = new Guid(decodedToken.Payload["userid"].ToString());
+
+            //Controllo il ruolo dello User tramite l'Id
+            role = RoleSearcher.GetRole(takenId, _context);
+
+            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            if (role == "student" || role == "unknown")
+                throw new Exception("UNAUTHORIZED");
+
+
+            //Prendo l'id del professore tramite l'id utente ricavato dal token
+            Guid teacherId = new GenericRepository<Teacher>(_context)
+                .GetByIdUsingIQueryable(
+                    query => query
+                        .Where(el => el.UserId == takenId)
+                ).Id;
+
+            //Prendo l'id di teacherSubjectClassroom in modo da poter procedere con la creazione dell'esame 
+            Guid teacherSubjectClassroomId = new GenericRepository<TeacherSubjectClassroom>(_context)
+                .GetByIdUsingIQueryable(query => query
+                    .Where(el => el.ClassroomId == InputExam.ClassroomId
+                                 && el.SubjectId == InputExam.SubjectId
+                                 && el.TeacherId == teacherId)).Id;
+            
+            //Creo l'esame che tramite i dati che passerà il FE
+            Exam createdExam = new Exam
+            {
+                Id = new Guid(),
+                TeacherSubjectClassroomId = teacherSubjectClassroomId,
+                ExamDate = InputExam.ExamDate
+            };
+
+            //Nel caso non dovesse essere creato genererà un'eccezione
+            if (!new GenericRepository<Exam>(_context).Create(createdExam))
+            {
+                throw new Exception("NOT_CREATED");
+            }
+
+            //Prendo la lista di studenti che appartengono alla classe nella quale il prof vuole svolgere l'esame
+            List<Student> students = new GenericRepository<Student>(_context).GetAllUsingIQueryable(
+                null,
+                query => query
+                    .Where(el => el.ClassroomId == InputExam.ClassroomId)
+            );
+            
+            //Creo record di StudentExam per tutti gli studenti della classe, inserendoli poi nel database
+            foreach (var el in students)
+            {
+                var createdStudentExams = new StudentExam
+                {
+                    ExamId = createdExam.Id,
+                    StudentId = el.Id
+                };
+                if (! new GenericRepository<StudentExam>(_context).Create(createdStudentExams))
+                {
+                    throw new Exception("NOT_CREATED");
+                }
+            }
+            
+            _transactionRepository.CommitTransaction(transaction);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
+        }
+    }
+
+    #endregion
+
+    #region Put Exam
+
+    [HttpPut]
+    [Route("{id}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public IActionResult PutExam([FromHeader] string Token, [FromBody] InputStudentExamDto InputStudentExam, Guid id)
+    {
+        JwtSecurityToken decodedToken;
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        Guid takenId;
+        string role;
+        
+        try
+        {
+            //Decode the token
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
+            takenId = new Guid(decodedToken.Payload["userid"].ToString());
+
+            //Controllo il ruolo dello User tramite l'Id
+            role = RoleSearcher.GetRole(takenId, _context);
+
+            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            if (role == "student" || role == "unknown")
+                throw new Exception("UNAUTHORIZED");
+            
+            //Tramite l'id che passa il FE prendo lo studente con quell'id e a sua volta l'instanza dell'esame tramite l'oggetto in Input dal FE
+            var takenStudentExam = new GenericRepository<Student>(_context)
+                .GetByIdUsingIQueryable(query => query
+                        .Where(el => el.Id == id)
+                        .Include(s => s.StudentExams) // Include StudentExams navigation property
+                ).StudentExams
+                .FirstOrDefault(src => src.StudentId == id && src.ExamId == InputStudentExam.ExamId);
+            
+            //Modifico il voto 
+            takenStudentExam.Grade = InputStudentExam.Grade;
+            
+            if (! new GenericRepository<StudentExam>(_context).UpdateEntity(takenStudentExam))
+            {
+                throw new Exception("NOT_UPDATED");
+            }
+            
+            _transactionRepository.CommitTransaction(transaction);
+            return StatusCode(StatusCodes.Status200OK, "Grade successfully updated.");
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
+        }
+    }
+
+    #endregion
+
+    #endregion
+
 }
