@@ -20,7 +20,7 @@ public class Classroom
 
     #region External Keys
     public virtual ICollection<Student> Students { get; set; }
-    public virtual IList<TeacherSubjectClassroom> TeacherSubjectsClassrooms { get; set; }
+    public virtual IList<TeacherSubjectClassroom> TeachersSubjectsClassrooms { get; set; }
     
     #endregion
 }

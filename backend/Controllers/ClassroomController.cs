@@ -40,29 +40,29 @@ public class ClassroomsController : Controller
     }
 
 
-    [HttpGet]
-    [Route("{id}")]
-    [ProducesResponseType(200, Type = typeof(List<ClassroomDetails>))]
-    public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
-    {
-        var students = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
-            .GetAllUsingIQueryable(@params,
-                query => query
-                    .Where(student => student.ClassroomId == id)
-                    .Include(student => student.Registry)));
-
-        var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
-            .GetAllUsingIQueryable(
-                null, 
-                query => query
-                    .Where(teacher => teacher.TeachersSubjectsClassrooms
-                        .Any(tsc => tsc.ClassroomId == id))
-                    .Include(teacher => teacher.TeachersSubjectsClassrooms)
-                    .ThenInclude(tsc => tsc.Subject)
-                    .Include(teacher => teacher.Registry)));
-        
-        return Ok(new { students, teachers });
-    }
+    // [HttpGet]
+    // [Route("{id}")]
+    // [ProducesResponseType(200, Type = typeof(List<ClassroomDetails>))]
+    // public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
+    // {
+    //     var students = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
+    //         .GetAllUsingIQueryable(@params,
+    //             query => query
+    //                 .Where(student => student.ClassroomId == id)
+    //                 .Include(student => student.Registry)));
+    //
+    //     var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
+    //         .GetAllUsingIQueryable(
+    //             null, 
+    //             query => query
+    //                 .Where(teacher => teacher.TeachersSubjectsClassrooms
+    //                     .Any(tsc => tsc.ClassroomId == id))
+    //                 .Include(teacher => teacher.TeachersSubjectsClassrooms)
+    //                 .ThenInclude(tsc => tsc.Subject)
+    //                 .Include(teacher => teacher.Registry)));
+    //     
+    //     return Ok(new { students, teachers });
+    // }
     
    
 }
