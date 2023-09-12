@@ -7,6 +7,7 @@ using backend.Models;
 using backend.Repositories;
 using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Controllers;
@@ -79,6 +80,11 @@ public class ExamsController : Controller
 
     #region Create Exam
 
+    /// <summary> Api call which plan an Exam </summary>
+    /// <param name="Token">token to autenticate the role</param>
+    /// <param name="InputExam">The exam to add on the Db</param>
+    /// <returns>201 if the exams is created, 400 if not</returns>
+    /// <exception cref="Exception"></exception>
     [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(400)]
@@ -167,9 +173,10 @@ public class ExamsController : Controller
     #region Put Exam
 
     [HttpPut]
+    [Route("{id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public IActionResult PutExam([FromHeader] string Token, [FromBody] InputStudentExamDto InputStudentExam)
+    public IActionResult PutExam([FromHeader] string Token, [FromBody] InputStudentExamDto InputStudentExam, Guid id)
     {
         JwtSecurityToken decodedToken;
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
@@ -188,29 +195,19 @@ public class ExamsController : Controller
             //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
             if (role == "student" || role == "unknown")
                 throw new Exception("UNAUTHORIZED");
-
-            //Prendo l'id dello studente
-            var takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(
-                query => query
-                    .Where(el => el.UserId == InputStudentExam.Id)
-                );
             
-            //Prendo l'instanza di studentExam
-            var studentExam = new GenericRepository<StudentExam>(_context).GetByIdUsingIQueryable(
-                query => query
-                    .Where(el => el.StudentId == takenStudent.Id && el.ExamId == InputStudentExam.ExamId));
-
-            studentExam.Grade = InputStudentExam.Grade;
-            //Modifico i parametri 
+            //Tramite l'id che passa il FE prendo lo studente con quell'id e a sua volta l'instanza dell'esame tramite l'oggetto in Input dal FE
+            var takenStudentExam = new GenericRepository<Student>(_context)
+                .GetByIdUsingIQueryable(query => query
+                        .Where(el => el.Id == id)
+                        .Include(s => s.StudentExams) // Include StudentExams navigation property
+                ).StudentExams
+                .FirstOrDefault(src => src.StudentId == id && src.ExamId == InputStudentExam.ExamId);
             
-            // StudentExam studentExam = new StudentExam
-            // {
-            //     ExamId = TakenStudentExam.ExamId,
-            //     StudentId = takenStudentId,
-            //     Grade = TakenStudentExam.Grade ?? null
-            // };
+            //Modifico il voto 
+            takenStudentExam.Grade = InputStudentExam.Grade;
             
-            if (! new GenericRepository<StudentExam>(_context).UpdateEntity(studentExam))
+            if (! new GenericRepository<StudentExam>(_context).UpdateEntity(takenStudentExam))
             {
                 throw new Exception("NOT_UPDATED");
             }
