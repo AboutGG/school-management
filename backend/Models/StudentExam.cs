@@ -7,11 +7,10 @@ namespace backend.Models;
 public class StudentExam
 {
     /// <summary> Registries_exam Foreign Key id_student </summary>
-    [Column("id_student")]
-    [JsonPropertyName("id_student")]
-    public Guid StudentId { get; set; }
-
-    public virtual Student Student { get; set; }
+    [Column("id_user")]
+    [JsonPropertyName("id_user")]
+    public Guid UserId { get; set; }
+    public virtual User User { get; set; }
 
     /// <summary> Registries_exam Foreign Key id_subject </summary>
     [Column("id_exam")]

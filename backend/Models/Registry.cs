@@ -53,9 +53,7 @@ public class Registry
     #region References from another table
 
     /// <summary> Elements from another table </summary>
-    public virtual Teacher Teacher { get; set; }
-
-    public virtual Student Student { get; set; }
+    public virtual User User { get; set; }
 
     #endregion
 }

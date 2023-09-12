@@ -27,7 +27,7 @@ public class AuthController : Controller
             if (_userRepository.CheckCredentials(request))
             {
                 var token = JWTHandler.GenerateJwtToken(user);
-                return Ok(new {token = token.Trim(), role = RoleSearcher.GetRole(user.Id, _context) });
+                // return Ok(new {token = token.Trim(), role = RoleSearcher.GetRole(user.Id, _context) });
             }
             else
             {

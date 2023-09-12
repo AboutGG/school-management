@@ -3,19 +3,16 @@ using System.Text.Json.Serialization;
 
 namespace backend.Models;
 
-[Table("subjects")]
-public class Subject
+[Table("roles")]
+public class Role
 {
     [Column("id")]
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
-
-    /// <summary> subject name </summary>
+    
     [Column("name")]
     [JsonPropertyName("name")]
     public string Name { get; set; }
 
-    #region External ref
-    public IList<TeacherSubjectClassroom> TeacherSubjectClassrooms { get; set; }
-    #endregion
+    public List<UserRole> UsersRoles { get; set; }
 }

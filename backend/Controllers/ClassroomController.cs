@@ -18,18 +18,16 @@ public class ClassroomsController : Controller
     private readonly SchoolContext _context;
     private readonly IClassroomRepository _classroomRepository;
     private readonly IMapper _mapper;
-    private readonly ITeacherRepository _teacherRepository;
 
     public ClassroomsController(
         SchoolContext context, 
         IClassroomRepository classroomRepository,
-        IMapper mapper,
-        ITeacherRepository teacherRepository)
+        IMapper mapper
+        )
     {
         _context = context;
         _classroomRepository = classroomRepository;
         _mapper = mapper;
-        _teacherRepository = teacherRepository;
     }
 
     [HttpGet]

@@ -22,7 +22,6 @@ public class UsersController : Controller
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
     private readonly SchoolContext _context;
-    private readonly ITeacherRepository _teacherRepository;
     private readonly IRegistryRepository _registryRepository;
     private readonly IStudentRepository _studentRepository;
     private readonly ITransactionRepository _transactionRepository;
@@ -34,7 +33,6 @@ public class UsersController : Controller
     public UsersController(
         ITransactionRepository transactionRepository,
         IUserRepository userRepository,
-        ITeacherRepository teacherRepository,
         IRegistryRepository registryRepository,
         IStudentRepository studentRepository,
         IMapper mapper,
@@ -45,7 +43,6 @@ public class UsersController : Controller
         this._mapper = mapper;
         _context = context;
         this._transactionRepository = transactionRepository;
-        this._teacherRepository = teacherRepository;
         this._registryRepository = registryRepository;
         this._studentRepository = studentRepository;
     }

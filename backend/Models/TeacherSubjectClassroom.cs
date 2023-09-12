@@ -16,10 +16,10 @@ public class TeacherSubjectClassroom
     #endregion
     
     #region Teacher
-    [Column("id_teacher")]
-    [JsonPropertyName("id_techer")]
-    public Guid TeacherId { get; set; }
-    public virtual Teacher Teacher { get; set; }
+    [Column("id_user")]
+    [JsonPropertyName("id_user")]
+    public Guid UserId { get; set; }
+    public virtual User User { get; set; }
     #endregion
     
     #region Subject

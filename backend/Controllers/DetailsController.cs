@@ -3,7 +3,6 @@ using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
-using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,6 @@ public class DetailsController : Controller
 
     private readonly IMapper _mapper;
     private readonly IStudentRepository _studentRepository;
-    private readonly ITeacherRepository _teacherRepository;
     private readonly IRegistryRepository _registryRepository;
     private readonly IUserRepository _userRepository;
     private readonly ITransactionRepository _transactionRepository;
@@ -30,7 +28,6 @@ public class DetailsController : Controller
 
     public DetailsController(IMapper mapper,
         IStudentRepository studentRepository,
-        ITeacherRepository teacherRepository,
         IRegistryRepository registryRepository,
         IUserRepository userRepository,
         ITransactionRepository transactionRepository,
@@ -39,7 +36,6 @@ public class DetailsController : Controller
     {
         _mapper = mapper;
         _studentRepository = studentRepository;
-        _teacherRepository = teacherRepository;
         _registryRepository = registryRepository;
         _userRepository = userRepository;
         _transactionRepository = transactionRepository;

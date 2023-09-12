@@ -26,7 +26,10 @@ public class User
 
 
     /// <summary> Element from another table</summary>
-    public virtual Teacher Teacher { get; set; }
-
+    public Guid RegistryId { get; set; }
+    public virtual Registry Registry { get; set; }
     public virtual Student Student { get; set; }
+    public virtual List<TeacherSubjectClassroom> TeachersSubjectsClassrooms { get; set; }
+    public virtual List<UserRole> UsersRoles { get; set; }
+    public virtual List<StudentExam> StudentsExams { get; set; }
 }

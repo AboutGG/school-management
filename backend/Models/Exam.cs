@@ -18,6 +18,10 @@ public class Exam
     [Column("exam_date")]
     [JsonPropertyName("exam_date")]
     public DateOnly ExamDate { get; set; }
+    
+    [Column("is_written")]
+    [JsonPropertyName("is_written")]
+    public bool IsWritten { get; set; }
 
     #region Foreign Key reference
     public virtual List<StudentExam> StudentExams { get; set; }

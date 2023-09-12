@@ -32,9 +32,9 @@ public class StudentRepository : IStudentRepository
     public ICollection<Student> GetStudents()
     {
         var student = _context.Students
-            .OrderBy(s => s.Id)
+            .OrderBy(s => s.UserId)
             .Include(s => s.User) // Include il registro associato
-            .Include(s => s.Registry)
+            .ThenInclude(u => u.Registry)
             .ToList();
 
         return student;
@@ -42,9 +42,9 @@ public class StudentRepository : IStudentRepository
 
     public Student GetStudentById(Guid id)
     {
-        return _context.Students.Where(s => s.Id == id)
+        return _context.Students.Where(s => s.UserId == id)
             .Include(s => s.User)
-            .Include(s => s.Registry)
+            .ThenInclude(s => s.Registry)
             .FirstOrDefault();
     }
 
@@ -55,7 +55,7 @@ public class StudentRepository : IStudentRepository
 
     public bool StudentExist(Guid id)
     {
-        return _context.Students.Any(s => s.Id == id);
+        return _context.Students.Any(s => s.UserId == id);
     }
 
     public bool CreateStudent(Student student)

@@ -7,10 +7,6 @@ namespace backend.Models;
 [Table("students")]
 public class Student
 {
-    [Column("id")]
-    [JsonPropertyName("id")]
-    public Guid Id { get; set; }
-
     [Column("id_classroom")]
     [JsonPropertyName("id_classroom")]
     public Guid ClassroomId { get; set; }
@@ -21,14 +17,4 @@ public class Student
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
 
-    [Column("id_registry")]
-    [JsonPropertyName("id_registry")]
-    public Guid RegistryId { get; set; }
-    public virtual Registry Registry { get; set; }
-
-    #region Foreign Keys
-
-    public virtual List<StudentExam> StudentExams{ get; set; }
-
-    #endregion
 }

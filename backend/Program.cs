@@ -22,7 +22,6 @@ builder.Services.AddDbContext<SchoolContext>(options =>
 // Linking the interfaces to the repos
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
-builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITeacherSubjectClassroomRepository, TeacherSubjectClassroomRepository>();
