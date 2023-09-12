@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Classroom } from 'src/app/shared/models/users';
+import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 
 @Component({
@@ -12,11 +13,13 @@ export class ClassesComponent {
 
   class: Classroom[] = [];
   searchTerm!: string;
+  isTeacher!: boolean;
 
-  constructor(private classroomService: ClassroomService) {}
+  constructor(private classroomService: ClassroomService, private authService: AuthService) {}
 
   ngOnInit(){
     this.fetchData();
+    this.isTeacher = this.authService.isTeacher()
   }
 
     // get dati api classroom

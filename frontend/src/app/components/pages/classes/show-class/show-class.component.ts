@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClassDetails, Classroom, Students, Teachers } from 'src/app/shared/models/users';
+import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 
 @Component({
@@ -12,14 +13,19 @@ export class ShowClassComponent {
 
   classId!: string;
   classDetails!: ClassDetails;
+  isTeacher!: boolean; //memorizza se l'utente è insegnante
+  
 
-  constructor(private classroomService: ClassroomService, private route: ActivatedRoute) {}
+  constructor(private classroomService: ClassroomService, private authService: AuthService, private route: ActivatedRoute) {}
+  
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.classId = params['id'];
     });
     this.fetchClassDetails();
+
+    
   }
 
   fetchClassDetails() {
