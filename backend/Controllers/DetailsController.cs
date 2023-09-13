@@ -97,61 +97,8 @@ public class DetailsController : Controller
     // }
     //
     // #endregion
-    //
-    // #region Edit detail
-    //
-    // /// <summary> Edit the Teacher or Student details. </summary>
-    // /// <param name="Id"></param>
-    // /// <param name="updatedUserDetail"></param>
-    // /// <returns>204 = Successfully, 404 = not found the id, 400 = bad request</returns>
-    // [HttpPut("{Id}")]
-    // [ProducesResponseType(400)]
-    // [ProducesResponseType(204)]
-    // [ProducesResponseType(404)]
-    // public IActionResult UpdateUser(Guid Id,
-    //     [FromBody] RegistryDto updatedRegistry) // i pass the user's Id
-    // {
-    //     if (updatedRegistry == null || Id == null)
-    //         return BadRequest();
-    //
-    //     GenericRepository<Registry> registryRepo = new GenericRepository<Registry>(_context);
-    //
-    //     // take the registry which have the Teacher || Student .UserId == Id
-    //     Registry takenRegistry = registryRepo.GetById(
-    //         reg => reg.Student.UserId == Id || reg.Teacher.UserId == Id,
-    //         reg => reg.Student,
-    //         reg => reg.Teacher
-    //     );
-    //
-    //     //start transaction
-    //     var transaction = _transactionRepository.BeginTransaction();
-    //
-    //     //Update taken registry
-    //     takenRegistry.Name = updatedRegistry.Name;
-    //     takenRegistry.Surname = updatedRegistry.Surname;
-    //     takenRegistry.Birth = updatedRegistry.Birth;
-    //     takenRegistry.Address = updatedRegistry.Address;
-    //     takenRegistry.Email = updatedRegistry.Email;
-    //     takenRegistry.Gender = updatedRegistry.Gender;
-    //     takenRegistry.Telephone = updatedRegistry.Telephone;
-    //
-    //     try
-    //     {
-    //         registryRepo.UpdateEntity(takenRegistry); //update the user's registry
-    //         _transactionRepository.CommitTransaction(transaction); //accept the changes
-    //         return Ok("Edit successfully");
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         //rollback when i can't update an Entity
-    //         _transactionRepository.RollbackTransaction(transaction);
-    //         ModelState.AddModelError("response", "Something went wrong updating user");
-    //         return StatusCode(500, ModelState);
-    //     }
-    // }
-    //
-    // #endregion
-    //
+    
+    
     // #region Detail count
     //
     // /// <summary> Function which gives the Users, Students, Teachers and Classrooms' counts </summary>
