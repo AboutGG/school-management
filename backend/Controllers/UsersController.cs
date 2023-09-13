@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
@@ -7,6 +8,7 @@ using backend.Utils;
 using iText.StyledXmlParser.Jsoup.Parser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Controllers;
 
@@ -94,89 +96,113 @@ public class UsersController : Controller
     }
     
     #endregion
-    //
-    // #region Add an UserTeacher
-    //
-    // /// <summary>
-    // /// This call is used to create an user which is a Teacher
-    // /// </summary>
-    // /// <param name="userTeacher"></param>
-    // /// <returns></returns>
-    // [HttpPost("teacher")]
-    // [ProducesResponseType(204)]
-    // [ProducesResponseType(400)]
-    // public IActionResult AddUserTeacher([FromBody] AddEntity userTeacher)
-    // {
-    //
-    //     if (userTeacher == null || userTeacher.User == null || userTeacher.Registry == null)
-    //     {
-    //         return BadRequest(ModelState);
-    //     }
-    //
-    //     if (_userRepository.UserExists(userTeacher.User.Username))
-    //     {
-    //         ModelState.AddModelError("response", "user already exist");
-    //         return StatusCode(422, ModelState);
-    //     }
-    //
-    //     // if (!ModelState.IsValid)
-    //     // {
-    //     //     return BadRequest(ModelState);
-    //     // }
-    //     ///<summary> start transaction </summary>
-    //     var transaction = _transactionRepository.BeginTransaction();
-    //
-    //     ///<summary> Create the user to add on db, taking the attributes from userTeacher</summary>
-    //     var user = new User
-    //     {
-    //         Id = new Guid(),
-    //         Username = userTeacher.User.Username,
-    //         Password = userTeacher.User.Password,
-    //     };
-    //
-    //     ///<summary> Create the Registry to add on db, taking the attributes from userTeacher</summary>
-    //     var registry = new Registry
-    //     {
-    //         Id = new Guid(),
-    //         Name = userTeacher.Registry.Name,
-    //         Surname = userTeacher.Registry.Surname,
-    //         Birth = userTeacher.Registry.Birth ?? null,
-    //         Gender = userTeacher.Registry.Gender,
-    //         Email = userTeacher.Registry.Email ?? null,
-    //         Address = userTeacher.Registry.Address ?? null,
-    //         Telephone = userTeacher.Registry.Telephone ?? null,
-    //     };
-    //
-    //     ///<summary> Try to create an user and registry</summary>
-    //     if (_userRepository.CreateUser(user) && _registryRepository.CreateRegistry(registry))
-    //     {
-    //         var teacher = new Teacher
-    //         {
-    //             Id = new Guid(),
-    //             UserId = user.Id,
-    //             RegistryId = registry.Id,
-    //         };
-    //
-    //         if (this._teacherRepository.CreateTeacher(teacher))
-    //         {
-    //             _transactionRepository.CommitTransaction(transaction);
-    //             return Ok(teacher);
-    //         }
-    //         else
-    //         {
-    //             _transactionRepository.RollbackTransaction(transaction);
-    //             return BadRequest(ModelState);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         _transactionRepository.RollbackTransaction(transaction);
-    //         ModelState.AddModelError("Response", "Teacher is null");
-    //         return BadRequest(ModelState);
-    //     }
-    // }
-    //
-    // #endregion
+    
+    #region Add an UserTeacher
+
+    /// <summary>
+    /// This call is used to create an user which is a Teacher
+    /// </summary>
+    /// <param name="inputUser"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public IActionResult AddUser([FromHeader] string Token, [FromBody] AddEntity inputUser)
+    {
+
+        JwtSecurityToken decodedToken;
+        Guid takenId;
+        string authorizationRole;
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        try
+        {
+            //Decode the token
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
+            takenId = new Guid(decodedToken.Payload["userid"].ToString());
+
+            //Controllo il ruolo dello User tramite l'Id
+            authorizationRole = RoleSearcher.GetRole(takenId, _context);
+
+            if (authorizationRole.Trim().ToLower() != "administrator")
+            {
+                throw new Exception("UNAUTHORIZED");
+            }
+
+            if (new GenericRepository<User>(_context).Exist(el => el.Username == inputUser.User.Username))
+            {
+                throw new Exception("USERNAME_EXISTS");
+            }
+            
+            ///<summary> Create the Registry to add on db, taking the attributes fro= inputUser</summary>
+            var newRegistry = new Registry
+            {
+                Id = Guid.NewGuid(),
+                Name = inputUser.Registry.Name,
+                Surname = inputUser.Registry.Surname,
+                Birth = inputUser.Registry.Birth ?? null,
+                Gender = inputUser.Registry.Gender,
+                Email = inputUser.Registry.Email ?? null,
+                Address = inputUser.Registry.Address ?? null,
+                Telephone = inputUser.Registry.Telephone ?? null,
+            };
+            
+            //Create the user to add on db, taking the attributes from inputUser
+            
+            var newUser = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = inputUser.User.Username,
+                Password = inputUser.User.Password,
+                RegistryId = newRegistry.Id
+            };
+            
+            if (new GenericRepository<Registry>(_context).Create(newRegistry) && new GenericRepository<User>(_context).Create(newUser))
+            {
+                UserRole newUserRole;
+                string roleName = new GenericRepository<Role>(_context)
+                    .GetByIdUsingIQueryable(el =>
+                    el.Where(el => el.Id == inputUser.RoleId)).Name;
+                
+                newUserRole = new UserRole
+                {
+                    RoleId = inputUser.RoleId,
+                    UserId = newUser.Id
+                };
+
+                if (roleName == "student")
+                {
+                    Student newStudent = new Student
+                    {
+                        UserId = newUser.Id,
+                        ClassroomId = inputUser.ClassroomId ?? throw new Exception("UNKNOWN_CLASSROOM")
+                    };
+
+                    if (!new GenericRepository<Student>(_context).Create(newStudent))
+                    {
+                        throw new Exception("NOT_CREATED");
+                    }
+                }
+
+                if (!new GenericRepository<UserRole>(_context).Create(newUserRole))
+                {
+                    throw new Exception("NOT_CREATED");
+                }
+                
+                _transactionRepository.CommitTransaction(transaction);
+                return Ok("The user has successfully created");
+            }
+
+            throw new Exception("NOT_CREATED");
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+    }
+
+    #endregion
     //
     // #region Add an UserStudent
     //

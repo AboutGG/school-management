@@ -8,5 +8,7 @@ public class AddEntity
 
     public UserDto User { get; set; }
 
-    public Classroom? Classroom { get; set; }
+    public Guid? ClassroomId { get; set; }
+
+    public Guid RoleId { get; set; }
 }

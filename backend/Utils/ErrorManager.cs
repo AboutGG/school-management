@@ -21,6 +21,16 @@ public static class ErrorManager
             case "NOT_UPDATED":
                 error = new ErrorResponse(StatusCodes.Status400BadRequest, "The entity is not updated", e.StackTrace);
                 return error;
+            case "USERNAME_EXISTS":
+                error = new ErrorResponse(StatusCodes.Status409Conflict, "The username already exists", e.StackTrace);
+                return error;
+            case "ROLE_NONEXISTENT":
+                error = new ErrorResponse(StatusCodes.Status409Conflict, "The role is not valid", e.StackTrace);
+                return error;
+            case "UNKNOWN_CLASSROOM":
+                error = new ErrorResponse(StatusCodes.Status409Conflict, "The Id classroom is not valid", e.StackTrace);
+                return error;
+                
             default:
                 error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
                 return error;
