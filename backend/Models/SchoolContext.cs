@@ -6,7 +6,7 @@ public class SchoolContext : DbContext
 {
     #region DbSets
     public DbSet<Registry> Registries { get; set; }
-
+    
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Student> Students { get; set; }

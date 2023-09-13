@@ -1,12 +1,9 @@
-using System.Linq.Expressions;
 using AutoMapper;
-using System.Linq.Dynamic;
-using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
-using J2N.Text;
+using iText.StyledXmlParser.Jsoup.Parser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,7 +46,7 @@ public class UsersController : Controller
 
     #endregion
 
-    // #region API calls
+    #region API calls
     //
     // #region Get all users
     //
@@ -321,5 +318,21 @@ public class UsersController : Controller
     //
     // #endregion
     //
-    // #endregion
+
+    [HttpGet("me")]
+    [ProducesResponseType(400)]
+    public IActionResult GetMyDetails([FromHeader] string token)
+    {
+        var loggedUserId = Guid.Parse(JWTHandler.DecodeJwtToken(token).Payload["userid"].ToString());
+        var user = new GenericRepository<User>(_context)
+            .GetAllUsingIQueryable(
+                null,
+                query => query
+                    .Where(el => el.Id == loggedUserId)
+                    .Include(el => el.Student)
+                );
+        
+        return Ok(user);
+    }
+    #endregion
 }

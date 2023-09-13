@@ -156,7 +156,7 @@ public static class Seeder
             },
             new Student()
             {
-                UserId = Guid.Parse("37ce79ab-5b93-44ce-8189-e49ab8e377e2"),
+                UserId = Guid.Parse("37ce79ab-5b93-44ce-8189-e49ab8e377e2"), //donna francisca
                 ClassroomId = Guid.Parse("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
             },
             new Student()
@@ -191,6 +191,13 @@ public static class Seeder
                 UserId = Guid.Parse("1346712f-a66d-4b25-9ff6-cf6b7cd8c954"),
                 SubjectId = Guid.Parse("336d920e-273f-40bd-aed3-17212e2fb2a3"),
                 ClassroomId = Guid.Parse("0ed3811a-0a5c-4ed0-b7db-53090199aa27")
+            },
+            new TeacherSubjectClassroom()
+            {
+                Id = Guid.Parse("0ac0626c-802a-4e59-a54d-8ddc3eab0b61"),
+                UserId = Guid.Parse("affab63e-dec6-4626-abfb-1e52b258cc6c"),
+                SubjectId = Guid.Parse("a907ec00-1577-4a50-ab10-579e071f1e59"),
+                ClassroomId = Guid.Parse("612ce7d2-c15f-4dca-ac34-676e93f6bb0e")
             },
             new TeacherSubjectClassroom()
             {
