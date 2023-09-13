@@ -100,7 +100,7 @@ public class UsersController : Controller
     #region Add an User
 
     /// <summary>
-    /// This call is used to create an user which is a Teacher
+    /// This call is used to create an user and assign to it the role
     /// </summary>
     /// <param name="inputUser"></param>
     /// <returns></returns>
