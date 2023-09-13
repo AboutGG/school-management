@@ -1,4 +1,5 @@
 using AutoMapper;
+using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
@@ -47,51 +48,52 @@ public class UsersController : Controller
     #endregion
 
     #region API calls
-    //
-    // #region Get all users
-    //
-    // /// <summary> Get call on user breakpoint </summary>
-    // /// <returns>All User with filter by role and search</returns>
-    // [HttpGet]
-    // [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
-    // public IActionResult GetUsers([FromQuery] PaginationParams @params)
-    // {
-    //     //check if the order type is valid
-    //     if (@params.OrderType.Trim().ToLower() != "asc" && @params.OrderType.Trim().ToLower() != "desc") 
-    //     {
-    //         return BadRequest($"{@params.OrderType} is not a valid order");
-    //     }
-    //     
-    //     GenericRepository<Registry> registryRepo = new GenericRepository<Registry>(_context);
-    //     //I take all the users using the params element and its includes
-    //     
-    //     ICollection<Registry> registries = registryRepo.GetAll(@params,
-    //         reg => reg.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
-    //                reg.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
-    //         reg => reg.Student,
-    //         reg => reg.Teacher);
-    //     
-    //     //if the role is null returns all the users
-    //     if (@params.Filter == null)
-    //     {
-    //         return Ok(registries);
-    //     }
-    //
-    //     //if the role is not null return the users which have the role equal then params.role
-    //     switch (@params.Filter.Trim().ToLower())
-    //     {
-    //         case "teacher":
-    //             registries = registries.Where(reg => reg.Student == null).ToList();
-    //             return Ok(registries);
-    //         case "student":
-    //             registries = registries.Where(reg => reg.Teacher == null).ToList();
-    //             return Ok(registries);
-    //         default:
-    //             return NotFound($"The Role \"{@params.Filter}\" has not found");
-    //     }
-    // }
-    //
-    // #endregion
+    
+    #region Get all users
+    
+    /// <summary> Get call on user breakpoint </summary>
+    /// <returns>All User with filter by role and search</returns>
+    [HttpGet]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
+    public IActionResult GetUsers([FromQuery] PaginationParams @params)
+    {
+        //check if the order type is valid
+        if (@params.OrderType.Trim().ToLower() != "asc" && @params.OrderType.Trim().ToLower() != "desc") 
+        {
+            return BadRequest($"{@params.OrderType} is not a valid order");
+        }
+        
+        //I take all the users using the params element and its includes
+
+        List<User> users = new GenericRepository<User>(_context).GetAll(@params,
+            reg => reg.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
+                   reg.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
+            reg => reg.Registry);
+        
+        //if the role is null returns all the users
+        if (@params.Filter == null)
+        {
+            return Ok(users);
+        }
+    
+        //if the role is not null return the users which have the role equal then params.role
+        switch (@params.Filter.Trim().ToLower())
+        {
+            case "teacher":
+                users = users.Where(reg => reg.Student == null).ToList();
+                break;
+            case "student":
+                users = users.Where(reg => reg.Student != null).ToList();
+                break;
+            default:
+                return NotFound($"The Role \"{@params.Filter}\" has not found");
+        }
+
+        var mappedUser = _mapper.Map<UserDetailDto>(users);
+        return StatusCode(StatusCodes.Status200OK, users);
+    }
+    
+    #endregion
     //
     // #region Add an UserTeacher
     //
