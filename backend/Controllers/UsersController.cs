@@ -325,13 +325,11 @@ public class UsersController : Controller
     {
         var loggedUserId = Guid.Parse(JWTHandler.DecodeJwtToken(token).Payload["userid"].ToString());
         var user = new GenericRepository<User>(_context)
-            .GetAllUsingIQueryable(
-                null,
+            .GetByIdUsingIQueryable(
                 query => query
                     .Where(el => el.Id == loggedUserId)
                     .Include(el => el.Student)
-                );
-        
+                    .Include(el => el.TeachersSubjectsClassrooms));
         return Ok(user);
     }
     #endregion

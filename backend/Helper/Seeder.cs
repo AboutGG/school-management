@@ -35,37 +35,43 @@ public static class Seeder
             {
                 Id = Guid.Parse("1346712f-a66d-4b25-9ff6-cf6b7cd8c954"),
                 Username = "giop5",
-                Password = "123"
+                Password = "123",
+                RegistryId = Guid.Parse("d7f23f33-ebf2-4716-8c3f-b997ba2da125")
             },
             new User()
             {
                 Id = Guid.Parse("affab63e-dec6-4626-abfb-1e52b258cc6c"),
                 Username = "aboutgg",
-                Password = "123"
+                Password = "123",
+                RegistryId = Guid.Parse("153afc1d-f63f-45aa-ae55-534d4ceeb737")
             },
             new User()
             {
                 Id = Guid.Parse("8af66697-aaf2-44d3-ac9e-b051451fa2ea"),
                 Username = "sidectrl",
-                Password = "nonloso"
+                Password = "nonloso",
+                RegistryId = Guid.Parse("c976d8c8-3aa5-4164-be7c-884ebe29ee1e")
             },
             new User()
             {
                 Id = Guid.Parse("c98b3291-bd68-4f9e-a906-1a273ac9046b"),
                 Username = "angelarmstrong",
-                Password = "nonticonosco"
+                Password = "nonticonosco",
+                RegistryId = Guid.Parse("634477e4-1eeb-4a0d-bb07-c9bd2e3f9702")
             },
             new User()
             {
                 Id = Guid.Parse("37ce79ab-5b93-44ce-8189-e49ab8e377e2"),
                 Username = "donnafrancisca",
-                Password = "ilsegreto"
+                Password = "ilsegreto",
+                RegistryId = Guid.Parse("f833e6a7-f617-4683-a772-b5bcd1971da8")
             },
             new User()
             {
                 Id = Guid.Parse("d0158fc5-3704-4e89-9cd6-11b7e956c774"),
                 Username = "unicornosupremodellemeraviglie",
-                Password = "admin"
+                Password = "admin",
+                RegistryId = Guid.Parse("d2d307bf-eb4e-4a58-afb9-aca5f4c23fce")
             }
         );
 
@@ -198,13 +204,6 @@ public static class Seeder
                 UserId = Guid.Parse("affab63e-dec6-4626-abfb-1e52b258cc6c"),
                 SubjectId = Guid.Parse("a907ec00-1577-4a50-ab10-579e071f1e59"),
                 ClassroomId = Guid.Parse("612ce7d2-c15f-4dca-ac34-676e93f6bb0e")
-            },
-            new TeacherSubjectClassroom()
-            {
-                Id = Guid.Parse("0ac0626c-802a-4e59-a54d-8ddc3eab0b61"),
-                UserId = Guid.Parse("affab63e-dec6-4626-abfb-1e52b258cc6c"),
-                SubjectId = Guid.Parse("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                ClassroomId = Guid.Parse("612ce7d2-c15f-4dca-ac34-676e93f6bb0e")
             }
         );
 
@@ -281,19 +280,19 @@ public static class Seeder
             new StudentExam()
             {
                 UserId = Guid.Parse("c98b3291-bd68-4f9e-a906-1a273ac9046b"),
-                ExamId = Guid.Parse("1c510518-5a4f-496e-9d27-57a23ff4ccb0"),
+                ExamId = Guid.Parse("55988821-2bc3-4122-aa50-e0fb3b8f42ad"),
                 Grade = 6
             },
             new StudentExam()
             {
                 UserId = Guid.Parse("c98b3291-bd68-4f9e-a906-1a273ac9046b"),
-                ExamId = Guid.Parse("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d"),
+                ExamId = Guid.Parse("20ad1b3e-af97-4a45-815b-af9f34e52dc3"),
                 Grade = 9
             },
             new StudentExam()
             {
                 UserId = Guid.Parse("8af66697-aaf2-44d3-ac9e-b051451fa2ea"),
-                ExamId = Guid.Parse("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d"),
+                ExamId = Guid.Parse("20ad1b3e-af97-4a45-815b-af9f34e52dc3"),
                 Grade = 5
             }
         );
