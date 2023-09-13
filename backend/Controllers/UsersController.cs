@@ -50,9 +50,9 @@ public class UsersController : Controller
     #endregion
 
     #region API calls
-    
+
     #region Get all users
-    
+
     /// <summary> Get call on user breakpoint </summary>
     /// <returns>All User with filter by role and search</returns>
     [HttpGet]
@@ -60,24 +60,24 @@ public class UsersController : Controller
     public IActionResult GetUsers([FromQuery] PaginationParams @params)
     {
         //check if the order type is valid
-        if (@params.OrderType.Trim().ToLower() != "asc" && @params.OrderType.Trim().ToLower() != "desc") 
+        if (@params.OrderType.Trim().ToLower() != "asc" && @params.OrderType.Trim().ToLower() != "desc")
         {
             return BadRequest($"{@params.OrderType} is not a valid order");
         }
-        
+
         //I take all the users using the params element and its includes
 
         List<User> users = new GenericRepository<User>(_context).GetAll(@params,
             reg => reg.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
                    reg.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
             reg => reg.Registry);
-        
+
         //if the role is null returns all the users
         if (@params.Filter == null)
         {
             return Ok(users);
         }
-    
+
         //if the role is not null return the users which have the role equal then params.role
         switch (@params.Filter.Trim().ToLower())
         {
@@ -94,9 +94,9 @@ public class UsersController : Controller
         var mappedUser = _mapper.Map<UserDetailDto>(users);
         return StatusCode(StatusCodes.Status200OK, users);
     }
-    
+
     #endregion
-    
+
     #region Add an User
 
     /// <summary>
@@ -132,7 +132,7 @@ public class UsersController : Controller
             {
                 throw new Exception("USERNAME_EXISTS");
             }
-            
+
             ///<summary> Create the Registry to add on db, taking the attributes fro= inputUser</summary>
             var newRegistry = new Registry
             {
@@ -145,9 +145,9 @@ public class UsersController : Controller
                 Address = inputUser.Registry.Address ?? null,
                 Telephone = inputUser.Registry.Telephone ?? null,
             };
-            
+
             //Create the user to add on db, taking the attributes from inputUser
-            
+
             var newUser = new User
             {
                 Id = Guid.NewGuid(),
@@ -155,14 +155,15 @@ public class UsersController : Controller
                 Password = inputUser.User.Password,
                 RegistryId = newRegistry.Id
             };
-            
-            if (new GenericRepository<Registry>(_context).Create(newRegistry) && new GenericRepository<User>(_context).Create(newUser))
+
+            if (new GenericRepository<Registry>(_context).Create(newRegistry) &&
+                new GenericRepository<User>(_context).Create(newUser))
             {
                 UserRole newUserRole;
                 string roleName = new GenericRepository<Role>(_context)
                     .GetByIdUsingIQueryable(el =>
-                    el.Where(el => el.Id == inputUser.RoleId)).Name;
-                
+                        el.Where(el => el.Id == inputUser.RoleId)).Name;
+
                 newUserRole = new UserRole
                 {
                     RoleId = inputUser.RoleId,
@@ -187,7 +188,7 @@ public class UsersController : Controller
                 {
                     throw new Exception("NOT_CREATED");
                 }
-                
+
                 _transactionRepository.CommitTransaction(transaction);
                 return Ok("The user has successfully created");
             }
@@ -203,6 +204,7 @@ public class UsersController : Controller
     }
 
     #endregion
+
     //
     // #region Add an UserStudent
     //
@@ -347,6 +349,8 @@ public class UsersController : Controller
     // #endregion
     //
 
+    #region Get user details
+
     [HttpGet("me")]
     [ProducesResponseType(400)]
     public IActionResult GetMyDetails([FromHeader] string token)
@@ -360,5 +364,66 @@ public class UsersController : Controller
                     .Include(el => el.TeachersSubjectsClassrooms));
         return Ok(user);
     }
+
+    #endregion
+
+
+    #region Edit detail
+
+    //TODO: add role control
+    /// <summary> Edit the Teacher or Student details. </summary>
+    /// <param name="Id"></param>
+    /// <param name="updatedUserDetail"></param>
+    /// <returns>204 = Successfully, 404 = not found the id, 400 = bad request</returns>
+    [HttpPut("{Id}")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    public IActionResult UpdateUser(Guid Id,
+        [FromBody] RegistryDto updatedRegistry) // i pass the user's Id
+    {
+        //start transaction
+        var transaction = _transactionRepository.BeginTransaction();
+        try
+        {
+            if (updatedRegistry == null || Id == null)
+                throw new Exception("INVALID_PARAMETERS");
+
+            // take the user which we need to update
+            Registry takenRegistry = new GenericRepository<User>(_context)
+                .GetByIdUsingIQueryable(
+                    query => query
+                        .Where(user => user.Id == Id)
+                        .Include(user => user.Registry)).Registry;
+
+            //Update taken registry
+            takenRegistry.Name = updatedRegistry.Name;
+            takenRegistry.Surname = updatedRegistry.Surname;
+            takenRegistry.Birth = updatedRegistry.Birth;
+            takenRegistry.Address = updatedRegistry.Address;
+            takenRegistry.Email = updatedRegistry.Email;
+            takenRegistry.Gender = updatedRegistry.Gender;
+            takenRegistry.Telephone = updatedRegistry.Telephone;
+
+
+            if (!new GenericRepository<Registry>(_context).UpdateEntity(takenRegistry)) //update the user's registry
+            {
+                throw new Exception("NOT_UPDATED");
+            }
+
+            _transactionRepository.CommitTransaction(transaction); //accept the changes
+            return Ok("Edit successfully");
+        }
+        catch (Exception e)
+        {
+            //rollback when i can't update an Entity
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+    }
+
+    #endregion
+
     #endregion
 }

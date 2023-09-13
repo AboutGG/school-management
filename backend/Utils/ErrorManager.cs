@@ -30,7 +30,9 @@ public static class ErrorManager
             case "UNKNOWN_CLASSROOM":
                 error = new ErrorResponse(StatusCodes.Status409Conflict, "The Id classroom is not valid", e.StackTrace);
                 return error;
-                
+            case "INVALID_PARAMETERS":
+                error = new ErrorResponse(StatusCodes.Status409Conflict, "The paremeters aren't valid", e.StackTrace);
+                return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
                 return error;
