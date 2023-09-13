@@ -12,8 +12,19 @@ public class MappingProfiles : Profile
         CreateMap<UserDto, User>();
         CreateMap<RegistryDto, Registry>();
         CreateMap<Registry, RegistryDto>();
+        CreateMap<UserRole, UserRoleDto>();
         
-        
+        CreateMap<User, UserDetailDto>()
+            .ForMember(destinationMember => destinationMember.Registry,
+                opt => opt
+                    .MapFrom(src => src.Registry))
+            .ForMember(destinationMember => destinationMember.Roles, 
+                opt => opt
+                    .MapFrom(src => src.UsersRoles.Select(el => el.Role)))
+            .ForMember(destinationMember => destinationMember.Classrooms, 
+                opt => opt
+                    .MapFrom(src => 
+                        src.Student.Classroom.Name));
         
         // CreateMap<User, UserDetailDto>()
         //     .ForMember(dest => dest.Registry,
