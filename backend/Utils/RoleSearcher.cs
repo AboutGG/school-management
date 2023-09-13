@@ -13,7 +13,7 @@ public static class RoleSearcher
         UserRole takenUser = usersRepository.GetByIdUsingIQueryable(query => query
             .Where(el => el.UserId == userId)
             .Include(el => el.Role));
-        string role = takenUser.Role.Name != null ? "student" : takenUser.Role.Name != null ? "teacher" : "unknown";
+        string role = takenUser.Role.Name;
         return role;
     }
 }
