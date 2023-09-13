@@ -97,7 +97,7 @@ public class UsersController : Controller
     
     #endregion
     
-    #region Add an UserTeacher
+    #region Add an User
 
     /// <summary>
     /// This call is used to create an user which is a Teacher
