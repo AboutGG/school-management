@@ -64,7 +64,7 @@ public class TeachersController : Controller
                 throw new Exception("NOT_FOUND");
 
             var classrooms = new GenericRepository<Teacher>(_context)
-                .GetAll2(@params,
+                .GetAllUsingIQueryable(@params,
                     query => query
                         .Include(teacher => teacher.TeachersSubjectsClassrooms)
                         .ThenInclude(tsc => tsc.Classroom.Students)
@@ -131,7 +131,7 @@ public class TeachersController : Controller
             else
             {
                 //Prendo le materie che insegna il professore con le relative classi
-                var resultTeacher = new GenericRepository<Teacher>(_context).GetById2(query => query
+                var resultTeacher = new GenericRepository<Teacher>(_context).GetByIdUsingIQueryable(query => query
                     .Where(el => el.UserId == takenId)
                     .Include(el => el.Registry)
                     .Include(el => el.TeachersSubjectsClassrooms)
@@ -194,7 +194,9 @@ public class TeachersController : Controller
             );
             if (@params.Filter != null)
                 dummy = dummy.Where(el =>
-                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower())
+                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                        || el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                        )
                     .ToList();
             return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
         }
@@ -223,7 +225,7 @@ public class TeachersController : Controller
         IGenericRepository<StudentExam> studentExamGenericRepository = new GenericRepository<StudentExam>(_context);
         try
         {
-            Exam takenExam = examGenericRepository.GetById2(query => query
+            Exam takenExam = examGenericRepository.GetByIdUsingIQueryable(query => query
                 .Where(el => el.Id.ToString() == id)
                 .Include(el => el.TeacherSubjectClassroom.Subject)
                 .Include(el => el.StudentExams)
@@ -232,7 +234,7 @@ public class TeachersController : Controller
             );
             @params.Order = "Student.Registry." + $"{@params.Order}";
             takenExam.StudentExams = new GenericRepository<StudentExam>(_context)
-                .GetAll2(@params, el => takenExam.StudentExams.AsQueryable()
+                .GetAllUsingIQueryable(@params, el => takenExam.StudentExams.AsQueryable()
                     .Where(el => el.Student.Registry.Name.Trim().ToLower()
                                      .Contains(@params.Search.Trim().ToLower())
                                  || el.Student.Registry.Surname.Trim().ToLower()

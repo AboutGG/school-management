@@ -67,7 +67,7 @@ public class DetailsController : Controller
         if (role == "teacher")
         {
             response = new GenericRepository<Teacher>(_context)
-                .GetAll2(null,
+                .GetAllUsingIQueryable(null,
                     query => query
                         .Include(t => t.Registry)
                 ).FirstOrDefault(u => u.UserId ==  Id).Registry;
@@ -76,7 +76,7 @@ public class DetailsController : Controller
         if (role == "student")
         {
             response = new GenericRepository<Student>(_context)
-                .GetAll2(null,
+                .GetAllUsingIQueryable(null,
                     query => query
                         .Include(t => t.Registry)
                 ).FirstOrDefault(u => u.UserId ==  Id).Registry;
@@ -95,7 +95,8 @@ public class DetailsController : Controller
             email = response.Email,
             telephone = response.Telephone,
             address = response.Address,
-            birth = response.Birth.ToString()
+            birth = response.Birth.ToString(),
+            role = RoleSearcher.GetRole(Id, _context)
         };
         return Ok(x);
     }

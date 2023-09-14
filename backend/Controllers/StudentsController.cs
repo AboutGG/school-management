@@ -93,7 +93,7 @@ public class StudentsController : Controller
                 }
                 
                 //Prendo le materie che pratica lo studente nella sua classe
-                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAll2(
+                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(
                     @params,
                     query => query
                         .Where(el => el.ClassroomId == studentclassroomId)
@@ -137,7 +137,7 @@ public class StudentsController : Controller
             
             //Take the student using the id
             Student takenStudent = new GenericRepository<Student>(_context)
-                .GetById2(
+                .GetByIdUsingIQueryable(
                     query => query
                         .Where(el => el.UserId == takenId)
                         .Include(el=> el.Registry)
