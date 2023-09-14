@@ -83,16 +83,10 @@ public class MappingProfiles : Profile
                     .MapFrom(src => src.TeachersSubjectsClassrooms
                         .Select( el => new SubjectClassroomDto
                         {
-                            Subject = new SubjectDto
-                            {
-                                Id = el.SubjectId,
-                                Name = el.Subject.Name
-                            },
-                            Classroom = new ClassroomDto
-                            {
-                                Id = el.ClassroomId,
-                                Name = el.Classroom.Name
-                            }
+                            SubjectId = el.SubjectId,
+                            ClassroomId = el.ClassroomId,
+                            SubjectName = el.Subject.Name,
+                            ClassroomName = el.Classroom.Name
                         })
                     ));
 
