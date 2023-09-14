@@ -95,7 +95,8 @@ public class DetailsController : Controller
             email = response.Email,
             telephone = response.Telephone,
             address = response.Address,
-            birth = response.Birth.ToString()
+            birth = response.Birth.ToString(),
+            role = RoleSearcher.GetRole(Id, _context)
         };
         return Ok(x);
     }
