@@ -50,49 +50,39 @@ public class UsersController : Controller
     #endregion
 
     #region API calls
-
+    
     #region Get all users
-
+    
     /// <summary> Get call on user breakpoint </summary>
     /// <returns>All User with filter by role and search</returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
-    public IActionResult GetUsers([FromQuery] PaginationParams @params)
+    [ProducesResponseType(200, Type = typeof(List<UserList>))]
+    public IActionResult GetUsers([FromQuery] PaginationParams @params, [FromHeader] string token)
     {
-        //check if the order type is valid
-        if (@params.OrderType.Trim().ToLower() != "asc" && @params.OrderType.Trim().ToLower() != "desc")
-        {
-            return BadRequest($"{@params.OrderType} is not a valid order");
-        }
+        // //if the role is not null return the users which have the role equal then params.role
+        // switch (@params.Filter.Trim().ToLower())
+        // {
+        //     case "teacher":
+        //         users = users.Where(reg => reg.Student == null).ToList();
+        //         break;
+        //     case "student":
+        //         users = users.Where(reg => reg.Student != null).ToList();
+        //         break;
+        //     default:
+        //         return NotFound($"The Role \"{@params.Filter}\" has not found");
+        // }
 
-        //I take all the users using the params element and its includes
-
-        List<User> users = new GenericRepository<User>(_context).GetAll(@params,
-            reg => reg.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
-                   reg.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
-            reg => reg.Registry);
-
-        //if the role is null returns all the users
-        if (@params.Filter == null)
-        {
-            return Ok(users);
-        }
-
-        //if the role is not null return the users which have the role equal then params.role
-        switch (@params.Filter.Trim().ToLower())
-        {
-            case "teacher":
-                users = users.Where(reg => reg.Student == null).ToList();
-                break;
-            case "student":
-                users = users.Where(reg => reg.Student != null).ToList();
-                break;
-            default:
-                return NotFound($"The Role \"{@params.Filter}\" has not found");
-        }
-
-        var mappedUser = _mapper.Map<UserDetailDto>(users);
-        return StatusCode(StatusCodes.Status200OK, users);
+        var users = new GenericRepository<User>(_context)
+            .GetAllUsingIQueryable(
+                @params,
+                queryFunc => queryFunc
+                    .Where(el => 
+                        el.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
+                        || 
+                        el.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()))
+                    .Include(u => u.Registry));
+        var prova = _mapper.Map<List<UserList>>(users);
+        return Ok(prova);
     }
 
     #endregion
@@ -132,7 +122,7 @@ public class UsersController : Controller
             {
                 throw new Exception("USERNAME_EXISTS");
             }
-
+            
             ///<summary> Create the Registry to add on db, taking the attributes fro= inputUser</summary>
             var newRegistry = new Registry
             {
@@ -145,9 +135,9 @@ public class UsersController : Controller
                 Address = inputUser.Registry.Address ?? null,
                 Telephone = inputUser.Registry.Telephone ?? null,
             };
-
+            
             //Create the user to add on db, taking the attributes from inputUser
-
+            
             var newUser = new User
             {
                 Id = Guid.NewGuid(),
@@ -155,15 +145,14 @@ public class UsersController : Controller
                 Password = inputUser.User.Password,
                 RegistryId = newRegistry.Id
             };
-
-            if (new GenericRepository<Registry>(_context).Create(newRegistry) &&
-                new GenericRepository<User>(_context).Create(newUser))
+            
+            if (new GenericRepository<Registry>(_context).Create(newRegistry) && new GenericRepository<User>(_context).Create(newUser))
             {
                 UserRole newUserRole;
                 string roleName = new GenericRepository<Role>(_context)
                     .GetByIdUsingIQueryable(el =>
-                        el.Where(el => el.Id == inputUser.RoleId)).Name;
-
+                    el.Where(el => el.Id == inputUser.RoleId)).Name;
+                
                 newUserRole = new UserRole
                 {
                     RoleId = inputUser.RoleId,
@@ -188,7 +177,7 @@ public class UsersController : Controller
                 {
                     throw new Exception("NOT_CREATED");
                 }
-
+                
                 _transactionRepository.CommitTransaction(transaction);
                 return Ok("The user has successfully created");
             }
@@ -204,108 +193,28 @@ public class UsersController : Controller
     }
 
     #endregion
+    
+    #region Get Registry of user
 
-    //
-    // #region Add an UserStudent
-    //
-    // /// <summary>
-    // /// This call is used to create an user which is a Teacher
-    // /// </summary>
-    // /// <param name="userDetail"></param>
-    // /// <returns></returns>
-    // [HttpPost("student")]
-    // [ProducesResponseType(204)]
-    // [ProducesResponseType(400)]
-    // public IActionResult AddUserStudent([FromBody] AddEntity userStudent)
-    // {
-    //     if (userStudent == null
-    //         || userStudent.Classroom == null
-    //         || userStudent.User == null ||
-    //         userStudent.Registry == null
-    //        )
-    //     {
-    //         return BadRequest(ModelState);
-    //     }
-    //
-    //
-    //     if (_userRepository.UserExists(userStudent.User.Username))
-    //     {
-    //         ModelState.AddModelError("response", "User already exist");
-    //         return StatusCode(422, ModelState);
-    //     }
-    //
-    //     ///<summary> start transaction </summary>
-    //     var transaction = _transactionRepository.BeginTransaction();
-    //
-    //     ///<summary> Create the user to add on db, taking the attributes from userStudent</summary>
-    //     var user = new User
-    //     {
-    //         Id = new Guid(),
-    //         Username = userStudent.User.Username,
-    //         Password = userStudent.User.Password,
-    //     };
-    //
-    //     ///<summary> Create the Registry to add on db, taking the attributes from userStudent</summary>
-    //     var registry = new Registry
-    //     {
-    //         Id = new Guid(),
-    //         Name = userStudent.Registry.Name,
-    //         Surname = userStudent.Registry.Surname,
-    //         Birth = userStudent.Registry.Birth ?? null,
-    //         Gender = userStudent.Registry.Gender,
-    //         Email = userStudent.Registry.Email ?? null,
-    //         Address = userStudent.Registry.Address ?? null,
-    //         Telephone = userStudent.Registry.Telephone ?? null,
-    //     };
-    //
-    //     ///<summary> Try to create an user and registry</summary>
-    //     if (_userRepository.CreateUser(user) && _registryRepository.CreateRegistry(registry))
-    //     {
-    //         var student = new Student()
-    //         {
-    //             Id = new Guid(),
-    //             UserId = user.Id,
-    //             RegistryId = registry.Id,
-    //             ClassroomId = userStudent.Classroom.Id,
-    //         };
-    //
-    //         if (this._studentRepository.CreateStudent(student))
-    //         {
-    //             _transactionRepository.CommitTransaction(transaction);
-    //             return Ok(student);
-    //         }
-    //         else
-    //         {
-    //             _transactionRepository.RollbackTransaction(transaction);
-    //             return BadRequest(ModelState);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         _transactionRepository.RollbackTransaction(transaction);
-    //         ModelState.AddModelError("Response", "Student is null");
-    //         return BadRequest(ModelState);
-    //     }
-    // }
-    //
-    // #endregion
-    //
-    // #region Pdf for circular and table
-    //
-    // [HttpPost]
-    // [Route("pdf")]
-    // public IActionResult GetUsersOnPdf([FromBody] Circular? data, [FromQuery] string type = "table")
-    // {
-    //     ///<summary>We return a Bytes array because the PDF is a sequence of binary bytes to represent the document content compactly. </summary>
-    //    
-    //     var stream = PDF.GeneratePdf(type,  _mapper.Map<List<UserDto>>(_userRepository.GetUsers()), data);
-    //     
-    //     // Returns the PDF
-    //     return File(stream, "application/pdf", "generated.pdf");
-    //
-    // }
-    //
-    // #endregion
+    [HttpGet]
+    [Route("{id}")]
+    public IActionResult GetRegistry([FromRoute] Guid id, [FromHeader] string token)
+    {
+        var user = new GenericRepository<User>(_context)
+            .GetByIdUsingIQueryable(query => query
+                .Include(el => el.Registry)
+                .Include(el => el.UsersRoles)
+                .ThenInclude(el => el.Role)
+                .Include(el => el.Student.Classroom)
+                .Include(el => el.TeachersSubjectsClassrooms)
+                .ThenInclude(el => el.Classroom));
+                
+        var request = _mapper.Map<UserDetailDto>(user);
+        return Ok(request);
+    }
+    
+    #endregion
+    
     //
     // #region Delete an User
     //

@@ -5,8 +5,6 @@ namespace backend.Dto;
 
 public class UserDto
 {
-    [JsonIgnore]
-    public Guid Id { get; set; }
     /// <summary> User username </summary>
     [StringValidator(3, ErrorMessage = "Username cannot contain less then 3 character")]
     public string Username { get; set; }

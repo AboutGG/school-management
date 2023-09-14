@@ -8,58 +8,40 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMap<User, UserDto>();
-        CreateMap<UserDto, User>();
+        // CreateMap<User, UserDto>();
+        // CreateMap<UserDto, User>();
         CreateMap<RegistryDto, Registry>();
         CreateMap<Registry, RegistryDto>();
-        CreateMap<UserRole, UserRoleDto>();
+        CreateMap<Role, RoleDto>();
         
+
+        CreateMap<User, UserList>();
+
+
         CreateMap<User, UserDetailDto>()
-            .ForMember(destinationMember => destinationMember.Registry,
+            .ForMember(dest => dest.Roles,
                 opt => opt
-                    .MapFrom(src => src.Registry))
-            .ForMember(destinationMember => destinationMember.Roles, 
+                    .MapFrom(user => user.UsersRoles.Select(el => el.Role)))
+            .ForMember(dest => dest.Classroom, 
                 opt => opt
-                    .MapFrom(src => src.UsersRoles.Select(el => el.Role)))
-            .ForMember(destinationMember => destinationMember.Classrooms, 
-                opt => opt
-                    .MapFrom(src => 
-                        src.Student.Classroom.Name));
-        
-        // CreateMap<User, UserDetailDto>()
-        //     .ForMember(dest => dest.Registry,
-        //         opt => opt
-        //             .MapFrom(src => src.Teacher != null ? src.Teacher.Registry : src.Student.Registry))
-        //     .ForPath(dest => dest.User.Id,
-        //         opt => opt
-        //             .MapFrom(user => user.Id))
-        //     .ForPath(dest => dest.User.Username,
-        //         opt => opt
-        //             .MapFrom(user => user.Username))
-        //     .ForPath(dest => dest.User.Password,
-        //         opt => opt
-        //             .MapFrom(user => user.Password));
-        
-        CreateMap<User, UserDto>();
+                    .MapFrom(el => el.Student.Classroom == null ? 
+                                   el.TeachersSubjectsClassrooms
+                                       .Select(r => r.Classroom) : null));
 
-        CreateMap<Classroom, ClassroomStudentCount>()
-            .ForMember(dest => dest.id_classroom,
-                opt => opt
-                    .MapFrom(src => src.Id))
-            .ForMember(dest => dest.name_classroom,
-                opt => opt
-                    .MapFrom(src => src.Name))
-            .ForMember(dest => dest.student_count,
-                opt => opt
-                    .MapFrom(src => src.Students.Count()));
+        // .ForMember(destinationMember => destinationMember.Roles,
+        //     opt => opt
+        //         .MapFrom(src => src.UsersRoles.Select(el => el.Role)));
+        // .ForMember(destinationMember => destinationMember.Classrooms, 
+        //     opt => opt
+        //         .MapFrom(src => 
+        //             src.Student.Classroom.Name));
 
-        CreateMap<Classroom, ClassroomDto>()
-            .ForMember(dest => dest.Id,
-                opt => opt
-                    .MapFrom(src => src.Id))
-            .ForMember(dest => dest.Name,
-                opt => opt
-                    .MapFrom(src => src.Name));
+
+        // CreateMap<User, UserDto>();
+        //
+        CreateMap<Classroom, ClassroomStudentCount>();
+        CreateMap<Classroom, ClassroomDto>();
+        CreateMap<ClassroomDto, Classroom>();
 
         // CreateMap<Teacher, TeacherDto>()
         //     .ForMember(destinationMember => destinationMember.id,
@@ -112,20 +94,20 @@ public class MappingProfiles : Profile
         //         opt => opt
         //             .MapFrom(src => src.Teacher));
 
-        CreateMap<Exam, TeacherExamDto>()
-            .ForMember(destinationMember => destinationMember.ExamId,
-                opt => opt
-                    .MapFrom(src => src.Id))
-            .ForMember(destinationMember => destinationMember.ExamDate, 
-                opt => opt
-                    .MapFrom(src => src.ExamDate))
-            .ForMember(destinationMember => destinationMember.Classroom,
-                opt => opt
-                    .MapFrom(src => src.TeacherSubjectClassroom.Classroom.Name))
-            .ForMember(destinationMember => destinationMember.Subject,
-                opt => opt
-                    .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
-        
+        // CreateMap<Exam, TeacherExamDto>()
+        //     .ForMember(destinationMember => destinationMember.ExamId,
+        //         opt => opt
+        //             .MapFrom(src => src.Id))
+        //     .ForMember(destinationMember => destinationMember.ExamDate, 
+        //         opt => opt
+        //             .MapFrom(src => src.ExamDate))
+        //     .ForMember(destinationMember => destinationMember.Classroom,
+        //         opt => opt
+        //             .MapFrom(src => src.TeacherSubjectClassroom.Classroom.Name))
+        //     .ForMember(destinationMember => destinationMember.Subject,
+        //         opt => opt
+        //             .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
+
         // CreateMap<Student, StudentDto>()
         //     .ForMember(destinationMember => destinationMember.id,
         //         opt => opt
@@ -167,18 +149,18 @@ public class MappingProfiles : Profile
         //     .ForMember(destinationMember => destinationMember.Student,
         //         opt => opt
         //             .MapFrom(src => src.Student));
-        
-        CreateMap<Exam, ExamDto>()
-            .ForMember(destinationMember => destinationMember.StudentExams,
-                opt => opt
-                    .MapFrom(src => src.StudentExams))
-            .ForMember(destinationMember => destinationMember.ExamDate,
-                opt => opt
-                    .MapFrom(src => src.ExamDate))
-            .ForMember(destinationMember => destinationMember.Subject,
-                opt => opt
-                    .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
-        
-        
+
+        // CreateMap<Exam, ExamDto>()
+        //     .ForMember(destinationMember => destinationMember.StudentExams,
+        //         opt => opt
+        //             .MapFrom(src => src.StudentExams))
+        //     .ForMember(destinationMember => destinationMember.ExamDate,
+        //         opt => opt
+        //             .MapFrom(src => src.ExamDate))
+        //     .ForMember(destinationMember => destinationMember.Subject,
+        //         opt => opt
+        //             .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
+
+
     }
 }

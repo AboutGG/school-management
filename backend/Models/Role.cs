@@ -13,6 +13,5 @@ public class Role
     [Column("name")]
     [JsonPropertyName("name")]
     public string Name { get; set; }
-
-    public List<UserRole> UsersRoles { get; set; }
+    public virtual List<UserRole> UsersRoles { get; set; }
 }
