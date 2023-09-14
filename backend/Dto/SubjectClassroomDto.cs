@@ -2,6 +2,8 @@ namespace backend.Dto;
 
 public class SubjectClassroomDto
 {
-    public SubjectDto Subject { get; set; }
-    public ClassroomDto Classroom { get; set; }
+    public Guid SubjectId { get; set; }
+    public string SubjectName { get; set; }
+    public Guid ClassroomId { get; set; }
+    public String ClassroomName { get; set; }
 }
