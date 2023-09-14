@@ -194,7 +194,9 @@ public class TeachersController : Controller
             );
             if (@params.Filter != null)
                 dummy = dummy.Where(el =>
-                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower())
+                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                        || el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                        )
                     .ToList();
             return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
         }
