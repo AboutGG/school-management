@@ -28,6 +28,7 @@ export interface Registry {
   email?: string;
   address?: string;
   telephone?: string; //date format "yyyy-mm-dd"
+  role: string;
 
   teacher?: Teacher;
   student?: Student;
@@ -63,7 +64,7 @@ export interface StudentExams {
 }
 export interface Classroom {
   id_classroom?: string;
-  name_classroom: string;
+  name: string;
   student_count?: number;
 }
 

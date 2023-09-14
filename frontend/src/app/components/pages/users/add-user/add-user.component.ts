@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { UsersService } from "src/app/shared/service/users.service";
 import { ActivatedRoute } from "@angular/router";
 import { Classroom } from "src/app/shared/models/users";
+import { Registry } from "src/app/shared/models/users";
 
 @Component({
   selector: "app-add-user",
@@ -15,9 +16,10 @@ export class AddUserComponent implements OnInit {
   gender: string = "";
   alert: boolean = false;
   classes: Classroom[] = [];
+  idUser!: string;
 
   constructor(
-    private serviceUsers: UsersService,
+    private usersService: UsersService,
     private route: ActivatedRoute
   ) {}
 
@@ -46,10 +48,13 @@ export class AddUserComponent implements OnInit {
 
     // per la creazione del wizard
     this.route.queryParams.subscribe((params) => {
-      const mode = params["mode"];
-      if (mode === "edit") {
+      const mode = params['mode'];
+      console.log(mode);
+      
+      if (mode === 'edit') {
         // mi serve caricare i dati dell'utente selezionato
-        this.getDataUser(); // devo creare la funzione che si prende i dati dell'utente e li torna
+        this.idUser = this.route.snapshot.params['idUser'];
+        this.getDataUser(this.idUser); 
       } else {
         this.usersForm.reset();
       }
@@ -72,12 +77,11 @@ export class AddUserComponent implements OnInit {
   }
 
   onClickClassroom(className: string) {
-    this.classes.map(classroom => {
-      classroom.name_classroom = className 
-      this.usersForm.get(className)!.setValue(classroom.name_classroom)
-    })
+    this.classes.map((classroom) => {
+      classroom.name = className;
+      this.usersForm.get(className)!.setValue(classroom.name);
+    });
   }
-
 
   getClassroomValidators(): any {
     if (this.role === "studente") {
@@ -90,13 +94,13 @@ export class AddUserComponent implements OnInit {
     return !!formControl && formControl.invalid;
   }
 
-
   onAddUser() {
-    if (this.usersForm.valid && this.role === "insegnante") {this.role = "teacher"
-      this.serviceUsers.addUser(this.usersForm.value, this.role).subscribe({
+    if (this.usersForm.valid && this.role === "insegnante") {
+      this.role = "teacher";
+      this.usersService.addUser(this.usersForm.value, this.role).subscribe({
         next: (res) => {
           console.log("ruolo", this.role);
-          
+
           console.log("tentativo", res);
         },
         error: (error) => {
@@ -104,12 +108,12 @@ export class AddUserComponent implements OnInit {
         },
       });
     } else {
-      if (this.usersForm.valid && this.usersForm.value.classroom !== null) { this.role = "student"
-        this.serviceUsers.addUser(this.usersForm.value, this.role).subscribe({
+      if (this.usersForm.valid && this.usersForm.value.classroom !== null) {
+        this.role = "student";
+        this.usersService.addUser(this.usersForm.value, this.role).subscribe({
           next: (res) => {
             console.log(res);
-                      console.log("ruolo", this.role);
-
+            console.log("ruolo", this.role);
           },
           error: (error) => {
             console.log(error);
@@ -118,11 +122,11 @@ export class AddUserComponent implements OnInit {
       }
     }
   }
-  
+
   // onAddUser() {
   //   console.log("onAddUser", this.role, this.usersForm.value);
   //   if (this.usersForm.valid && this.role === "insegnante") {
-  //     this.serviceUsers.addTeacher(this.usersForm.value, this.role).subscribe({
+  //     this.usersService.addTeacher(this.usersForm.value, this.role).subscribe({
   //       next: (res) => {
   //         console.log("tentativo", res);
   //       },
@@ -132,7 +136,7 @@ export class AddUserComponent implements OnInit {
   //     });
   //   } else {
   //     if (this.usersForm.valid && this.usersForm.value.classroom !== null) {
-  //       this.serviceUsers.addStudent(this.usersForm.value, this.role).subscribe({
+  //       this.usersService.addStudent(this.usersForm.value, this.role).subscribe({
   //         next: (res) => {
   //           console.log(res);
   //         },
@@ -144,12 +148,26 @@ export class AddUserComponent implements OnInit {
   //   }
   // }
 
-  getDataUser() {
-    this.serviceUsers.getUsers;
+  getDataUser(idUser: string) {
+    this.usersService.getDetailsUser(idUser).subscribe((userData: Registry) => {
+      this.usersForm.patchValue({ 
+        name: userData.name, 
+        surname: userData.surname, 
+      })
+    });
   }
 
+  // getDataUser() {
+  //   const idUser = this.route.snapshot.params["idUser"];
+  //   console.log(idUser);
+  //   this.usersService.getDetailsUser(idUser).subscribe((res: Registry) => {
+  //     console.log(res);
+  //     this.getDataUser;
+  //   });
+  // }
+
   getClassroom() {
-    this.serviceUsers.getClassroom().subscribe((data) => {
+    this.usersService.getClassroom().subscribe((data) => {
       this.classes = data;
       console.log(this.classes);
     });
