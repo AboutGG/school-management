@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { Registry } from 'src/app/shared/models/users';
-import { UsersService } from 'src/app/shared/service/users.service';
+import { Classroom, Teacher, TeacherExams, TeacherSubjects, Teachers } from 'src/app/shared/models/users';
+import { ClassroomService } from 'src/app/shared/service/classroom.service';
+import { ExamsService } from 'src/app/shared/service/exams.service';
+import { TeacherService } from 'src/app/shared/service/teacher.service';
 
 @Component({
   selector: 'app-examslist',
@@ -8,46 +10,41 @@ import { UsersService } from 'src/app/shared/service/users.service';
   styleUrls: ['./examslist.component.scss']
 })
 export class ExamslistComponent {
-  constructor(private usersService: UsersService) {}
+  constructor(private examsService: ExamsService, private teacherService: TeacherService, private classroomService: ClassroomService) { }
 
-  ngOnInit(): void {
-    this.getData("Name", "asc", "name");    
-  }
-
-  users: Registry[] = [];
-  matter: string = "";
-  action: string = "";
+  examsList!: TeacherExams[]
+  subject!: string
+  filteredSubject!: string
+  subjects: string[] = []
+  // teacherSubjects!: TeacherSubjects[]
+  teacher!: Teacher
+  classroom!: string
+  classrooms: string[] = []
   orders = {
     name: 'asc',
     surname: 'asc',
     birth: 'asc'
   }
-
-  onClickMatter(matter: string): void {
-    this.matter = matter;
+  
+  ngOnInit(): void {
+    this.getTeacherExams();
+    this.getTeacherClassrooms();
+    this.getTeacherSubjects();
   }
 
-  onClickAction(action: string): void {
-    this.action = action;
-  }
-
-  
-  
-
-  getData(order: string, type: 'asc' | 'desc', id: keyof typeof this.orders): void {
-    this.usersService.getUsers().subscribe({
-      next: (data: Registry[]) => {
-        this.orders = {
-          name: 'asc',
-          surname: 'asc',
-          birth: 'asc',
-          [id]: type
-        };
+  getTeacherExams(): void {
+    this.examsService.getTeacherExams().subscribe({
+      next: (data: TeacherExams[]) => {
+        // this.orders = {
+        //   name: 'asc',
+        //   surname: 'asc',
+        //   birth: 'asc',
+        //   [id]: type
+        // };
         // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
         // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
         // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
-
-        this.users = data;
+        this.examsList = data
       },
       error: (error) => {
         console.log(error);
@@ -55,14 +52,43 @@ export class ExamslistComponent {
     });
   }
 
-  getExamData(order: string, type: string, matter: string) {
-    // this.usersService.getMatter(order, type, matter).subscribe({
-    //   next: (data: Registry[]) => {
-    //     this.users = data
-    //   },
-    //   error: (error: any) => {
-    //     console.log(error);
-    //   }
-    // });
+  getTeacherClassrooms() {
+    this.teacherService.getDataClassroom().subscribe({
+      next: (data) => {
+        data.map(classroom =>{
+          this.classrooms.push(classroom.name_classroom);
+        })
+      }
+    });
   }
+
+  getTeacherSubjects() {
+    this.teacherService.getTeacherSubjects().subscribe({
+      next: (data) => {
+        data.subjects.map(subjects => {
+          this.subjects.push(subjects.subject.name)
+        })
+      }
+    });
+  }
+
+  filterBySubject(subject: string): void {
+    this.subject = subject;
+  }
+
+  filterByClassroom(classroom: string): void {
+    this.classroom = classroom;
+  }
+  
+
+  // getExamData(order: string, type: string, matter: string) {
+  //   this.usersService.getMatter(order, type, matter).subscribe({
+  //     next: (data: Registry[]) => {
+  //       this.users = data
+  //     },
+  //     error: (error: any) => {
+  //       console.log(error);
+  //     }
+  //   });
+  // }
 }

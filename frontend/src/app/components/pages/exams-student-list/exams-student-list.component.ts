@@ -39,7 +39,7 @@ export class ExamsStudentListComponent implements OnInit {
   // }
 
   getExams() {
-    this.examsService.getExams().subscribe(data => {
+    this.examsService.getStudentExams().subscribe(data => {
       this.examsList = data
       console.log(data);
     })

@@ -4,8 +4,6 @@ export interface Users {
   registry: Registry
 }
 
-
-
 export interface User {
   id?: string
   username: string
@@ -45,10 +43,36 @@ export interface StudentExams {
     }
   ]
 }
+
+export interface TeacherExams {
+  examId: string,
+  examDate: string,
+  classroom: string,
+  subject: string
+}
+
 export interface Classroom {
   id_classroom?: string;
   name_classroom: string;
   student_count: number;
+}
+
+export interface Teacher {
+  id: string,
+  name: string,
+  surname: string,
+  subjects: TeacherSubjects[]
+}
+
+export interface TeacherSubjects {
+  subject: {
+    id: string
+    name: string
+  },
+  classroom: {
+    id: string,
+    name: string
+  }
 }
 
 export interface Teachers {
@@ -67,4 +91,3 @@ export interface ClassDetails {
   teachers: Teachers[];
   students: Students[];
 }
-
