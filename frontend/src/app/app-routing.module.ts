@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'teachers/classes', component: ClassesComponent, canActivate: [AuthGuard] },
   { path: 'students/classes', component: ShowClassComponent, canActivate: [AuthGuard] },
   { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard]},
-  { path: "subjects/teacher", component:SubjectsComponent, canActivate: [AuthGuard] },
+  { path: "teachers/subjects", component:SubjectsComponent, canActivate: [AuthGuard] },
   { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },
   { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard] },

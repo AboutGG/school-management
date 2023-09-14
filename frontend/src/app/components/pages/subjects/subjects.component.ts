@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Teachers } from 'src/app/shared/models/users';
+import { Teacher, Teachers } from 'src/app/shared/models/users';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 
 @Component({
@@ -8,28 +8,29 @@ import { ClassroomService } from 'src/app/shared/service/classroom.service';
   templateUrl: './subjects.component.html',
   styleUrls: ['./subjects.component.scss']
 })
-export class SubjectsComponent {
+export class SubjectsComponent implements OnInit {
 
-  teacherSubjects : any;
+  teachers: Teacher[] = []
 
   constructor(private classroomService: ClassroomService) {}
 
 
   ngOnInit(){
+    this.fetchData();
     
   }
 
-    // get dati api classroom
+    // get dati api teacher subjects
     fetchData() {
       this.classroomService.getTeacherSubjects().subscribe({
-        next: (data: any []) => {
-          this.teacherSubjects = data;
-          console.log(data);
+        next: (data: Teacher[]) => {
+          this.teachers = data;
+          console.log("i dati sono qui",data)
         },
         error: (err) => { 
           console.log("errore",err);
-      }
-    })
+        }
+      })
     }
 
 

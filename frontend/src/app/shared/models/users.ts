@@ -68,3 +68,20 @@ export interface ClassDetails {
   students: Students[];
 }
 
+export interface Teacher {
+  id: string,
+  name: string,
+  surname: string,
+  subjects: [
+    {
+      subject: {
+        id: string
+        name: string
+      },
+      classroom: {
+        id: string,
+        name: string
+      }
+    },
+  ]
+}

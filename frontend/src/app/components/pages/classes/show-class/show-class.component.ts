@@ -24,6 +24,7 @@ export class ShowClassComponent {
       this.classId = params['id'];
     });
     this.fetchClassDetails();
+    this.isTeacher = this.authService.isTeacher()
 
     
   }
