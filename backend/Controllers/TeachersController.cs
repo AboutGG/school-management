@@ -145,7 +145,7 @@ public class TeachersController : Controller
         catch (Exception e)
         {
             ErrorResponse error = ErrorManager.Error(e);
-            return BadRequest(error);
+            return StatusCode(error.statusCode, error);
         }
     }
 
@@ -194,13 +194,16 @@ public class TeachersController : Controller
             );
             if (@params.Filter != null)
                 dummy = dummy.Where(el =>
-                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower())
+                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                        || el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                        )
                     .ToList();
             return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e));
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
     }
 
@@ -245,7 +248,8 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e));
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
     }
 
