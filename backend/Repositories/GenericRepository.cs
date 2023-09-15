@@ -40,8 +40,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     /// <param name="predicate"> Used to do a condition in a search or more.</param>
     /// <param name="includes"> Used to includes the reference object of another table. </param>
     /// <returns>All users using the params, predicate and includes</returns>
-    
-    public ICollection<T> GetAll(PaginationParams? @params,
+
+    public List<T> GetAll(PaginationParams? @params,
         Expression<Func<T, bool>> predicate, //Predicate ex:  t => t.Id == Id
         params Expression<Func<T, object>>[] includes //Include ex:  t => t.Id<
     )
@@ -64,13 +64,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     }
 
     #endregion
-    
-    public List<T> GetAll(@PaginationParams? @params,
+
+    #region Get All using IQueryable
+
+    public List<T> GetAllUsingIQueryable(@PaginationParams? @params,
         Func<IQueryable<T>, IQueryable<T>>? queryFunc
     )
     {
         var query = _entities.AsQueryable();
-        
+
         if (queryFunc != null)
         {
             query = queryFunc.Invoke(query);
@@ -85,9 +87,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             query.Skip((@params.Page - 1) * @params.ItemsPerPage)
                 .Take(@params.ItemsPerPage);
         }
-        
+
         return query.ToList();
     }
+
+    #endregion
 
     #region GetById
 
@@ -106,11 +110,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
         return query.FirstOrDefault();
     }
+    
+    #endregion
 
-    public T GetById2(Func<IQueryable<T>, IQueryable<T>>? queryFunc) //Include ex:  t => t.Id.
+    #region GetById using IQueryable
+
+    public T GetByIdUsingIQueryable(Func<IQueryable<T>, IQueryable<T>>? queryFunc) //Include ex:  t => t.Id.
     {
         var query = _entities.AsQueryable();
-        
+
         if (queryFunc != null)
         {
             query = queryFunc.Invoke(query);
@@ -118,6 +126,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
         return query.FirstOrDefault();
     }
+
     #endregion
 
     #region Exists
@@ -157,6 +166,16 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     #endregion
 
+    #region Create
+
+    public bool Create(T value)
+        {
+            _context.Add(value);
+            return Save();
+        }
+
+    #endregion
+    
     #region Save
 
     public bool Save()
@@ -172,5 +191,5 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     #endregion
 
     #endregion
-    
+
 }

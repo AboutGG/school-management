@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using backend.Dto;
 
 namespace backend.Models;
 
@@ -23,5 +24,5 @@ public class Teacher
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
 
-    public IList<TeacherSubjectClassroom> TeacherSubjectsClassrooms { get; set; }
+    public IList<TeacherSubjectClassroom> TeachersSubjectsClassrooms { get; set; }
 }

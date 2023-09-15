@@ -10,7 +10,7 @@ public static class RoleSearcher
     {
         IGenericRepository<User> usersRepository = new GenericRepository<User>(_context);
         User takenUser = usersRepository.GetById(el => el.Id == userId, el => el.Teacher, el => el.Student);
-        string role = takenUser.Student != null ? "student" : takenUser.Teacher != null ? "teacher" : "unknow";
+        string role = takenUser.Student != null ? "student" : takenUser.Teacher != null ? "teacher" : "unknown";
         return role;
     }
 }

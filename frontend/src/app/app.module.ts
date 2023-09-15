@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NgModel, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +18,8 @@ import { DetailUserComponent } from './components/pages/users/detail-user/detail
 import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
 import { NotFoundComponent } from './components/pages/not-found/not-found.component';
 import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
+import { ExamslistComponent } from './components/pages/examslist/examslist.component';
+import { ExamsStudentListComponent } from './components/pages/exams-student-list/exams-student-list.component';
 import { SubjectsComponent } from './components/pages/subjects/subjects.component';
 
 @NgModule({
@@ -35,13 +37,16 @@ import { SubjectsComponent } from './components/pages/subjects/subjects.componen
     DetailUserComponent,
     EditUserComponent,
     NotFoundComponent,
+    ExamslistComponent,
+    ExamsStudentListComponent,
     SubjectsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     {

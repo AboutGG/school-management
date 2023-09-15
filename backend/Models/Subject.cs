@@ -17,6 +17,5 @@ public class Subject
 
     #region External ref
     public IList<TeacherSubjectClassroom> TeacherSubjects { get; set; }
-    public virtual ICollection<Exam> Exams { get; set; }
     #endregion
 }

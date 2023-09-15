@@ -78,13 +78,13 @@ public class UsersController : Controller
             reg => reg.Teacher);
         
         //if the role is null returns all the users
-        if (@params.Role == null)
+        if (@params.Filter == null)
         {
             return Ok(registries);
         }
 
         //if the role is not null return the users which have the role equal then params.role
-        switch (@params.Role.Trim().ToLower())
+        switch (@params.Filter.Trim().ToLower())
         {
             case "teacher":
                 registries = registries.Where(reg => reg.Student == null).ToList();
@@ -93,7 +93,7 @@ public class UsersController : Controller
                 registries = registries.Where(reg => reg.Teacher == null).ToList();
                 return Ok(registries);
             default:
-                return NotFound($"The Role \"{@params.Role}\" has not found");
+                return NotFound($"The Role \"{@params.Filter}\" has not found");
         }
     }
 
@@ -109,7 +109,7 @@ public class UsersController : Controller
     [HttpPost("teacher")]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
-    public IActionResult AddUserTeacher([FromBody] UserDetailDto userTeacher)
+    public IActionResult AddUserTeacher([FromBody] AddEntity userTeacher)
     {
 
         if (userTeacher == null || userTeacher.User == null || userTeacher.Registry == null)
@@ -148,7 +148,7 @@ public class UsersController : Controller
             Gender = userTeacher.Registry.Gender,
             Email = userTeacher.Registry.Email ?? null,
             Address = userTeacher.Registry.Address ?? null,
-            Telephone = userTeacher?.Registry.Telephone,
+            Telephone = userTeacher.Registry.Telephone ?? null,
         };
 
         ///<summary> Try to create an user and registry</summary>
@@ -192,7 +192,7 @@ public class UsersController : Controller
     [HttpPost("student")]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
-    public IActionResult AddUserStudent([FromBody] UserDetailDto userStudent)
+    public IActionResult AddUserStudent([FromBody] AddEntity userStudent)
     {
         if (userStudent == null
             || userStudent.Classroom == null

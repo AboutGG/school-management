@@ -1,61 +1,57 @@
 <div class="container">
-    <hr>
-    <div class=" title d-flex align-items-center justify-content-center fs-5 fw-bold">
-        <div class="d-flex align-items-center justify-content-center"></div>
-        {{'Gestione delle materie' | uppercase}}
-        <span class="icon"><i class="bi bi-book"></i>
-        </span>
-    </div>
-    <hr>
+  <hr>
+  <div class=" title d-flex align-items-center justify-content-center fs-5 fw-bold">
+    <div class="d-flex align-items-center justify-content-center"></div>
+    {{'Gestione delle materie' | uppercase}}
+    <span class="icon"><i class="bi bi-book"></i>
+    </span>
+  </div>
+  <hr>
     <div class="container d-flex justify-content-end mt-4">
         <div class="classes-header">
-            <div class="input-container">
-                <span>Cerca: </span>
-                <input type="text" name="" id="" placeholder="Scrivi per cercare..." />
-                <i class="bi bi-search"></i>
-            </div>
-        </div>
+          <div class="input-container">
+            <span>Cerca: </span>
+            <input type="text" name="" id="" placeholder="Scrivi per cercare..." />
+            <i class="bi bi-search"></i>
+          </div>
+        </div>  
     </div>
     <table class="w-100 table table-hover mt-4">
-        <thead class="text-center">
-            <tr class="fw-bold">
-                <th>#</th>
-                <th>Materia</th>
-                <th>Classe</th>
-                <th>Insegnante</th>
-                <th>Azioni</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>example</td>
-                <td>example</td>
-                <td>example</td>
-                <td>
-                    <button class="btn " value="dettagli" [routerLink]="['/esami']">Visualizza Esami<i
-                            class="bi bi-calendar-plus px-2"></i></button>
-                </td>
-            </tr>
-        </tbody>
+      <thead class="text-center" >
+        <tr class="fw-bold">
+          <th>#</th>
+          <th>Materia</th>
+          <th>Classe</th>  
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>example</td>
+          <td>example</td>
+          <td>       
+            <button class="btn " value="dettagli"  [routerLink]="['/esami']">Crea Esame<i class="bi bi-calendar-plus px-2"></i></button>
+          </td>
+        </tr>
+      </tbody>
     </table>
     <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mt-5">
-            <li class="page-item">
-                <a class="page-link text-black fw-bold" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link text-black" href="#">1</a></li>
-            <li class="page-item"><a class="page-link text-black" href="#">2</a></li>
-            <li class="page-item"><a class="page-link text-black" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link text-black fw-bold" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-              
-        </ul>
-          
-    </nav>
+      <ul class="pagination justify-content-center mt-5">
+        <li class="page-item">
+          <a class="page-link text-black fw-bold" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item"><a class="page-link text-black" href="#">1</a></li>
+        <li class="page-item"><a class="page-link text-black" href="#">2</a></li>
+        <li class="page-item"><a class="page-link text-black" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link text-black fw-bold" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 </div>
+  

@@ -10,10 +10,10 @@ public class Exam
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
 
-    [Column("id_subject")]
-    [JsonPropertyName("id_subject")]
-    public Guid SubjectId { get; set; }
-    public virtual Subject Subject { get; set; }
+    [Column("id_teacherSubjectClassroom")]
+    [JsonPropertyName("id_teacherSubjectClassroom")]
+    public Guid TeacherSubjectClassroomId { get; set; }
+    public virtual TeacherSubjectClassroom TeacherSubjectClassroom { get; set; }
 
     [Column("exam_date")]
     [JsonPropertyName("exam_date")]
