@@ -324,5 +324,16 @@ public class UsersController : Controller
 
     #endregion
     
+    #region Me
+
+    [HttpGet]
+    [Route("me")]
+    public IActionResult GetMe([FromHeader] string token)
+    {
+        return Ok(_userRepository.GetMe(token));
+    }
+    
+    #endregion
+    
     #endregion
 }

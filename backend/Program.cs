@@ -29,6 +29,7 @@ builder.Services.AddScoped<ITeacherSubjectClassroomRepository, TeacherSubjectCla
 builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<JWTHandler>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
+builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 
 builder.Services.AddScoped<PDF>();
 
