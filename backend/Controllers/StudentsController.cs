@@ -6,6 +6,7 @@ using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,7 +51,6 @@ public class StudentsController : Controller
     #endregion
 
     #region Get Subjects
-
     [HttpGet]
     [Route("subjects")]
     [ProducesResponseType(200, Type = typeof(List<TeacherSubjectClassroomDto>))]
