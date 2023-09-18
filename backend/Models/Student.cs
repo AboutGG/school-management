@@ -5,7 +5,7 @@ using backend.Utils;
 namespace backend.Models;
 
 [Table("students")]
-public class Student
+public class Student : Deleted
 {
     [Column("id")]
     [JsonPropertyName("id")]

@@ -6,7 +6,7 @@ using backend.Utils;
 namespace backend.Models;
 
 [Table("registries")]
-public class Registry
+public class Registry : Deleted
 {
     [Column("id")]
     [JsonPropertyName("id")]

@@ -5,7 +5,7 @@ using backend.Utils;
 namespace backend.Models;
 
 [Table("users")]
-public class User
+public class User : Deleted
 {
     /// <summary> User id </summary>
     [Column("id")]

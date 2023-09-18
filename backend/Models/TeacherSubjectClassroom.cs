@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace backend.Models;
 
 [Table("teachers_subjects_classrooms")]
-public class TeacherSubjectClassroom
+public class TeacherSubjectClassroom : Deleted
 {
     #region Id
     [Required]
