@@ -58,8 +58,6 @@ public class StudentsController : Controller
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromQuery] PaginationParams @params, [FromHeader] string Token)
     {
-        #region Decode the token
-
         JwtSecurityToken decodedToken;
         Guid takenId;
         string role;
@@ -107,10 +105,8 @@ public class StudentsController : Controller
         catch (Exception e)
         {
             ErrorResponse error = ErrorManager.Error(e);
-            return BadRequest(error);
+            return StatusCode(error.statusCode, error);
         }
-
-        #endregion
     }
 
     #endregion
@@ -173,7 +169,8 @@ public class StudentsController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e));
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
     }
 
