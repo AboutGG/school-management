@@ -25,11 +25,11 @@
           <th>Azioni</th>
         </tr>
       </thead>
-      <tbody *ngFor="let teacher of teachers; let i = index">
-        <tr *ngFor="let subject of teacher.subjects">
+      <tbody *ngIf="teachers">
+        <tr *ngFor="let teacher of teachers.subjects; let i = index">
           <td scope="row">{{i + 1}}</td> 
-          <td>{{subject.subject.name}}</td>
-          <td>{{subject.classroom.name}}</td>
+          <td>{{teacher.subjectName}}</td>
+          <td>{{teacher.classroomName}}</td>
         
           <td>       
             <button class="btn " value="dettagli"  [routerLink]="['/teachers/exams']">Crea Esame<i class="bi bi-calendar-plus px-2"></i></button>

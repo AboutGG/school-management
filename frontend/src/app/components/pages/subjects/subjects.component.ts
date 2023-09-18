@@ -10,7 +10,7 @@ import { ClassroomService } from 'src/app/shared/service/classroom.service';
 })
 export class SubjectsComponent implements OnInit {
 
-  teachers: Teacher[] = []
+  teachers!: Teacher
 
   constructor(private classroomService: ClassroomService) {}
 
@@ -23,12 +23,12 @@ export class SubjectsComponent implements OnInit {
     // get dati api teacher subjects
     fetchData() {
       this.classroomService.getTeacherSubjects().subscribe({
-        next: (data: Teacher[]) => {
+        next: (data: Teacher) => {
           this.teachers = data;
-          console.log("i dati sono qui",data)
+          console.log(data)
         },
         error: (err) => { 
-          console.log("errore",err);
+          console.log("error",err);
         }
       })
     }

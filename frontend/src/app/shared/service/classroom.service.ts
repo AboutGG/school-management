@@ -30,8 +30,8 @@ export class ClassroomService {
   }
 
   //get teacher subjects 
-  getTeacherSubjects(): Observable<Teacher[]>{
-    return this.http.get<Teacher[]>(`https://localhost:7262/api/teachers/subjects`)
+  getTeacherSubjects(): Observable<Teacher>{
+    return this.http.get<Teacher>(`https://localhost:7262/api/teachers/subjects`)
   }
 
   
