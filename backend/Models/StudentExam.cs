@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace backend.Models;
 
 [Table("students_exams")]
-public class StudentExam
+public class StudentExam : Deleted
 {
     /// <summary> Registries_exam Foreign Key id_student </summary>
     [Column("id_student")]

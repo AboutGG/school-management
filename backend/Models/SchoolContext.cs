@@ -1,30 +1,47 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace backend.Models;
 
 public class SchoolContext : DbContext
 {
     #region DbSets
+
     public DbSet<Registry> Registries { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Subject> Subjects { get; set; }
-    public DbSet<TeacherSubjectClassroom> TeachersSubjectsClassrooms{ get; set; }
+    public DbSet<TeacherSubjectClassroom> TeachersSubjectsClassrooms { get; set; }
     public DbSet<Exam> Exams { get; set; }
     public DbSet<StudentExam> RegistryExams { get; set; }
     public DbSet<Classroom> Classrooms { get; set; }
+
     #endregion
-    
+
     public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
     {
-        
+
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         Seeder.SeedData(modelBuilder);
-        
+
+        #region Filters
+
+        modelBuilder.Entity<User>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<Registry>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<Student>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<Teacher>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<Classroom>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<Exam>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<Subject>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<StudentExam>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<TeacherSubjectClassroom>().HasQueryFilter(el => el.DeletedAt == null);
+
+        #endregion
+
         #region Uniques
 
         modelBuilder.Entity<User>()
@@ -72,7 +89,7 @@ public class SchoolContext : DbContext
             .HasOne<Classroom>(s => s.Classroom)
             .WithMany(c => c.Students)
             .HasForeignKey(s => s.ClassroomId);
-            
+
         #endregion
 
         #region TeacherSubjectClassroom relations
@@ -97,7 +114,7 @@ public class SchoolContext : DbContext
         #endregion
 
         #region Exam relations
-        
+
         ///<summary> Exam relation with subject one-to-one </summary>
 
         modelBuilder.Entity<Exam>()
@@ -124,4 +141,34 @@ public class SchoolContext : DbContext
 
         #endregion
     }
+
+    #region Overrides
+
+    public override int SaveChanges()
+    {
+        OnBeforeChange();
+        return base.SaveChanges();
+    }
+
+    #endregion
+
+
+    #region Private Methods
+
+    private void OnBeforeChange()
+    {
+        foreach (var entries in ChangeTracker.Entries())
+        {
+            if (entries.Entity is Deleted entity)
+            {
+                if (entries.State == EntityState.Deleted)
+                {
+                    entity.DeletedAt = DateOnly.FromDateTime(DateTime.Now.ToUniversalTime());
+                    entries.State = EntityState.Modified;
+                }
+            }
+        }
+    }
+
+    #endregion
 }
