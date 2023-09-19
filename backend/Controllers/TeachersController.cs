@@ -35,7 +35,6 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
-
     #region Get classroom by teacher id
 
     /// <summary>
@@ -145,7 +144,7 @@ public class TeachersController : Controller
         catch (Exception e)
         {
             ErrorResponse error = ErrorManager.Error(e);
-            return BadRequest(error);
+            return StatusCode(error.statusCode, error);
         }
     }
 
@@ -202,7 +201,8 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e));
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
     }
 
@@ -247,7 +247,8 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(ErrorManager.Error(e));
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
     }
 
