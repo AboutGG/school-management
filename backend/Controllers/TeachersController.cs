@@ -35,7 +35,6 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
-
     #region Get classroom by teacher id
 
     /// <summary>
