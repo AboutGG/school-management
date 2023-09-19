@@ -14,12 +14,6 @@ public class UserDto
     /// <summary> User password </summary>
     [StringValidator(3, ErrorMessage = "Password cannot contain less then 3 character")]
     public string Password { get; set; }
-
-    public UserDto(User user)
-    {
-        this.Username = user.Username;
-        this.Password = user.Password;
-    }
     
 }
 
