@@ -41,36 +41,28 @@ namespace backend.Migrations
                         .HasColumnName("name")
                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("classrooms");
+                    b.ToTable("classrooms", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e"),
-                            Name = "1A",
-                            isDeleted = false
+                            Name = "1A"
                         },
                         new
                         {
                             Id = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
-                            Name = "1B",
-                            isDeleted = false
+                            Name = "1B"
                         },
                         new
                         {
                             Id = new Guid("70f432dc-2a6c-499b-9326-52d1506befa5"),
-                            Name = "2A",
-                            isDeleted = false
+                            Name = "2A"
                         });
                 });
 
@@ -97,38 +89,30 @@ namespace backend.Migrations
                         .HasColumnName("id_teacherSubjectClassroom")
                         .HasAnnotation("Relational:JsonPropertyName", "id_teacherSubjectClassroom");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TeacherSubjectClassroomId");
 
-                    b.ToTable("exams");
+                    b.ToTable("exams", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("55988821-2bc3-4122-aa50-e0fb3b8f42ad"),
                             ExamDate = new DateOnly(2023, 9, 6),
-                            TeacherSubjectClassroomId = new Guid("0f69c148-07ab-47a8-838a-0c9dfce974bf"),
-                            isDeleted = false
+                            TeacherSubjectClassroomId = new Guid("0f69c148-07ab-47a8-838a-0c9dfce974bf")
                         },
                         new
                         {
                             Id = new Guid("06dec5ca-003e-4b39-af43-c745746d23e0"),
                             ExamDate = new DateOnly(2023, 9, 10),
-                            TeacherSubjectClassroomId = new Guid("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa"),
-                            isDeleted = false
+                            TeacherSubjectClassroomId = new Guid("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa")
                         },
                         new
                         {
                             Id = new Guid("20ad1b3e-af97-4a45-815b-af9f34e52dc3"),
                             ExamDate = new DateOnly(2023, 9, 25),
-                            TeacherSubjectClassroomId = new Guid("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d"),
-                            isDeleted = false
+                            TeacherSubjectClassroomId = new Guid("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d")
                         });
                 });
 
@@ -183,14 +167,9 @@ namespace backend.Migrations
                         .HasColumnName("telephone")
                         .HasAnnotation("Relational:JsonPropertyName", "telephone");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("Id");
 
-                    b.ToTable("registries");
+                    b.ToTable("registries", (string)null);
 
                     b.HasData(
                         new
@@ -199,8 +178,7 @@ namespace backend.Migrations
                             Birth = new DateOnly(1996, 9, 15),
                             Gender = "Vipera",
                             Name = "Giordana",
-                            Surname = "Pistorio",
-                            isDeleted = false
+                            Surname = "Pistorio"
                         },
                         new
                         {
@@ -208,8 +186,7 @@ namespace backend.Migrations
                             Birth = new DateOnly(2002, 1, 3),
                             Gender = "Sirenetta",
                             Name = "Gabriele",
-                            Surname = "Giuliano",
-                            isDeleted = false
+                            Surname = "Giuliano"
                         },
                         new
                         {
@@ -217,8 +194,7 @@ namespace backend.Migrations
                             Birth = new DateOnly(2001, 9, 25),
                             Gender = "M",
                             Name = "Francesco",
-                            Surname = "Limonelli",
-                            isDeleted = false
+                            Surname = "Limonelli"
                         },
                         new
                         {
@@ -226,8 +202,7 @@ namespace backend.Migrations
                             Birth = new DateOnly(1993, 5, 6),
                             Gender = "F",
                             Name = "Francesca",
-                            Surname = "Scollo",
-                            isDeleted = false
+                            Surname = "Scollo"
                         },
                         new
                         {
@@ -235,8 +210,7 @@ namespace backend.Migrations
                             Birth = new DateOnly(2001, 9, 23),
                             Gender = "M",
                             Name = "Angelo",
-                            Surname = "Lombardo",
-                            isDeleted = false
+                            Surname = "Lombardo"
                         });
                 });
 
@@ -268,11 +242,6 @@ namespace backend.Migrations
                         .HasColumnName("id_user")
                         .HasAnnotation("Relational:JsonPropertyName", "id_user");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClassroomId");
@@ -283,7 +252,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("students");
+                    b.ToTable("students", (string)null);
 
                     b.HasData(
                         new
@@ -291,24 +260,21 @@ namespace backend.Migrations
                             Id = new Guid("007d3bca-d81d-42bd-9194-9c1d9f1f5ed7"),
                             ClassroomId = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e"),
                             RegistryId = new Guid("c976d8c8-3aa5-4164-be7c-884ebe29ee1e"),
-                            UserId = new Guid("8af66697-aaf2-44d3-ac9e-b051451fa2ea"),
-                            isDeleted = false
+                            UserId = new Guid("8af66697-aaf2-44d3-ac9e-b051451fa2ea")
                         },
                         new
                         {
                             Id = new Guid("8767fd02-7891-4b47-8b02-3cc0d07ac334"),
                             ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
                             RegistryId = new Guid("f833e6a7-f617-4683-a772-b5bcd1971da8"),
-                            UserId = new Guid("37ce79ab-5b93-44ce-8189-e49ab8e377e2"),
-                            isDeleted = false
+                            UserId = new Guid("37ce79ab-5b93-44ce-8189-e49ab8e377e2")
                         },
                         new
                         {
                             Id = new Guid("78362ba2-29ea-472b-9878-f55dad233e21"),
                             ClassroomId = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e"),
                             RegistryId = new Guid("634477e4-1eeb-4a0d-bb07-c9bd2e3f9702"),
-                            UserId = new Guid("c98b3291-bd68-4f9e-a906-1a273ac9046b"),
-                            isDeleted = false
+                            UserId = new Guid("c98b3291-bd68-4f9e-a906-1a273ac9046b")
                         });
                 });
 
@@ -334,16 +300,11 @@ namespace backend.Migrations
                         .HasColumnName("grade")
                         .HasAnnotation("Relational:JsonPropertyName", "grade");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("ExamId", "StudentId");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("students_exams");
+                    b.ToTable("students_exams", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Subject", b =>
@@ -365,51 +326,40 @@ namespace backend.Migrations
                         .HasColumnName("name")
                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("Id");
 
-                    b.ToTable("subjects");
+                    b.ToTable("subjects", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("be1816ff-41be-4620-a48c-ac18b71e3bf8"),
-                            Name = "Italiano",
-                            isDeleted = false
+                            Name = "Italiano"
                         },
                         new
                         {
                             Id = new Guid("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                            Name = "Inglese",
-                            isDeleted = false
+                            Name = "Inglese"
                         },
                         new
                         {
                             Id = new Guid("46fd8c9d-b689-47cb-b9fd-44a19c5291a4"),
-                            Name = "Matematica",
-                            isDeleted = false
+                            Name = "Matematica"
                         },
                         new
                         {
                             Id = new Guid("b55de490-fcdd-43d3-9146-94774e96cfe6"),
-                            Name = "Storia",
-                            isDeleted = false
+                            Name = "Storia"
                         },
                         new
                         {
                             Id = new Guid("336d920e-273f-40bd-aed3-17212e2fb2a3"),
-                            Name = "Geografia",
-                            isDeleted = false
+                            Name = "Geografia"
                         },
                         new
                         {
                             Id = new Guid("47e8b0b5-1b53-46be-a0a9-9954958d3071"),
-                            Name = "Spagnola",
-                            isDeleted = false
+                            Name = "Spagnola"
                         });
                 });
 
@@ -436,11 +386,6 @@ namespace backend.Migrations
                         .HasColumnName("id_user")
                         .HasAnnotation("Relational:JsonPropertyName", "id_user");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RegistryId")
@@ -449,22 +394,20 @@ namespace backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("teachers");
+                    b.ToTable("teachers", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
                             RegistryId = new Guid("d7f23f33-ebf2-4716-8c3f-b997ba2da125"),
-                            UserId = new Guid("1346712f-a66d-4b25-9ff6-cf6b7cd8c954"),
-                            isDeleted = false
+                            UserId = new Guid("1346712f-a66d-4b25-9ff6-cf6b7cd8c954")
                         },
                         new
                         {
                             Id = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
                             RegistryId = new Guid("153afc1d-f63f-45aa-ae55-534d4ceeb737"),
-                            UserId = new Guid("affab63e-dec6-4626-abfb-1e52b258cc6c"),
-                            isDeleted = false
+                            UserId = new Guid("affab63e-dec6-4626-abfb-1e52b258cc6c")
                         });
                 });
 
@@ -496,11 +439,6 @@ namespace backend.Migrations
                         .HasColumnName("id_teacher")
                         .HasAnnotation("Relational:JsonPropertyName", "id_techer");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClassroomId");
@@ -509,7 +447,7 @@ namespace backend.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("teachers_subjects_classrooms");
+                    b.ToTable("teachers_subjects_classrooms", (string)null);
 
                     b.HasData(
                         new
@@ -517,32 +455,28 @@ namespace backend.Migrations
                             Id = new Guid("0f69c148-07ab-47a8-838a-0c9dfce974bf"),
                             ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
                             SubjectId = new Guid("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
-                            isDeleted = false
+                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335")
                         },
                         new
                         {
                             Id = new Guid("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa"),
                             ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
                             SubjectId = new Guid("be1816ff-41be-4620-a48c-ac18b71e3bf8"),
-                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
-                            isDeleted = false
+                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d")
                         },
                         new
                         {
                             Id = new Guid("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d"),
                             ClassroomId = new Guid("0ed3811a-0a5c-4ed0-b7db-53090199aa27"),
                             SubjectId = new Guid("336d920e-273f-40bd-aed3-17212e2fb2a3"),
-                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d"),
-                            isDeleted = false
+                            TeacherId = new Guid("cc3f629e-ae6b-448e-be46-afce1fa9e31d")
                         },
                         new
                         {
                             Id = new Guid("0ac0626c-802a-4e59-a54d-8ddc3eab0b61"),
                             ClassroomId = new Guid("612ce7d2-c15f-4dca-ac34-676e93f6bb0e"),
                             SubjectId = new Guid("a907ec00-1577-4a50-ab10-579e071f1e59"),
-                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335"),
-                            isDeleted = false
+                            TeacherId = new Guid("54ff5a4a-1469-4f07-afcb-9b1864dcb335")
                         });
                 });
 
@@ -571,53 +505,43 @@ namespace backend.Migrations
                         .HasColumnName("username")
                         .HasAnnotation("Relational:JsonPropertyName", "username");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isDeleted")
-                        .HasAnnotation("Relational:JsonPropertyName", "isDeleted");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("1346712f-a66d-4b25-9ff6-cf6b7cd8c954"),
                             Password = "123",
-                            Username = "giop5",
-                            isDeleted = false
+                            Username = "giop5"
                         },
                         new
                         {
                             Id = new Guid("affab63e-dec6-4626-abfb-1e52b258cc6c"),
                             Password = "123",
-                            Username = "aboutgg",
-                            isDeleted = false
+                            Username = "aboutgg"
                         },
                         new
                         {
                             Id = new Guid("8af66697-aaf2-44d3-ac9e-b051451fa2ea"),
                             Password = "nonloso",
-                            Username = "sidectrl",
-                            isDeleted = false
+                            Username = "sidectrl"
                         },
                         new
                         {
                             Id = new Guid("c98b3291-bd68-4f9e-a906-1a273ac9046b"),
                             Password = "nonticonosco",
-                            Username = "angelarmstrong",
-                            isDeleted = false
+                            Username = "angelarmstrong"
                         },
                         new
                         {
                             Id = new Guid("37ce79ab-5b93-44ce-8189-e49ab8e377e2"),
                             Password = "ilsegreto",
-                            Username = "donnafrancisca",
-                            isDeleted = false
+                            Username = "donnafrancisca"
                         });
                 });
 
