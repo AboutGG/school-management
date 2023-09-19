@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { StudentExams, TeacherExams } from '../models/users';
+import { StudentExams, TeacherExam } from '../models/users';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,8 @@ export class ExamsService {
     return this.http.get<StudentExams>(`https://localhost:7262/api/students/exams`)
   }
 
-  getTeacherExams() {
-    return this.http.get<TeacherExams[]>(`https://localhost:7262/api/teachers/exams`)
+  getTeacherExams(page: number, filter: string, search: string, orderType: string, order: string, itemsPerPage: number) {
+    return this.http.get<TeacherExam[]>(`https://localhost:7262/api/teachers/exams?Page=${page}&Filter=${filter}&Search=${search}&OrderType=${orderType}&Order=${order}&ItemsPerPage=${itemsPerPage}`)
   }
+  
 }

@@ -44,7 +44,7 @@ export interface StudentExams {
   ]
 }
 
-export interface TeacherExams {
+export interface TeacherExam {
   examId: string,
   examDate: string,
   classroom: string,
@@ -61,18 +61,14 @@ export interface Teacher {
   id: string,
   name: string,
   surname: string,
-  subjects: TeacherSubjects[]
-}
-
-export interface TeacherSubjects {
-  subject: {
-    id: string
-    name: string
-  },
-  classroom: {
-    id: string,
-    name: string
-  }
+  subjects: [
+    {
+      subjectId: string
+      subjectName: string,
+      classroomId: string
+      classroomName: string
+    }
+  ]
 }
 
 export interface Teachers {

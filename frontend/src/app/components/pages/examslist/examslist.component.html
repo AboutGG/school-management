@@ -12,16 +12,63 @@
     <div class="d-flex justify-content-center align-items-center w-100 flex-column">
     </div>
     <div class="col-md-2 mb-4 d-flex w-100 justify-content-center">
-        <div class="dropdown d-flex w-100">
-            <div class="d-flex flex-column pe-2">
+        <div class="d-flex">
+            <form [formGroup]="formSubject">
+                <select class="btn btn-warning w-100 p-2 m-2" formControlName="subjects"
+                    (click)="[onClickFilter = true, resetForm()]">
+                    <option value="">Vedi materie</option>
+                    <option *ngFor="let subject of subjects">{{this.subject}}</option>
+                </select>
+            </form>
+            <form [formGroup]="formClassroom">
+                <select class="btn btn-warning w-100 p-2 m-2" formControlName="classrooms"
+                    (click)="[onClickFilter = false, resetForm()]">
+                    <option value="">Vedi classi</option>
+                    <option *ngFor="let classroom of classrooms">{{classroom}}</option>
+                </select>
+            </form>
+        </div>
+        <!-- <div class="dropdown d-flex w-100">
+            <div class="d-flex flex-column">
+                <button class="btn btn-warning w-100 p-2 my-3" (click)="filterSwitch()">{{switchText}}</button>
+                <label for="classroom" class="form-label">Filtra per: </label>
+                <ng-container *ngIf="!onClickFilter">
+                    <button class="btn btn-outline-dark dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" title="subject">
+                        {{ this.subject ? this.subject : 'Tutte le materie' }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" role="button" value="classroom">Tutte le materie</a></li>
+                        <li *ngFor="let subject of subjects">
+                            <a class="dropdown-item" (click)="dropdownFilter(subject)" role="button"
+                                value="subject">{{this.subject}}</a>
+                        </li>
+                    </ul>
+                </ng-container>
+                <ng-container *ngIf="onClickFilter">
+                    <button class="btn btn-outline-dark dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" title="classroom">
+                        {{ this.classroom ? this.classroom : 'Tutte le classi' }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" role="button" value="classroom">Tutte le classi</a></li>
+                        <li *ngFor="let classroom of classrooms">
+                            <a class="dropdown-item" (click)="dropdownFilter(classroom)" role="button"
+                                value="classroom">{{this.classroom}}</a>
+                        </li>
+                    </ul>
+                </ng-container>
+            </div> -->
+        <!-- <div class="d-flex flex-column pe-2">
                 <label for="classroom" class="form-label">Filtra per classe: </label>
                 <button class="btn btn-outline-dark dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false" title="classroom">
                     {{ this.classroom ? this.classroom : 'Tutte le classi' }}
                 </button>
                 <ul *ngFor="let classroom of classrooms" class="dropdown-menu">
+                    <li><a class="dropdown-item" role="button" value="classroomm">Tutte le classi</a></li>
                     <li>
-                        <a class="dropdown-item" (click)="filterByClassroom(classroom)" role="button" value="classroom">{{this.classroom}}</a>
+                        <a class="dropdown-item" (click)="[onClickClassroom = true, dropdownFilter(classroom)]" role="button" value="classroom">{{this.classroom}}</a>
                     </li>
                 </ul>
             </div>
@@ -32,13 +79,14 @@
                     {{ this.subject ? this.subject : 'Tutte le materie' }}
                 </button>
                 <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" role="button" value="subject">Tutte le materie</a></li>
                     <li *ngFor="let subject of subjects, let i = index">
-                        <a class="dropdown-item" (click)="filterBySubject(subject)" role="button" value="subject">{{
+                        <a class="dropdown-item" (click)="[onClickSubject = true, dropdownFilter(subject) ]" role="button" value="subject">{{
                             this.subject }}</a>
                     </li>
                 </ul>
-            </div>
-        </div>
+            </div> 
+        </div> -->
         <!-- <div class="d-flex w-100 justify-content-center align-items-center mt-4">
             <div class="d-flex align-items-center">
                 <input type="text" name="search" id="search" placeholder="Cerca">
@@ -86,11 +134,11 @@
                     <div class="dropdown-toggle ps-3" data-bs-toggle="dropdown" aria-expanded="false"></div>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" value="dettagli" [routerLink]="['/detailsExam']"><i
-                            class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
+                                    class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
                         <li><a class="dropdown-item" value="modifica" [routerLink]="['/editExam']"><i
-                            class="bi bi-pencil-square px-2"></i>Modifica</a></li>
+                                    class="bi bi-pencil-square px-2"></i>Modifica</a></li>
                         <li><a role="button" class="dropdown-item" value="elimina" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
+                                data-bs-target="#deleteModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
                     </ul>
                 </div>
             </tr>
