@@ -53,7 +53,7 @@ public class StudentsController : Controller
     #region Get Subjects
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200, Type = typeof(List<TeacherSubjectClassroomDto>))]
+    [ProducesResponseType(200, Type = typeof(List<TeacherDto>))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromQuery] PaginationParams @params, [FromHeader] string Token)
@@ -97,9 +97,9 @@ public class StudentsController : Controller
                         .Where(el => el.ClassroomId == studentclassroomId)
                         .Include(el => el.Classroom)
                         .Include(el => el.Teacher.Registry)
-                        .Include(el => el.Subject));
+                        .Include(el => el.Subject)).Select(el => el.Teacher).ToList();
                 
-                return Ok(_mapper.Map<List<TeacherSubjectClassroomDto>>(resultStudent.DistinctBy(el => el.TeacherId)));
+                return Ok(_mapper.Map<List<TeacherDto>>(resultStudent.DistinctBy(el => el.Id)));
             //}
         }
         catch (Exception e)
