@@ -163,7 +163,7 @@ public class UsersController : Controller
                 new GenericRepository<User>(_context).Create(newUser))
             {
 
-                switch (inputUser.RoleName.Trim().ToLower())
+                switch (inputUser.Role.Trim().ToLower())
                 {
                     case "student":
                         Student newStudent = new Student
