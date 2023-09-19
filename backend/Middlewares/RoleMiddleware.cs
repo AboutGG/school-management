@@ -16,7 +16,7 @@ public class RoleMiddleware : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var dummy = context.Request.Headers["Role"].ToString();
+        var conditionRole = context.Request.Headers["Role"].ToString();
         
         //tramite i servizi prendo il dbContext da utilizzare per prendere il ruolo dal token
         var dbContext = context.RequestServices.GetRequiredService<SchoolContext>();
@@ -32,7 +32,12 @@ public class RoleMiddleware : IMiddleware
                 
                 //Prendo il ruolo in modo da controllare se ha i permessi necessari
                 var role = RoleSearcher.GetRole(userid, dbContext);
-                if (role.Trim().ToLower() != dummy.Trim().ToLower())
+
+                if (role == "unknown" || (conditionRole.Trim().ToLower() != "student" && conditionRole.Trim().ToLower() != "teacher"))
+                {
+                    throw new Exception("ROLE_NONEXISTENT");
+                }
+                if (role.Trim().ToLower() != conditionRole.Trim().ToLower())
                 {
                     throw new Exception("UNAUTHORIZED");
                 }
