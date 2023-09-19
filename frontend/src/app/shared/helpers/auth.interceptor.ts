@@ -15,10 +15,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const authToken = this.authService.getToken();
+    const authRole = this.authService.getRole();
     
-    if (authToken) {
+    if (authToken && authRole) {
       request = request.clone({
-        headers: request.headers.set('Token', authToken)
+        headers: request.headers.set('Token', authToken).set('Role', authRole)
       });
 
     }
