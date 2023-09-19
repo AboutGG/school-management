@@ -147,7 +147,7 @@ public class UsersController : Controller
                 new GenericRepository<User>(_context).Create(newUser))
             {
 
-                switch (inputUser.RoleName.Trim().ToLower())
+                switch (inputUser.Role.Trim().ToLower())
                 {
                     case "student":
                         Student newStudent = new Student
@@ -262,6 +262,17 @@ public class UsersController : Controller
     }
 
     #endregion
+    
+    #region Me
 
+    [HttpGet]
+    [Route("me")]
+    public IActionResult GetMe([FromHeader] string token)
+    {
+        return Ok(_userRepository.GetMe(token));
+    }
+    
+    #endregion
+    
     #endregion
 }
