@@ -16,18 +16,18 @@ public class RoleMiddleware : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var dummy = context.Request.Query["role"].ToString();
+        var dummy = context.Request.Headers["Role"].ToString();
         
         //tramite i servizi prendo il dbContext da utilizzare per prendere il ruolo dal token
         var dbContext = context.RequestServices.GetRequiredService<SchoolContext>();
         
         //controllo endpoint in modo da eseguire la funzione
-        if (context.Request.Path.Value.Contains("api/students"))
+        if (context.Request.Path.Value.Contains("api/students") || context.Request.Path.Value.Contains("api/teachers") || context.Request.Path.Value.Contains("api/users"))
         {
             try
             {
                 //Ricavo lo userid decodificando il token
-                var userid = Guid.Parse(JWTHandler.DecodeJwtToken(context.Request.Headers["token"]).Payload["userid"]
+                var userid = Guid.Parse(JWTHandler.DecodeJwtToken(context.Request.Headers["Token"]).Payload["userid"]
                     .ToString());
                 
                 //Prendo il ruolo in modo da controllare se ha i permessi necessari

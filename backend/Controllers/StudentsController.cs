@@ -68,15 +68,15 @@ public class StudentsController : Controller
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //tramite lo user ricavo il ruolo tramite l'Id
-            role = RoleSearcher.GetRole(takenId, _context);
-
-            //nel caso non dovesse essere un alunno esegue una nuova exception ritornando Unauthorized
-            if (role == "teacher" || role == "unknown")
-            {
-                throw new Exception("NOT_FOUND");
-            }
-            else
-            {
+            // role = RoleSearcher.GetRole(takenId, _context);
+            //
+            // //nel caso non dovesse essere un alunno esegue una nuova exception ritornando Unauthorized
+            // if (role == "teacher" || role == "unknown")
+            // {
+            //     throw new Exception("NOT_FOUND");
+            // }
+            // else
+            // {
                 //Prendo l'id della classe riguardante lo studente 
                 Guid studentclassroomId = _context.Students.FirstOrDefault(el => el.UserId == takenId).ClassroomId;
 
@@ -100,7 +100,7 @@ public class StudentsController : Controller
                         .Include(el => el.Subject));
                 
                 return Ok(_mapper.Map<List<TeacherSubjectClassroomDto>>(resultStudent.DistinctBy(el => el.TeacherId)));
-            }
+            //}
         }
         catch (Exception e)
         {
@@ -148,10 +148,10 @@ public class StudentsController : Controller
                 throw new Exception("NOT_FOUND");
             }
 
-            string role = RoleSearcher.GetRole(takenId, _context);
-
-            if (role == "teacher" || role == "unknown")
-                throw new Exception("UNAUTHORIZED");
+            // string role = RoleSearcher.GetRole(takenId, _context);
+            //
+            // if (role == "teacher" || role == "unknown")
+            //     throw new Exception("UNAUTHORIZED");
             // var dummyExams = new GenericRepository<StudentExam>(_context).GetAll2(null, 
             //     el => 
             //         takenStudent.StudentExams.AsQueryable()

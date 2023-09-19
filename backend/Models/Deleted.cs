@@ -9,7 +9,4 @@ public class Deleted
     [JsonPropertyName("deleted_at")]
     public DateOnly? DeletedAt { get; set; }
 
-    [Column("isDeleted")]
-    [JsonPropertyName("isDeleted")]
-    public bool isDeleted { get; set; } = false;
 }
