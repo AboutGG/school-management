@@ -4,6 +4,7 @@ import { UsersService } from "src/app/shared/service/users.service";
 import { ActivatedRoute } from "@angular/router";
 import { Classroom } from "src/app/shared/models/users";
 import { Registry } from "src/app/shared/models/users";
+import { Prova } from "src/app/shared/models/users";
 
 @Component({
   selector: "app-add-user",
@@ -17,6 +18,7 @@ export class AddUserComponent implements OnInit {
   alert: boolean = false;
   classes: Classroom[] = [];
   idUser!: string;
+  classroom!: string;
 
   constructor(
     private usersService: UsersService,
@@ -24,37 +26,65 @@ export class AddUserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.usersForm = new FormGroup({
-      role: new FormControl(null, Validators.required),
-      username: new FormControl(null, Validators.required),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-      name: new FormControl(null, Validators.required),
-      surname: new FormControl(null, Validators.required),
-      birth: new FormControl(null),
-      gender: new FormControl(null, Validators.required),
-      email: new FormControl(null, Validators.email),
-      address: new FormControl(null),
-      telephone: new FormControl(
-        null,
-        Validators.pattern(
-          /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
-        )
-      ),
-      classroom: new FormControl(null),
-    });
+     this.usersForm = new FormGroup({
+       username: new FormControl(null, Validators.required),
+       password: new FormControl(null, [
+         Validators.required,
+         Validators.minLength(6),
+       ]),
+       name: new FormControl(null, Validators.required),
+       surname: new FormControl(null, Validators.required),
+       birth: new FormControl(null),
+       gender: new FormControl(null, Validators.required),
+       email: new FormControl(null, Validators.email),
+       address: new FormControl(null),
+       telephone: new FormControl(
+         null,
+         Validators.pattern(
+           /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
+         )
+       ),
+       classroomId: new FormControl(null),
+       roleName: new FormControl(null, Validators.required)
+     });
 
+
+    // this.usersForm = this.builder.group({
+    //   registry: this.builder.group({
+    //     name: new FormControl(null, Validators.required),
+    //     surname: new FormControl(null, Validators.required),
+    //     gender: new FormControl(null, Validators.required),
+    //     birth: new FormControl(null),
+    //     email: new FormControl(null, Validators.email),
+    //     address: new FormControl(null),
+    //     telephone: new FormControl(
+    //       null,
+    //       Validators.pattern(
+    //         /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
+    //       )
+    //     ),
+    //   }),
+    //   user: this.builder.group({
+    //     username: new FormControl(null, Validators.required),
+    //     password: new FormControl(null, [
+    //       Validators.required,
+    //       Validators.minLength(6),
+    //     ]),
+    //   }),
+    //   classroomId: new FormControl(null),
+    //   roleName: new FormControl(null, Validators.required),
+    // });
+
+  
     // per la creazione del wizard
     this.route.queryParams.subscribe((params) => {
-      const mode = params['mode'];
+      const mode = params["mode"];
       console.log(mode);
-      
-      if (mode === 'edit') {
+
+      if (mode === "edit") {
         // mi serve caricare i dati dell'utente selezionato
-        this.idUser = this.route.snapshot.params['idUser'];
-        this.getDataUser(this.idUser); 
+        this.idUser = this.route.snapshot.params["idUser"];
+        this.getDataUser(this.idUser);
       } else {
         this.usersForm.reset();
       }
@@ -65,10 +95,10 @@ export class AddUserComponent implements OnInit {
   onClickRole(role: string): void {
     this.role = role;
     this.usersForm
-      .get("classroom")!
+      .get("classroomId")!
       .setValidators(this.getClassroomValidators());
-    this.usersForm.get("classroom")!.updateValueAndValidity();
-    this.usersForm.get("role")!.setValue(this.role);
+    this.usersForm.get("classroomId")!.updateValueAndValidity();
+    this.usersForm.get("roleName")!.setValue(this.role);
   }
 
   onClickGender(gender: string): void {
@@ -76,12 +106,12 @@ export class AddUserComponent implements OnInit {
     this.usersForm.get("gender")!.setValue(this.gender);
   }
 
-  onClickClassroom(className: string) {
-    this.classes.map((classroom) => {
-      classroom.name = className;
-      this.usersForm.get(className)!.setValue(classroom.name);
-    });
-  }
+  // onClickClassroom(classId: string) {
+  //   // this.classes.map((classroom) => {
+  //   //   classroom.name = className;
+  //     this.usersForm.value.classroomId!.setValue(classId);
+  //   // });
+  // }
 
   getClassroomValidators(): any {
     if (this.role === "studente") {
@@ -97,7 +127,7 @@ export class AddUserComponent implements OnInit {
   onAddUser() {
     if (this.usersForm.valid && this.role === "insegnante") {
       this.role = "teacher";
-      this.usersService.addUser(this.usersForm.value, this.role).subscribe({
+      this.usersService.addUser(this.usersForm.value).subscribe({
         next: (res) => {
           console.log("ruolo", this.role);
 
@@ -110,10 +140,11 @@ export class AddUserComponent implements OnInit {
     } else {
       if (this.usersForm.valid && this.usersForm.value.classroom !== null) {
         this.role = "student";
-        this.usersService.addUser(this.usersForm.value, this.role).subscribe({
+        this.usersService.addUser(this.usersForm.value).subscribe({
           next: (res) => {
             console.log(res);
             console.log("ruolo", this.role);
+            console.log(this.usersForm.value);
           },
           error: (error) => {
             console.log(error);
@@ -121,6 +152,11 @@ export class AddUserComponent implements OnInit {
         });
       }
     }
+    console.log(this.usersForm.value);
+  }
+
+  selectClassroom(classroom: string) {
+    this.usersForm.value.classroomId!.setValue(classroom);
   }
 
   // onAddUser() {
@@ -150,10 +186,10 @@ export class AddUserComponent implements OnInit {
 
   getDataUser(idUser: string) {
     this.usersService.getDetailsUser(idUser).subscribe((userData: Registry) => {
-      this.usersForm.patchValue({ 
-        name: userData.name, 
-        surname: userData.surname, 
-      })
+      this.usersForm.patchValue({
+        name: userData.name,
+        surname: userData.surname,
+      });
     });
   }
 
@@ -169,7 +205,7 @@ export class AddUserComponent implements OnInit {
   getClassroom() {
     this.usersService.getClassroom().subscribe((data) => {
       this.classes = data;
-      console.log(this.classes);
+      console.log("prova", this.classes);
     });
   }
 }

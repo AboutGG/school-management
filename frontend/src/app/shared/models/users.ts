@@ -4,6 +4,12 @@ export interface Users {
   registry: Registry
 }
 
+export interface Prova {
+  classroomId?: string
+  user: User 
+  registry: Registry
+  roleName: string
+}
 
 
 export interface User {
@@ -28,7 +34,7 @@ export interface Registry {
   email?: string;
   address?: string;
   telephone?: string; //date format "yyyy-mm-dd"
-  role: string;
+  roleName?: string;
 
   teacher?: Teacher;
   student?: Student;
@@ -63,6 +69,7 @@ export interface StudentExams {
   ]
 }
 export interface Classroom {
+  id: string;
   id_classroom?: string;
   name: string;
   student_count?: number;

@@ -11,16 +11,16 @@
         <div class="row position-relative mb-4">
             <div class="col-md-2 mb-3">
                 <div class="dropdown">
-                    <label for="role" class="form-label">Seleziona il ruolo:<span class="text-danger">*</span></label>
-                    <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
+                    <label for="roleName" class="form-label">Seleziona il ruolo:<span class="text-danger">*</span></label>
+                    <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="roleName">
                         {{ (this.role ? this.role : 'Ruolo') | titlecase}}
                     </button>
-                    <ul class="dropdown-menu" formControlName="role">
+                    <ul class="dropdown-menu" formControlName="roleName">
                         <li><a class="dropdown-item" value="studente" (click)="onClickRole('studente')">Studente</a></li>
                         <li><a class="dropdown-item" value="insegnante" (click)="onClickRole('insegnante')">Insegnante</a></li>
                     </ul>
                 </div> 
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
+                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('roleName')">
                     <span>Campo obbligatorio</span>
                 </div>     
             </div>
@@ -104,9 +104,9 @@
         </div> -->
 
         <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
-            <select class="form-select">
+            <select class="form-select" formControlName="classroomId">
                 <option selected>Scegli la classe:</option>
-                <option *ngFor="let className of classes" value="class.name">{{className.name}}</option>
+                <option *ngFor="let className of classes">{{className.id}}</option>
             </select>
         </div>
 
