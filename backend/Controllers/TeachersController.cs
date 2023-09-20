@@ -107,7 +107,7 @@ public class TeachersController : Controller
     /// <exception cref="Exception">Errors if the token is not valid or more.</exception>
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200, Type = typeof(TeacherSubjectDto))]
+    [ProducesResponseType(200, Type = typeof(SubjectClassroomDto))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromHeader] string Token, [FromQuery] PaginationParams @params)
@@ -130,21 +130,20 @@ public class TeachersController : Controller
             // else
             // {
                 //Prendo le materie che insegna il professore con le relative classi
-                Teacher resultTeacher = new GenericRepository<Teacher>(_context).GetByIdUsingIQueryable(query => query
-                    .Where(el => el.UserId == takenId)
-                    .Include(el => el.Registry)
-                    .Include(el => el.TeachersSubjectsClassrooms)
-                    .ThenInclude(el => el.Classroom)
-                    .Include(el => el.TeachersSubjectsClassrooms)
-                    .ThenInclude(el => el.Subject)
+                var resultTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params, query => query
+                    .Where(el => el.Teacher.UserId == takenId)
+                    .Include(el => el.Teacher)
+                    .Include(el => el.Teacher.Registry)
+                    .Include(el => el.Classroom)
+                    .Include(el => el.Subject)
                 );
 
-                if (@params.Filter != null)
-                    resultTeacher.TeachersSubjectsClassrooms = resultTeacher.TeachersSubjectsClassrooms
-                        .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                        || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                        ).ToList(); 
-                return Ok(_mapper.Map<TeacherSubjectDto>(resultTeacher));
+                 if (@params.Filter != null)
+                   resultTeacher = resultTeacher
+                .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                ).ToList(); 
+                return Ok(_mapper.Map<List<SubjectClassroomDto>>(resultTeacher));
             // }
         }
         catch (Exception e)

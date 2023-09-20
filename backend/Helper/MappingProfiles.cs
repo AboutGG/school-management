@@ -86,6 +86,20 @@ public class MappingProfiles : Profile
                             ClassroomName = el.Classroom.Name
                         })
                     ));
+
+        CreateMap<TeacherSubjectClassroom, SubjectClassroomDto>()
+            .ForMember(destinationMember => destinationMember.ClassroomId,
+                opt => opt
+                    .MapFrom(src => src.ClassroomId))
+            .ForMember(destinationMember => destinationMember.ClassroomName,
+                opt => opt
+                    .MapFrom(src => src.Classroom.Name))
+            .ForMember(destinationMember => destinationMember.SubjectId,
+                opt => opt
+                    .MapFrom(src => src.SubjectId))
+            .ForMember(destinationMember => destinationMember.SubjectName,
+                opt => opt
+                    .MapFrom(src => src.Subject.Name));
         
 
         CreateMap<Exam, TeacherExamDto>()
