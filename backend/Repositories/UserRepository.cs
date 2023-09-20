@@ -1,15 +1,20 @@
-﻿using backend.Dto;
+﻿using System.IdentityModel.Tokens.Jwt;
+using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
+using backend.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
 
 public class UserRepository : IUserRepository
 {
     private readonly SchoolContext _context;
+    private readonly IGenericRepository<User> _userGenericRepository;
 
-    public UserRepository(SchoolContext context)
+    public UserRepository(SchoolContext context, IGenericRepository<User> userGenericRepository)
     {
+        _userGenericRepository = userGenericRepository;
         _context = context;
     }
     
@@ -71,5 +76,18 @@ public class UserRepository : IUserRepository
         _context.Users.Update(user);
         return Save();
     }
-    
+
+    public Me GetMe(string token)
+    {
+        var userid = Guid.Parse(JWTHandler.DecodeJwtToken(token).Payload["userid"].ToString());
+        var user = _userGenericRepository.GetByIdUsingIQueryable(
+            query => query
+                .Where(el => el.Id == userid)
+                .Include(u => u.Student)
+                .ThenInclude(s => s.Registry)
+                .Include(u => u.Teacher)
+                .ThenInclude(t => t.Registry));
+        Me userme = new Me(user);
+        return userme;
+    }
 }

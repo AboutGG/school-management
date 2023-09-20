@@ -69,9 +69,6 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember => destinationMember.id,
                 opt => opt
                     .MapFrom(src => src.UserId))
-            .ForMember(destinationMember => destinationMember.id,
-                opt => opt
-                    .MapFrom(src => src.UserId))
             .ForMember(destinationMember => destinationMember.name,
                 opt => opt
                     .MapFrom(src => src.Registry.Name))
@@ -89,11 +86,7 @@ public class MappingProfiles : Profile
                             ClassroomName = el.Classroom.Name
                         })
                     ));
-
-        CreateMap<TeacherSubjectClassroom, TeacherSubjectClassroomDto>()
-            .ForMember(destinationMember => destinationMember.teacher,
-                opt => opt
-                    .MapFrom(src => src.Teacher));
+        
 
         CreateMap<Exam, TeacherExamDto>()
             .ForMember(destinationMember => destinationMember.ExamId,

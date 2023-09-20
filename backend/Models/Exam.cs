@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace backend.Models;
 
 [Table("exams")]
-public class Exam
+public class Exam : Deleted
 {
     [Column("id")]
     [JsonPropertyName("id")]

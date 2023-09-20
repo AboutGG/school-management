@@ -5,7 +5,7 @@ using backend.Dto;
 namespace backend.Models;
 
 [Table("teachers")]
-public class Teacher
+public class Teacher : Deleted
 {
     /// <summary> Teacher id </summary>
     [Column("id")]

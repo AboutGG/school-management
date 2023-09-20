@@ -35,7 +35,6 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
-
     #region Get classroom by teacher id
 
     /// <summary>
@@ -56,12 +55,12 @@ public class TeachersController : Controller
             decodedToken = JWTHandler.DecodeJwtToken(token);
             Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
-            //Controllo il ruolo dello User tramite l'Id
-            var role = RoleSearcher.GetRole(takenId, _context);
-
-            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknown")
-                throw new Exception("NOT_FOUND");
+            // //Controllo il ruolo dello User tramite l'Id
+            // var role = RoleSearcher.GetRole(takenId, _context);
+            //
+            // //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            // if (role == "student" || role == "unknown")
+            //     throw new Exception("NOT_FOUND");
 
             var classrooms = new GenericRepository<Teacher>(_context)
                 .GetAllUsingIQueryable(@params,
@@ -79,8 +78,8 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
 
     }
@@ -115,7 +114,7 @@ public class TeachersController : Controller
     {
         JwtSecurityToken decodedToken;
         Guid takenId;
-        string role;
+        //string role;
         try
         {
             //Decode the token
@@ -123,13 +122,13 @@ public class TeachersController : Controller
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //Controllo il ruolo dello User tramite l'Id
-            role = RoleSearcher.GetRole(takenId, _context);
+            //role = RoleSearcher.GetRole(takenId, _context);
             
-            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknown")
-                throw new Exception("UNAUTHORIZED");
-            else
-            {
+            // //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            // if (role == "student" || role == "unknown")
+            //     throw new Exception("UNAUTHORIZED");
+            // else
+            // {
                 //Prendo le materie che insegna il professore con le relative classi
                 var resultTeacher = new GenericRepository<Teacher>(_context).GetByIdUsingIQueryable(query => query
                     .Where(el => el.UserId == takenId)
@@ -140,7 +139,7 @@ public class TeachersController : Controller
                     .ThenInclude(el => el.Subject)
                 );
                 return Ok(_mapper.Map<TeacherSubjectDto>(resultTeacher));
-            }
+            // }
         }
         catch (Exception e)
         {
@@ -170,7 +169,7 @@ public class TeachersController : Controller
         IGenericRepository<Exam> examGenericRepository = new GenericRepository<Exam>(_context);
         JwtSecurityToken decodedToken;
         Guid takenId;
-        string role;
+        //string role;
 
         try
         {
@@ -179,11 +178,12 @@ public class TeachersController : Controller
 
             //Dal token decodificato prendo l'id dello user
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
-            role = RoleSearcher.GetRole(takenId, _context);
-            if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknown")
-            {
-                throw new Exception("UNAUTHORIZED");
-            }
+            
+            // role = RoleSearcher.GetRole(takenId, _context);
+            // if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknown")
+            // {
+            //     throw new Exception("UNAUTHORIZED");
+            // }
 
             //Prendo la lista di esami eseguiti dal professore che come userId ha 
             List<Exam> dummy = examGenericRepository.GetAll(@params,
