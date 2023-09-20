@@ -107,10 +107,10 @@ public class TeachersController : Controller
     /// <exception cref="Exception">Errors if the token is not valid or more.</exception>
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200, Type = typeof(TeacherDto))]
+    [ProducesResponseType(200, Type = typeof(TeacherSubjectDto))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    public IActionResult GetSubjects([FromHeader] string Token)
+    public IActionResult GetSubjects([FromHeader] string Token, [FromQuery] PaginationParams @params)
     {
         JwtSecurityToken decodedToken;
         Guid takenId;
@@ -130,7 +130,7 @@ public class TeachersController : Controller
             // else
             // {
                 //Prendo le materie che insegna il professore con le relative classi
-                var resultTeacher = new GenericRepository<Teacher>(_context).GetByIdUsingIQueryable(query => query
+                Teacher resultTeacher = new GenericRepository<Teacher>(_context).GetByIdUsingIQueryable(query => query
                     .Where(el => el.UserId == takenId)
                     .Include(el => el.Registry)
                     .Include(el => el.TeachersSubjectsClassrooms)
@@ -138,6 +138,12 @@ public class TeachersController : Controller
                     .Include(el => el.TeachersSubjectsClassrooms)
                     .ThenInclude(el => el.Subject)
                 );
+
+                if (@params.Filter != null)
+                    resultTeacher.TeachersSubjectsClassrooms = resultTeacher.TeachersSubjectsClassrooms
+                        .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                        || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                        ).ToList(); 
                 return Ok(_mapper.Map<TeacherSubjectDto>(resultTeacher));
             // }
         }
