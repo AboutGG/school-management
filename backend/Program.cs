@@ -1,5 +1,6 @@
 using System.Text;
 using backend.Interfaces;
+using backend.Middleware;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
@@ -78,6 +79,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddTransient<RoleMiddleware>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -85,14 +88,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseClassWithNoImplementationMiddleware();
 }
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.UseCors("AllowAll");
 
 app.MapControllers();
+
 app.Run();

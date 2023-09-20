@@ -113,25 +113,9 @@ public class UsersController : Controller
     [ProducesResponseType(400)]
     public IActionResult CreateUser([FromHeader] string Token, [FromBody] AddEntity inputUser)
     {
-
-        JwtSecurityToken decodedToken;
-        Guid takenId;
-        string authorizationRole;
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         try
         {
-            //Decode the token
-            decodedToken = JWTHandler.DecodeJwtToken(Token);
-            takenId = new Guid(decodedToken.Payload["userid"].ToString());
-
-            //Controllo il ruolo dello User tramite l'Id
-            authorizationRole = RoleSearcher.GetRole(takenId, _context);
-
-            if (authorizationRole.Trim().ToLower() != "teacher")
-            {
-                throw new Exception("UNAUTHORIZED");
-            }
-
             if (new GenericRepository<User>(_context).Exist(el => el.Username == inputUser.User.Username))
             {
                 throw new Exception("USERNAME_EXISTS");
