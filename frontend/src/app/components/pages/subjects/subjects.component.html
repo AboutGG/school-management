@@ -2,7 +2,7 @@
   <hr>
   <div class=" title d-flex align-items-center justify-content-center fs-5 fw-bold">
     <div class="d-flex align-items-center justify-content-center"></div>
-    {{'Gestione delle materie' | uppercase}}
+    {{'Profilo delle materie' | uppercase}}
     <span class="icon"><i class="bi bi-book"></i>
     </span>
   </div>
@@ -21,17 +21,17 @@
         <tr class="fw-bold">
           <th>#</th>
           <th>Materia</th>
-          <th>Classe</th>  
+          <th>Insegnante</th>  
           <th>Azioni</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngFor = "let teachers of teacherSubjects ;let i = index" >
         <tr>
-          <td>1</td>
-          <td>example</td>
-          <td>example</td>
+          <td scope="row">{{i + 1}}</td> 
+          <td>{{teachers.teacher.subjects}}</td>
+          <td>{{teachers.teacher.name +' '+ teachers.teacher.surname}}</td>
           <td>       
-            <button class="btn " value="dettagli"  [routerLink]="['/esami']">Crea Esame<i class="bi bi-calendar-plus px-2"></i></button>
+            <button class="btn " value="dettagli"  [routerLink]="['/esami']">Visualizza Esame<i class="bi bi-calendar-plus px-2"></i></button>
           </td>
         </tr>
       </tbody>

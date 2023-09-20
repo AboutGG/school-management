@@ -45,6 +45,16 @@ export interface StudentExams {
     }
   ]
 }
+
+export interface StudentSubjects {
+    teacher: {
+      id: string,
+      name: string,
+      surname: string,
+      subjects: string[]
+    }
+}
+
 export interface Classroom {
   id_classroom?: string;
   name_classroom: string;
