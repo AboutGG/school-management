@@ -14,6 +14,7 @@ namespace backend.Middleware;
 /// <summary> Middleware che permette di controllare il ruolo tramite il token che manda il FE quando effettua determinate chiamate </summary>
 public class RoleMiddleware : IMiddleware
 {
+    
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var conditionRole = context.Request.Headers["Role"].ToString();
@@ -40,6 +41,18 @@ public class RoleMiddleware : IMiddleware
                 if (role.Trim().ToLower() != conditionRole.Trim().ToLower())
                 {
                     throw new Exception("UNAUTHORIZED");
+                }
+
+                switch (context.Request.Path.Value)
+                {
+                    case var s when s.Contains("/api/teachers") || s.Contains("/api/users"):
+                        if (role != "teacher")
+                            throw new Exception("UNAUTHORIZED");
+                        break;
+                    case var s when s.Contains("/api/students"):
+                        if (role != "student")
+                            throw new Exception("UNAUTHORIZED");
+                        break;
                 }
                 await next(context);
             }
