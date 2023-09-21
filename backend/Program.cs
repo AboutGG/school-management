@@ -88,7 +88,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseClassWithNoImplementationMiddleware();
 }
 
 app.UseHttpsRedirection();
@@ -98,6 +97,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("AllowAll");
+
+app.UseClassWithNoImplementationMiddleware();
 
 app.MapControllers();
 
