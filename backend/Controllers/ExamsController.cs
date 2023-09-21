@@ -127,7 +127,7 @@ public class ExamsController : Controller
             {
                 Id = new Guid(),
                 TeacherSubjectClassroomId = teacherSubjectClassroomId,
-                ExamDate = InputExam.ExamDate
+                Date = InputExam.ExamDate
             };
 
             //Nel caso non dovesse essere creato genererà un'eccezione
@@ -140,7 +140,8 @@ public class ExamsController : Controller
             List<Student> students = new GenericRepository<Student>(_context).GetAllUsingIQueryable(
                 null,
                 query => query
-                    .Where(el => el.ClassroomId == InputExam.ClassroomId)
+                    .Where(el => el.ClassroomId == InputExam.ClassroomId),
+                out var total
             );
             
             //Creo record di StudentExam per tutti gli studenti della classe, inserendoli poi nel database

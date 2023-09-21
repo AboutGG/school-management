@@ -19,7 +19,8 @@ public interface IGenericRepository<T> where T : class
     bool Save();
 
     List<T> GetAllUsingIQueryable(PaginationParams? @params,
-        Func<IQueryable<T>, IQueryable<T>>? includeFunc);
+        Func<IQueryable<T>, IQueryable<T>>? includeFunc,
+        out int total);
 
     T GetByIdUsingIQueryable(Func<IQueryable<T>, IQueryable<T>>? includeFunc);
 }
