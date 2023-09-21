@@ -55,7 +55,7 @@ export class UsersService {
     //   },
     // };
 
-    return this.http.post<Prova>(`https://localhost:7262/api/users`, user);
+    return this.http.post<Prova>(`https://localhost:7262/api/users`, user );
   };
 
   getUsers(order?: string, orderType?: string, page?: number, role?: string, search?: string): Observable<Registry[]> {

@@ -7,20 +7,20 @@
         </div>
     
     
-    <form [formGroup]="usersForm" class="row g-3 form-container ms-5 me-4" (ngSubmit)="onAddUser()">
+    <form [formGroup]="usersForm" class="row g-3 form-container ms-5 me-4">
         <div class="row position-relative mb-4">
             <div class="col-md-2 mb-3">
                 <div class="dropdown">
-                    <label for="roleName" class="form-label">Seleziona il ruolo:<span class="text-danger">*</span></label>
-                    <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="roleName">
-                        {{ (this.role ? this.role : 'Ruolo') | titlecase}}
+                    <label for="role" class="form-label">Seleziona il ruolo:<span class="text-danger">*</span></label>
+                    <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
+                        {{ (this.roleValue ? this.roleValue : 'Ruolo') | titlecase}}
                     </button>
-                    <ul class="dropdown-menu" formControlName="roleName">
+                    <ul class="dropdown-menu" formControlName="role">
                         <li><a class="dropdown-item" value="studente" (click)="onClickRole('studente')">Studente</a></li>
                         <li><a class="dropdown-item" value="insegnante" (click)="onClickRole('insegnante')">Insegnante</a></li>
                     </ul>
                 </div> 
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('roleName')">
+                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
                     <span>Campo obbligatorio</span>
                 </div>     
             </div>
@@ -103,7 +103,7 @@
             </div>
         </div> -->
 
-        <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
+        <div class="col-md-2 mb-3" *ngIf="this.roleValue === 'studente'">
             <select class="form-select" formControlName="classroomId">
                 <option selected>Scegli la classe:</option>
                 <option *ngFor="let className of classes">{{className.id}}</option>
@@ -131,8 +131,15 @@
 
         <div class="d-flex justify-content-end mb-5 pe-5">
             <div class="col-md-2">
-                <button (click)="this.alert=true" type="submit" class="btn btn-warning form-control">INVIA</button>
+                <button type="submit" (click)="onAddUser()" class="btn btn-warning form-control">INVIA</button>
             </div>
         </div>
     </form>
 </div>
+
+
+<!-- <div class="d-flex justify-content-end mb-5 pe-5">
+            <div class="col-md-2">
+                <button (click)="this.alert=true" type="submit" class="btn btn-warning form-control">INVIA</button>
+            </div>
+        </div> -->
