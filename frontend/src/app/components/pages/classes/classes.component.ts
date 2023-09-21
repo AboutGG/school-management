@@ -20,6 +20,7 @@ export class ClassesComponent {
   totalItems = 0;
   isTeacher!: boolean;
   newPage! : string
+  previousPage: number = 1;
 
 
   constructor(private classroomService: ClassroomService, private authService: AuthService, private route: ActivatedRoute) {}
@@ -57,7 +58,9 @@ export class ClassesComponent {
 
     //funzione per ricerca
     onSearch() { 
+      this.previousPage = this.currentPage;
       this.currentPage = 1;
+     
       this.fetchData();
       
     }
