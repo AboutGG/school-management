@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ClassDetails, Classroom, Students, Teacher, Teachers } from '../models/users';
@@ -12,16 +12,10 @@ export class ClassroomService {
 
 
   // get teachers classes
-  getDataClassroom(): Observable<Classroom[]>{
-    return this.http.get<Classroom[]>(`https://localhost:7262/api/teachers/classrooms`,)
+  getDataClassroom(params: {}): Observable<Classroom[]>{
+    return this.http.get<Classroom[]>(`https://localhost:7262/api/teachers/classrooms`,{params})
 
   }
-
-  //chiamata per la ricerca
-  searchClassrooms(searchTerm: string): Observable<Classroom[]> {
-    return this.http.get<Classroom[]>(`https://localhost:7262/api/teachers/classrooms?search=${searchTerm}`);
-  }
-  
 
   //get single class id
   getSingleClassroom(id: string): Observable<ClassDetails>{
