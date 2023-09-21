@@ -31,30 +31,40 @@ export class ClassesComponent {
 
     // get dati api classroom
     fetchData() {
-      this.classroomService.getDataClassroom({search: this.searchTerm, page: this.currentPage, itemPerPage: this.itemsPerPage} ).subscribe({
-        next: (data: Classroom []) => {
-          this.class = data;
-          this.class = this.class.slice(0, this.itemsPerPage); // mostra solo i primi 10 elementi inizialmente
-          this.totalItems = this.class.length;
-         
-          console.log('dati get',data);
-          console.log('data search',this.searchTerm)   
+      const params = {
+        search: this.searchTerm,
+        page: this.currentPage,
+        itemsPerPage: this.itemsPerPage,
+      };
+      this.classroomService.getDataClassroom(params).subscribe({
+        next: (data: Classroom[]) => {
+          this.totalItems = data.length; // numero totale di elementi
+  
+          const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+          const endIndex = startIndex + this.itemsPerPage;
+          
+          this.class = data.slice(startIndex, endIndex);
+  
+          console.log('dati get', data);
+          console.log('params', params)
         },
-        error: (err) => { 
-          console.log("error",err);
-      }
-    })
+        error: (err) => {
+          console.log('error', err);
+        }
+      });
     }
+  
 
     //funzione per ricerca
     onSearch() { 
+      this.currentPage = 1;
       this.fetchData();
       
     }
 
     //funzione per paginazione
-    onPageChange(currentPage: number) {
-      
+    onPageChange(newPage: number) {
+      this.currentPage = newPage;
         this.fetchData();
         console.log('page',this.currentPage);
       }
