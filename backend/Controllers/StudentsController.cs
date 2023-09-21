@@ -121,12 +121,12 @@ public class StudentsController : Controller
     [ProducesResponseType(401)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
-    public IActionResult GetStudentExams([FromHeader] string token)
+    public IActionResult GetStudentExams([FromHeader] string Token)
     {
         try
         {
             //Decode the token
-            JwtSecurityToken idFromToken = JWTHandler.DecodeJwtToken(token);
+            JwtSecurityToken idFromToken = JWTHandler.DecodeJwtToken(Token);
             
             //Take the userId from the token
             var takenId = new Guid (idFromToken.Payload["userid"].ToString());
