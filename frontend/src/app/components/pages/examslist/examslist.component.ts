@@ -34,7 +34,7 @@ export class ExamslistComponent {
   filtered: string = ""
   search: string = ""
   orderType: string = "asc"
-  order: string = "examDate"
+  order: string = "Id"
   itemsPerPage: number = 10
   onClickFilter: boolean = false
 
