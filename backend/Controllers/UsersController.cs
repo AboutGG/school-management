@@ -212,7 +212,7 @@ public class UsersController : Controller
     {
         ///<summary>We return a Bytes array because the PDF is a sequence of binary bytes to represent the document content compactly. </summary>
 
-        var stream = PDF.GeneratePdf(type, _mapper.Map<List<UserDto>>(_userRepository.GetUsers()), data);
+        var stream = PdfHandler.GeneratePdf(type, _mapper.Map<List<UserDto>>(_userRepository.GetUsers()), data);
 
         // Returns the PDF
         return File(stream, "application/pdf", "generated.pdf");

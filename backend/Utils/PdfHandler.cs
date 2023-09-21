@@ -8,7 +8,7 @@ using iText.Layout;
 
 namespace backend.Utils;
 
-public class PDF
+public class PdfHandler
 {
     public static byte[] GeneratePdf<T>(string type, ICollection<T>? table, Circular? data)
     {
@@ -46,11 +46,11 @@ public class PDF
         {
             htmlPath = "Assets/Circular.html";
             htmlContent = File.ReadAllText(htmlPath);
-            // Sostituisci i segnaposto con i dati dinamici
-            htmlContent = htmlContent.Replace("{{Title}}", data.Title)
-                .Replace("{{SchoolName}}", data.SchoolName)
-                .Replace("{{body}}", data.Body);
-            //.Replace("{{eta}}", "30");
+            // // Sostituisci i segnaposto con i dati dinamici
+            // htmlContent = htmlContent.Replace("{{Title}}", data.Title)
+            //     .Replace("{{SchoolName}}", data.SchoolName)
+            //     .Replace("{{body}}", data.Body);
+            // //.Replace("{{eta}}", "30");
         }
 
         using var memoryStream = new MemoryStream();

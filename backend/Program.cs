@@ -32,7 +32,7 @@ builder.Services.AddScoped<JWTHandler>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 
-builder.Services.AddScoped<PDF>();
+builder.Services.AddScoped<PdfHandler>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {

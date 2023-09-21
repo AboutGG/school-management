@@ -1,12 +1,36 @@
-﻿namespace backend.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-public class Circular
+namespace backend.Models;
+
+[Table("Pdfs")]
+public class Circular : Deleted
 {
-    public string? Title { get; set; }
+    [Column("id")]
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
+
+    [Column("circular_number")]
+    [JsonPropertyName("circular_name")]
+    public int CircularNumber { get; set; }
     
-    public string? SchoolName { get; set; }
+    [Column("upload_date")]
+    [JsonPropertyName("upload_date")]
+    public DateOnly UploadDate { get; set; }
     
-    public string? Body { get; set; }
+    [Column("location")]
+    [JsonPropertyName("location")]
+    public string Location { get; set; }
+
+    [Column("header")]
+    [JsonPropertyName("header")]
+    public string Header { get; set; }
     
-    
+    [Column("body")] 
+    [JsonPropertyName("body")]
+    public string Body { get; set; }
+
+    [Column("sign")]
+    [JsonPropertyName("sign")]
+    public string Sign { get; set; }
 }
