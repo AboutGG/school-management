@@ -15,10 +15,11 @@ namespace backend.Middleware;
 public class RoleMiddleware : IMiddleware
 {
     
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public  async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var conditionRole = context.Request.Headers["Role"].ToString();
-        
+        string conditionRole;
+        string token;
+       
         //tramite i servizi prendo il dbContext da utilizzare per prendere il ruolo dal token
         var dbContext = context.RequestServices.GetRequiredService<SchoolContext>();
         
@@ -27,8 +28,19 @@ public class RoleMiddleware : IMiddleware
         {
             try
             {
+                //Controllo e poi prendo dall'header il Ruolo e il Token
+                if (context.Request.Headers.ContainsKey("Role") && context.Request.Headers.ContainsKey("Token"))
+                {
+                    conditionRole = context.Request.Headers["Role"];
+                    token = context.Request.Headers["Token"];
+                }
+                else
+                {
+                    throw new Exception("INVALID_PARAMETERS");
+                }
+                
                 //Ricavo lo userid decodificando il token
-                var userid = Guid.Parse(JWTHandler.DecodeJwtToken(context.Request.Headers["Token"]).Payload["userid"]
+                var userid = Guid.Parse(JWTHandler.DecodeJwtToken(token).Payload["userid"]
                     .ToString());
                 
                 //Prendo il ruolo in modo da controllare se ha i permessi necessari
@@ -59,7 +71,7 @@ public class RoleMiddleware : IMiddleware
             catch (Exception e)
             {
                 ErrorResponse error = ErrorManager.Error(e);
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.StatusCode = error.statusCode;
                 context.Response.ContentType = "text/plain";
                 var jsonErrorResponse = JsonConvert.SerializeObject(error);
                 await context.Response.WriteAsync(jsonErrorResponse);

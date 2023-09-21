@@ -46,13 +46,13 @@ public class TeachersController : Controller
     [Route("Classrooms")]
     [ProducesResponseType(200, Type = typeof(List<ClassroomStudentCount>))]
     [ProducesResponseType(400)]
-    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string token)
+    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string Token)
     {
         JwtSecurityToken decodedToken;
         try
         {
             //Decode the token
-            decodedToken = JWTHandler.DecodeJwtToken(token);
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
             Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             // //Controllo il ruolo dello User tramite l'Id
