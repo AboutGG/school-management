@@ -61,16 +61,14 @@ export interface Teacher {
   id: string,
   name: string,
   surname: string,
-  subjects: [
-    {
-      subjectId: string
-      subjectName: string,
-      classroomId: string
-      classroomName: string
-    }
-  ]
+  subjects: TeacherSubject[]
 }
-
+export interface TeacherSubject {
+  subjectId: string
+  subjectName: string,
+  classroomId: string
+  classroomName: string
+}
 export interface Teachers {
   id?: string;
   name: string;

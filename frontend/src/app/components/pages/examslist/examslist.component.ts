@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Teacher, TeacherExam } from 'src/app/shared/models/users';
@@ -13,17 +14,15 @@ import { TeacherService } from 'src/app/shared/service/teacher.service';
 export class ExamslistComponent {
   constructor(private examsService: ExamsService, private teacherService: TeacherService, private classroomService: ClassroomService) { }
 
-  formSubject = new FormGroup({
+  formSubjects = new FormGroup({
     subjects: new FormControl('')
   })
-  formClassroom = new FormGroup({
+  formClassrooms = new FormGroup({
     classrooms: new FormControl('')
   });
-  classOrSubjs!: string
   examsList!: TeacherExam[]
   subject!: string
   subjects: string[] = []
-  teacher!: Teacher
   classroom!: string
   classrooms: string[] = []
   orders = {
@@ -36,11 +35,8 @@ export class ExamslistComponent {
   search: string = ""
   orderType: string = "asc"
   order: string = "examDate"
-  itemsPerPage: number = 50
-  onClickClassroom: boolean = false
-  onClickSubject: boolean = false
+  itemsPerPage: number = 10
   onClickFilter: boolean = false
-  switchText: string = "Vedi classi"
 
   ngOnInit(): void {
     this.getTeacherExams();
@@ -48,12 +44,24 @@ export class ExamslistComponent {
     this.getTeacherSubjects();
   }
 
-  resetForm() {
-    return this.onClickFilter === true ? this.formClassroom.reset() : this.formSubject.reset();
+  resetAllDropdown() {
+    [this.formClassrooms.reset({classrooms: ""})] && [this.formSubjects.reset({subjects: ""})]
+    this.getTeacherExams()
+  }
+  dropdownFilter() {
+    this.onClickFilter === true ? [this.formClassrooms.reset({ classrooms: "" })] && [this.filtered = this.formSubjects.value.subjects as string] : [this.formSubjects.reset({ subjects: "" })] && [this.filtered = this.formClassrooms.value.classrooms as string];
+    this.getTeacherExams()
   }
 
-  getTeacherExams(): void {
-    this.examsService.getTeacherExams(this.page, this.filtered, this.search, this.orderType, this.order, this.itemsPerPage).subscribe({
+  getTeacherExams() {
+    const params = new HttpParams()
+      .set('Page', this.page)
+      .set('Filter', this.filtered)
+      .set('Search', this.search)
+      .set('OrderType', this.orderType)
+      .set('Order', this.order)
+      .set('ItemsPerPage', this.itemsPerPage)
+    this.examsService.getTeacherExams(params).subscribe({
       next: (data: TeacherExam[]) => {
         // this.orders = {
         //   name: 'asc',
@@ -85,76 +93,11 @@ export class ExamslistComponent {
   getTeacherSubjects() {
     this.teacherService.getTeacherSubjects().subscribe({
       next: (data) => {
-        data.subjects.map(subjects => {
+        data.map(subjects => {
           this.subjects.push(subjects.subjectName)
         })
       }
     });
   }
-
-  filterSwitch() {
-    if (this.onClickFilter) {
-      this.onClickFilter = false;
-      this.subject = this.filtered
-      this.switchText = "Vedi classi"
-      
-    } else {
-      this.onClickFilter = true
-      this.classroom = this.filtered
-      this.switchText = "Vedi materie"
-
-    }
-  }
-
-  dropdownFilter(filtered: string) {
-    if (this.onClickFilter === false) {
-      this.subject = filtered
-    } else {
-      this.classroom = filtered
-    }
-    this.filtered = filtered
-  }
-  // getTeacherSubjects() {
-  //   this.teacherService.getTeacherSubjects().subscribe({
-  //     next: (data) => {
-  //       this.teacher = data
-  //       this.subject = data.subjects.
-  //     }
-  //   })
-  // }
-
-  // filterBySubject(subject: string) {
-  //   this.subject = subject;
-  // }
-
-  // filterByClassroom(classroom: string) {
-  //   this.classroom = classroom;
-  // }
-
-  // dropdownFilter(filtered: string) {
-  //   if (this.onClickClassroom) {
-  //     this.onClickSubject = false
-  //     this.classroom = filtered
-  //     this.subject = ""
-  //   }
-  //   if (this.onClickSubject) {
-  //     this.onClickClassroom = false
-  //     this.subject = filtered
-  //     this.classroom = ""
-  //   }
-  //   if (!this.onClickClassroom && !this.onClickSubject) {
-
-  //   }
-  // }
-  // getExamData(order: string, type: string, matter: string) {
-  //   this.usersService.getMatter(order, type, matter).subscribe({
-  //     next: (data: Registry[]) => {
-  //       this.users = data
-  //     },
-  //     error: (error: any) => {
-  //       console.log(error);
-  //     }
-  //   });
-  // }
 
 }
