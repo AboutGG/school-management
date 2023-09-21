@@ -57,48 +57,25 @@ public class DetailsController : Controller
     /// <param name="Id"></param>
     /// <returns>The details of a single user</returns>
     [HttpGet("{Id}")]
-    [ProducesResponseType(200, Type = typeof(RegistryDto))]
+    [ProducesResponseType(200, Type = typeof(UserDetailResponse))]
     [ProducesResponseType(404)]
     [ProducesResponseType(400)]
-    public IActionResult GetUserDetail([FromRoute]Guid Id)
+    public IActionResult GetUserDetail([FromRoute]Guid Id, [FromHeader] string token)
     {
-        var role = RoleSearcher.GetRole(Id, _context);
-        Registry response = null;
-        if (role == "teacher")
-        {
-            response = new GenericRepository<Teacher>(_context)
-                .GetAllUsingIQueryable(null,
-                    query => query
-                        .Include(t => t.Registry)
-                ).FirstOrDefault(u => u.UserId ==  Id).Registry;
-        }
-
-        if (role == "student")
-        {
-            response = new GenericRepository<Student>(_context)
-                .GetAllUsingIQueryable(null,
-                    query => query
-                        .Include(t => t.Registry)
-                ).FirstOrDefault(u => u.UserId ==  Id).Registry;
-        }
-
-        if (response == null)
-        {
-            return NotFound();
-        }
-
-        var x = new 
-        {
-            name = response.Name,
-            surname = response.Surname,
-            gender = response.Gender,
-            email = response.Email,
-            telephone = response.Telephone,
-            address = response.Address,
-            birth = response.Birth.ToString(),
-            role = RoleSearcher.GetRole(Id, _context)
-        };
-        return Ok(x);
+        UserDetailResponse response;
+        
+        var user = new GenericRepository<User>(_context)
+            .GetByIdUsingIQueryable(query => query
+                .Where(user => user.Id == Id)
+                .Include(u => u.Teacher.Registry)
+                .Include(u => u.Student.Registry));
+        
+        if (user.Teacher != null)
+            response = new UserDetailResponse(user.Teacher.Registry, "teacher");
+        else
+            response = new UserDetailResponse(user.Student.Registry, "student");
+        
+        return Ok(response);
     }
 
     #endregion

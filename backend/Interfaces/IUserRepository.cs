@@ -36,5 +36,6 @@ public interface IUserRepository
     /// <param name="user"></param>
     /// <returns>if the user is updated</returns>
     bool UpdateUser(User user);
-    
+    Me GetMe(string token);
+
 }

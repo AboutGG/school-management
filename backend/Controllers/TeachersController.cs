@@ -35,7 +35,6 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
-
     #region Get classroom by teacher id
 
     /// <summary>
@@ -47,21 +46,21 @@ public class TeachersController : Controller
     [Route("Classrooms")]
     [ProducesResponseType(200, Type = typeof(List<ClassroomStudentCount>))]
     [ProducesResponseType(400)]
-    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string token)
+    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string Token)
     {
         JwtSecurityToken decodedToken;
         try
         {
             //Decode the token
-            decodedToken = JWTHandler.DecodeJwtToken(token);
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
             Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
-            //Controllo il ruolo dello User tramite l'Id
-            var role = RoleSearcher.GetRole(takenId, _context);
-
-            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknown")
-                throw new Exception("NOT_FOUND");
+            // //Controllo il ruolo dello User tramite l'Id
+            // var role = RoleSearcher.GetRole(takenId, _context);
+            //
+            // //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            // if (role == "student" || role == "unknown")
+            //     throw new Exception("NOT_FOUND");
 
             var classrooms = new GenericRepository<Teacher>(_context)
                 .GetAllUsingIQueryable(@params,
@@ -79,8 +78,8 @@ public class TeachersController : Controller
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
 
     }
@@ -108,14 +107,14 @@ public class TeachersController : Controller
     /// <exception cref="Exception">Errors if the token is not valid or more.</exception>
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200, Type = typeof(TeacherDto))]
+    [ProducesResponseType(200, Type = typeof(SubjectClassroomDto))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    public IActionResult GetSubjects([FromHeader] string Token)
+    public IActionResult GetSubjects([FromHeader] string Token, [FromQuery] PaginationParams @params)
     {
         JwtSecurityToken decodedToken;
         Guid takenId;
-        string role;
+        //string role;
         try
         {
             //Decode the token
@@ -123,24 +122,29 @@ public class TeachersController : Controller
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
             //Controllo il ruolo dello User tramite l'Id
-            role = RoleSearcher.GetRole(takenId, _context);
+            //role = RoleSearcher.GetRole(takenId, _context);
             
-            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknown")
-                throw new Exception("UNAUTHORIZED");
-            else
-            {
+            // //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            // if (role == "student" || role == "unknown")
+            //     throw new Exception("UNAUTHORIZED");
+            // else
+            // {
                 //Prendo le materie che insegna il professore con le relative classi
-                var resultTeacher = new GenericRepository<Teacher>(_context).GetByIdUsingIQueryable(query => query
-                    .Where(el => el.UserId == takenId)
-                    .Include(el => el.Registry)
-                    .Include(el => el.TeachersSubjectsClassrooms)
-                    .ThenInclude(el => el.Classroom)
-                    .Include(el => el.TeachersSubjectsClassrooms)
-                    .ThenInclude(el => el.Subject)
+                var resultTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params, query => query
+                    .Where(el => el.Teacher.UserId == takenId)
+                    .Include(el => el.Teacher)
+                    .Include(el => el.Teacher.Registry)
+                    .Include(el => el.Classroom)
+                    .Include(el => el.Subject)
                 );
-                return Ok(_mapper.Map<TeacherSubjectDto>(resultTeacher));
-            }
+
+                 if (@params.Filter != null)
+                   resultTeacher = resultTeacher
+                .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                ).ToList(); 
+                return Ok(_mapper.Map<List<SubjectClassroomDto>>(resultTeacher));
+            // }
         }
         catch (Exception e)
         {
@@ -170,7 +174,7 @@ public class TeachersController : Controller
         IGenericRepository<Exam> examGenericRepository = new GenericRepository<Exam>(_context);
         JwtSecurityToken decodedToken;
         Guid takenId;
-        string role;
+        //string role;
 
         try
         {
@@ -179,11 +183,12 @@ public class TeachersController : Controller
 
             //Dal token decodificato prendo l'id dello user
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
-            role = RoleSearcher.GetRole(takenId, _context);
-            if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknown")
-            {
-                throw new Exception("UNAUTHORIZED");
-            }
+            
+            // role = RoleSearcher.GetRole(takenId, _context);
+            // if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknown")
+            // {
+            //     throw new Exception("UNAUTHORIZED");
+            // }
 
             //Prendo la lista di esami eseguiti dal professore che come userId ha 
             List<Exam> dummy = examGenericRepository.GetAll(@params,

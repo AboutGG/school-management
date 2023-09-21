@@ -84,7 +84,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
                 $"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
 
             //@params.Page default value: 1, @params.ItemsPerPage default value: 10
-            query.Skip((@params.Page - 1) * @params.ItemsPerPage)
+            query = query.Skip((@params.Page - 1) * @params.ItemsPerPage)
                 .Take(@params.ItemsPerPage);
         }
 
