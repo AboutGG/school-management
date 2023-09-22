@@ -171,19 +171,19 @@ public static class Seeder
             new Exam
             {
                 Id = Guid.Parse("55988821-2bc3-4122-aa50-e0fb3b8f42ad"),
-                ExamDate = DateOnly.Parse("06/09/2023"),
+                Date = DateOnly.Parse("06/09/2023"),
                 TeacherSubjectClassroomId = Guid.Parse("0f69c148-07ab-47a8-838a-0c9dfce974bf")
             },
             new Exam
             {
                 Id = Guid.Parse("06dec5ca-003e-4b39-af43-c745746d23e0"),
-                ExamDate = DateOnly.Parse("10/09/2023"),
+                Date = DateOnly.Parse("10/09/2023"),
                 TeacherSubjectClassroomId = Guid.Parse("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa")
             },
             new Exam
             {
                 Id = Guid.Parse("20ad1b3e-af97-4a45-815b-af9f34e52dc3"),
-                ExamDate = DateOnly.Parse("25/09/2023"),
+                Date = DateOnly.Parse("25/09/2023"),
                 TeacherSubjectClassroomId = Guid.Parse("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d")
             }
         );

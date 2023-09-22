@@ -68,7 +68,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     #region Get All using IQueryable
 
     public List<T> GetAllUsingIQueryable(@PaginationParams? @params,
-        Func<IQueryable<T>, IQueryable<T>>? queryFunc
+        Func<IQueryable<T>, IQueryable<T>>? queryFunc,
+        out int total
     )
     {
         var query = _entities.AsQueryable();
@@ -77,6 +78,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         {
             query = queryFunc.Invoke(query);
         }
+
+        total = query.Count();
 
         if (@params != null)
         {
