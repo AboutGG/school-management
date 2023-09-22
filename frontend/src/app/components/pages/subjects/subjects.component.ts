@@ -1,6 +1,7 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Teacher, Teachers } from 'src/app/shared/models/users';
+import { TeacherSubject, Teachers } from 'src/app/shared/models/users';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 
 @Component({
@@ -8,9 +9,15 @@ import { ClassroomService } from 'src/app/shared/service/classroom.service';
   templateUrl: './subjects.component.html',
   styleUrls: ['./subjects.component.scss']
 })
-export class SubjectsComponent implements OnInit {
+export class SubjectsComponent {
 
-  teachers!: Teacher
+  teachers: TeacherSubject [] = [];
+  searchTerm: string = '';
+  currentPage : number = 1; 
+  itemsPerPage : number = 1// numero di elementi per pagina
+  totalItems = 0;
+  newPage! : string
+  previousPage: number = 1;
 
   constructor(private classroomService: ClassroomService) {}
 
@@ -22,10 +29,21 @@ export class SubjectsComponent implements OnInit {
 
     // get dati api teacher subjects
     fetchData() {
-      this.classroomService.getTeacherSubjects().subscribe({
-        next: (data: Teacher) => {
-          this.teachers = data;
-          console.log(data)
+      // const params = {
+      //   page: this.currentPage,
+      //   search: this.searchTerm,
+      //   itemsPerPage: this.itemsPerPage,
+      // }
+      this.classroomService.getTeacherSubjects(new HttpParams).subscribe({
+        next: (data: TeacherSubject []) => {
+          this.totalItems = data.length; // numero totale di elementi
+
+          const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+          const endIndex = startIndex + this.itemsPerPage;
+          this.teachers = data.slice(startIndex, endIndex);
+
+          console.log('dati get',data)
+          // console.log('params',params)
         },
         error: (err) => { 
           console.log("error",err);
@@ -33,8 +51,18 @@ export class SubjectsComponent implements OnInit {
       })
     }
 
+    onSearch() {
+      this.previousPage = this.currentPage;
+      this.currentPage = 1;
+      this.fetchData();
+      
+    }
 
-
-
+    //funzione per paginazione
+    onPageChange(newPage: number) {
+      this.currentPage = newPage;
+      this.fetchData();
+      console.log('page',this.currentPage);
+    }
 
 }

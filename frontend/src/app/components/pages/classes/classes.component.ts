@@ -33,11 +33,11 @@ export class ClassesComponent {
     // get dati api classroom
     fetchData() {
       const params = {
-        search: this.searchTerm,
         page: this.currentPage,
+        search: this.searchTerm,  
         itemsPerPage: this.itemsPerPage,
       };
-      this.classroomService.getDataClassroom(params).subscribe({
+      this.classroomService.getDataClassroom(new HttpParams).subscribe({
         next: (data: Classroom[]) => {
           this.totalItems = data.length; // numero totale di elementi
   
@@ -47,20 +47,45 @@ export class ClassesComponent {
           this.class = data.slice(startIndex, endIndex);
   
           console.log('dati get', data);
-          console.log('params', params)
+        //  console.log('params', params)
         },
         error: (err) => {
           console.log('error', err);
         }
       });
     }
+
+    // fetchData() {
+    //   const params = new HttpParams()
+    //     .set('page', this.currentPage)
+    //     .set('search', this.searchTerm)
+    //     .set('itemsPerPage', this.itemsPerPage);
+    
+    //   this.classroomService.getDataClassroom(params).subscribe({
+    //     next: (data: Classroom[]) => {
+
+    //       this.totalItems = data.totalItems; // quando l'api includerà il totale degli elementi
+          
+    //       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    //       const endIndex = startIndex + this.itemsPerPage;
+          
+    //       this.class = data.slice(startIndex, endIndex);
+    
+    //       console.log('dati get', data);
+    //       console.log('params', params);
+    //     },
+    //     error: (err) => {
+    //       console.log('error', err);
+    //     }
+    //   });
+    // }
+    
   
 
     //funzione per ricerca
     onSearch() { 
       this.previousPage = this.currentPage;
       this.currentPage = 1;
-     
       this.fetchData();
       
     }
@@ -68,6 +93,7 @@ export class ClassesComponent {
     //funzione per paginazione
     onPageChange(newPage: number) {
       this.currentPage = newPage;
+      
         this.fetchData();
         console.log('page',this.currentPage);
       }
