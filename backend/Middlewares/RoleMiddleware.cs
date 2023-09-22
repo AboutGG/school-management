@@ -14,10 +14,12 @@ namespace backend.Middleware;
 /// <summary> Middleware che permette di controllare il ruolo tramite il token che manda il FE quando effettua determinate chiamate </summary>
 public class RoleMiddleware : IMiddleware
 {
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    
+    public  async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var conditionRole = context.Request.Headers["Role"].ToString();
-        
+        string conditionRole;
+        string token;
+       
         //tramite i servizi prendo il dbContext da utilizzare per prendere il ruolo dal token
         var dbContext = context.RequestServices.GetRequiredService<SchoolContext>();
         
@@ -26,8 +28,19 @@ public class RoleMiddleware : IMiddleware
         {
             try
             {
+                //Controllo e poi prendo dall'header il Ruolo e il Token
+                if (context.Request.Headers.ContainsKey("Role") && context.Request.Headers.ContainsKey("Token"))
+                {
+                    conditionRole = context.Request.Headers["Role"];
+                    token = context.Request.Headers["Token"];
+                }
+                else
+                {
+                    throw new Exception("INVALID_PARAMETERS");
+                }
+                
                 //Ricavo lo userid decodificando il token
-                var userid = Guid.Parse(JWTHandler.DecodeJwtToken(context.Request.Headers["Token"]).Payload["userid"]
+                var userid = Guid.Parse(JWTHandler.DecodeJwtToken(token).Payload["userid"]
                     .ToString());
                 
                 //Prendo il ruolo in modo da controllare se ha i permessi necessari
@@ -41,12 +54,24 @@ public class RoleMiddleware : IMiddleware
                 {
                     throw new Exception("UNAUTHORIZED");
                 }
+
+                switch (context.Request.Path.Value)
+                {
+                    case var s when s.Contains("/api/teachers") || s.Contains("/api/users"):
+                        if (role != "teacher")
+                            throw new Exception("UNAUTHORIZED");
+                        break;
+                    case var s when s.Contains("/api/students"):
+                        if (role != "student")
+                            throw new Exception("UNAUTHORIZED");
+                        break;
+                }
                 await next(context);
             }
             catch (Exception e)
             {
                 ErrorResponse error = ErrorManager.Error(e);
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.StatusCode = error.statusCode;
                 context.Response.ContentType = "text/plain";
                 var jsonErrorResponse = JsonConvert.SerializeObject(error);
                 await context.Response.WriteAsync(jsonErrorResponse);

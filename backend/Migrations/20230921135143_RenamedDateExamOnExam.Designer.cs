@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -11,9 +12,11 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20230921135143_RenamedDateExamOnExam")]
+    partial class RenamedDateExamOnExam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,58 +24,6 @@ namespace backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("backend.Models.Circular", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("body")
-                        .HasAnnotation("Relational:JsonPropertyName", "body");
-
-                    b.Property<int>("CircularNumber")
-                        .HasColumnType("integer")
-                        .HasColumnName("circular_number")
-                        .HasAnnotation("Relational:JsonPropertyName", "circular_name");
-
-                    b.Property<DateOnly?>("DeletedAt")
-                        .HasColumnType("date")
-                        .HasColumnName("deleted_at")
-                        .HasAnnotation("Relational:JsonPropertyName", "deleted_at");
-
-                    b.Property<string>("Header")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("header")
-                        .HasAnnotation("Relational:JsonPropertyName", "header");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("location")
-                        .HasAnnotation("Relational:JsonPropertyName", "location");
-
-                    b.Property<string>("Sign")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("sign")
-                        .HasAnnotation("Relational:JsonPropertyName", "sign");
-
-                    b.Property<DateOnly>("UploadDate")
-                        .HasColumnType("date")
-                        .HasColumnName("upload_date")
-                        .HasAnnotation("Relational:JsonPropertyName", "upload_date");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pdfs");
-                });
 
             modelBuilder.Entity("backend.Models.Classroom", b =>
                 {

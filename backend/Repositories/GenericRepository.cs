@@ -68,7 +68,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     #region Get All using IQueryable
 
     public List<T> GetAllUsingIQueryable(@PaginationParams? @params,
-        Func<IQueryable<T>, IQueryable<T>>? queryFunc
+        Func<IQueryable<T>, IQueryable<T>>? queryFunc,
+        out int total
     )
     {
         var query = _entities.AsQueryable();
@@ -78,13 +79,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             query = queryFunc.Invoke(query);
         }
 
+        total = query.Count();
+
         if (@params != null)
         {
             query = query.OrderBy(
                 $"{@params.Order} {@params.OrderType}"); // Order to Student.Registry.{params order} and Teacher.Registry{params order}
 
             //@params.Page default value: 1, @params.ItemsPerPage default value: 10
-            query.Skip((@params.Page - 1) * @params.ItemsPerPage)
+            query = query.Skip((@params.Page - 1) * @params.ItemsPerPage)
                 .Take(@params.ItemsPerPage);
         }
 

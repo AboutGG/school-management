@@ -51,6 +51,7 @@ public class StudentsController : Controller
     #endregion
 
     #region Get Subjects
+
     [HttpGet]
     [Route("subjects")]
     [ProducesResponseType(200, Type = typeof(List<TeacherDto>))]
@@ -67,40 +68,38 @@ public class StudentsController : Controller
             decodedToken = JWTHandler.DecodeJwtToken(Token);
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
-            //tramite lo user ricavo il ruolo tramite l'Id
-            // role = RoleSearcher.GetRole(takenId, _context);
-            //
-            // //nel caso non dovesse essere un alunno esegue una nuova exception ritornando Unauthorized
-            // if (role == "teacher" || role == "unknown")
-            // {
-            //     throw new Exception("NOT_FOUND");
-            // }
-            // else
-            // {
-                //Prendo l'id della classe riguardante lo studente 
-                Guid studentclassroomId = _context.Students.FirstOrDefault(el => el.UserId == takenId).ClassroomId;
+            //Prendo l'id della classe riguardante lo studente 
+            Guid studentclassroomId = _context.Students.FirstOrDefault(el => el.UserId == takenId).ClassroomId;
 
-                switch (@params.Order.Trim().ToLower())
+            switch (@params.Order.Trim().ToLower())
+            {
+                case "name":
+                    @params.Order = "Teacher.Registry.Name";
+                    break;
+                case "surname":
+                    @params.Order = "Teacher.Registry.Surname";
+                    break;
+            }
+
+            //Prendo le materie che pratica lo studente nella sua classe
+            var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(
+                @params,
+                query => query
+                    .Where(el => el.ClassroomId == studentclassroomId)
+                    .Include(el => el.Classroom)
+                    .Include(el => el.Teacher.Registry)
+                    .Include(el => el.Subject),
+                out var total
+            ).Select(el => el.Teacher).ToList();
+
+            var mappedResponse = _mapper.Map<List<TeacherDto>>(resultStudent.DistinctBy(el => el.Id));
+            
+            return Ok(
+                new PaginationResponse<TeacherDto>
                 {
-                    case "name":
-                        @params.Order = "Teacher.Registry.Name";
-                        break;
-                    case "surname":
-                        @params.Order = "Teacher.Registry.Surname";
-                        break;
-                }
-                
-                //Prendo le materie che pratica lo studente nella sua classe
-                var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(
-                    @params,
-                    query => query
-                        .Where(el => el.ClassroomId == studentclassroomId)
-                        .Include(el => el.Classroom)
-                        .Include(el => el.Teacher.Registry)
-                        .Include(el => el.Subject)).Select(el => el.Teacher).ToList();
-                
-                return Ok(_mapper.Map<List<TeacherDto>>(resultStudent.DistinctBy(el => el.Id)));
-            //}
+                    Total = total,
+                    Data = mappedResponse
+                });
         }
         catch (Exception e)
         {
@@ -117,55 +116,50 @@ public class StudentsController : Controller
     /// <returns>Return a list of Exams performed by the Student</returns>
     [HttpGet]
     [Route("exams")]
-    [ProducesResponseType(200, Type = typeof(StudentExamDto))]
+    [ProducesResponseType(200, Type = typeof(PaginationResponse<StudentExamDto>))]
     [ProducesResponseType(401)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
-    public IActionResult GetStudentExams([FromHeader] string token)
+    public IActionResult GetStudentExams([FromHeader] string Token, [FromQuery] PaginationParams @params)
     {
         try
         {
             //Decode the token
-            JwtSecurityToken idFromToken = JWTHandler.DecodeJwtToken(token);
+            JwtSecurityToken idFromToken = JWTHandler.DecodeJwtToken(Token);
             
             //Take the userId from the token
             var takenId = new Guid (idFromToken.Payload["userid"].ToString());
+
+            @params.Order = "Exam." + @params.Order;
             
             //Take the student using the id
-            Student takenStudent = new GenericRepository<Student>(_context)
-                .GetByIdUsingIQueryable(
+            List<StudentExam> takenStudent = new GenericRepository<StudentExam>(_context)
+                .GetAllUsingIQueryable(@params,
                     query => query
-                        .Where(el => el.UserId == takenId)
-                        .Include(el=> el.Registry)
-                        .Include(el => el.StudentExams)
-                        .ThenInclude(el => el.Exam)
-                        .ThenInclude(el => el.TeacherSubjectClassroom.Subject)
-                        .Include(el => el.StudentExams)
-                        .ThenInclude(el => el.Exam.TeacherSubjectClassroom.Teacher.Registry)
+                        .Where(el => el.Student.UserId == takenId)
+                        .Include(el => el.Student)
+                        .Include(el => el.Exam)
+                        .ThenInclude(el => el.TeacherSubjectClassroom.Teacher.Registry)
+                        .Include(el => el.Student.Classroom)
+                        .Include(el=> el.Exam.TeacherSubjectClassroom)
+                        .ThenInclude(el => el.Subject)
+                    ,out var total
                     );
             if (takenStudent == null)
             {
                 throw new Exception("NOT_FOUND");
             }
-
-            // string role = RoleSearcher.GetRole(takenId, _context);
-            //
-            // if (role == "teacher" || role == "unknown")
-            //     throw new Exception("UNAUTHORIZED");
-            // var dummyExams = new GenericRepository<StudentExam>(_context).GetAll2(null, 
-            //     el => 
-            //         takenStudent.StudentExams.AsQueryable()
-            //             .Include(el => el.Student)
-            //             .Include(el => el.Exam)
-            //             .Include(el => el.Exam.TeacherSubjectClassroom)
-            //             .Include(el => el.Exam.TeacherSubjectClassroom.Subject)
-            //             .Include(el => el.Exam.TeacherSubjectClassroom.Teacher)
-            //         );
-            //
-            // takenStudent.StudentExams = dummyExams;
+            var studentExamDtos = new List<StudentExamDto>();
+            foreach (var el in takenStudent)
+            {
+                studentExamDtos.Add(new StudentExamDto(el));
+            }
             
-            var dummy = _mapper.Map<StudentExamDto>(takenStudent);
-            return Ok(dummy);
+            return Ok(new PaginationResponse<StudentExamDto>
+            {
+                Total = total,
+                Data = studentExamDtos
+            });
         }
         catch (Exception e)
         {
