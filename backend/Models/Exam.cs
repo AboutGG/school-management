@@ -15,9 +15,9 @@ public class Exam : Deleted
     public Guid TeacherSubjectClassroomId { get; set; }
     public virtual TeacherSubjectClassroom TeacherSubjectClassroom { get; set; }
 
-    [Column("exam_date")]
-    [JsonPropertyName("exam_date")]
-    public DateOnly ExamDate { get; set; }
+    [Column("date")]
+    [JsonPropertyName("date")]
+    public DateOnly Date { get; set; }
 
     #region Foreign Key reference
     public virtual List<StudentExam> StudentExams { get; set; }

@@ -35,7 +35,9 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
-    #region Get classroom by teacher id
+    
+    //TODO: fix the api GetClassrooms
+    #region Get classroom
 
     /// <summary>
     /// Get all classrooms of a teacher 
@@ -67,13 +69,16 @@ public class TeachersController : Controller
                     query => query
                         .Include(teacher => teacher.TeachersSubjectsClassrooms)
                         .ThenInclude(tsc => tsc.Classroom.Students)
-                        .Where(tsc => tsc.UserId == takenId))
+                        .Where(tsc => tsc.UserId == takenId),
+                    out var total
+                    )
                 .SelectMany(teacher =>
                     teacher.TeachersSubjectsClassrooms
                         .Select(tsc => tsc.Classroom)).Distinct().ToList();
 
             var filterclassroom = classrooms
                 .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())).ToList();
+            
             return Ok(_mapper.Map<List<ClassroomStudentCount>>(filterclassroom));
         }
         catch (Exception e)
@@ -121,30 +126,29 @@ public class TeachersController : Controller
             decodedToken = JWTHandler.DecodeJwtToken(Token);
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
-            //Controllo il ruolo dello User tramite l'Id
-            //role = RoleSearcher.GetRole(takenId, _context);
-            
-            // //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            // if (role == "student" || role == "unknown")
-            //     throw new Exception("UNAUTHORIZED");
-            // else
-            // {
-                //Prendo le materie che insegna il professore con le relative classi
-                var resultTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params, query => query
+            var resultTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params,
+                query => query
                     .Where(el => el.Teacher.UserId == takenId)
                     .Include(el => el.Teacher)
                     .Include(el => el.Teacher.Registry)
                     .Include(el => el.Classroom)
-                    .Include(el => el.Subject)
-                );
+                    .Include(el => el.Subject),
+                out var total
+            );
 
-                 if (@params.Filter != null)
-                   resultTeacher = resultTeacher
-                .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                ).ToList(); 
-                return Ok(_mapper.Map<List<SubjectClassroomDto>>(resultTeacher));
-            // }
+            if (@params.Filter != null)
+                resultTeacher = resultTeacher
+                    .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                                 || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                    ).ToList();
+
+            var mappedResponse = _mapper.Map<List<SubjectClassroomDto>>(resultTeacher);
+            
+            return Ok(new PaginationResponse<SubjectClassroomDto>
+            {
+                Total = total,
+                Data = mappedResponse
+            });
         }
         catch (Exception e)
         {
@@ -191,11 +195,13 @@ public class TeachersController : Controller
             // }
 
             //Prendo la lista di esami eseguiti dal professore che come userId ha 
-            List<Exam> dummy = examGenericRepository.GetAll(@params,
-                el => el.TeacherSubjectClassroom.Teacher.UserId == takenId,
-                el => el.TeacherSubjectClassroom,
-                el => el.TeacherSubjectClassroom.Classroom,
-                el => el.TeacherSubjectClassroom.Subject
+            List<Exam> dummy = examGenericRepository.GetAllUsingIQueryable(@params,
+                query => query
+                    . Where(el => el.TeacherSubjectClassroom.Teacher.UserId == takenId)
+                .Include( el => el.TeacherSubjectClassroom)
+                .Include(el => el.TeacherSubjectClassroom.Classroom)
+                    .Include(el => el.TeacherSubjectClassroom.Subject),
+                out var total
             );
             if (@params.Filter != null)
                 dummy = dummy.Where(el =>
@@ -203,7 +209,13 @@ public class TeachersController : Controller
                         || el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
                         )
                     .ToList();
-            return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
+
+            var mappedResponse = _mapper.Map<List<TeacherExamDto>>(dummy);
+            return Ok(new PaginationResponse<TeacherExamDto>
+            {
+                Total = total,
+                Data = mappedResponse
+            });
         }
         catch (Exception e)
         {
@@ -244,8 +256,9 @@ public class TeachersController : Controller
                     .Where(el => el.Student.Registry.Name.Trim().ToLower()
                                      .Contains(@params.Search.Trim().ToLower())
                                  || el.Student.Registry.Surname.Trim().ToLower()
-                                     .Contains(@params.Search.Trim().ToLower())
-                    ));
+                                     .Contains(@params.Search.Trim().ToLower()))
+                ,  out var total
+                );
 
             ExamDto mappedExams = _mapper.Map<ExamDto>(takenExam);
 
