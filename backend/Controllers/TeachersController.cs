@@ -8,6 +8,7 @@ using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
+using J2N.Text;
 
 namespace backend.Controllers;
 
@@ -36,7 +37,6 @@ public class TeachersController : Controller
 
     #region Api calls
     
-    //TODO: fix the api GetClassrooms
     #region Get classroom
 
     /// <summary>
@@ -119,7 +119,6 @@ public class TeachersController : Controller
     #endregion
 
     #region Get Subjects
-
     /// <summary> A method that return a Teacher's subjects list </summary>
     /// <param name="Token">Token to take the user id of the Teacher and checks the role</param>
     /// <returns>A list of Subject and his classrooms</returns>
@@ -142,7 +141,10 @@ public class TeachersController : Controller
 
             var resultTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params,
                 query => query
-                    .Where(el => el.Teacher.UserId == takenId)
+                    .Where(el => el.Teacher.UserId == takenId
+                    && (el.Classroom.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
+                    || el.Subject.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()))
+                    )
                     .Include(el => el.Teacher)
                     .Include(el => el.Teacher.Registry)
                     .Include(el => el.Classroom)
@@ -150,11 +152,11 @@ public class TeachersController : Controller
                 out var total
             );
 
-            if (@params.Filter != null)
-                resultTeacher = resultTeacher
-                    .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                                 || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                    ).ToList();
+            // if (@params.Filter != null)
+            //     resultTeacher = resultTeacher
+            //         .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+            //                      || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+            //         ).ToList();
 
             var mappedResponse = _mapper.Map<List<SubjectClassroomDto>>(resultTeacher);
             
