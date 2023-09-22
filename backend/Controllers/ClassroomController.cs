@@ -31,17 +31,20 @@ public class ClassroomsController : Controller
         _mapper = mapper;
         _teacherRepository = teacherRepository;
     }
-
+    
+    /// <summary> This API call are used to take all the classrooms when you create an Student </summary>
+    /// <returns>All the classrooms present on the Database</returns>
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
     public IActionResult GetClassroomsList()
     {
         var classrooms = new GenericRepository<Classroom>(_context)
-            .GetAllUsingIQueryable(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null);
+            .GetAllUsingIQueryable(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null, out var total);
         return Ok(_mapper.Map<List<ClassroomDto>>(classrooms));
     }
 
 
+    //TODO: fix the response of this api call
     [HttpGet]
     [Route("{id}")]
     [ProducesResponseType(200, Type = typeof(List<ClassroomDetails>))]
@@ -51,7 +54,11 @@ public class ClassroomsController : Controller
             .GetAllUsingIQueryable(@params,
                 query => query
                     .Where(student => student.ClassroomId == id)
-                    .Include(student => student.Registry)));
+                    .Include(student => student.Registry)
+                ,out var totalStudents 
+                )
+        
+        );
 
         var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
             .GetAllUsingIQueryable(
@@ -61,7 +68,9 @@ public class ClassroomsController : Controller
                         .Any(tsc => tsc.ClassroomId == id))
                     .Include(teacher => teacher.TeachersSubjectsClassrooms)
                     .ThenInclude(tsc => tsc.Subject)
-                    .Include(teacher => teacher.Registry)));
+                    .Include(teacher => teacher.Registry),
+                out var totalTeachers
+                ));
         
         return Ok(new { students, teachers });
     }
