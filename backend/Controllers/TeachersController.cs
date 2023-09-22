@@ -65,7 +65,7 @@ public class TeachersController : Controller
             //     throw new Exception("NOT_FOUND");
 
             var classrooms = new GenericRepository<Teacher>(_context)
-                .GetAllUsingIQueryable(@params,
+                .GetAllUsingIQueryable(null,
                     query => query
                         .Include(teacher => teacher.TeachersSubjectsClassrooms)
                         .ThenInclude(tsc => tsc.Classroom.Students)
@@ -76,10 +76,24 @@ public class TeachersController : Controller
                     teacher.TeachersSubjectsClassrooms
                         .Select(tsc => tsc.Classroom)).Distinct().ToList();
 
-            var filterclassroom = classrooms
-                .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())).ToList();
+
+            var filteredClassroom = new GenericRepository<Classroom>(_context)
+                .GetAllUsingIQueryable(@params,
+                query => classrooms.AsQueryable()
+                    .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())),
+                out var totalClassrooms
+            );
             
-            return Ok(_mapper.Map<List<ClassroomStudentCount>>(filterclassroom));
+            var result  = new List<ClassroomStudentCount>();
+            foreach (var el in filteredClassroom)
+            {
+                result.Add(new ClassroomStudentCount(el));
+            }
+            return Ok(new PaginationResponse<ClassroomStudentCount>
+            {
+                Total = totalClassrooms,
+                Data = result
+            });
         }
         catch (Exception e)
         {
