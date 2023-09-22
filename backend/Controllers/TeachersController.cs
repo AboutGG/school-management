@@ -35,8 +35,9 @@ public class TeachersController : Controller
     #endregion
 
     #region Api calls
-
-    #region Get classroom by teacher id
+    
+    //TODO: fix the api GetClassrooms
+    #region Get classroom
 
     /// <summary>
     /// Get all classrooms of a teacher 
@@ -47,40 +48,43 @@ public class TeachersController : Controller
     [Route("Classrooms")]
     [ProducesResponseType(200, Type = typeof(List<ClassroomStudentCount>))]
     [ProducesResponseType(400)]
-    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string token)
+    public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string Token)
     {
         JwtSecurityToken decodedToken;
         try
         {
             //Decode the token
-            decodedToken = JWTHandler.DecodeJwtToken(token);
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
             Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
-            //Controllo il ruolo dello User tramite l'Id
-            var role = RoleSearcher.GetRole(takenId, _context);
-
-            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknown")
-                throw new Exception("NOT_FOUND");
+            // //Controllo il ruolo dello User tramite l'Id
+            // var role = RoleSearcher.GetRole(takenId, _context);
+            //
+            // //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
+            // if (role == "student" || role == "unknown")
+            //     throw new Exception("NOT_FOUND");
 
             var classrooms = new GenericRepository<Teacher>(_context)
                 .GetAllUsingIQueryable(@params,
                     query => query
                         .Include(teacher => teacher.TeachersSubjectsClassrooms)
                         .ThenInclude(tsc => tsc.Classroom.Students)
-                        .Where(tsc => tsc.UserId == takenId))
+                        .Where(tsc => tsc.UserId == takenId),
+                    out var total
+                    )
                 .SelectMany(teacher =>
                     teacher.TeachersSubjectsClassrooms
                         .Select(tsc => tsc.Classroom)).Distinct().ToList();
 
             var filterclassroom = classrooms
                 .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())).ToList();
+            
             return Ok(_mapper.Map<List<ClassroomStudentCount>>(filterclassroom));
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
 
     }
@@ -108,39 +112,43 @@ public class TeachersController : Controller
     /// <exception cref="Exception">Errors if the token is not valid or more.</exception>
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200, Type = typeof(TeacherDto))]
+    [ProducesResponseType(200, Type = typeof(SubjectClassroomDto))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    public IActionResult GetSubjects([FromHeader] string Token)
+    public IActionResult GetSubjects([FromHeader] string Token, [FromQuery] PaginationParams @params)
     {
         JwtSecurityToken decodedToken;
         Guid takenId;
-        string role;
+        //string role;
         try
         {
             //Decode the token
             decodedToken = JWTHandler.DecodeJwtToken(Token);
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
-            //Controllo il ruolo dello User tramite l'Id
-            role = RoleSearcher.GetRole(takenId, _context);
+            var resultTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params,
+                query => query
+                    .Where(el => el.Teacher.UserId == takenId)
+                    .Include(el => el.Teacher)
+                    .Include(el => el.Teacher.Registry)
+                    .Include(el => el.Classroom)
+                    .Include(el => el.Subject),
+                out var total
+            );
+
+            if (@params.Filter != null)
+                resultTeacher = resultTeacher
+                    .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                                 || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+                    ).ToList();
+
+            var mappedResponse = _mapper.Map<List<SubjectClassroomDto>>(resultTeacher);
             
-            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknown")
-                throw new Exception("UNAUTHORIZED");
-            else
+            return Ok(new PaginationResponse<SubjectClassroomDto>
             {
-                //Prendo le materie che insegna il professore con le relative classi
-                var resultTeacher = new GenericRepository<Teacher>(_context).GetByIdUsingIQueryable(query => query
-                    .Where(el => el.UserId == takenId)
-                    .Include(el => el.Registry)
-                    .Include(el => el.TeachersSubjectsClassrooms)
-                    .ThenInclude(el => el.Classroom)
-                    .Include(el => el.TeachersSubjectsClassrooms)
-                    .ThenInclude(el => el.Subject)
-                );
-                return Ok(_mapper.Map<TeacherSubjectDto>(resultTeacher));
-            }
+                Total = total,
+                Data = mappedResponse
+            });
         }
         catch (Exception e)
         {
@@ -170,7 +178,7 @@ public class TeachersController : Controller
         IGenericRepository<Exam> examGenericRepository = new GenericRepository<Exam>(_context);
         JwtSecurityToken decodedToken;
         Guid takenId;
-        string role;
+        //string role;
 
         try
         {
@@ -179,18 +187,21 @@ public class TeachersController : Controller
 
             //Dal token decodificato prendo l'id dello user
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
-            role = RoleSearcher.GetRole(takenId, _context);
-            if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknown")
-            {
-                throw new Exception("UNAUTHORIZED");
-            }
+            
+            // role = RoleSearcher.GetRole(takenId, _context);
+            // if (role.Trim().ToLower() == "student" || role.Trim().ToLower() == "unknown")
+            // {
+            //     throw new Exception("UNAUTHORIZED");
+            // }
 
             //Prendo la lista di esami eseguiti dal professore che come userId ha 
-            List<Exam> dummy = examGenericRepository.GetAll(@params,
-                el => el.TeacherSubjectClassroom.Teacher.UserId == takenId,
-                el => el.TeacherSubjectClassroom,
-                el => el.TeacherSubjectClassroom.Classroom,
-                el => el.TeacherSubjectClassroom.Subject
+            List<Exam> dummy = examGenericRepository.GetAllUsingIQueryable(@params,
+                query => query
+                    . Where(el => el.TeacherSubjectClassroom.Teacher.UserId == takenId)
+                .Include( el => el.TeacherSubjectClassroom)
+                .Include(el => el.TeacherSubjectClassroom.Classroom)
+                    .Include(el => el.TeacherSubjectClassroom.Subject),
+                out var total
             );
             if (@params.Filter != null)
                 dummy = dummy.Where(el =>
@@ -198,7 +209,13 @@ public class TeachersController : Controller
                         || el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
                         )
                     .ToList();
-            return Ok(_mapper.Map<List<TeacherExamDto>>(dummy));
+
+            var mappedResponse = _mapper.Map<List<TeacherExamDto>>(dummy);
+            return Ok(new PaginationResponse<TeacherExamDto>
+            {
+                Total = total,
+                Data = mappedResponse
+            });
         }
         catch (Exception e)
         {
@@ -239,8 +256,9 @@ public class TeachersController : Controller
                     .Where(el => el.Student.Registry.Name.Trim().ToLower()
                                      .Contains(@params.Search.Trim().ToLower())
                                  || el.Student.Registry.Surname.Trim().ToLower()
-                                     .Contains(@params.Search.Trim().ToLower())
-                    ));
+                                     .Contains(@params.Search.Trim().ToLower()))
+                ,  out var total
+                );
 
             ExamDto mappedExams = _mapper.Map<ExamDto>(takenExam);
 

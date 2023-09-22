@@ -10,5 +10,5 @@ namespace backend.Dto;
 
         public Guid? ClassroomId { get; set; }
 
-        public string RoleName { get; set; }
+        public string Role { get; set; }
     }

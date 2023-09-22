@@ -69,9 +69,6 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember => destinationMember.id,
                 opt => opt
                     .MapFrom(src => src.UserId))
-            .ForMember(destinationMember => destinationMember.id,
-                opt => opt
-                    .MapFrom(src => src.UserId))
             .ForMember(destinationMember => destinationMember.name,
                 opt => opt
                     .MapFrom(src => src.Registry.Name))
@@ -90,10 +87,20 @@ public class MappingProfiles : Profile
                         })
                     ));
 
-        CreateMap<TeacherSubjectClassroom, TeacherSubjectClassroomDto>()
-            .ForMember(destinationMember => destinationMember.teacher,
+        CreateMap<TeacherSubjectClassroom, SubjectClassroomDto>()
+            .ForMember(destinationMember => destinationMember.ClassroomId,
                 opt => opt
-                    .MapFrom(src => src.Teacher));
+                    .MapFrom(src => src.ClassroomId))
+            .ForMember(destinationMember => destinationMember.ClassroomName,
+                opt => opt
+                    .MapFrom(src => src.Classroom.Name))
+            .ForMember(destinationMember => destinationMember.SubjectId,
+                opt => opt
+                    .MapFrom(src => src.SubjectId))
+            .ForMember(destinationMember => destinationMember.SubjectName,
+                opt => opt
+                    .MapFrom(src => src.Subject.Name));
+        
 
         CreateMap<Exam, TeacherExamDto>()
             .ForMember(destinationMember => destinationMember.ExamId,
@@ -101,7 +108,7 @@ public class MappingProfiles : Profile
                     .MapFrom(src => src.Id))
             .ForMember(destinationMember => destinationMember.ExamDate, 
                 opt => opt
-                    .MapFrom(src => src.ExamDate))
+                    .MapFrom(src => src.Date))
             .ForMember(destinationMember => destinationMember.Classroom,
                 opt => opt
                     .MapFrom(src => src.TeacherSubjectClassroom.Classroom.Name))
@@ -119,30 +126,7 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember => destinationMember.surname,
                 opt => opt
                     .MapFrom(src => src.Registry.Surname));
-
-        CreateMap<Student, StudentExamDto>()
-            .ForPath(dest => dest.Student.id,
-                opt => opt
-                    .MapFrom(src => src.UserId))
-            .ForPath(dest => dest.Student.name, 
-                opt => opt
-                    .MapFrom(src => src.Registry.Name))
-            .ForPath(dest => dest.Student.surname,
-                opt => opt
-                    .MapFrom(src => src.Registry.Surname))
-            .ForMember(destinationMember => destinationMember.Exams,
-                opt => opt
-                    .MapFrom(src => src.StudentExams
-                        .Select(el => new
-                            {
-                                subject = el.Exam.TeacherSubjectClassroom.Subject.Name,
-                                date = el.Exam.ExamDate,
-                                grade = el.Grade,
-                                teacher = $"{el.Exam.TeacherSubjectClassroom.Teacher.Registry.Name} {el.Exam.TeacherSubjectClassroom.Teacher.Registry.Surname}"
-                            }
-                        )
-                    ));
-
+        
         CreateMap<StudentExam, TeacherStudentExamDto>()
             .ForMember(destinationMember => destinationMember.Grade,
                 opt => opt
@@ -157,7 +141,7 @@ public class MappingProfiles : Profile
                     .MapFrom(src => src.StudentExams))
             .ForMember(destinationMember => destinationMember.ExamDate,
                 opt => opt
-                    .MapFrom(src => src.ExamDate))
+                    .MapFrom(src => src.Date))
             .ForMember(destinationMember => destinationMember.Subject,
                 opt => opt
                     .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));

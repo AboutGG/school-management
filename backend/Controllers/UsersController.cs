@@ -73,27 +73,50 @@ public class UsersController : Controller
         GenericRepository<Registry> registryRepo = new GenericRepository<Registry>(_context);
         //I take all the users using the params element and its includes
 
-        ICollection<Registry> registries = registryRepo.GetAll(@params,
-            reg => reg.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
-                   reg.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()),
-            reg => reg.Student,
-            reg => reg.Teacher);
+        List<Registry> registries = registryRepo.GetAllUsingIQueryable(@params,
+            query => query
+                .Where(reg => reg.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()) ||
+                              reg.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower()))
+                .Include(reg => reg.Student)
+                .Include(reg => reg.Teacher),
+            out var total
+        );
 
         //if the role is null returns all the users
         if (@params.Filter == null)
         {
-            return Ok(registries);
+            return Ok(new PaginationResponse<Registry>
+            {
+                Total = total,
+                Data = registries
+            });
         }
 
         //if the role is not null return the users which have the role equal then params.role
         switch (@params.Filter.Trim().ToLower())
         {
             case "teacher":
-                registries = registries.Where(reg => reg.Student == null).ToList();
-                return Ok(registries);
+                registries = new GenericRepository<Registry>(_context).GetAllUsingIQueryable(  
+                    @params,
+                    query => registries.AsQueryable()
+                        .Where(reg => reg.Student == null)
+                    , out var totalTeacher);
+                return Ok(new PaginationResponse<Registry>
+                {
+                    Total = totalTeacher,
+                    Data = registries
+                });
             case "student":
-                registries = registries.Where(reg => reg.Teacher == null).ToList();
-                return Ok(registries);
+                registries = new GenericRepository<Registry>(_context).GetAllUsingIQueryable(  
+                    @params,
+                    query => registries.AsQueryable()
+                        .Where(reg => reg.Teacher == null)
+                    , out var totalStudent);
+                return Ok(new PaginationResponse<Registry>
+                {
+                    Total = totalStudent,
+                    Data = registries
+                });
             default:
                 return NotFound($"The Role \"{@params.Filter}\" has not found");
         }
@@ -113,25 +136,9 @@ public class UsersController : Controller
     [ProducesResponseType(400)]
     public IActionResult CreateUser([FromHeader] string Token, [FromBody] AddEntity inputUser)
     {
-
-        JwtSecurityToken decodedToken;
-        Guid takenId;
-        string authorizationRole;
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         try
         {
-            //Decode the token
-            decodedToken = JWTHandler.DecodeJwtToken(Token);
-            takenId = new Guid(decodedToken.Payload["userid"].ToString());
-
-            //Controllo il ruolo dello User tramite l'Id
-            authorizationRole = RoleSearcher.GetRole(takenId, _context);
-
-            if (authorizationRole.Trim().ToLower() != "teacher")
-            {
-                throw new Exception("UNAUTHORIZED");
-            }
-
             if (new GenericRepository<User>(_context).Exist(el => el.Username == inputUser.User.Username))
             {
                 throw new Exception("USERNAME_EXISTS");
@@ -163,7 +170,7 @@ public class UsersController : Controller
                 new GenericRepository<User>(_context).Create(newUser))
             {
 
-                switch (inputUser.RoleName.Trim().ToLower())
+                switch (inputUser.Role.Trim().ToLower())
                 {
                     case "student":
                         Student newStudent = new Student
@@ -278,6 +285,17 @@ public class UsersController : Controller
     }
 
     #endregion
+    
+    #region Me
 
+    [HttpGet]
+    [Route("me")]
+    public IActionResult GetMe([FromHeader] string token)
+    {
+        return Ok(_userRepository.GetMe(token));
+    }
+    
+    #endregion
+    
     #endregion
 }
