@@ -4,8 +4,6 @@ export interface Users {
   registry: Registry
 }
 
-
-
 export interface User {
   id?: string
   username: string
@@ -30,21 +28,13 @@ export interface Registry {
   telephone?: string //date format "yyyy-mm-dd"
 }
 
-export interface StudentExams {
-  student: {
-    id: string,
-    name: string,
-    surname: string
-  },
-  exams: [
-    {
-      subject: string,
-      teacher: string,
-      date: string,
-      grade?: number
-    }
-  ]
+export interface StudentExam {
+  subject: string,
+  teacher: string,
+  date: string,
+  grade?: number
 }
+
 export interface Classroom {
   id_classroom?: string;
   name_classroom: string;
@@ -53,7 +43,7 @@ export interface Classroom {
 
 export interface ListResponse {
   data: any[];
-  total : number
+  total: number
 }
 export interface Teachers {
   id?: string;

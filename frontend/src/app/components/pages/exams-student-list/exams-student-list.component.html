@@ -8,7 +8,6 @@
 	</div>
 	<hr>
 </div>
-<h3 class="d-flex justify-content-center py-3">Studente: {{examsList.student.name + " " + examsList.student.surname}}</h3>
 <div class="container mt-6 bb">
 	<table class="table table-hover">
 		<thead>
@@ -41,7 +40,7 @@
 				<th *ngIf="role === 'teacher'" scope="col-2">Azioni</th>
 			</tr>
 		</thead>
-		<tbody *ngFor="let exam of examsList.exams, let i = index">
+		<tbody *ngFor="let exam of examsList, let i = index">
 			<tr>
 				<th scope="row">{{i + 1}}</th>
 				<td>{{exam.date}}</td>
