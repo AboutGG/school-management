@@ -14,23 +14,23 @@
     <div class="col-md-2 mb-3 d-flex w-100 justify-content-center">
         <div class="d-flex">
             <form [formGroup]="formSubjects" class="px-2">
-                <small for="Materie" class="smallForm" >Materie</small>
+                <small for="Materie" class="smallForm">Materie</small>
                 <select class="btn btn-warning w-100" formControlName="subjects"
                     (click)="[onClickFilter = true, dropdownFilter()]">
-                    <option *ngFor="let subject of subjects">{{this.subject ? this.subject : "Tutte le materie"}}</option>
+                    <option *ngFor="let subject of subjects">{{this.subject}}</option>
                 </select>
             </form>
             <form [formGroup]="formClassrooms" class="px-2">
                 <small for="Classi" class="smallForm">Classi</small>
                 <select class="btn btn-warning w-100" formControlName="classrooms"
                     (click)="[onClickFilter = false, dropdownFilter()]">
-                    <option *ngFor="let classroom of classrooms">{{this.classroom ? this.classroom : "Tutte le classi"}}</option>
+                    <option *ngFor="let classroom of classrooms">{{this.classroom}}</option>
                 </select>
             </form>
         </div>
     </div>
     <table class="table table-hover">
-        <thead>
+        <thead class="text-center">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col" id="date">Data
@@ -60,22 +60,27 @@
                 <td>{{exam.examDate}}</td>
                 <td>{{exam.subject}}</td>
                 <td>{{exam.classroom}}</td>
-                <div class="dropdown d-flex">
-                    <i class="bi bi-gear-fill" data-bs-toggle="dropdown" aria-expanded="false" type="button"></i>
-                    <div class="dropdown-toggle ps-3" data-bs-toggle="dropdown" aria-expanded="false"></div>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" value="dettagli" [routerLink]="['/detailsExam']"><i
-                                    class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
-                        <li><a class="dropdown-item" value="modifica" [routerLink]="['/editExam']"><i
-                                    class="bi bi-pencil-square px-2"></i>Modifica</a></li>
-                        <li><a role="button" class="dropdown-item" value="elimina" data-bs-toggle="modal"
-                                data-bs-target="#deleteModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
-                    </ul>
-                </div>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-gear-fill"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" [routerLink]="'/details/'"><i
+                                        class="bi bi-eye-fill px-2"></i>Visualizza</a></li>
+                            <li><a class="dropdown-item" [routerLink]="'/esami/'"><i
+                                        class="bi bi-book-fill px-2"></i>Vai a Esami</a></li>
+                            <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
-        <!-- <div class="dropdown d-flex w-100">
+    <!-- <div class="dropdown d-flex w-100">
             <div class="d-flex flex-column">
                 <button class="btn btn-warning w-100 p-2 my-3" (click)="filterSwitch()">{{switchText}}</button>
                 <label for="classroom" class="form-label">Filtra per: </label>
@@ -106,7 +111,7 @@
                     </ul>
                 </ng-container>
             </div> -->
-        <!-- <div class="d-flex flex-column pe-2">
+    <!-- <div class="d-flex flex-column pe-2">
                 <label for="classroom" class="form-label">Filtra per classe: </label>
                 <button class="btn btn-outline-dark dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false" title="classroom">
@@ -134,7 +139,7 @@
                 </ul>
             </div> 
         </div> -->
-        <!-- <div class="d-flex w-100 justify-content-center align-items-center mt-4">
+    <!-- <div class="d-flex w-100 justify-content-center align-items-center mt-4">
             <div class="d-flex align-items-center">
                 <input type="text" name="search" id="search" placeholder="Cerca">
                 <i class="bi bi-search"></i>

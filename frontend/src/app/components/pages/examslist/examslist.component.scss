@@ -5,6 +5,10 @@ hr{
   border-top: var(--bs-border-width) solid;
   opacity: 0.25;
 }
+td, th {
+  text-align: center;
+  vertical-align: middle;
+}
 .icon-data {
   border: 2px solid;
   border-radius: 50px;
@@ -16,9 +20,15 @@ hr{
   color: #ffb900;
   margin-left: 20px;
 }
-.bi-card-list{
-  font-size: 30px;
-    color: #ffb900;
+.dropdown-toggle{
+  background-color: #ffc422;
+  color: black;
+  border: 2px solid;
+  border-color: #ffb900;
+
+}
+.dropdown-item:hover{
+  background-color: #ffc422;
 }
 
 .smallForm {
