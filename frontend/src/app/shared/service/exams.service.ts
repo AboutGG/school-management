@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { StudentExams, TeacherExam } from '../models/users';
+import { ListResponse, StudentExams, TeacherExam } from '../models/users';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +13,10 @@ export class ExamsService {
   getStudentExams() {
     return this.http.get<StudentExams>(`https://localhost:7262/api/students/exams`)
   }
-
+//TODO: cambiare tutte le response di visualizzazione liste con ListResponse,
+//dopo accorpare alla chiave data il tipo specifico precedentemente utilizzato per la chiamata
   getTeacherExams(params: {}) {
-    return this.http.get<TeacherExam[]>(`https://localhost:7262/api/teachers/exams`, { params })
+    return this.http.get<ListResponse>(`https://localhost:7262/api/teachers/exams`, { params })
   }
   
 }

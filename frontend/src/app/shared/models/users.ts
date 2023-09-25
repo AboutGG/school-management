@@ -63,12 +63,19 @@ export interface Teacher {
   surname: string,
   subjects: TeacherSubject[]
 }
+
+export interface ListResponse {
+  data: any[],
+  total: number
+}
+
 export interface TeacherSubject {
   subjectId: string
   subjectName: string,
   classroomId: string
   classroomName: string
 }
+
 export interface Teachers {
   id?: string;
   name: string;

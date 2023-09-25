@@ -1,7 +1,8 @@
+import { TeacherSubject } from './../../../shared/models/users';
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Teacher, TeacherExam } from 'src/app/shared/models/users';
+import { TeacherExam } from 'src/app/shared/models/users';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
@@ -23,6 +24,7 @@ export class ExamslistComponent {
   examsList!: TeacherExam[]
   subject!: string
   subjects: string[] = []
+  subjectsName: string[] = []
   classroom!: string
   classrooms: string[] = []
   orders = {
@@ -44,10 +46,11 @@ export class ExamslistComponent {
     this.getTeacherSubjects();
   }
 
-  resetAllDropdown() {
-    [this.formClassrooms.reset({classrooms: ""})] && [this.formSubjects.reset({subjects: ""})]
-    this.getTeacherExams()
-  }
+  // resetAllDropdowns() {
+  //   [this.formClassrooms.reset({classrooms: ""})] && [this.formSubjects.reset({subjects: ""})]
+  //   this.getTeacherExams()
+  // }
+  
   dropdownFilter() {
     this.onClickFilter === true ? [this.formClassrooms.reset({ classrooms: "" })] && [this.filtered = this.formSubjects.value.subjects as string] : [this.formSubjects.reset({ subjects: "" })] && [this.filtered = this.formClassrooms.value.classrooms as string];
     this.getTeacherExams()
@@ -62,7 +65,7 @@ export class ExamslistComponent {
       .set('Order', this.order)
       .set('ItemsPerPage', this.itemsPerPage)
     this.examsService.getTeacherExams(params).subscribe({
-      next: (data: TeacherExam[]) => {
+      next: (res: any) => {
         // this.orders = {
         //   name: 'asc',
         //   surname: 'asc',
@@ -72,7 +75,7 @@ export class ExamslistComponent {
         // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
         // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
         // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
-        this.examsList = data
+        this.examsList = res.data
       },
       error: (error) => {
         console.log(error);
@@ -90,12 +93,31 @@ export class ExamslistComponent {
     });
   }
 
+  // getTeacherSubjects() {
+  //   this.teacherService.getTeacherSubjects().subscribe({
+  //     next: (res) => {
+  //       res.map(items => {
+  //         this.teacherSubject = items
+  //         this.subjects.map(item => {
+  //           this.subjectsName.push(item);
+  //         })
+          
+  //         // this.subjects.push(items.subjectName)
+  //         console.log(this.subjects);
+          
+  //       })
+  //     }
+  //   });
+  // }
+
   getTeacherSubjects() {
     this.teacherService.getTeacherSubjects().subscribe({
-      next: (data) => {
-        data.map(subjects => {
-          this.subjects.push(subjects.subjectName)
+      next: (res: any) => {
+      res.data.map((item: TeacherSubject) => {
+          this.subjects.push(item.subjectName);
+          console.log(this.subjects);
         })
+        
       }
     });
   }

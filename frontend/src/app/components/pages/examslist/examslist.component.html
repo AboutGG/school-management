@@ -17,7 +17,6 @@
                 <small for="Materie" class="smallForm" >Materie</small>
                 <select class="btn btn-warning w-100" formControlName="subjects"
                     (click)="[onClickFilter = true, dropdownFilter()]">
-                    <option (click)="resetAllDropdown()">Tutte le materie</option>
                     <option *ngFor="let subject of subjects">{{this.subject ? this.subject : "Tutte le materie"}}</option>
                 </select>
             </form>
@@ -25,7 +24,6 @@
                 <small for="Classi" class="smallForm">Classi</small>
                 <select class="btn btn-warning w-100" formControlName="classrooms"
                     (click)="[onClickFilter = false, dropdownFilter()]">
-                    <option (click)="resetAllDropdown()">Tutte le classi</option>
                     <option *ngFor="let classroom of classrooms">{{this.classroom ? this.classroom : "Tutte le classi"}}</option>
                 </select>
             </form>
