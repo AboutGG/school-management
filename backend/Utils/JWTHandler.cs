@@ -26,7 +26,7 @@ public class JWTHandler
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(30),
+            Expires = DateTime.UtcNow.AddHours(8),
             // Issuer = issuer,
             // Audience = audience,
             SigningCredentials =
