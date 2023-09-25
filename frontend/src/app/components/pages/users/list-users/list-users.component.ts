@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Registry, Users } from 'src/app/shared/models/users';
+import { Registry, Users, Prova } from 'src/app/shared/models/users';
 import { UsersService } from 'src/app/shared/service/users.service';
 
 @Component({
@@ -58,10 +58,10 @@ export class ListUsersComponent {
     search = this.text;
 
     switch(this.role) {
-      case 'studenti':
+      case 'student':
       role = 'Student';
       break;
-      case 'insegnanti':
+      case 'teacher':
       role = 'Teacher';
       break;
     }

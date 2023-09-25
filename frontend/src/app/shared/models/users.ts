@@ -8,7 +8,7 @@ export interface Prova {
   classroomId?: string
   user: User 
   registry: Registry
-  roleName: string
+  role: string
 }
 
 
@@ -34,7 +34,7 @@ export interface Registry {
   email?: string;
   address?: string;
   telephone?: string; //date format "yyyy-mm-dd"
-  roleName?: string;
+  role?: string;
 
   teacher?: Teacher;
   student?: Student;

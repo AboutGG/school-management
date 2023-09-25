@@ -7,110 +7,157 @@
         </div>
     
     
-    <form [formGroup]="usersForm" class="row g-3 form-container ms-5 me-4">
-        <div class="row position-relative mb-4">
-            <div class="col-md-2 mb-3">
-                <div class="dropdown">
-                    <label for="role" class="form-label">Seleziona il ruolo:<span class="text-danger">*</span></label>
-                    <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
-                        {{ (this.roleValue ? this.roleValue : 'Ruolo') | titlecase}}
-                    </button>
-                    <ul class="dropdown-menu" formControlName="role">
-                        <li><a class="dropdown-item" value="studente" (click)="onClickRole('studente')">Studente</a></li>
-                        <li><a class="dropdown-item" value="insegnante" (click)="onClickRole('insegnante')">Insegnante</a></li>
-                    </ul>
-                </div> 
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
-                    <span>Campo obbligatorio</span>
-                </div>     
-            </div>
-            <div class="col-md-5 mb-3">
-                <label class="form-label" for="username">Username:<span class="text-danger">*</span></label>
-                <input class="form-control placeholder-input" type="text" title="username" formControlName="username" placeholder="mariorossi2023">
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('username')">
-                    <span>Campo obbligatorio</span>
+        <form [formGroup]="usersForm" class="row g-3 form-container ms-5 me-4">
+            <div class="row position-relative mb-4">
+
+                <div class="col-md-2 mb-3">
+
+                    <select class="form-select" formControlName="role" (change)="onClickRole()">
+                        <option value="student">Studente</option>
+                        <option value="teacher">Insegnante</option>
+                    </select>
+                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
+                        <span>Campo obbligatorio</span>
+                    </div> 
+                </div>    
+
+                <div class="col-md-2 mb-3" *ngIf="this.roleValue === 'student'">
+                    <select class="form-select" formControlName="classroomId">
+                        <option selected>Scegli la classe:</option>
+                        <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
+                    </select>
+                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('classroomId')">
+                        <span>Campo obbligatorio</span>
+                    </div> 
+                </div>
+
+
+                    <!-- <div class="dropdown">
+                        <label for="role" class="form-label">Seleziona il ruolo:<span class="text-danger">*</span></label>
+                        <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
+                            {{ (this.roleValue ? this.roleValue : 'Ruolo') | titlecase}}
+                        </button>
+                        <ul class="dropdown-menu" formControlName="role">
+                            <li><a class="dropdown-item" value="student" (click)="onClickRole('studente')">Studente</a></li>
+                            <li><a class="dropdown-item" value="teacher" (click)="onClickRole('insegnante')">Insegnante</a></li>
+                        </ul>
+                    </div> 
+                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
+                        <span>Campo obbligatorio</span>
+                    </div>  -->
+                    
+
+
+                <div class="col-md-6">
+                    <div formGroupName="user">
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label" for="username">Username:<span class="text-danger">*</span></label>
+                            <input class="form-control placeholder-input" type="text" title="username" formControlName="username" placeholder="mariorossi2023">
+                            <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('username')">
+                                <span>Campo obbligatorio</span>
+                            </div>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label" for="password">Password:<span class="text-danger">*</span></label>
+                            <input class="form-control placeholder-input" type="password" title="password" formControlName="password">
+                            <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('password')">
+                                <span>Campo obbligatorio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+
+                <div class="col-md-6">
+                    <div formGroupName="registry">
+                        <div class="row position-relative mb-4">
+                            <div class="col-md-3 mb-3">
+                                <label for="name" class="form-label">Nome:<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control placeholder-input" title="name" formControlName="name" placeholder="Mario">
+                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('name')">
+                                    <span>Campo obbligatorio</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="surname" class="form-label">Cognome:<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control placeholder-input" title="surname" formControlName="surname" placeholder="Rossi">
+                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('surname')">
+                                    <span>Campo obbligatorio</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="text" title="email" formControlName="email" class="form-control placeholder-input" placeholder="mariorossi2023@gmail.com">
+                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('email')">
+                                    <span>Email non valida</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row position-relative mb-4">
+                            <div class="col-md-2 mb-3">
+                                <select class="form-select" formControlName="gender" (change)="onClickGender()">
+                                    <option value="male">Maschio</option>
+                                    <option value="female">Femmina</option>
+                                    <option value="other">Altro</option>
+                                </select>
+                            
+                                <!-- <div class="dropdown">
+                                    <label for="gender" class="form-label">Seleziona il genere:<span class="text-danger">*</span></label>
+                                    <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="gender">
+                                        {{ (this.gender ? this.gender : 'Genere') | titlecase}}
+                                    </button>
+                                    <ul class="dropdown-menu" formControlName="gender">
+                                        <li><a class="dropdown-item" value="male" (click)="onClickGender('maschio')">Maschio</a></li>
+                                        <li><a class="dropdown-item" value="female" (click)="onClickGender('femmina')">Femmina</a></li>
+                                        <li><a class="dropdown-item" value="other" (click)="onClickGender('altro')">Altro</a></li>
+                                    </ul>
+                                </div> -->
+                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('gender')">
+                                    <span>Campo obbligatorio</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="telephone" class="form-label">Telefono:</label>
+                                <input type="text" class="form-control placeholder-input" title="telephone" formControlName="telephone" placeholder="391-234567890">
+                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('telephone')">
+                                    <span>Numero non valido</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="address" class="form-label">Indirizzo:</label>
+                                <input type="text" title="address" formControlName="address" class="form-control placeholder-input" placeholder="Via Roma 90, 95030, Catania">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="birth" class="form-label">Data di nascita:</label>
+                            <input type="date" class="form-control placeholder-input" title="birth" formControlName="birth">
+                        </div>
+                    </div>
+                </div>
+
+
+            
+
+            
+                <div class="d-flex justify-content-end mb-5 pe-5">
+                    <div class="col-md-2">
+                        <button (click)="this.alert=true; onAddUser()" type="submit" class="btn btn-warning form-control">INVIA</button>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-5 mb-3">
-                <label class="form-label" for="password">Password:<span class="text-danger">*</span></label>
-                <input class="form-control placeholder-input" type="password" title="password" formControlName="password">
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('password')">
-                    <span>Campo obbligatorio</span>
-                </div>
-            </div>
-        </div>
-        <div class="row position-relative mb-4">
-            <div class="col-md-3 mb-3">
-                <label for="name" class="form-label">Nome:<span class="text-danger">*</span></label>
-                <input type="text" class="form-control placeholder-input" title="name" formControlName="name" placeholder="Mario">
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('name')">
-                    <span>Campo obbligatorio</span>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="surname" class="form-label">Cognome:<span class="text-danger">*</span></label>
-                <input type="text" class="form-control placeholder-input" title="surname" formControlName="surname" placeholder="Rossi">
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('surname')">
-                    <span>Campo obbligatorio</span>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="text" title="email" formControlName="email" class="form-control placeholder-input" placeholder="mariorossi2023@gmail.com">
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('email')">
-                    <span>Email non valida</span>
-                </div>
-            </div>
-        </div>
-        <div class="row position-relative mb-4">
-            <div class="col-md-2 mb-3">
-                <div class="dropdown">
-                    <label for="gender" class="form-label">Seleziona il genere:<span class="text-danger">*</span></label>
-                    <button class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="gender">
-                        {{ (this.gender ? this.gender : 'Genere') | titlecase}}
-                    </button>
-                    <ul class="dropdown-menu" formControlName="gender">
-                        <li><a class="dropdown-item" value="male" (click)="onClickGender('Maschio')">Maschio</a></li>
-                        <li><a class="dropdown-item" value="female" (click)="onClickGender('Femmina')">Femmina</a></li>
-                        <li><a class="dropdown-item" value="other" (click)="onClickGender('Altro')">Altro</a></li>
-                    </ul>
-                </div>
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('gender')">
-                    <span>Campo obbligatorio</span>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="telephone" class="form-label">Telefono:</label>
-                <input type="text" class="form-control placeholder-input" title="telephone" formControlName="telephone" placeholder="+391234567890">
-                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('telephone')">
-                    <span>Numero non valido</span>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="address" class="form-label">Indirizzo:</label>
-                <input type="text" title="address" formControlName="address" class="form-control placeholder-input" placeholder="Via Roma 90, 95030, Catania">
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <label for="birth" class="form-label">Data di nascita:</label>
-            <input type="date" class="form-control placeholder-input" title="birth" formControlName="birth">
-        </div>
-        <!-- <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
-            <label for="classroom" class="form-label">Classe:*</label>
-            <input type="text" class="form-control placeholder-input" title="classroom" formControlName="classroom" placeholder="5^C">
-            <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('classroom')">
-                <span>Campo obbligatorio</span>
+        </form>
+    </div>
+
+
+<!-- <div class="d-flex justify-content-end mb-5 pe-5">
+            <div class="col-md-2">
+                <button (click)="this.alert=true" type="submit" class="btn btn-warning form-control">INVIA</button>
             </div>
         </div> -->
 
-        <div class="col-md-2 mb-3" *ngIf="this.roleValue === 'studente'">
-            <select class="form-select" formControlName="classroomId">
-                <option selected>Scegli la classe:</option>
-                <option *ngFor="let className of classes">{{className.id}}</option>
-            </select>
-        </div>
 
-            <!-- <div class="dropdown col-md-2 mb-3">
+
+        <!-- <div class="dropdown col-md-2 mb-3">
                 <label for="classroom" class="form-label">Classe:*<span class="text-danger">*</span></label>
                 <button (click)="getClassroom()" class="btn btn-outline-warning dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="classroom">
                       {{ (this.classes ? this.classes : 'Classe') | titlecase}} 
@@ -126,20 +173,11 @@
                     <span>Campo obbligatorio</span>
                 </div>     
             </div> -->
-            
-        
 
-        <div class="d-flex justify-content-end mb-5 pe-5">
-            <div class="col-md-2">
-                <button type="submit" (click)="onAddUser()" class="btn btn-warning form-control">INVIA</button>
-            </div>
-        </div>
-    </form>
-</div>
-
-
-<!-- <div class="d-flex justify-content-end mb-5 pe-5">
-            <div class="col-md-2">
-                <button (click)="this.alert=true" type="submit" class="btn btn-warning form-control">INVIA</button>
-            </div>
-        </div> -->
+            <!-- <div class="col-md-2 mb-3" *ngIf="this.role === 'studente'">
+                        <label for="classroom" class="form-label">Classe:*</label>
+                        <input type="text" class="form-control placeholder-input" title="classroom" formControlName="classroom" placeholder="5^C">
+                        <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('classroom')">
+                            <span>Campo obbligatorio</span>
+                        </div>
+                    </div> -->
