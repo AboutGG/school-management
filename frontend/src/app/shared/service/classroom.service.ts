@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ClassDetails, Classroom, Students, TeacherSubject, Teachers } from '../models/users';
+import { ClassDetails, Classroom, ListResponse, Students, TeacherSubject, Teachers } from '../models/users';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +24,8 @@ export class ClassroomService {
   }
 
   //get teacher subjects 
-  getTeacherSubjects(params: HttpParams): Observable<TeacherSubject[]> {
-    return this.http.get<TeacherSubject[]>(`https://localhost:7262/api/teachers/subjects`, {params})
+  getTeacherSubjects(params: {}): Observable<ListResponse> {
+    return this.http.get<ListResponse>(`https://localhost:7262/api/teachers/subjects`, {params})
   }
   
 

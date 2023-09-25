@@ -67,24 +67,14 @@ export interface ClassDetails {
   teachers: Teachers[];
   students: Students[];
 }
-
-// export interface Teacher {
-//   id: string,
-//   name: string,
-//   surname: string,
-//   subjects?: [
-//     {
-//       subjectId: string, 
-//       subjectName: string,
-//       classroomId: string,
-//       classroomName: string,
-//     },
-//   ]
-// }
-
 export interface TeacherSubject {
   subjectId: string;
   subjectName: string;
   classroomId: string;
   classroomName: string;
+}
+
+export interface ListResponse {
+  data: any[],
+  total: number
 }

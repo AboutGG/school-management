@@ -15,9 +15,10 @@ export class SubjectsComponent {
   searchTerm: string = '';
   currentPage : number = 1; 
   itemsPerPage : number = 1// numero di elementi per pagina
-  totalItems = 0;
+  totalItems! : number;
   newPage! : string
   previousPage: number = 1;
+  totalPages!: number;
 
   constructor(private classroomService: ClassroomService) {}
 
@@ -29,21 +30,18 @@ export class SubjectsComponent {
 
     // get dati api teacher subjects
     fetchData() {
-      // const params = {
-      //   page: this.currentPage,
-      //   search: this.searchTerm,
-      //   itemsPerPage: this.itemsPerPage,
-      // }
-      this.classroomService.getTeacherSubjects(new HttpParams).subscribe({
-        next: (data: TeacherSubject []) => {
-          this.totalItems = data.length; // numero totale di elementi
+       const params = new HttpParams()
+        .set('Page', this.currentPage)
+        .set('Search', this.searchTerm)
+        .set('ItemsPerPage', this.itemsPerPage);
+      this.classroomService.getTeacherSubjects(params).subscribe({
+        next: (res: any) => {
+          this.totalItems = res.total; // numero totale di elementi
+          this.totalPages = this.totalItems/this.itemsPerPage;
+          this.teachers = res.data;
 
-          const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-          const endIndex = startIndex + this.itemsPerPage;
-          this.teachers = data.slice(startIndex, endIndex);
-
-          console.log('dati get',data)
-          // console.log('params',params)
+          console.log('dati get',res.data)
+          console.log('params',params)
         },
         error: (err) => { 
           console.log("error",err);
