@@ -5,6 +5,7 @@ using iText.Html2pdf;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Layout;
+using Path = iText.Kernel.Geom.Path;
 
 namespace backend.Utils;
 
@@ -63,5 +64,27 @@ public class PdfHandler
             document.Close();
             return memoryStream.ToArray();
         }
+
+        GenerateCircular("Assets/Circular.html", data);
+        GenerateTable("Assets/Table.html");
+    }
+    private static void GenerateCircular(string path, Circular circular)
+    {
+        var htmlContent = File.ReadAllText(path);
+        //Sostituisci i segnaposto con i dati dinamici
+        htmlContent = htmlContent.Replace("{{Body}}", circular.Body);
+        //     .Replace("{{SchoolName}}", circular.SchoolName)
+        //     .Replace("{{body}}", data.Body);
+        // .Replace("{{eta}}", "30");
+    }
+
+    private static void GenerateTable(string path)
+    {
+        
+    }
+
+    private static void GenerateReport(string path)
+    {
+        
     }
 }

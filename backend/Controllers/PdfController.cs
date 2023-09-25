@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using backend.Dto;
+using backend.Models;
+using backend.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
@@ -6,9 +9,28 @@ namespace backend.Controllers;
 [ApiController]
 public class PdfController : Controller
 {
-    [HttpGet]
-    public IActionResult GetAll()
+    private readonly SchoolContext _context;
+
+    public PdfController(SchoolContext context)
     {
-        return Ok();
+        _context = context;
+    }
+    
+    [HttpPost]
+    [Route("Circulars")]
+    [ProducesResponseType(200, Type = typeof(CircularRequest))]
+    public IActionResult GetAll([FromBody] CircularRequest circular)
+    {
+        Circular c = new ()
+        {
+            CircularNumber = circular.number,
+            UploadDate = circular.date,
+            Location = circular.location,
+            Header = circular.header,
+            Body = circular.body,
+            Sign = circular.sign
+        };
+        
+        return Ok(c);
     }
 }
