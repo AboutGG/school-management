@@ -51,6 +51,10 @@ export interface Classroom {
   student_count: number;
 }
 
+export interface ListResponse {
+  data: any[];
+  total : number
+}
 export interface Teachers {
   id?: string;
   name: string;

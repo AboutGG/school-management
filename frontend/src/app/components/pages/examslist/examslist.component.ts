@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Registry } from 'src/app/shared/models/users';
 import { UsersService } from 'src/app/shared/service/users.service';
 
+
 @Component({
   selector: 'app-examslist',
   templateUrl: './examslist.component.html',
@@ -9,10 +10,7 @@ import { UsersService } from 'src/app/shared/service/users.service';
 })
 export class ExamslistComponent {
   constructor(private usersService: UsersService) {}
-
-  ngOnInit(): void {
-    this.getData("Name", "asc", "name");    
-  }
+  
 
   users: Registry[] = [];
   matter: string = "";
@@ -48,21 +46,10 @@ export class ExamslistComponent {
         // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
 
         this.users = data;
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
-  }
-
-  getExamData(order: string, type: string, matter: string) {
-    // this.usersService.getMatter(order, type, matter).subscribe({
-    //   next: (data: Registry[]) => {
-    //     this.users = data
-    //   },
-    //   error: (error: any) => {
-    //     console.log(error);
-    //   }
-    // });
-  }
-}
+  // resetAllDropdowns() {
+  //   [this.formClassrooms.reset({classrooms: ""})] && [this.formSubjects.reset({subjects: ""})]
+  //   this.getTeacherExams()
+  // }
+  
+      }})
+    }}

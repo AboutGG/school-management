@@ -9,11 +9,11 @@ export class ExamsService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  // getExams(order: string, orderType: string, key: string) {
-  //   return this.http.get<any>(`https://localhost:7262/api/students/exams?Order=${order}&orderType=${orderType}&id=${key}`)
-  // }
-  getExams() {
+  
+  getStudentExams() {
     return this.http.get<any>(`https://localhost:7262/api/students/exams`)
   }
-
+//TODO: cambiare tutte le response di visualizzazione liste con ListResponse,
+//dopo accorpare alla chiave data il tipo specifico precedentemente utilizzato per la chiamata
+  
 }
