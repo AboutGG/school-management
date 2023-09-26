@@ -56,10 +56,10 @@ public class PdfHandler
         
         switch (type.Trim().ToLower())
         {
-            case "report":
+            case "circular":
                htmlContent = GenerateCircular("Assets/Circular.html", data);
               break;  
-            case "circular":
+            case "report":
                 htmlContent = GenerateTable("Assets/Table.html",table);
                 break;
             default:

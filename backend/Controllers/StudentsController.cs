@@ -93,7 +93,7 @@ public class StudentsController : Controller
             ).Select(el => el.Teacher).ToList();
 
             var mappedResponse = _mapper.Map<List<TeacherDto>>(resultStudent.DistinctBy(el => el.Id));
-            
+
             return Ok(
                 new PaginationResponse<TeacherDto>
                 {
@@ -109,8 +109,9 @@ public class StudentsController : Controller
     }
 
     #endregion
-    
+
     #region Get Exams
+
     /// <summary> Having the token take the userId then takes the related exams </summary>
     /// <param name="token"></param>
     /// <returns>Return a list of Exams performed by the Student</returns>
@@ -152,10 +153,12 @@ public class StudentsController : Controller
 
             if (@params.Filter != null)
                 takenStudent = takenStudent.Where(el =>
-                    el.Exam.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
-            
+                        el.Exam.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() ==
+                        @params.Filter.Trim().ToLower())
+                    .ToList();
+
             var studentExamDtos = new List<StudentExamDto>();
-            
+
             foreach (var el in takenStudent)
             {
                 studentExamDtos.Add(new StudentExamDto(el));
@@ -172,6 +175,58 @@ public class StudentsController : Controller
             ErrorResponse error = ErrorManager.Error(e);
             return StatusCode(error.statusCode, error);
         }
+    }
+
+    #endregion
+
+    #region Student Report
+
+    /// <summary> Api call which passing the UserId return the student's report </summary>
+    /// <param name="Id">UserId to take the student's instance</param>
+    /// <returns>Return a PDF file with the student's report</returns>
+    [HttpGet]
+    [Route("{Id}/Reports")]
+    [ProducesResponseType(200)]
+    public IActionResult GetStudentReport([FromRoute] Guid Id)
+    {
+        //Ottengo lo studente tramite l'id che viene passato dalla route
+        Student takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(query => query
+            .Where(el => el.UserId == Id)
+            .Include(el => el.StudentExams)
+        );
+        
+        //Prendo le materie insegnate nella classe dello studente
+        var subjectClassrooms = new GenericRepository<Classroom>(_context).GetByIdUsingIQueryable(
+            query => query
+                .Where(el => el.Id == takenStudent.ClassroomId)
+                .Include(el => el.TeacherSubjectsClassrooms)
+                .ThenInclude(el => el.Subject)
+        ).TeacherSubjectsClassrooms.Select(el => new Subject{ Id = el.Subject.Id, Name = el.Subject.Name}).ToList();
+
+        Dictionary<string, double> result = new Dictionary<string, double>();
+        
+        foreach (var subject in subjectClassrooms)
+        {
+            // prendo gli esami per materia
+            var dummy = new GenericRepository<StudentExam>(_context).GetAllUsingIQueryable(null,
+                query => takenStudent.StudentExams.AsQueryable()
+                    .Where(el => el.Exam.TeacherSubjectClassroom.Subject.Id == subject.Id)
+                , out var total);
+            double media = 0;
+            foreach (var el in dummy)
+            {
+                media += el.Grade ?? 0;
+            }
+            media /= total;
+            
+            result.Add(subject.Name, media);
+        }
+        
+        return Ok(result);
+        
+        var pdf = PdfHandler.GeneratePdf("report", null, null);
+
+        return File(pdf, "application/pdf", "generated.pdf");
     }
 
     #endregion
