@@ -11,9 +11,9 @@ namespace backend.Utils;
 
 public class PdfHandler
 {
-    public static byte[] GeneratePdf(string type, ICollection<object>? table, Circular? data)
+    public static byte[] GeneratePdf(string type, List<object>? table, Circular? data)
     {
-        string htmlPath, htmlContent;
+        string htmlPath, htmlContent = string.Empty;
         // StringBuilder tableHtml = new StringBuilder();
         // if (type == "table")
         // {
@@ -54,8 +54,18 @@ public class PdfHandler
         //     // //.Replace("{{eta}}", "30");
         // }
         
-
-        GenerateCircular("Assets/Circular.html", data, out htmlContent);
+        switch (type.Trim().ToLower())
+        {
+            case "report":
+               htmlContent = GenerateCircular("Assets/Circular.html", data);
+              break;  
+            case "circular":
+                htmlContent = GenerateTable("Assets/Table.html",table);
+                break;
+            default:
+                throw new Exception("INVALID_PDF_TYPE");
+        }
+        
         using var memoryStream = new MemoryStream();
         {
             var writer = new PdfWriter(memoryStream);
@@ -66,13 +76,13 @@ public class PdfHandler
             document.Close();
             return memoryStream.ToArray();
         }
-        GenerateTable("Assets/Table.html");
+        
     }
     
 
-    private static void GenerateCircular(string path, Circular circular, out string htmlContent)
+    private static string GenerateCircular(string path, Circular circular)
     {
-        htmlContent = File.ReadAllText(path);
+        var htmlContent = File.ReadAllText(path);
         //Sostituisci i segnaposto con i dati dinamici
         htmlContent = htmlContent
             .Replace("{{body}}", circular.Body)
@@ -80,11 +90,44 @@ public class PdfHandler
             .Replace("{{number}}", circular.CircularNumber.ToString())
             .Replace("{{date}}", circular.UploadDate.ToString())
             .Replace("{{header}}", circular.Header);
+        return htmlContent;
     }
 
-    private static void GenerateTable(string path)
+    private static string GenerateTable(string path, List<object> table)
     {
-        
+        string htmlPath, htmlContent;
+        StringBuilder tableHtml = new StringBuilder();
+        htmlPath = "Assets/Table.html";
+        htmlContent = File.ReadAllText(htmlPath);
+
+
+        var propertyNames = table.First().GetType().GetProperties().Select(p => p.Name);
+        tableHtml.Append("<table>");
+
+        tableHtml.AppendLine("<tr>");
+        foreach (string dummy in propertyNames)
+            tableHtml.AppendLine("<td>").AppendLine(dummy).AppendLine("</td>");
+        tableHtml.AppendLine("</tr>");
+
+
+        foreach (var item in table)
+        {
+            tableHtml.AppendLine("<tr>");
+            foreach (PropertyInfo property in
+                     item.GetType().GetProperties()) //PropertyInfo represents the information of a property of a class.
+            {
+                if (property != null)
+                    tableHtml.AppendLine("<td>").AppendLine(property.GetValue(item).ToString())
+                        .AppendLine("</td>"); //takes the property's value of a specific object in this case: property
+            }
+
+            tableHtml.AppendLine("</tr>");
+        }
+
+        tableHtml.Append("</table>");
+        htmlContent = htmlContent.Replace("{{tabelle}}", tableHtml.ToString());
+
+        return htmlContent;
     }
 
     private static void GenerateReport(string path)
