@@ -226,23 +226,6 @@ public class UsersController : Controller
     }
 
     #endregion
-    
-    #region Pdf for circular and table
-
-    [HttpPost]
-    [Route("pdf")]
-    public IActionResult GetUsersOnPdf([FromBody] Circular? data, [FromQuery] string type = "table")
-    {
-        ///<summary>We return a Bytes array because the PDF is a sequence of binary bytes to represent the document content compactly. </summary>
-
-        var stream = PdfHandler.GeneratePdf(type, _mapper.Map<List<UserDto>>(_userRepository.GetUsers()), data);
-
-        // Returns the PDF
-        return File(stream, "application/pdf", "generated.pdf");
-
-    }
-
-    #endregion
 
     #region Delete an User
 

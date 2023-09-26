@@ -1,6 +1,7 @@
 ﻿using backend.Dto;
 using backend.Models;
 using backend.Repositories;
+using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -30,7 +31,9 @@ public class PdfController : Controller
             Body = circular.body,
             Sign = circular.sign
         };
+
+        var pdf = PdfHandler.GeneratePdf("pdf", null, c);
         
-        return Ok(c);
+        return File(pdf, "application/pdf", "generated.pdf");
     }
 }

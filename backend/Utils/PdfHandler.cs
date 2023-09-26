@@ -11,49 +11,50 @@ namespace backend.Utils;
 
 public class PdfHandler
 {
-    public static byte[] GeneratePdf<T>(string type, ICollection<T>? table, Circular? data)
+    public static byte[] GeneratePdf(string type, ICollection<object>? table, Circular? data)
     {
         string htmlPath, htmlContent;
-        StringBuilder tableHtml = new StringBuilder();
-        if (type == "table")
-        {
-            htmlPath = "Assets/Table.html";
-            htmlContent = File.ReadAllText(htmlPath);
-            
-            
-            var propertyNames = table.First().GetType().GetProperties().Select(p => p.Name);
-            tableHtml.Append("<table>");
-            
-            tableHtml.AppendLine("<tr>");
-            foreach (string dummy in propertyNames)
-                tableHtml.AppendLine("<td>").AppendLine(dummy).AppendLine("</td>");
-            tableHtml.AppendLine("</tr>");
+        // StringBuilder tableHtml = new StringBuilder();
+        // if (type == "table")
+        // {
+        //     htmlPath = "Assets/Table.html";
+        //     htmlContent = File.ReadAllText(htmlPath);
+        //     
+        //     
+        //     var propertyNames = table.First().GetType().GetProperties().Select(p => p.Name);
+        //     tableHtml.Append("<table>");
+        //     
+        //     tableHtml.AppendLine("<tr>");
+        //     foreach (string dummy in propertyNames)
+        //         tableHtml.AppendLine("<td>").AppendLine(dummy).AppendLine("</td>");
+        //     tableHtml.AppendLine("</tr>");
+        //
+        //
+        //     foreach (var item in table)
+        //     {
+        //         tableHtml.AppendLine("<tr>");
+        //         foreach (PropertyInfo property in item.GetType().GetProperties()) //PropertyInfo represents the information of a property of a class.
+        //         {
+        //             if(property != null)
+        //                 tableHtml.AppendLine("<td>").AppendLine(property.GetValue(item).ToString()).AppendLine("</td>"); //takes the property's value of a specific object in this case: property
+        //         }
+        //         tableHtml.AppendLine("</tr>");
+        //     }
+        //     tableHtml.Append("</table>");
+        //     htmlContent = htmlContent.Replace("{{tabelle}}", tableHtml.ToString());
+        // }
+        // else
+        // {
+        //     htmlPath = "Assets/Circular.html";
+        //     htmlContent = File.ReadAllText(htmlPath);
+        //     // // Sostituisci i segnaposto con i dati dinamici
+        //     // htmlContent = htmlContent.Replace("{{Title}}", data.Title)
+        //     //     .Replace("{{SchoolName}}", data.SchoolName)
+        //     //     .Replace("{{body}}", data.Body);
+        //     // //.Replace("{{eta}}", "30");
+        // }
 
-
-            foreach (var item in table)
-            {
-                tableHtml.AppendLine("<tr>");
-                foreach (PropertyInfo property in item.GetType().GetProperties()) //PropertyInfo represents the information of a property of a class.
-                {
-                    if(property != null)
-                        tableHtml.AppendLine("<td>").AppendLine(property.GetValue(item).ToString()).AppendLine("</td>"); //takes the property's value of a specific object in this case: property
-                }
-                tableHtml.AppendLine("</tr>");
-            }
-            tableHtml.Append("</table>");
-            htmlContent = htmlContent.Replace("{{tabelle}}", tableHtml.ToString());
-        }
-        else
-        {
-            htmlPath = "Assets/Circular.html";
-            htmlContent = File.ReadAllText(htmlPath);
-            // // Sostituisci i segnaposto con i dati dinamici
-            // htmlContent = htmlContent.Replace("{{Title}}", data.Title)
-            //     .Replace("{{SchoolName}}", data.SchoolName)
-            //     .Replace("{{body}}", data.Body);
-            // //.Replace("{{eta}}", "30");
-        }
-
+        GenerateCircular("Assets/Circular.html", data, out htmlContent);
         using var memoryStream = new MemoryStream();
         {
             var writer = new PdfWriter(memoryStream);
@@ -64,18 +65,20 @@ public class PdfHandler
             document.Close();
             return memoryStream.ToArray();
         }
-
-        GenerateCircular("Assets/Circular.html", data);
         GenerateTable("Assets/Table.html");
     }
-    private static void GenerateCircular(string path, Circular circular)
+    
+
+    private static void GenerateCircular(string path, Circular circular, out string htmlContent)
     {
-        var htmlContent = File.ReadAllText(path);
+        htmlContent = File.ReadAllText(path);
         //Sostituisci i segnaposto con i dati dinamici
-        htmlContent = htmlContent.Replace("{{Body}}", circular.Body);
-        //     .Replace("{{SchoolName}}", circular.SchoolName)
-        //     .Replace("{{body}}", data.Body);
-        // .Replace("{{eta}}", "30");
+        htmlContent = htmlContent
+            .Replace("{{body}}", circular.Body)
+            .Replace("{{location}}", circular.Location)
+            .Replace("{{number}}", circular.CircularNumber.ToString())
+            .Replace("{{date}}", circular.UploadDate.ToString())
+            .Replace("{{header}}", circular.Header);
     }
 
     private static void GenerateTable(string path)
@@ -88,3 +91,4 @@ public class PdfHandler
         
     }
 }
+
