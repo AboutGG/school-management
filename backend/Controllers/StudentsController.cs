@@ -126,12 +126,12 @@ public class StudentsController : Controller
         {
             //Decode the token
             JwtSecurityToken idFromToken = JWTHandler.DecodeJwtToken(Token);
-            
+
             //Take the userId from the token
-            var takenId = new Guid (idFromToken.Payload["userid"].ToString());
+            var takenId = new Guid(idFromToken.Payload["userid"].ToString());
 
             @params.Order = "Exam." + @params.Order;
-            
+
             //Take the student using the id
             List<StudentExam> takenStudent = new GenericRepository<StudentExam>(_context)
                 .GetAllUsingIQueryable(@params,
@@ -141,20 +141,26 @@ public class StudentsController : Controller
                         .Include(el => el.Exam)
                         .ThenInclude(el => el.TeacherSubjectClassroom.Teacher.Registry)
                         .Include(el => el.Student.Classroom)
-                        .Include(el=> el.Exam.TeacherSubjectClassroom)
+                        .Include(el => el.Exam.TeacherSubjectClassroom)
                         .ThenInclude(el => el.Subject)
-                    ,out var total
-                    );
+                    , out var total
+                );
             if (takenStudent == null)
             {
                 throw new Exception("NOT_FOUND");
             }
+
+            if (@params.Filter != null)
+                takenStudent = takenStudent.Where(el =>
+                    el.Exam.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
+            
             var studentExamDtos = new List<StudentExamDto>();
+            
             foreach (var el in takenStudent)
             {
                 studentExamDtos.Add(new StudentExamDto(el));
             }
-            
+
             return Ok(new PaginationResponse<StudentExamDto>
             {
                 Total = total,
