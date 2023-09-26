@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Classroom } from 'src/app/shared/models/users';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { HttpParams } from '@angular/common/http';
+import { Classroom } from 'src/app/shared/models/classrooms';
 
 @Component({
   selector: 'app-classes',
@@ -38,12 +38,12 @@ export class ClassesComponent {
         .set('Search', this.searchTerm)
         .set('ItemsPerPage', this.itemsPerPage);
       this.classroomService.getDataClassroom(params).subscribe({
-        next: (res: any) => {
-          this.totalItems = res.total; // numero totale di elementi
-          this.totalPages = this.totalItems/this.itemsPerPage;
-          this.class = res.data;
+        next: (res: Classroom[]) => {
+         // this.totalItems = res.total; // numero totale di elementi
+         // this.totalPages = this.totalItems/this.itemsPerPage;
+          this.class = res;
   
-          console.log('dati get', res.data);
+          console.log('dati get', res);
           console.log('params', params)
         },
         error: (err) => {

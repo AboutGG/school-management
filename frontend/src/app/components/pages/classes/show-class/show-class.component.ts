@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClassDetails, Classroom, Students, Teachers } from 'src/app/shared/models/users';
+import { ClassDetails, Students, Teachers } from 'src/app/shared/models/users';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 

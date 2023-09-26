@@ -1,7 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TeacherSubject, Teachers } from 'src/app/shared/models/users';
+import { TeacherSubject } from 'src/app/shared/models/subjects';
+import { Teachers } from 'src/app/shared/models/users';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 
 @Component({
@@ -14,11 +15,12 @@ export class SubjectsComponent {
   teachers: TeacherSubject [] = [];
   searchTerm: string = '';
   currentPage : number = 1; 
-  itemsPerPage : number = 1// numero di elementi per pagina
+  itemsPerPage : number = 5// numero di elementi per pagina
   totalItems! : number;
   newPage! : string
   previousPage: number = 1;
   totalPages!: number;
+
 
   constructor(private classroomService: ClassroomService) {}
 
