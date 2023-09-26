@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { StudentExam } from 'src/app/shared/models/users';
 import { AuthService } from 'src/app/shared/service/auth.service';
@@ -10,6 +11,12 @@ import { ExamsService } from 'src/app/shared/service/exams.service';
 })
 export class ExamsStudentListComponent implements OnInit {
   examsList!: StudentExam[]
+  page: number = 1;
+  filtered!: string
+  search!: string
+  orderType!: string
+  order!: string
+  itemsPerPage!: number
   orders = {
     date: 'asc',
     matter: 'asc',
@@ -39,6 +46,13 @@ export class ExamsStudentListComponent implements OnInit {
   // }
 
   getStudentExams() {
+    const params = new HttpParams()
+      .set('Page', this.page)
+      .set('Filter', this.filtered)
+      .set('Search', this.search)
+      .set('OrderType', this.orderType)
+      .set('Order', this.order)
+      .set('ItemsPerPage', this.itemsPerPage)
     this.examsService.getStudentExams().subscribe(res => {
       this.examsList = res.data
     })
