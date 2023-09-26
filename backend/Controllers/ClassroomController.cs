@@ -50,19 +50,19 @@ public class ClassroomsController : Controller
     [ProducesResponseType(200, Type = typeof(List<ClassroomDetails>))]
     public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
     {
-        var students = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
+        var mappedStudents = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
             .GetAllUsingIQueryable(@params,
                 query => query
                     .Where(student => student.ClassroomId == id)
                     .Include(student => student.Registry)
-                ,out var totalStudents 
-                )
-        
+                , out var totalStudents
+            )
+
         );
 
         var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
             .GetAllUsingIQueryable(
-                null, 
+                null,
                 query => query
                     .Where(teacher => teacher.TeachersSubjectsClassrooms
                         .Any(tsc => tsc.ClassroomId == id))
@@ -70,10 +70,20 @@ public class ClassroomsController : Controller
                     .ThenInclude(tsc => tsc.Subject)
                     .Include(teacher => teacher.Registry),
                 out var totalTeachers
-                ));
-        
-        return Ok(new { students, teachers });
+            ));
+
+        return Ok(new
+            {
+                students =
+                    new PaginationResponse<StudentDto>
+                    {
+                        Total = totalStudents,
+                        Data = mappedStudents
+                    },
+                teachers = teachers
+            }
+        );
     }
-    
-   
+
+
 }
