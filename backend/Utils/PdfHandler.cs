@@ -53,6 +53,7 @@ public class PdfHandler
         //     //     .Replace("{{body}}", data.Body);
         //     // //.Replace("{{eta}}", "30");
         // }
+        
 
         GenerateCircular("Assets/Circular.html", data, out htmlContent);
         using var memoryStream = new MemoryStream();
