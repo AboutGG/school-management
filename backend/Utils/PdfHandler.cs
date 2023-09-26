@@ -11,56 +11,18 @@ namespace backend.Utils;
 
 public class PdfHandler
 {
-    public static byte[] GeneratePdf(string type, List<object>? table, Circular? data)
+    public static byte[] GeneratePdf<T>(object data) where T : class
     {
-        string htmlPath, htmlContent = string.Empty;
-        // StringBuilder tableHtml = new StringBuilder();
-        // if (type == "table")
-        // {
-        //     htmlPath = "Assets/Table.html";
-        //     htmlContent = File.ReadAllText(htmlPath);
-        //     
-        //     
-        //     var propertyNames = table.First().GetType().GetProperties().Select(p => p.Name);
-        //     tableHtml.Append("<table>");
-        //     
-        //     tableHtml.AppendLine("<tr>");
-        //     foreach (string dummy in propertyNames)
-        //         tableHtml.AppendLine("<td>").AppendLine(dummy).AppendLine("</td>");
-        //     tableHtml.AppendLine("</tr>");
-        //
-        //
-        //     foreach (var item in table)
-        //     {
-        //         tableHtml.AppendLine("<tr>");
-        //         foreach (PropertyInfo property in item.GetType().GetProperties()) //PropertyInfo represents the information of a property of a class.
-        //         {
-        //             if(property != null)
-        //                 tableHtml.AppendLine("<td>").AppendLine(property.GetValue(item).ToString()).AppendLine("</td>"); //takes the property's value of a specific object in this case: property
-        //         }
-        //         tableHtml.AppendLine("</tr>");
-        //     }
-        //     tableHtml.Append("</table>");
-        //     htmlContent = htmlContent.Replace("{{tabelle}}", tableHtml.ToString());
-        // }
-        // else
-        // {
-        //     htmlPath = "Assets/Circular.html";
-        //     htmlContent = File.ReadAllText(htmlPath);
-        //     // // Sostituisci i segnaposto con i dati dinamici
-        //     // htmlContent = htmlContent.Replace("{{Title}}", data.Title)
-        //     //     .Replace("{{SchoolName}}", data.SchoolName)
-        //     //     .Replace("{{body}}", data.Body);
-        //     // //.Replace("{{eta}}", "30");
-        // }
-        
-        switch (type.Trim().ToLower())
+        string htmlContent = string.Empty;
+        switch (typeof(T).Name)
         {
-            case "report":
-               htmlContent = GenerateCircular("Assets/Circular.html", data);
+            case "Report":
+                var list = data as List<T>;
+                htmlContent = GenerateTable("Assets/Table.html", list);
               break;  
-            case "circular":
-                htmlContent = GenerateTable("Assets/Table.html",table);
+            case "Circular":
+                var circular = data as Circular;
+                htmlContent = GenerateCircular("Assets/Table.html", circular);
                 break;
             default:
                 throw new Exception("INVALID_PDF_TYPE");
@@ -93,7 +55,7 @@ public class PdfHandler
         return htmlContent;
     }
 
-    private static string GenerateTable(string path, List<object> table)
+    private static string GenerateTable<T>(string path, List<T> table)
     {
         string htmlPath, htmlContent;
         StringBuilder tableHtml = new StringBuilder();
