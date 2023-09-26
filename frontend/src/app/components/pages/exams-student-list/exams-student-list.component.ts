@@ -16,7 +16,7 @@ export class ExamsStudentListComponent implements OnInit {
   search!: string
   orderType!: string
   order!: string
-  itemsPerPage!: number
+  itemsPerPage: number = 10
   orders = {
     date: 'asc',
     matter: 'asc',
@@ -53,7 +53,7 @@ export class ExamsStudentListComponent implements OnInit {
       .set('OrderType', this.orderType)
       .set('Order', this.order)
       .set('ItemsPerPage', this.itemsPerPage)
-    this.examsService.getStudentExams().subscribe(res => {
+    this.examsService.getStudentExams(params).subscribe(res => {
       this.examsList = res.data
     })
   }
