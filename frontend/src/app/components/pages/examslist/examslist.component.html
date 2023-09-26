@@ -14,15 +14,15 @@
     <div class="col-md-2 mb-3 d-flex w-100 justify-content-center">
         <div class="d-flex">
             <form [formGroup]="formSubjects" class="px-2">
-                <small for="Materie" class="smallForm">Materie</small>
-                <select class="btn btn-warning w-100" formControlName="subjects"
+                <!-- <small for="Materie" class="smallForm">Materie</small> -->
+                <select class="btn btn-warning" formControlName="subjects"
                     (click)="[onClickFilter = true, dropdownFilter()]">
                     <option *ngFor="let subject of subjects">{{this.subject}}</option>
                 </select>
             </form>
             <form [formGroup]="formClassrooms" class="px-2">
-                <small for="Classi" class="smallForm">Classi</small>
-                <select class="btn btn-warning w-100" formControlName="classrooms"
+                <!-- <small for="Classi" class="smallForm">Classi</small> -->
+                <select class="btn btn-warning" formControlName="classrooms"
                     (click)="[onClickFilter = false, dropdownFilter()]">
                     <option *ngFor="let classroom of classrooms">{{this.classroom}}</option>
                 </select>
