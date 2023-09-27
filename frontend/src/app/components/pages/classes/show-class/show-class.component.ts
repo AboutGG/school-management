@@ -31,12 +31,12 @@ export class ShowClassComponent {
 
   fetchClassDetails() {
     this.classroomService.getSingleClassroom(this.classId).subscribe({
-      next: (data: ClassDetails) => {
-        this.classDetails = data;
-        console.log(data);
+      next: (res: any) => {
+        this.classDetails = res.data;
+        console.log(res.data);
       },
       error:(err) => {
-        console.log("errore",err);
+        console.log("error",err);
       }
 
     })
