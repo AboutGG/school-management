@@ -104,7 +104,7 @@ public class SchoolContext : DbContext
 
         modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Subject>(ts => ts.Subject)
-            .WithMany(s => s.TeacherSubjects)
+            .WithMany(s => s.TeacherSubjectsClassrooms)
             .HasForeignKey(ts => ts.SubjectId);
 
         modelBuilder.Entity<TeacherSubjectClassroom>()

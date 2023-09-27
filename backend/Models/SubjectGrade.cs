@@ -5,12 +5,12 @@ namespace backend.Models;
 /// </summary>
 public class SubjectGrade
 {
-    public SubjectGrade(string subject, double grade)
+    public SubjectGrade(string subject, string grade)
     {
         Subject = subject;
         Grade = grade;
     }
 
     public string Subject { get; set; }
-    public double Grade { get; set; }
+    public string Grade { get; set; }
 }
