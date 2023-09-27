@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { HttpParams } from '@angular/common/http';
 import { Classroom } from 'src/app/shared/models/classrooms';
+import { ListResponse } from 'src/app/shared/models/listResponse';
 
 @Component({
   selector: 'app-classes',
@@ -41,7 +42,7 @@ export class ClassesComponent {
         
         
       this.classroomService.getDataClassroom(params).subscribe({
-        next: (res: any) => {
+        next: (res: ListResponse<Classroom[]> ) => {
           this.totalItems = res.total; // numero totale di elementi
           this.totalPages = this.totalItems/this.itemsPerPage;
           this.class = res.data;

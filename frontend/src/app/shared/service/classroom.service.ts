@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ClassDetails } from '../models/users';
+import { ClassDetails } from '../models/classrooms';
 import { ListResponse } from '../models/listResponse';
 import { Classroom } from '../models/classrooms';
 
