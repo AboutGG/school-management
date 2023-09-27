@@ -192,6 +192,7 @@ public class StudentsController : Controller
         //Ottengo lo studente tramite l'id che viene passato dalla route
         Student takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(query => query
             .Where(el => el.UserId == Id)
+            .Include(el => el.Registry)
             .Include(el => el.StudentExams)
             .ThenInclude(el => el.Exam)
             .ThenInclude(el => el.TeacherSubjectClassroom.Subject)
@@ -207,17 +208,20 @@ public class StudentsController : Controller
         
         List<SubjectGrade> report = new List<SubjectGrade>();
         
-        foreach (var subject in subjectClassrooms)
+        foreach (Subject subject in subjectClassrooms)
         {
             // prendo gli esami per materia
-            var dummy = new GenericRepository<StudentExam>(_context).GetAllUsingIQueryable(null,
+            List<StudentExam> studentExams = new GenericRepository<StudentExam>(_context).GetAllUsingIQueryable(null,
                 query => takenStudent.StudentExams.AsQueryable()
                     .Where(el => el.Exam.TeacherSubjectClassroom.Subject.Id == subject.Id)
                 , out var total);
+            
             double media = 0;
-            if (dummy != null)
+            //se l'alunno non ha eseguito esami in quella materia allora la media rimarrà a 0, nel caso opposto calcolerà la media di tutti i voti presi negli esami
+            //nel caso in cui non è presente un voto allora metterà il valore 0
+            if (studentExams != null)
             {
-                foreach (var el in dummy)
+                foreach (StudentExam el in studentExams)
                 {
                     media += el.Grade ?? 0;
 
@@ -229,10 +233,10 @@ public class StudentsController : Controller
         }
         
         var pdf = PdfHandler.GeneratePdf<SubjectGrade>(report);
-        return File(pdf, "application/pdf", "generated.pdf");
+        return File(pdf, "application/pdf", $"{takenStudent.Registry.Name}_{takenStudent.Registry.Surname}_student_report.pdf");
     }
 
     #endregion
-
+    
     #endregion
 }
