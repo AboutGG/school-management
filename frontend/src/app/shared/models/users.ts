@@ -40,6 +40,11 @@ export interface Registry {
   student?: Student;
 }
 
+export interface ListResponse {
+  data: any[],
+  total: number
+}
+
 export interface Teacher {
   id: string;
   registryId: string;

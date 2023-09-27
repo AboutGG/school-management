@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Registry, Users, Prova } from 'src/app/shared/models/users';
+import { Registry, Users, Prova, ListResponse } from 'src/app/shared/models/users';
 import { UsersService } from 'src/app/shared/service/users.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class ListUsersComponent {
   }
 
   users: Registry[] = [];
-  role: string = "";
+  filter: string = "";
   action: string = "";
   id!: string;
   page: number = 1;
@@ -34,8 +34,11 @@ export class ListUsersComponent {
     birth: 'asc'
   }
 
-  onClickRole(role: string): void {
-    this.role = role;
+  onClickRole(): void {
+    let boh ="";
+    this.filter = boh;
+    console.log(this.filter);
+    
     this.getData('Name', this.orders.name)
   }
 
@@ -57,41 +60,42 @@ export class ListUsersComponent {
     let role = "";
     search = this.text;
 
-    switch(this.role) {
-      case 'student':
-      role = 'Student';
-      break;
-      case 'teacher':
-      role = 'Teacher';
-      break;
+    switch (this.filter) {
+      case "studenti":
+        role = "student";
+        break;
+      case "insegnanti":
+        role = "teacher";
+        break;
     }
-    console.log(this.text)
+    console.log(this.filter);
 
-    this.usersService.getUsers(order, type, this.page, role, search).subscribe({
-      next: (data: Registry[]) => {
-        console.log(id)
-       
-        if(id) {
-          this.orders = {
-            name: 'asc',
-            surname: 'asc',
-            birth: 'asc',
-            
-            [id]: type
-            
-          };          
-        }
-        console.log("orders", this.orders);
-        // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
-        // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
-        // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
-        
-        this.users = data;
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+    this.usersService
+      .getUsers(order, type, this.page, this.filter, search)
+      .subscribe({
+        next: (res: ListResponse) => {
+          console.log(id);
+
+          if (id) {
+            this.orders = {
+              name: "asc",
+              surname: "asc",
+              birth: "asc",
+
+              [id]: type,
+            };
+          }
+          console.log("orders", this.orders);
+          // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
+          // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc";
+          // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
+
+          this.users = res.data;
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 
   dUser(id: string): void {

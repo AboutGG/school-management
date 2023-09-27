@@ -8,18 +8,33 @@
 </div>
 
 <div class="container mt-6 bb">
-    <div class="col-md-2 mb-4 d-flex w-100 justify-content-center">
-        <div class="dropdown d-flex flex-column w-100">
+    <div class="col-md-2 mb-4 d-flex w-50 justify-content-center">
+      <select class="form-select" (change)="onClickRole()">
+        <option selected>Ruolo</option>
+        <option value="utenti">Utente</option>
+        <option value="studenti">Studente</option>
+        <option value="insegnante">Insegnante</option>
+      </select>
+
+
+      <!-- <select class="form-select" (change)="this.filter">
+        <option selected>Ruolo</option>
+        <option value="utenti" (click)="onClickRole('')">Utente</option>
+        <option value="studenti" (click)="onClickRole('studenti')">Studente</option>
+        <option value="insegnante" (click)="onClickRole('insegnanti')">Insegnante</option>
+      </select> -->
+
+        <!-- <div class="dropdown d-flex flex-column w-100">
             <label for="role" class="form-label">Filtra per ruolo: </label>
             <button class="btn btn-outline-warning dropdown-toggle w-25" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="role">
-                {{ (this.role ? this.role : 'Utenti') | titlecase}}
+                {{ (this.filter ? this.filter : 'Utenti') | titlecase}}
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" role="button" value="utenti" (click)="[onClickRole('')]">Utenti</a></li>
                 <li><a class="dropdown-item" role="button" value="studenti" (click)="[onClickRole('studenti')]">Studenti</a></li>
                 <li><a class="dropdown-item" role="button" value="insegnanti" (click)="[onClickRole('insegnanti')]">Insegnanti</a></li>
             </ul>
-        </div>
+        </div> -->
 
 
         <!-- <div class="col-md-2 mb-3 d-flex w-10 justify-content-center">
