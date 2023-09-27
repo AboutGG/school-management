@@ -193,17 +193,19 @@ public class StudentsController : Controller
         Student takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(query => query
             .Where(el => el.UserId == Id)
             .Include(el => el.StudentExams)
+            .ThenInclude(el => el.Exam)
+            .ThenInclude(el => el.TeacherSubjectClassroom.Subject)
         );
         
         //Prendo le materie insegnate nella classe dello studente
-        var subjectClassrooms = new GenericRepository<Classroom>(_context).GetByIdUsingIQueryable(
+        List<Subject> subjectClassrooms = new GenericRepository<Classroom>(_context).GetByIdUsingIQueryable(
             query => query
                 .Where(el => el.Id == takenStudent.ClassroomId)
                 .Include(el => el.TeacherSubjectsClassrooms)
                 .ThenInclude(el => el.Subject)
         ).TeacherSubjectsClassrooms.Select(el => new Subject{ Id = el.Subject.Id, Name = el.Subject.Name}).ToList();
-
-        Dictionary<string, double> result = new Dictionary<string, double>();
+        
+        List<SubjectGrade> report = new List<SubjectGrade>();
         
         foreach (var subject in subjectClassrooms)
         {
@@ -213,19 +215,20 @@ public class StudentsController : Controller
                     .Where(el => el.Exam.TeacherSubjectClassroom.Subject.Id == subject.Id)
                 , out var total);
             double media = 0;
-            foreach (var el in dummy)
+            if (dummy != null)
             {
-                media += el.Grade ?? 0;
+                foreach (var el in dummy)
+                {
+                    media += el.Grade ?? 0;
+
+                    media /= total;
+                }
             }
-            media /= total;
-            
-            result.Add(subject.Name, media);
+
+            report.Add(new SubjectGrade(subject.Name, media));
         }
         
-        return Ok(result);
-        
-        var pdf = PdfHandler.GeneratePdf("report", null, null);
-
+        var pdf = PdfHandler.GeneratePdf<SubjectGrade>(report);
         return File(pdf, "application/pdf", "generated.pdf");
     }
 
