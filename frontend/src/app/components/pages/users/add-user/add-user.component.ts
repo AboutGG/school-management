@@ -133,8 +133,11 @@ export class AddUserComponent implements OnInit {
     this.getClassroom();
   }
 
-  onClickRole(): void {
-    this.roleValue = this.usersForm.get("role")?.value;
+  onClickRole(event: any): void {
+
+    this.roleValue = event.target.value;
+    // this.roleValue = this.usersForm.get("role")?.value;
+    
     // console.log(this.usersForm.value.role);
     console.log(this.roleValue);
     this.usersForm

@@ -7,14 +7,17 @@
     </div> 
 </div>
 
-<div class="container mt-6 bb">
-    <div class="col-md-2 mb-4 d-flex w-50 justify-content-center">
-      <select class="form-select" (change)="onClickRole($event)">
-        <option selected>Ruolo</option>
-        <option value="user">Utente</option>
-        <option value="student">Studente</option>
-        <option value="teacher">Insegnante</option>
-      </select>
+<div class="container mt-12 bb mt-5 ms-5">
+    <div class="row position-relative mb-3 align-items-center">
+      <div class="col-md-2 mb-3">
+        <select class="form-select" (change)="onClickRole($event)">
+          <option selected>Ruolo</option>
+          <option value="user">Utente</option>
+          <option value="student">Studente</option>
+          <option value="teacher">Insegnante</option>
+        </select>
+      </div>
+    
 
 
       <!-- <select class="form-select" (change)="this.filter">
@@ -46,19 +49,22 @@
           </div>     -->
 
 
-        <div class="container d-flex justify-content-end mt-5">
-          <div class="classes-header">
-            <div class="input-container">
-              <span>Cerca: </span>
-              <input type="text" name="" id="search" placeholder="Scrivi per cercare..." #filter>
-              <i class="bi bi-search" type="button" (click)="saveSearch(filter.value)"></i>
-            </div>
+      <div class="col-md-8">
+        <!-- <div class="container d-flex justify-content-end mt-5"> -->
+        <div class="classes-header align-items-end ">
+          <div class="input-container">
+            <span>Cerca: </span>
+            <input type="text" name="" id="search" placeholder="Scrivi per cercare..." #filter>
+            <i class="bi bi-search" type="button" (click)="saveSearch(filter.value)"></i>
           </div>
-          <div>
-            <button class="btn btn-warning mx-3">PDF</button>
-          </div>
+        </div>
+      </div>
+      <div class="col-md-2 mb-3">
+          <button class="btn btn-warning mx-3">PDF</button>
       </div>
     </div>
+</div>
+  
 
 <table class="table table-hover">
     <thead>

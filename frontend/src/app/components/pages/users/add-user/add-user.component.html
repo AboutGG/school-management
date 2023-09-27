@@ -8,29 +8,22 @@
     
     
         <form [formGroup]="usersForm" class="row g-3 form-container ms-5 me-4">
-            <div class="row position-relative mb-4">
+            <div class="row position-relative ms-5 mb-4">
 
-                <div class="col-md-2 mb-3">
+                <div class="row position-relative mb-3 align-items-center">
+                        <div class="col-md-2 mb-3">
+                            <select class="form-select" formControlName="role" (change)="onClickRole($event)">
+                                <option selected>Ruolo</option>
+                                <option value="student">Studente</option>
+                                <option value="teacher">Insegnante</option>
+                            </select>
+                            <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
+                                <span>Campo obbligatorio</span>
+                            </div> 
+                        </div>
 
-                    <select class="form-select" formControlName="role" (change)="onClickRole()">
-                        <option value="student">Studente</option>
-                        <option value="teacher">Insegnante</option>
-                    </select>
-                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
-                        <span>Campo obbligatorio</span>
-                    </div> 
-                </div>    
 
-                <div class="col-md-2 mb-3" *ngIf="this.roleValue === 'student'">
-                    <select class="form-select" formControlName="classroomId">
-                        <option selected>Scegli la classe:</option>
-                        <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
-                    </select>
-                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('classroomId')">
-                        <span>Campo obbligatorio</span>
-                    </div> 
-                </div>
-
+                    
 
                     <!-- <div class="dropdown">
                         <label for="role" class="form-label">Seleziona il ruolo:<span class="text-danger">*</span></label>
@@ -45,33 +38,35 @@
                     <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
                         <span>Campo obbligatorio</span>
                     </div>  -->
-                    
 
-
-                <div class="col-md-6">
-                    <div formGroupName="user">
-                        <div class="col-md-5 mb-3">
-                            <label class="form-label" for="username">Username:<span class="text-danger">*</span></label>
-                            <input class="form-control placeholder-input" type="text" title="username" formControlName="username" placeholder="mariorossi2023">
-                            <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('username')">
-                                <span>Campo obbligatorio</span>
-                            </div>
-                        </div>
-                        <div class="col-md-5 mb-3">
-                            <label class="form-label" for="password">Password:<span class="text-danger">*</span></label>
-                            <input class="form-control placeholder-input" type="password" title="password" formControlName="password">
-                            <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('password')">
-                                <span>Campo obbligatorio</span>
+                    <div class="col-md-8">
+                        <div formGroupName="user">
+                            <div class="row position-relative mb-3">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" for="username">Username:<span class="text-danger">*</span></label>
+                                    <input class="form-control placeholder-input" type="text" title="username" formControlName="username" placeholder="mariorossi2023">
+                                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('username')">
+                                        <span>Campo obbligatorio</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" for="password">Password:<span class="text-danger">*</span></label>
+                                    <input class="form-control placeholder-input" type="password" title="password" formControlName="password">
+                                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('password')">
+                                        <span>Campo obbligatorio</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             
 
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div formGroupName="registry">
                         <div class="row position-relative mb-4">
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-2 mb-3">
                                 <label for="name" class="form-label">Nome:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control placeholder-input" title="name" formControlName="name" placeholder="Mario">
                                 <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('name')">
@@ -85,7 +80,7 @@
                                     <span>Campo obbligatorio</span>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-5 mb-3">
                                 <label for="email" class="form-label">Email:</label>
                                 <input type="text" title="email" formControlName="email" class="form-control placeholder-input" placeholder="mariorossi2023@gmail.com">
                                 <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('email')">
@@ -93,7 +88,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row position-relative mb-4">
+                        <div class="row position-relative mb-4 align-items-end">
                             <div class="col-md-2 mb-3">
                                 <select class="form-select" formControlName="gender" (change)="onClickGender()">
                                     <option value="male">Maschio</option>
@@ -116,36 +111,47 @@
                                     <span>Campo obbligatorio</span>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-2 mb-3">
+                                <label for="birth" class="form-label">Data di nascita:</label>
+                                <input type="date" class="form-control placeholder-input" title="birth" formControlName="birth">
+                            </div>
+                            <div class="col-md-2 mb-3">
                                 <label for="telephone" class="form-label">Telefono:</label>
                                 <input type="text" class="form-control placeholder-input" title="telephone" formControlName="telephone" placeholder="391-234567890">
                                 <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('telephone')">
                                     <span>Numero non valido</span>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="address" class="form-label">Indirizzo:</label>
                                 <input type="text" title="address" formControlName="address" class="form-control placeholder-input" placeholder="Via Roma 90, 95030, Catania">
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="birth" class="form-label">Data di nascita:</label>
-                            <input type="date" class="form-control placeholder-input" title="birth" formControlName="birth">
-                        </div>
                     </div>
                 </div>
 
 
+                <div class="col-md-4 mb-5" *ngIf="this.roleValue === 'student'">
+                    <select class="form-select" formControlName="classroomId">
+                        <option selected>Scegli la classe:</option>
+                        <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
+                    </select>
+                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('classroomId')">
+                        <span>Campo obbligatorio</span>
+                    </div> 
+                </div>
+
             
 
             
-                <div class="d-flex justify-content-end mb-5 pe-5">
+                
+            </div>
+        </form>
+        <div class="d-flex justify-content-end mb-5 pe-5">
                     <div class="col-md-2">
                         <button (click)="this.alert=true; onAddUser()" type="submit" class="btn btn-warning form-control">INVIA</button>
                     </div>
                 </div>
-            </div>
-        </form>
     </div>
 
 
