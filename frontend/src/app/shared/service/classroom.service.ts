@@ -1,7 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ClassDetails, Classroom, Students, Teachers } from '../models/users';
+import { ClassDetails } from '../models/users';
+import { ListResponse } from '../models/listResponse';
+import { Classroom } from '../models/classrooms';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +13,11 @@ export class ClassroomService {
   constructor(private http: HttpClient) { }
 
 
-  // get all classes
-  getDataClassroom(): Observable<Classroom[]>{
-    return this.http.get<Classroom[]>(`https://localhost:7262/api/teachers/classrooms`,)
+  // get teachers classes
+  getDataClassroom(params: HttpParams): Observable<Classroom[]>{
+    return this.http.get<Classroom[]>(`https://localhost:7262/api/teachers/classrooms`,{params})
 
   }
-
-  //chiamata per la ricerca
-  searchClassrooms(searchTerm: string): Observable<Classroom[]> {
-    return this.http.get<Classroom[]>(`https://localhost:7262/api/teachers/classrooms?search=${searchTerm}`);
-  }
-  
 
   //get single class id
   getSingleClassroom(id: string): Observable<ClassDetails>{
@@ -29,9 +25,10 @@ export class ClassroomService {
   }
 
   //get teacher subjects 
-  getTeacherSubjects(): Observable<Teachers[]>{
-    return this.http.get<Teachers[]>(`https://localhost:7262/api/teachers/subjects`)
+  getTeacherSubjects(params: {}): Observable<ListResponse<any>> {
+    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/subjects`, {params})
   }
+  
 
   
 }

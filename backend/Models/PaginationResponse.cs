@@ -4,5 +4,5 @@ public class PaginationResponse <T>
 {
     public int Total { get; set; }
 
-    public List<T> Data { get; set; }
+    public object Data { get; set; }
 }

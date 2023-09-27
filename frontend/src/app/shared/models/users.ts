@@ -44,12 +44,12 @@ export interface StudentExams {
   ]
 }
 
-export interface TeacherExam {
-  examId: string,
-  examDate: string,
-  classroom: string,
-  subject: string
-}
+// export interface TeacherExam {
+//   examId: string,
+//   examDate: string,
+//   classroom: string,
+//   subject: string
+// }
 
 export interface Classroom {
   id_classroom?: string;
@@ -64,10 +64,10 @@ export interface Teacher {
   subjects: TeacherSubject[]
 }
 
-export interface ListResponse {
-  data: any[],
-  total: number
-}
+// export interface ListResponse {
+//   data: any[],
+//   total: number
+// }
 
 export interface TeacherSubject {
   subjectId: string
@@ -92,3 +92,6 @@ export interface ClassDetails {
   teachers: Teachers[];
   students: Students[];
 }
+
+
+
