@@ -14,15 +14,15 @@ public class PdfHandler
     public static byte[] GeneratePdf<T>(object data) where T : class
     {
         string htmlContent = string.Empty;
-        switch (typeof(T).Name)
+        switch (typeof(T).Name.Trim().ToLower())
         {
-            case "Report":
+            case "report":
                 var list = data as List<T>;
                 htmlContent = GenerateTable("Assets/Table.html", list);
               break;  
-            case "Circular":
+            case "circular":
                 var circular = data as Circular;
-                htmlContent = GenerateCircular("Assets/Table.html", circular);
+                htmlContent = GenerateCircular("Assets/new.html", circular);
                 break;
             default:
                 throw new Exception("INVALID_PDF_TYPE");
