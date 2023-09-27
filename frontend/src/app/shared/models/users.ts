@@ -5,7 +5,6 @@ export interface Users {
 }
 
 
-
 export interface User {
   id?: string
   username: string
@@ -47,12 +46,11 @@ export interface StudentExams {
 }
 
 export interface StudentSubjects {
-    teacher: {
+      teacher: any
       id: string,
       name: string,
       surname: string,
       subjects: string[]
-    }
 }
 
 export interface Classroom {
@@ -78,3 +76,7 @@ export interface ClassDetails {
   students: Students[];
 }
 
+export interface ListResponse {
+  data: any [];
+  total: number;
+}
