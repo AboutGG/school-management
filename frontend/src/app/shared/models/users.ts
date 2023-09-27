@@ -1,3 +1,5 @@
+import { TeacherSubject } from "./subjects"
+
 export interface Users {
   classroom?: string
   user: User
@@ -51,11 +53,11 @@ export interface StudentExams {
 //   subject: string
 // }
 
-export interface Classroom {
-  id_classroom?: string;
-  name_classroom: string;
-  student_count: number;
-}
+// export interface Classroom {
+//   id_classroom?: string;
+//   name_classroom: string;
+//   student_count: number;
+// }
 
 export interface Teacher {
   id: string,
@@ -69,12 +71,12 @@ export interface Teacher {
 //   total: number
 // }
 
-export interface TeacherSubject {
-  subjectId: string
-  subjectName: string,
-  classroomId: string
-  classroomName: string
-}
+// export interface TeacherSubject {
+//   subjectId: string
+//   subjectName: string,
+//   classroomId: string
+//   classroomName: string
+// }
 
 export interface Teachers {
   id?: string;

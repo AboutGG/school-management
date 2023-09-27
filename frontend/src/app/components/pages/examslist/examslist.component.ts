@@ -1,8 +1,9 @@
-import { TeacherSubject } from './../../../shared/models/teachersubjects';
-import { ListResponse } from 'src/app/shared/models/listresponse';
+import { TeacherSubject } from './../../../shared/models/subjects';
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Classroom } from 'src/app/shared/models/classrooms';
+import { ListResponse } from 'src/app/shared/models/listResponse';
 import { TeacherExam } from 'src/app/shared/models/teacherexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
@@ -23,17 +24,17 @@ export class ExamslistComponent {
   });
   examsList!: TeacherExam[]
   subject!: string
-  subjects: string[] = []
+  subjects: TeacherSubject[] = []
   subjectsName: string[] = []
   classroom!: string
-  classrooms: string[] = []
+  classrooms: Classroom[] = []
   orders = {
     date: 'asc',
     subject: 'asc',
     classroom: 'asc'
   }
   page: number = 1
-  itemsPerPage: number = 2
+  itemsPerPage: number = 10
   filtered: string = ""
   search: string = ""
   orderType: string = "asc"
@@ -49,14 +50,11 @@ export class ExamslistComponent {
     this.getTeacherSubjects();
   }
 
-  // resetAllDropdowns() {
-  //   [this.formClassrooms.reset({classrooms: ""})] && [this.formSubjects.reset({subjects: ""})]
-  //   this.getTeacherExams()
-  // }
-
   onChangePage(newPage: number) {
     this.page = newPage
     this.getTeacherExams()
+    this.getTeacherClassrooms()
+    this.getTeacherSubjects()
   }
 
   dropdownFilter() {
@@ -73,7 +71,7 @@ export class ExamslistComponent {
       .set('Order', this.order)
       .set('ItemsPerPage', this.itemsPerPage)
     this.examsService.getTeacherExams(params).subscribe({
-      next: (res: ListResponse) => {
+      next: (res: ListResponse<TeacherExam[]>) => {
         // this.orders = {
         //   name: 'asc',
         //   surname: 'asc',
@@ -95,41 +93,25 @@ export class ExamslistComponent {
   getTeacherClassrooms() {
     this.teacherService.getDataClassroom().subscribe({
       next: (res) => {
-        res.map(classroom => {
-          this.classrooms.push(classroom.name_classroom);
-        })
+        this.classrooms = res.data        
       }
     });
   }
 
-  // getTeacherSubjects() {
-  //   this.teacherService.getTeacherSubjects().subscribe({
+  // getTeacherClassrooms() {
+  //   this.teacherService.getDataClassroom().subscribe({
   //     next: (res) => {
-  //       res.map(items => {
-  //         this.teacherSubject = items
-  //         this.subjects.map(item => {
-  //           this.subjectsName.push(item);
-  //         })
-
-  //         // this.subjects.push(items.subjectName)
-  //         console.log(this.subjects);
-
-  //       })
+  //       console.log(res);
   //     }
   //   });
   // }
 
   getTeacherSubjects() {
     this.teacherService.getTeacherSubjects().subscribe({
-      next: (res: any) => {
-        res.data.map((item: TeacherSubject) => {
-          this.subjects.push(item.subjectName);
-          console.log(this.subjects);
-        })
+      next: (res) => {
+        this.subjects = res.data
       }
     });
   }
-
-
 
 }

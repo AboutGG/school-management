@@ -17,14 +17,14 @@
                 <select class="btn btn-warning" formControlName="subjects"
                     (click)="[onClickFilter = true, dropdownFilter()]">
                     <option selected value="">Tutte le materie</option>
-                    <option *ngFor="let subject of subjects">{{this.subject ? this.subject : 'ciaoooooooo'}}</option>
+                    <option *ngFor="let subject of subjects">{{subject.subjectName}}</option>
                 </select>
             </form>
             <form [formGroup]="formClassrooms" class="px-2">
                 <select class="btn btn-warning" formControlName="classrooms"
                     (click)="[onClickFilter = false, dropdownFilter()]">
                     <option selected value="">Tutte le classi</option>
-                    <option *ngFor="let classroom of classrooms">{{this.classroom}}</option>
+                    <option *ngFor="let classroom of classrooms">{{classroom.name_classroom}}</option>
                 </select>
             </form>
         </div>
