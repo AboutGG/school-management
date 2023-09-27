@@ -60,8 +60,8 @@ public class ClassroomsController : Controller
 
         );
 
-        var classroom = _mapper.Map<ClassroomDto>(new GenericRepository<Classroom>(_context)
-            .GetByIdUsingIQueryable(el => el.Where(classroom => classroom.Id == id)));
+        var classroom = new GenericRepository<Classroom>(_context)
+            .GetByIdUsingIQueryable(el => el.Where(classroom => classroom.Id == id)).Name;
         
         var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
             .GetAllUsingIQueryable(
@@ -81,7 +81,7 @@ public class ClassroomsController : Controller
                 Total = totalStudents,
                 Data = new ClassroomDetails
                 {
-                    Classroom = classroom,
+                    name_classroom = classroom,
                     Students = mappedStudents,
                     Teachers = teachers
                 }

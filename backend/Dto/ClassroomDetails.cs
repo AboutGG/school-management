@@ -8,5 +8,5 @@ public class ClassroomDetails
     
     public List<TeacherDto> Teachers { get; set; }
     
-    public ClassroomDto Classroom { get; set; }
+    public string name_classroom { get; set; }
 }
