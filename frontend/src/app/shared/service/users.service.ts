@@ -60,7 +60,7 @@ export class UsersService {
 
   getUsers(order?: string, orderType?: string, page?: number, filter?: string, search?: string): Observable<ListResponse> {
     return this.http.get<ListResponse>(
-      `https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Page=${page}&Role=${filter}&Search=${search}&ItemsPerPage=10`
+      `https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Page=${page}&Filter=${filter}&Search=${search}&ItemsPerPage=10`
     );
   }
 

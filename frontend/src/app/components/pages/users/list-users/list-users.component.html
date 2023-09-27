@@ -9,11 +9,11 @@
 
 <div class="container mt-6 bb">
     <div class="col-md-2 mb-4 d-flex w-50 justify-content-center">
-      <select class="form-select" (change)="onClickRole()">
+      <select class="form-select" (change)="onClickRole($event)">
         <option selected>Ruolo</option>
-        <option value="utenti">Utente</option>
-        <option value="studenti">Studente</option>
-        <option value="insegnante">Insegnante</option>
+        <option value="user">Utente</option>
+        <option value="student">Studente</option>
+        <option value="teacher">Insegnante</option>
       </select>
 
 
