@@ -1,7 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { StudentExam } from 'src/app/shared/models/studentexam';
-import { AuthService } from 'src/app/shared/service/auth.service';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 
 @Component({
@@ -47,7 +46,6 @@ export class ExamsStudentListComponent implements OnInit {
   getStudentExams() {
     const params = new HttpParams()
       .set('Page', this.page)
-      .set('Filter', this.filtered)
       .set('Search', this.search)
       .set('OrderType', this.orderType)
       .set('Order', this.order)
