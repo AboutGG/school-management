@@ -92,7 +92,7 @@
         <td>{{user.surname}}</td>
         <td>{{user.birth}}</td>
         
-            <div class="dropdown d-flex">
+            <!-- <div class="dropdown d-flex">
               <i class="bi bi-gear-fill" data-bs-toggle="dropdown" aria-expanded="false" type="button"></i>  
               <div class="dropdown-toggle ps-3" data-bs-toggle="dropdown" aria-expanded="false"></div>
                 <ul class="dropdown-menu">
@@ -100,7 +100,27 @@
                     <li><a class="dropdown-item" value="modifica" (click)="onClickAction('modifica', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)" [routerLink]="['/add-user']" [queryParams]="{ mode: 'edit' }"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
                     <li><a role="button" class="dropdown-item" value="elimina" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="onClickAction('elimina', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
                 </ul>
-            </div>
+            </div> -->
+
+
+            <!-- <td> -->
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-gear-fill"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" (click)="onClickAction('dettagli', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)" [routerLink]="['/details/', user.teacher != null ? user!.teacher!.userId : user!.student!.userId]"><i
+                                        class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
+                            <li><a class="dropdown-item" (click)="onClickAction('modifica', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)" [routerLink]="['/add-user']" [queryParams]="{ mode: 'edit' }"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
+                            <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal"
+                                    value="elimina" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="onClickAction('elimina', user.teacher != null ? user!.teacher!.userId : user!.student!.userId)"><i class="bi bi-trash3-fill px-2"></i>Elimina</a>
+                            </li>
+                        </ul>
+                    </div>
+     <!--            </td> -->
+
+
       </tr>
     </tbody>
   </table>
