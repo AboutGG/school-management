@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { StudentExam } from 'src/app/shared/models/users';
+import { StudentExam } from 'src/app/shared/models/studentexam';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 
@@ -14,8 +14,8 @@ export class ExamsStudentListComponent implements OnInit {
   page: number = 1;
   filtered!: string
   search!: string
-  orderType!: string
-  order!: string
+  orderType: string = 'desc'
+  order: string = 'Date'
   itemsPerPage: number = 10
   orders = {
     date: 'asc',
@@ -23,8 +23,7 @@ export class ExamsStudentListComponent implements OnInit {
     grade: 'asc'
   }
 
-  role = this.authService.getRole()
-  constructor(private examsService: ExamsService, private authService: AuthService) { }
+  constructor(private examsService: ExamsService) { }
 
   ngOnInit(): void {
     this.getStudentExams()
