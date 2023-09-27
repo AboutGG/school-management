@@ -8,4 +8,5 @@ export interface Classroom {
   export interface ClassDetails {
     teachers: Teachers[];
     students: Students[];
+    name_classroom: string;
   }

@@ -21,6 +21,7 @@ export class SubjectsComponent {
   newPage! : string
   previousPage: number = 1;
   totalPages!: number;
+  order: string = 'Classroom.Name'
 
 
   constructor(private classroomService: ClassroomService) {}
@@ -36,6 +37,7 @@ export class SubjectsComponent {
        const params = new HttpParams()
         .set('Page', this.currentPage)
         .set('Search', this.searchTerm)
+        .set('Order', this.order)
         .set('ItemsPerPage', this.itemsPerPage);
       this.classroomService.getTeacherSubjects(params).subscribe({
         next: (res: ListResponse<TeacherSubject[]>) => {
