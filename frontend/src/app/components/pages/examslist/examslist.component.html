@@ -14,16 +14,16 @@
     <div class="col-md-2 mb-3 d-flex w-100 justify-content-center">
         <div class="d-flex">
             <form [formGroup]="formSubjects" class="px-2">
-                <!-- <small for="Materie" class="smallForm">Materie</small> -->
                 <select class="btn btn-warning" formControlName="subjects"
                     (click)="[onClickFilter = true, dropdownFilter()]">
-                    <option *ngFor="let subject of subjects">{{this.subject}}</option>
+                    <option selected value="">Tutte le materie</option>
+                    <option *ngFor="let subject of subjects">{{this.subject ? this.subject : 'ciaoooooooo'}}</option>
                 </select>
             </form>
             <form [formGroup]="formClassrooms" class="px-2">
-                <!-- <small for="Classi" class="smallForm">Classi</small> -->
                 <select class="btn btn-warning" formControlName="classrooms"
                     (click)="[onClickFilter = false, dropdownFilter()]">
+                    <option selected value="">Tutte le classi</option>
                     <option *ngFor="let classroom of classrooms">{{this.classroom}}</option>
                 </select>
             </form>
@@ -80,77 +80,6 @@
             </tr>
         </tbody>
     </table>
-    <!-- <div class="dropdown d-flex w-100">
-            <div class="d-flex flex-column">
-                <button class="btn btn-warning w-100 p-2 my-3" (click)="filterSwitch()">{{switchText}}</button>
-                <label for="classroom" class="form-label">Filtra per: </label>
-                <ng-container *ngIf="!onClickFilter">
-                    <button class="btn btn-outline-dark dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false" title="subject">
-                        {{ this.subject ? this.subject : 'Tutte le materie' }}
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" role="button" value="classroom">Tutte le materie</a></li>
-                        <li *ngFor="let subject of subjects">
-                            <a class="dropdown-item" (click)="dropdownFilter(subject)" role="button"
-                                value="subject">{{this.subject}}</a>
-                        </li>
-                    </ul>
-                </ng-container>
-                <ng-container *ngIf="onClickFilter">
-                    <button class="btn btn-outline-dark dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false" title="classroom">
-                        {{ this.classroom ? this.classroom : 'Tutte le classi' }}
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" role="button" value="classroom">Tutte le classi</a></li>
-                        <li *ngFor="let classroom of classrooms">
-                            <a class="dropdown-item" (click)="dropdownFilter(classroom)" role="button"
-                                value="classroom">{{this.classroom}}</a>
-                        </li>
-                    </ul>
-                </ng-container>
-            </div> -->
-    <!-- <div class="d-flex flex-column pe-2">
-                <label for="classroom" class="form-label">Filtra per classe: </label>
-                <button class="btn btn-outline-dark dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false" title="classroom">
-                    {{ this.classroom ? this.classroom : 'Tutte le classi' }}
-                </button>
-                <ul *ngFor="let classroom of classrooms" class="dropdown-menu">
-                    <li><a class="dropdown-item" role="button" value="classroomm">Tutte le classi</a></li>
-                    <li>
-                        <a class="dropdown-item" (click)="[onClickClassroom = true, dropdownFilter(classroom)]" role="button" value="classroom">{{this.classroom}}</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="d-flex flex-column ps-2">
-                <label for="subject" class="form-label">Filtra per materia: </label>
-                <button class="btn btn-outline-dark dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false" title="subject">
-                    {{ this.subject ? this.subject : 'Tutte le materie' }}
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" role="button" value="subject">Tutte le materie</a></li>
-                    <li *ngFor="let subject of subjects, let i = index">
-                        <a class="dropdown-item" (click)="[onClickSubject = true, dropdownFilter(subject) ]" role="button" value="subject">{{
-                            this.subject }}</a>
-                    </li>
-                </ul>
-            </div> 
-        </div> -->
-    <!-- <div class="d-flex w-100 justify-content-center align-items-center mt-4">
-            <div class="d-flex align-items-center">
-                <input type="text" name="search" id="search" placeholder="Cerca">
-                <i class="bi bi-search"></i>
-            </div>
-            <div>
-                <button class="btn btn-outline-dark mx-3">PDF</button>
-            </div>
-        </div> -->
-
-
-
 
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -173,15 +102,17 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
+                <a class="page-link" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li *ngIf="page > 1" class="page-item"><a class="page-link" (click)="onChangePage(page - 1)">{{ page -1
+                    }}</a></li>
+            <li class="page-item"><a class="page-link">{{ page }}</a></li>
+            <li *ngIf="page < total / itemsPerPage" class="page-item"><a class="page-link"
+                    (click)="onChangePage(page + 1)"> {{ page + 1 }} </a></li>
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
+                <a class="page-link" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
