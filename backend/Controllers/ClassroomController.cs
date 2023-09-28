@@ -35,7 +35,7 @@ public class ClassroomsController : Controller
     /// <summary> This API call are used to take all the classrooms when you create an Student </summary>
     /// <returns>All the classrooms present on the Database</returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
+    [ProducesResponseType(200, Type = typeof(PaginationResponse<StudentDto>))]
     public IActionResult GetClassroomsList()
     {
         var classrooms = new GenericRepository<Classroom>(_context)
@@ -47,22 +47,25 @@ public class ClassroomsController : Controller
     //TODO: fix the response of this api call
     [HttpGet]
     [Route("{id}")]
-    [ProducesResponseType(200, Type = typeof(List<ClassroomDetails>))]
+    [ProducesResponseType(200, Type = typeof(PaginationResponse<ClassroomDetails>))]
     public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
     {
-        var students = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
+        var mappedStudents = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
             .GetAllUsingIQueryable(@params,
                 query => query
                     .Where(student => student.ClassroomId == id)
                     .Include(student => student.Registry)
-                ,out var totalStudents 
-                )
-        
+                , out var totalStudents
+            )
+
         );
 
+        var classroom = new GenericRepository<Classroom>(_context)
+            .GetByIdUsingIQueryable(el => el.Where(classroom => classroom.Id == id)).Name;
+        
         var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
             .GetAllUsingIQueryable(
-                null, 
+                null,
                 query => query
                     .Where(teacher => teacher.TeachersSubjectsClassrooms
                         .Any(tsc => tsc.ClassroomId == id))
@@ -70,10 +73,21 @@ public class ClassroomsController : Controller
                     .ThenInclude(tsc => tsc.Subject)
                     .Include(teacher => teacher.Registry),
                 out var totalTeachers
-                ));
-        
-        return Ok(new { students, teachers });
+            ));
+
+        return Ok(
+            new PaginationResponse<ClassroomDetails>
+            {
+                Total = totalStudents,
+                Data = new ClassroomDetails
+                {
+                    name_classroom = classroom,
+                    Students = mappedStudents,
+                    Teachers = teachers
+                }
+            }
+        );
     }
-    
-   
+
+
 }

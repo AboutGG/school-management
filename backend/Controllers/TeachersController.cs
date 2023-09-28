@@ -8,6 +8,7 @@ using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
+using J2N.Text;
 
 namespace backend.Controllers;
 
@@ -36,7 +37,6 @@ public class TeachersController : Controller
 
     #region Api calls
     
-    //TODO: fix the api GetClassrooms
     #region Get classroom
 
     /// <summary>
@@ -65,7 +65,7 @@ public class TeachersController : Controller
             //     throw new Exception("NOT_FOUND");
 
             var classrooms = new GenericRepository<Teacher>(_context)
-                .GetAllUsingIQueryable(@params,
+                .GetAllUsingIQueryable(null,
                     query => query
                         .Include(teacher => teacher.TeachersSubjectsClassrooms)
                         .ThenInclude(tsc => tsc.Classroom.Students)
@@ -76,10 +76,24 @@ public class TeachersController : Controller
                     teacher.TeachersSubjectsClassrooms
                         .Select(tsc => tsc.Classroom)).Distinct().ToList();
 
-            var filterclassroom = classrooms
-                .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())).ToList();
+
+            var filteredClassroom = new GenericRepository<Classroom>(_context)
+                .GetAllUsingIQueryable(@params,
+                query => classrooms.AsQueryable()
+                    .Where(classrooom => classrooom.Name.ToLower().Trim().Contains(@params.Search.ToLower())),
+                out var totalClassrooms
+            );
             
-            return Ok(_mapper.Map<List<ClassroomStudentCount>>(filterclassroom));
+            var result  = new List<ClassroomStudentCount>();
+            foreach (var el in filteredClassroom)
+            {
+                result.Add(new ClassroomStudentCount(el));
+            }
+            return Ok(new PaginationResponse<ClassroomStudentCount>
+            {
+                Total = totalClassrooms,
+                Data = result
+            });
         }
         catch (Exception e)
         {
@@ -105,7 +119,6 @@ public class TeachersController : Controller
     #endregion
 
     #region Get Subjects
-
     /// <summary> A method that return a Teacher's subjects list </summary>
     /// <param name="Token">Token to take the user id of the Teacher and checks the role</param>
     /// <returns>A list of Subject and his classrooms</returns>
@@ -128,7 +141,10 @@ public class TeachersController : Controller
 
             var resultTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params,
                 query => query
-                    .Where(el => el.Teacher.UserId == takenId)
+                    .Where(el => el.Teacher.UserId == takenId
+                    && (el.Classroom.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
+                    || el.Subject.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()))
+                    )
                     .Include(el => el.Teacher)
                     .Include(el => el.Teacher.Registry)
                     .Include(el => el.Classroom)
@@ -136,11 +152,11 @@ public class TeachersController : Controller
                 out var total
             );
 
-            if (@params.Filter != null)
-                resultTeacher = resultTeacher
-                    .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                                 || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                    ).ToList();
+            // if (@params.Filter != null)
+            //     resultTeacher = resultTeacher
+            //         .Where(el => el.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+            //                      || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
+            //         ).ToList();
 
             var mappedResponse = _mapper.Map<List<SubjectClassroomDto>>(resultTeacher);
             

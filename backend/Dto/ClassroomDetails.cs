@@ -1,8 +1,12 @@
-﻿namespace backend.Dto;
+﻿using backend.Models;
+
+namespace backend.Dto;
 
 public class ClassroomDetails
 {
-    public StudentDto[] Students { get; set; }
+    public List<StudentDto> Students { get; set; }
     
-    public TeacherDto[] TeacherDto { get; set; }
+    public List<TeacherDto> Teachers { get; set; }
+    
+    public string name_classroom { get; set; }
 }

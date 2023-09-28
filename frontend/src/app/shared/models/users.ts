@@ -35,11 +35,6 @@ export interface StudentExam {
   grade?: number
 }
 
-export interface Classroom {
-  id_classroom?: string;
-  name_classroom: string;
-  student_count: number;
-}
 
 export interface ListResponse {
   data: any[];
@@ -61,4 +56,5 @@ export interface ClassDetails {
   teachers: Teachers[];
   students: Students[];
 }
+
 
