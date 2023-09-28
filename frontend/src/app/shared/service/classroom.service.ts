@@ -22,7 +22,6 @@ export class ClassroomService {
   //get single class id
   getSingleClassroom(id: string): Observable<ClassDetails>{
     return this.http.get<ClassDetails>(`https://localhost:7262/api/classrooms/${id}`)
-    
   }
 
   //get teacher subjects 

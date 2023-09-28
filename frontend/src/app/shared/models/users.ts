@@ -1,3 +1,5 @@
+import { TeacherSubject } from "./subjects"
+
 export interface Users {
   classroom?: string
   user: User
@@ -28,18 +30,54 @@ export interface Registry {
   telephone?: string //date format "yyyy-mm-dd"
 }
 
-export interface StudentExam {
-  subject: string,
-  teacher: string,
-  date: string,
-  grade?: number
+export interface StudentExams {
+  student: {
+    id: string,
+    name: string,
+    surname: string
+  },
+  exams: [
+    {
+      subject: string,
+      teacher: string,
+      date: string,
+      grade?: number
+    }
+  ]
 }
 
+// export interface TeacherExam {
+//   examId: string,
+//   examDate: string,
+//   classroom: string,
+//   subject: string
+// }
 
-export interface ListResponse {
-  data: any[];
-  total: number
+// export interface Classroom {
+//   id_classroom?: string;
+//   name_classroom: string;
+//   student_count: number;
+// }
+
+export interface Teacher {
+  id: string,
+  name: string,
+  surname: string,
+  subjects: TeacherSubject[]
 }
+
+// export interface ListResponse {
+//   data: any[],
+//   total: number
+// }
+
+// export interface TeacherSubject {
+//   subjectId: string
+//   subjectName: string,
+//   classroomId: string
+//   classroomName: string
+// }
+
 export interface Teachers {
   id?: string;
   name: string;
@@ -56,5 +94,6 @@ export interface ClassDetails {
   teachers: Teachers[];
   students: Students[];
 }
+
 
 
