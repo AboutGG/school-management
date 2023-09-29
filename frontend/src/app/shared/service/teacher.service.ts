@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Classroom } from '../models/classrooms';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ListResponse } from '../models/listResponse';
