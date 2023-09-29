@@ -18,7 +18,7 @@ export class ShowClassComponent {
   isTeacher!: boolean; //memorizza se l'utente è insegnante
   order:string = 'Registry.Surname'
 
-  constructor(private classroomService: ClassroomService, private authService: AuthService, private route: ActivatedRoute) {}
+  constructor(private classroomService: ClassroomService, private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
   
 
   ngOnInit() {
@@ -46,7 +46,8 @@ export class ShowClassComponent {
     })
   }
 
-  
-
+  navigateToTeachersClasses() {
+    this.router.navigate(['teachers/classes']);
+  }
 
 }

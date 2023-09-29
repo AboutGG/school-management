@@ -25,7 +25,7 @@ export class ClassesComponent {
   order: string = 'name';
 
 
-  constructor(private classroomService: ClassroomService, private authService: AuthService, private route: ActivatedRoute) {}
+  constructor(private classroomService: ClassroomService) {}
 
   ngOnInit(){
  

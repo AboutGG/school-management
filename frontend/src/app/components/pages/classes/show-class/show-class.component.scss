@@ -20,6 +20,10 @@ hr{
   font-size: 30px;
     color: #ffb900;
 }
+.bi-arrow-left{
+  font-size: 25px;
+    color: #ffb900;
+}
 .input-container {
     position: relative;
     display: inline-block;
@@ -105,9 +109,14 @@ hr{
   .dropdown-item:hover{
     background-color: #ffc422;
 
-
+  }
+  .bi-book-fill{
+    margin-right: 10px;
   }
 
+  .bi-eye-fill{
+    margin-right: 10px;
+  }
 
 
   
