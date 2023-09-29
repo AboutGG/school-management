@@ -198,18 +198,19 @@ public class StudentsController : Controller
         
         try
         {
-            var dummy = schoolYear.Split('-');
-            startFirstQuarter = new DateOnly(int.Parse(dummy[0]), 09, 15);
-            endFirstQuarter = new DateOnly(int.Parse(dummy[1]), 01, 31);
-            startSecondQuarter = new DateOnly(int.Parse(dummy[1]), 02, 1);
-            endSecondQuarter = new DateOnly(int.Parse(dummy[1]), 09, 15);
+            var splittedSchoolYear = schoolYear.Split('-');
+            startFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[0]), 09, 15);
+            endFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 01, 31);
+            startSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 02, 1);
+            endSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 09, 15);
         
-            if (DateTime.UtcNow.Year != int.Parse(dummy[0]) || DateTime.UtcNow.Year + 1 != int.Parse(dummy[1]))
+            if (DateTime.UtcNow.Year != int.Parse(splittedSchoolYear[0]) || DateTime.UtcNow.Year + 1 != int.Parse(splittedSchoolYear[1]))
             {
                 throw new Exception("INVALID_SCHOOL_YEAR");
             }
 
-            if (!firstQuarter &&  DateOnly.FromDateTime(DateTime.UtcNow) < endFirstQuarter)
+            if (//(firstQuarter && DateOnly.FromDateTime(DateTime.UtcNow) < endFirstQuarter) ||
+                (!firstQuarter &&  DateOnly.FromDateTime(DateTime.UtcNow) < endSecondQuarter))
             {
                 throw new Exception("UNAUTHORIZED_SECOND_QUARTER_REPORT");
             }
@@ -240,7 +241,7 @@ public class StudentsController : Controller
 
         List<SubjectGrade> report = new List<SubjectGrade>();
 
-        foreach (Subject subject in subjectClassrooms)
+        subjectClassrooms.ForEach(subject =>
         {
             // prendo gli esami svolti la singola materia insegnata nella classe dello studente 
             List<StudentExam> studentExams = new GenericRepository<StudentExam>(_context).GetAllUsingIQueryable(null,
@@ -272,9 +273,14 @@ public class StudentsController : Controller
 
             //Nel caso in cui la media non presenta un voto allora il voto in quella materia verrà sostituito da NC (non classificato)
             report.Add(new SubjectGrade(subject.Name, media > 0 ? media.ToString() : "NC"));
+        });
+        
+        if (report.Count(el => el.Grade.Trim().ToLower() == "nc") == report.Count())
+        {
+            return StatusCode(StatusCodes.Status400BadRequest, $"The Student {takenStudent.Registry.Name} {takenStudent.Registry.Surname} in all the quarter hasn't any grades");
         }
-
-        var pdf = PdfHandler.GeneratePdf<SubjectGrade>(report);
+        
+        var pdf = PdfHandler.GeneratePdf<SubjectGrade>(report, $"{takenStudent.Registry.Name} {takenStudent.Registry.Surname}");
         return File(pdf, "application/pdf",
             $"{takenStudent.Registry.Name}_{takenStudent.Registry.Surname}_student_report.pdf");
     }

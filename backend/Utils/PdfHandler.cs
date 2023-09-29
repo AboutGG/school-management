@@ -11,14 +11,14 @@ namespace backend.Utils;
 
 public class PdfHandler
 {
-    public static byte[] GeneratePdf<T>(object data) where T : class
+    public static byte[] GeneratePdf<T>(object data, string? fullName) where T : class
     {
         string htmlContent = string.Empty;
         switch (typeof(T).Name.Trim().ToLower())
         {
             case "subjectgrade":
                 var list = data as List<T>;
-                htmlContent = GenerateTable("Assets/Table.html", list);
+                htmlContent = GenerateTable("Assets/Table.html", list, fullName);
               break;  
             case "circular":
                 var circular = data as Circular;
@@ -55,7 +55,7 @@ public class PdfHandler
         return htmlContent;
     }
 
-    private static string GenerateTable<T>(string path, List<T> table)
+    private static string GenerateTable<T>(string path, List<T> table, string? fullName)
     {
         string htmlPath, htmlContent;
         StringBuilder tableHtml = new StringBuilder();
@@ -87,7 +87,8 @@ public class PdfHandler
         }
 
         tableHtml.Append("</table>");
-        htmlContent = htmlContent.Replace("{{tabelle}}", tableHtml.ToString());
+        htmlContent = htmlContent.Replace("{{tabelle}}", tableHtml.ToString())
+            .Replace("{{fullName}}", fullName);
 
         return htmlContent;
     }
