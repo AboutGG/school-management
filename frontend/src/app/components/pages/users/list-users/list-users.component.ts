@@ -12,7 +12,7 @@ export class ListUsersComponent {
 
   ngOnInit(): void {
     this.page = 1;
-    this.getData("Name", "asc", "name");
+    this.getUser("Name", "asc", "name");
   }
 
   users: Registry[] = [];
@@ -21,6 +21,9 @@ export class ListUsersComponent {
   id!: string;
   page: number = 1;
   text: string = "";
+
+  userEdit!: string;
+
 
   orders: {
     name: "asc" | "desc";
@@ -48,7 +51,7 @@ export class ListUsersComponent {
     if (this.filter === "all") {
       window.location.reload();
     } else {
-      this.getData("Name", this.orders.name);
+      this.getUser("Name", this.orders.name);
     }
   }
 
@@ -61,15 +64,11 @@ export class ListUsersComponent {
   onClickPage(page: number) {
     this.page = page;
     console.log(this.page);
-    this.getData("Name", this.orders["name"]);
+    this.getUser("Name", this.orders["name"]);
   }
 
-  getData(
-    order: string,
-    type: "asc" | "desc",
-    id?: keyof typeof this.orders,
-    search?: string
-  ): void {
+
+  getUser(order: string, type: "asc" | "desc", id?: keyof typeof this.orders, search?: string): void {
     let role = "";
     search = this.text;
 
@@ -83,9 +82,10 @@ export class ListUsersComponent {
     }
     console.log(this.filter);
 
+  
+
     this.usersService
-      .getUsers(order, type, this.page, this.filter, search)
-      .subscribe({
+      .getUsers(order, type, this.page, this.filter, search).subscribe({
         next: (res: ListResponse) => {
           console.log(id);
 
@@ -116,7 +116,7 @@ export class ListUsersComponent {
     this.usersService.deleteUser(id).subscribe({
       next: (res) => {
         this.page = 1;
-        this.getData("Name", "asc", "name");
+        this.getUser("Name", "asc", "name");
         console.log(res);
       },
       error: (error) => {
@@ -127,7 +127,7 @@ export class ListUsersComponent {
 
   saveSearch(text: string) {
     this.text = text;
-    this.getData("Name", "asc", "name", this.text);
+    this.getUser("Name", "asc", "name", this.text);
   }
 }
 
