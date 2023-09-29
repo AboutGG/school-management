@@ -32,13 +32,24 @@ export class ListUsersComponent {
     birth: "asc",
   };
 
+  // onClickRole(event: any): void {
+  //   this.filter = event.target.value;
+  //   this.page = 1;
+  //   console.log(this.filter);
+
+  //   this.getData("Name", this.orders.name);
+  // }
 
   onClickRole(event: any): void {
     this.filter = event.target.value;
     this.page = 1;
     console.log(this.filter);
 
-    this.getData("Name", this.orders.name);
+    if (this.filter === "all") {
+      window.location.reload();
+    } else {
+      this.getData("Name", this.orders.name);
+    }
   }
 
   onClickAction(action: string, id: string): void {
@@ -73,7 +84,8 @@ export class ListUsersComponent {
     console.log(this.filter);
 
     this.usersService
-      .getUsers(order, type, this.page, this.filter, search).subscribe({
+      .getUsers(order, type, this.page, this.filter, search)
+      .subscribe({
         next: (res: ListResponse) => {
           console.log(id);
 
