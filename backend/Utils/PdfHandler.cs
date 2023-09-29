@@ -22,7 +22,7 @@ public class PdfHandler
               break;  
             case "circular":
                 var circular = data as Circular;
-                htmlContent = GenerateCircular("Assets/Table.html", circular);
+                htmlContent = GenerateCircular("Assets/new.html", circular);
                 break;
             default:
                 throw new Exception("INVALID_PDF_TYPE");
