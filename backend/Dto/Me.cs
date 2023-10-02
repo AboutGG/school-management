@@ -4,9 +4,8 @@ namespace backend.Dto;
 
 public class Me
 {
-    //public Guid UserId { get; set; }
+    public Guid Id { get; set; }
     public String Name { get; set; }
-    public Guid RegistryId { get; set; }
     public Guid? ClassroomId { get; set; }
 
     public Me(User user)
@@ -16,9 +15,7 @@ public class Me
         else
             this.Name = user.Teacher.Registry.Name + " " + user.Teacher.Registry.Surname;
         
-       // this.Name =string.Concat( user.Student?.Registry.Name + " " + user.Student?.Registry.Surname) ?? user.Teacher.Registry.Name  : ;
-       // this.UserId = user.Id;
-        this.RegistryId = user.Student?.RegistryId ?? user.Teacher?.RegistryId ?? Guid.Empty;
+        this.Id = user.Id;
         this.ClassroomId = user.Student?.ClassroomId;
     }
 
