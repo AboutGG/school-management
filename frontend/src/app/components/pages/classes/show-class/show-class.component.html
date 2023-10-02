@@ -1,17 +1,20 @@
 <div class="container">
   <hr />
+  <div class="row">
+    <div
+    class=" col-md-1 fs-5 fw-bold">
+    <span class="icon" style="cursor: pointer;" (click)="navigateToTeachersClasses()"><i class="bi bi-arrow-left"  ></i> </span>
+   </div>
   <div
-    class="title d-flex align-items-center justify-content-center fs-5 fw-bold"
-  >
+    class="col-md-9 d-flex align-items-center justify-content-center fs-5 fw-bold">
     <div class="d-flex align-items-center justify-content-center "></div>
-    {{ "Mostra Classe" | uppercase }}
+   CLASSE {{ classDetails.name_classroom}}
     <span class="icon"><i class="bi bi-person-vcard"></i> </span>
-  </div>
+ </div>
+</div>
   <hr class="mb-5"/>
- 
- 
-    <div *ngIf="isTeacher" class="row justify-content-center">
-     
+
+    <div *ngIf="isTeacher" class="row justify-content-center">    
       <div class="col-md-5">
         <table class="table table-teachers table-hover mb-5">
           <thead class="text-center">
@@ -24,7 +27,7 @@
           <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
             <tr style="cursor: pointer" [routerLink]="'/details/'">
               <td scope="row">{{i + 1}}</td>
-               <td>{{ teacher.name +' '+ teacher.surname}}</td>             
+               <td>{{ teacher.surname +' '+ teacher.name}}</td>             
                <td>{{ teacher.subjects.join(', ') }}</td>
             </tr>
             <tr>
@@ -45,7 +48,7 @@
           <th>Azioni</th>
         </tr>
       </thead>
-      <tbody *ngFor="let student of classDetails?.students; let i = index">
+      <tbody *ngFor="let student of classDetails?.students let i = index">
         <tr >
           <td scope="row">{{i + 1}}</td> 
           <td style="cursor: pointer" [routerLink]="'/details/'">{{student.surname}}</td>
@@ -57,9 +60,9 @@
                 <i class="bi bi-gear-fill"></i>
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill px-2"></i>Visualizza</a></li>
-                <li><a class="dropdown-item" [routerLink]="'/esami/'"><i class="bi bi-book-fill px-2"></i>Vai a Esami</a></li>
-                <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
+                <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/teachers/exams']"><i class="bi bi-book-fill"></i>Visualizza Pagella</a></li>
+                <!-- <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li> -->
               </ul>
             </div>
           </td>
@@ -70,7 +73,7 @@
 </div>
 
   <!-- Modal delete -->
-  <div
+  <!-- <div
     class="modal fade"
     id="exampleModal"
     tabindex="-1"
@@ -105,5 +108,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
