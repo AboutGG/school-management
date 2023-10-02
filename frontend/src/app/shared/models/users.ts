@@ -6,6 +6,13 @@ export interface Users {
   role: string
 }
 
+export interface Help {
+  classroom?: string;
+  classroomId?: string;
+  user: User;
+  registry: Registry;
+  role: string;
+}
 // export interface Prova {
 //   classroomId?: string
 //   user: User 
@@ -42,8 +49,8 @@ export interface Registry {
   student?: Student;
 }
 
-export interface ListResponse {
-  data: any[],
+export interface ListResponse<T> {
+  data: T,
   total: number
 }
 

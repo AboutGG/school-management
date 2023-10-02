@@ -16,7 +16,8 @@ export class ListUsersComponent {
     this.getUser("Name", "asc", "name");
   }
 
-  users: Registry[] = [];
+  registries: Registry[] = [];
+  users: Users[] = [];
   filter: string = "";
   action: string = "";
   id!: string;
@@ -89,7 +90,9 @@ export class ListUsersComponent {
 
     this.usersService
       .getUsers(order, type, this.page, this.filter, search).subscribe({
-        next: (res: ListResponse) => {
+        next: (res: ListResponse<Registry[]>) => {
+          console.log(res);
+          
           console.log(id);
 
           if (id) {
@@ -106,7 +109,9 @@ export class ListUsersComponent {
           // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc";
           // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
 
-          this.users = res.data;
+          this.registries = res.data;
+          console.log(this.users);
+          
         },
         error: (error) => {
           console.log(error);

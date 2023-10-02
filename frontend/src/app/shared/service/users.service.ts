@@ -58,8 +58,8 @@ export class UsersService {
     return this.http.post<Users>(`https://localhost:7262/api/users`, user );
   };
 
-  getUsers(order?: string, orderType?: string, page?: number, filter?: string, search?: string): Observable<ListResponse> {
-    return this.http.get<ListResponse>(
+  getUsers(order?: string, orderType?: string, page?: number, filter?: string, search?: string): Observable<ListResponse<Registry[]>> {
+    return this.http.get<ListResponse<Registry[]>>(
       `https://localhost:7262/api/users?Order=${order}&OrderType=${orderType}&Page=${page}&Filter=${filter}&Search=${search}&ItemsPerPage=10`
     );
   }
