@@ -90,10 +90,7 @@ export interface Students {
   name: string;
   surname: string;
 }
-export interface ClassDetails {
-  teachers: Teachers[];
-  students: Students[];
-}
+
 
 
 
