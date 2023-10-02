@@ -4,6 +4,7 @@ using backend.Models;
 using backend.Repositories;
 using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Controllers;
 
@@ -14,16 +15,19 @@ public class PdfController : Controller
     private readonly SchoolContext _context;
     private readonly ITransactionRepository _transactionRepository;
 
-    public PdfController(SchoolContext context)
+    public PdfController(SchoolContext context, ITransactionRepository transactionRepository)
     {
         _context = context;
+        _transactionRepository = transactionRepository;
     }
     
     [HttpPost]
     [Route("Circulars")]
     [ProducesResponseType(200, Type = typeof(CircularRequest))]
-    public IActionResult GetAll([FromBody] CircularRequest circular)
+    public IActionResult CreateCircular([FromBody] CircularRequest circular)
     {
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        
         try
         {
             Circular c = new()
@@ -35,15 +39,23 @@ public class PdfController : Controller
                 Body = circular.body,
                 Sign = circular.sign
             };
-            var pdf = PdfHandler.GeneratePdf<Circular>(c);
 
-            return File(pdf, "application/pdf", "generated.pdf");
+            if (new GenericRepository<Circular>(_context).Create(c))
+            {
+                _transactionRepository.CommitTransaction(transaction);
+                var pdf = PdfHandler.GeneratePdf<Circular>(c);
+                return File(pdf, "application/pdf", "generated.pdf");
+            }
+            else
+            {
+                throw new Exception("NOT_CREATED");
+            }
         }
         catch (Exception e)
         {
-
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
         }
-
-        return BadRequest();
     }
 }
