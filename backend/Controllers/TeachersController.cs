@@ -184,7 +184,7 @@ public class TeachersController : Controller
     /// <exception cref="Exception"></exception>
     [HttpGet]
     [Route("exams")]
-    [ProducesResponseType(200, Type = typeof(List<TeacherExamDto>))]
+    [ProducesResponseType(200, Type = typeof(List<ExamResponseDto>))]
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
@@ -211,7 +211,7 @@ public class TeachersController : Controller
             // }
 
             //Prendo la lista di esami eseguiti dal professore che come userId ha 
-            List<Exam> dummy = examGenericRepository.GetAllUsingIQueryable(@params,
+            List<Exam> teacherExams = examGenericRepository.GetAllUsingIQueryable(@params,
                 query => query
                     . Where(el => el.TeacherSubjectClassroom.Teacher.UserId == takenId)
                 .Include( el => el.TeacherSubjectClassroom)
@@ -220,17 +220,23 @@ public class TeachersController : Controller
                 out var total
             );
             if (@params.Filter != null)
-                dummy = dummy.Where(el =>
+                teacherExams = teacherExams.Where(el =>
                         el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
                         || el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
                         )
                     .ToList();
 
-            var mappedResponse = _mapper.Map<List<TeacherExamDto>>(dummy);
-            return Ok(new PaginationResponse<TeacherExamDto>
+            List<ExamResponseDto> response = new List<ExamResponseDto>();
+            
+            foreach (var el in teacherExams)
+            {
+                response.Add(new ExamResponseDto(el.Id, el.Date, el.TeacherSubjectClassroom.Classroom, el.TeacherSubjectClassroom.Subject));
+            }
+            
+            return Ok(new PaginationResponse<ExamResponseDto>
             {
                 Total = total,
-                Data = mappedResponse
+                Data = response
             });
         }
         catch (Exception e)
