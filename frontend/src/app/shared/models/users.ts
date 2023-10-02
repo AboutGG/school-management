@@ -45,19 +45,6 @@ export interface StudentExams {
   ]
 }
 
-export interface StudentSubjects {
-      teacher: any
-      id: string,
-      name: string,
-      surname: string,
-      subjects: string[]
-}
-
-export interface Classroom {
-  id_classroom?: string;
-  name_classroom: string;
-  student_count: number;
-}
 
 export interface Teachers {
   id?: string;
@@ -76,7 +63,3 @@ export interface ClassDetails {
   students: Students[];
 }
 
-export interface ListResponse {
-  data: any [];
-  total: number;
-}
