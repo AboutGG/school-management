@@ -94,6 +94,7 @@ export interface Students {
 export interface UsersMe{
   id: string;
   name: string;
+  classroomId: string;
 }
 
 

@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <div [routerLink]="[linkByRole + '/classes']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
+    <div [routerLink]="[isTeacher ? linkByRole + '/classes/' : linkByRole + '/classes/'+ userId.classroomId]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
         <div class="icon">
           <i class="bi bi-newspaper"></i>

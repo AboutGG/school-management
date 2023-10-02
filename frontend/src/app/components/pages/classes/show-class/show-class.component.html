@@ -5,16 +5,15 @@
     class=" col-md-1 fs-5 fw-bold">
     <span class="icon" style="cursor: pointer;" (click)="navigateToTeachersClasses()"><i class="bi bi-arrow-left"  ></i> </span>
    </div>
-  <div
-    class="col-md-9 d-flex align-items-center justify-content-center fs-5 fw-bold">
-    <div class="d-flex align-items-center justify-content-center "></div>
+  <div class="col-md-9 d-flex align-items-center justify-content-center fs-5 fw-bold" *ngIf="classDetails">
+  
    CLASSE {{ classDetails.name_classroom}}
     <span class="icon"><i class="bi bi-person-vcard"></i> </span>
  </div>
 </div>
   <hr class="mb-5"/>
 
-    <div *ngIf="isTeacher" class="row justify-content-center">    
+    <div  class="row justify-content-center">    
       <div class="col-md-5">
         <table class="table table-teachers table-hover mb-5">
           <thead class="text-center">
@@ -25,7 +24,7 @@
             </tr>
           </thead>
           <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
-            <tr style="cursor: pointer" [routerLink]="'/details/'">
+            <tr *ngIf="classDetails" style="cursor: pointer" [routerLink]="'/details/'">
               <td scope="row">{{i + 1}}</td>
                <td>{{ teacher.surname +' '+ teacher.name}}</td>             
                <td>{{ teacher.subjects.join(', ') }}</td>
