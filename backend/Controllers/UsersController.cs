@@ -61,7 +61,7 @@ public class UsersController : Controller
     /// <summary> Get call on user breakpoint </summary>
     /// <returns>All User with filter by role and search</returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<Registry>))]
+    [ProducesResponseType(200, Type = typeof(List<Registry>))]
     public IActionResult GetUsers([FromQuery] PaginationParams @params)
     {
         //check if the order type is valid
