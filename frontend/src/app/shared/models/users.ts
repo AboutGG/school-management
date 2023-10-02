@@ -1,15 +1,17 @@
 export interface Users {
   classroom?: string
-  user: User
-  registry: Registry
-}
-
-export interface Prova {
   classroomId?: string
-  user: User 
+  user: User
   registry: Registry
   role: string
 }
+
+// export interface Prova {
+//   classroomId?: string
+//   user: User 
+//   registry: Registry
+//   role: string
+// }
 
 
 export interface User {

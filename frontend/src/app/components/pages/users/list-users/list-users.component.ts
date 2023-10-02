@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Registry, Users, Prova, ListResponse } from 'src/app/shared/models/users';
+import { Registry, Users, ListResponse } from 'src/app/shared/models/users';
 import { UsersService } from 'src/app/shared/service/users.service';
+
 
 @Component({
   selector: "app-list-users",
@@ -24,7 +25,6 @@ export class ListUsersComponent {
 
   userEdit!: string;
 
-
   orders: {
     name: "asc" | "desc";
     surname: "asc" | "desc";
@@ -47,7 +47,6 @@ export class ListUsersComponent {
     this.filter = event.target.value;
     this.page = 1;
     console.log(this.filter);
-
     if (this.filter === "all") {
       window.location.reload();
     } else {
@@ -67,8 +66,12 @@ export class ListUsersComponent {
     this.getUser("Name", this.orders["name"]);
   }
 
-
-  getUser(order: string, type: "asc" | "desc", id?: keyof typeof this.orders, search?: string): void {
+  getUser(
+    order: string,
+    type: "asc" | "desc",
+    id?: keyof typeof this.orders,
+    search?: string
+  ): void {
     let role = "";
     search = this.text;
 
@@ -82,7 +85,7 @@ export class ListUsersComponent {
     }
     console.log(this.filter);
 
-  
+    
 
     this.usersService
       .getUsers(order, type, this.page, this.filter, search).subscribe({
@@ -110,6 +113,11 @@ export class ListUsersComponent {
         },
       });
   }
+
+  // saveUser(user: string) {
+  //   this.userEdit = user;
+  //   this.getUser();
+  // }
 
   dUser(id: string): void {
     console.log(id);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Classroom, ListResponse, Prova, Registry, Users } from '../models/users';
+import { Classroom, ListResponse, Registry, Users } from '../models/users';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -36,7 +36,7 @@ export class UsersService {
   //   );
   // };
 
-  addUser = (user: FormGroup): Observable<Prova> => {
+  addUser = (user: FormGroup): Observable<Users> => {
     
     // let newUser: Users = {
     //   classroom: user.get("classroom")!.value,
@@ -55,7 +55,7 @@ export class UsersService {
     //   },
     // };
 
-    return this.http.post<Prova>(`https://localhost:7262/api/users`, user );
+    return this.http.post<Users>(`https://localhost:7262/api/users`, user );
   };
 
   getUsers(order?: string, orderType?: string, page?: number, filter?: string, search?: string): Observable<ListResponse> {

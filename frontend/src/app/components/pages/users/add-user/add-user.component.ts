@@ -4,7 +4,7 @@ import { UsersService } from "src/app/shared/service/users.service";
 import { ActivatedRoute } from "@angular/router";
 import { Classroom } from "src/app/shared/models/users";
 import { Registry } from "src/app/shared/models/users";
-import { Prova } from "src/app/shared/models/users";
+import { Users } from "src/app/shared/models/users";
 
 @Component({
   selector: "app-add-user",
