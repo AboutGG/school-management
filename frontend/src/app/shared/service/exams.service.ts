@@ -1,19 +1,19 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
-
+import { ListResponse } from '../models/listResponse';
 @Injectable({
   providedIn: 'root'
 })
 export class ExamsService {
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
-  // getExams(order: string, orderType: string, key: string) {
-  //   return this.http.get<any>(`https://localhost:7262/api/students/exams?Order=${order}&orderType=${orderType}&id=${key}`)
-  // }
-  getExams() {
-    return this.http.get<any>(`https://localhost:7262/api/students/exams`)
+  getStudentExams(params: HttpParams) {
+    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/students/exams`, { params })
   }
 
+  getTeacherExams(params: HttpParams) {
+    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/exams`, { params })
+  }
+  
 }

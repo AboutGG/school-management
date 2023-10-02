@@ -22,18 +22,26 @@ public class PdfController : Controller
     [ProducesResponseType(200, Type = typeof(CircularRequest))]
     public IActionResult GetAll([FromBody] CircularRequest circular)
     {
-        Circular c = new ()
+        try
         {
-            CircularNumber = circular.number,
-            UploadDate = circular.date,
-            Location = circular.location,
-            Header = circular.header,
-            Body = circular.body,
-            Sign = circular.sign
-        };
+            Circular c = new()
+            {
+                CircularNumber = circular.number,
+                UploadDate = circular.date,
+                Location = circular.location,
+                Header = circular.header,
+                Body = circular.body,
+                Sign = circular.sign
+            };
+            var pdf = PdfHandler.GeneratePdf<Circular>(c, null);
 
-        var pdf = PdfHandler.GeneratePdf<Circular> (c, null);
-        
-        return File(pdf, "application/pdf", "generated.pdf");
+            return File(pdf, "application/pdf", "generated.pdf");
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        return BadRequest();
     }
 }

@@ -85,7 +85,11 @@ public class StudentsController : Controller
             var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(
                 @params,
                 query => query
-                    .Where(el => el.ClassroomId == studentclassroomId)
+                    .Where(el => el.ClassroomId == studentclassroomId
+                    && ( el.Teacher.Registry.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
+                         || el.Teacher.Registry.Surname.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
+                        || el.Subject.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower()))
+                    )
                     .Include(el => el.Classroom)
                     .Include(el => el.Teacher.Registry)
                     .Include(el => el.Subject),

@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { HttpParams } from '@angular/common/http';
 import { Classroom } from 'src/app/shared/models/classrooms';
+import { ListResponse } from 'src/app/shared/models/listResponse';
 
 @Component({
   selector: 'app-classes',
@@ -16,15 +17,15 @@ export class ClassesComponent {
   class: Classroom[] = [];
   searchTerm: string = '';
   currentPage : number = 1; 
-  itemsPerPage : number = 1// numero di elementi per pagina
+  itemsPerPage : number = 5// numero di elementi per pagina
   totalItems! : number;
   isTeacher!: boolean;
-  newPage! : string
   previousPage: number = 1;
   totalPages!: number;
+  order: string = 'name';
 
 
-  constructor(private classroomService: ClassroomService, private authService: AuthService, private route: ActivatedRoute) {}
+  constructor(private classroomService: ClassroomService) {}
 
   ngOnInit(){
  
@@ -36,14 +37,17 @@ export class ClassesComponent {
          const params = new HttpParams()
         .set('Page', this.currentPage)
         .set('Search', this.searchTerm)
+        .set('Order', this.order)
         .set('ItemsPerPage', this.itemsPerPage);
+        
+        
       this.classroomService.getDataClassroom(params).subscribe({
-        next: (res: Classroom[]) => {
-         // this.totalItems = res.total; // numero totale di elementi
-         // this.totalPages = this.totalItems/this.itemsPerPage;
-          this.class = res;
+        next: (res: ListResponse<Classroom[]> ) => {
+          this.totalItems = res.total; // numero totale di elementi
+          this.totalPages = this.totalItems/this.itemsPerPage;
+          this.class = res.data;
   
-          console.log('dati get', res);
+          console.log('dati get', res.data);
           console.log('params', params)
         },
         error: (err) => {
