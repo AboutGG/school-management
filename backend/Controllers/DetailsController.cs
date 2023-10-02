@@ -67,8 +67,8 @@ public class DetailsController : Controller
         var user = new GenericRepository<Registry>(_context)
             .GetByIdUsingIQueryable(query => query
                 .Where(user => user.Id == Id)
-                .Include(u => u.Teacher.Registry)
-                .Include(u => u.Student.Registry));
+                .Include(u => u.Teacher)
+                .Include(u => u.Student));
         
         if (user.Teacher != null)
             response = new UserDetailResponse(user.Teacher.Registry, "teacher");
