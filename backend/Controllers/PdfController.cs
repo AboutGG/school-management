@@ -1,4 +1,5 @@
 ﻿using backend.Dto;
+using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.Utils;
@@ -11,6 +12,7 @@ namespace backend.Controllers;
 public class PdfController : Controller
 {
     private readonly SchoolContext _context;
+    private readonly ITransactionRepository _transactionRepository;
 
     public PdfController(SchoolContext context)
     {
@@ -22,18 +24,26 @@ public class PdfController : Controller
     [ProducesResponseType(200, Type = typeof(CircularRequest))]
     public IActionResult GetAll([FromBody] CircularRequest circular)
     {
-        Circular c = new ()
+        try
         {
-            CircularNumber = circular.number,
-            UploadDate = circular.date,
-            Location = circular.location,
-            Header = circular.header,
-            Body = circular.body,
-            Sign = circular.sign
-        };
+            Circular c = new()
+            {
+                CircularNumber = circular.number,
+                UploadDate = circular.date,
+                Location = circular.location,
+                Header = circular.header,
+                Body = circular.body,
+                Sign = circular.sign
+            };
+            var pdf = PdfHandler.GeneratePdf<Circular>(c);
 
-        var pdf = PdfHandler.GeneratePdf<Circular>(c);
-        
-        return File(pdf, "application/pdf", "generated.pdf");
+            return File(pdf, "application/pdf", "generated.pdf");
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        return BadRequest();
     }
 }
