@@ -199,21 +199,29 @@ public class StudentsController : Controller
         try
         {
             var splittedSchoolYear = schoolYear.Split('-');
+
+            if (Convert.ToInt32(splittedSchoolYear[0]) +1 != Convert.ToInt32(splittedSchoolYear[1]))
+            {
+                throw new Exception("INVALID_SCHOOL_YEAR");
+            }
+            
             startFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[0]), 09, 15);
             endFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 01, 31);
             startSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 02, 1);
-            endSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 09, 15);
+            endSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 05, 15);
         
-            if (DateTime.UtcNow.Year != int.Parse(splittedSchoolYear[0]) || DateTime.UtcNow.Year + 1 != int.Parse(splittedSchoolYear[1]))
+            if(DateTime.UtcNow.Year == int.Parse(splittedSchoolYear[1]) || DateTime.UtcNow.Year == int.Parse(splittedSchoolYear[0]))
+            { 
+                if ((firstQuarter && DateOnly.FromDateTime(DateTime.UtcNow) < endFirstQuarter) ||
+                    (!firstQuarter &&  DateOnly.FromDateTime(DateTime.UtcNow) < endSecondQuarter))
+                {
+                    throw new Exception("UNAUTHORIZED_QUARTER_REPORT");
+                }
+            } else if (DateTime.UtcNow.Year < int.Parse(splittedSchoolYear[1]))
             {
                 throw new Exception("INVALID_SCHOOL_YEAR");
             }
 
-            if (//(firstQuarter && DateOnly.FromDateTime(DateTime.UtcNow) < endFirstQuarter) ||
-                (!firstQuarter &&  DateOnly.FromDateTime(DateTime.UtcNow) < endSecondQuarter))
-            {
-                throw new Exception("UNAUTHORIZED_SECOND_QUARTER_REPORT");
-            }
         }
         catch (Exception e)
         {

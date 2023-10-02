@@ -39,8 +39,8 @@ public static class ErrorManager
             case "INVALID_SCHOOL_YEAR":
                 error = new ErrorResponse(StatusCodes.Status406NotAcceptable, "The school year is not valid", e.StackTrace); 
                 return error;
-            case "UNAUTHORIZED_SECOND_QUARTER_REPORT":
-                error = new ErrorResponse(StatusCodes.Status401Unauthorized, "You can't access to the second quarter report", e.StackTrace); 
+            case "UNAUTHORIZED_QUARTER_REPORT":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized, "You can't access to the quarter reports", e.StackTrace); 
                 return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
