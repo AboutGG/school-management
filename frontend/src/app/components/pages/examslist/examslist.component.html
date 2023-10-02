@@ -1,81 +1,82 @@
 <div class="container mt-3">
     <hr>
-    <span class="d-flex justify-content-center fw-bold fs-5">LISTA UTENTI</span>
-    <hr>
-</div>
-<div class="container mt-6 bb">
-    <div class="d-flex justify-content-center align-items-center w-100 flex-column">
+    <div class="d-flex justify-content-center align-items-center fw-bold fs-5">
+        <span>LISTA ESAMI</span>
         <span class="icon-data">
             <i class="bi bi-card-list list-icon"></i>
         </span>
     </div>
-    <div class="col-md-2 mb-4 d-flex w-100 justify-content-center">
-        <div class="dropdown d-flex flex-column w-100">
-            <label for="role" class="form-label">Filtra per classe: </label>
-            <button class="btn btn-outline-dark dropdown-toggle w-25" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false" title="role">
-                {{ (this.matter ? this.matter : 'Utenti') | titlecase}}
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" role="button" value="utenti" (click)="[onClickMatter('utenti'), getExamData('Name', 'asc', '')]">Utenti</a></li>
-            </ul>
-        </div>
-        <div class="d-flex w-100 justify-content-center align-items-center mt-4">
-            <div class="d-flex align-items-center">
-                <input type="text" name="search" id="search" placeholder="Cerca">
-                <i class="bi bi-search"></i>
-            </div>
-            <div>
-                <button class="btn btn-outline-dark mx-3">PDF</button>
-            </div>
+    <hr>
+</div>
+<div class="container mt-6 bb">
+    <div class="d-flex justify-content-center align-items-center w-100 flex-column">
+    </div>
+    <div class="col-md-2 mb-3 d-flex w-100 justify-content-center">
+        <div class="d-flex">
+            <form [formGroup]="formSubjects" class="px-2">
+                <select class="btn btn-warning" formControlName="subjects"
+                    (click)="[onClickFilter = true, dropdownFilter()]">
+                    <option selected value="">Tutte le materie</option>
+                    <option *ngFor="let subject of subjects">{{subject.subjectName}}</option>
+                </select>
+            </form>
+            <form [formGroup]="formClassrooms" class="px-2">
+                <select class="btn btn-warning" formControlName="classrooms"
+                    (click)="[onClickFilter = false, dropdownFilter()]">
+                    <option selected value="">Tutte le classi</option>
+                    <option *ngFor="let classroom of classrooms">{{classroom.name_classroom}}</option>
+                </select>
+            </form>
         </div>
     </div>
-
     <table class="table table-hover">
-        <thead>
+        <thead class="text-center">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col" id="name">Nome
-                    <i *ngIf="this.orders.name === 'desc'" class="bi bi-caret-down-fill"
+                <th scope="col" id="date">Data
+                    <!-- <i *ngIf="this.orders.name === 'desc'" class="bi bi-caret-down-fill"
                         (click)="getData('Name', 'asc', 'name')"></i>
                     <i *ngIf="this.orders.name === 'asc'" class="bi bi-caret-up-fill"
-                        (click)="getData('Name', 'desc', 'name')"></i>
+                        (click)="getData('Name', 'desc', 'name')"></i> -->
                 </th>
-                <th scope="col" id="surname">Cognome
-                    <i *ngIf="this.orders.surname === 'asc'" class="bi bi-caret-up-fill"
+                <th scope="col" id="matter">Materia
+                    <!-- <i *ngIf="this.orders.surname === 'asc'" class="bi bi-caret-up-fill"
                         (click)="getData('Surname', 'desc', 'surname')"></i>
                     <i *ngIf="this.orders.surname === 'desc'" class="bi bi-caret-down-fill"
-                        (click)="getData('Surname', 'asc', 'surname')"></i>
+                        (click)="getData('Surname', 'asc', 'surname')"></i> -->
                 </th>
-                <th scope="col" id="birth">Data di nascita
-                    <i *ngIf="this.orders.birth === 'asc'" class="bi bi-caret-up-fill"
+                <th scope="col" id="birth">Classe
+                    <!-- <i *ngIf="this.orders.birth === 'asc'" class="bi bi-caret-up-fill"
                         (click)="getData('Birth', 'desc', 'birth')"></i>
                     <i *ngIf="this.orders.birth === 'desc'" class="bi bi-caret-down-fill"
-                        (click)="getData('Birth', 'asc', 'birth')"></i>
+                        (click)="getData('Birth', 'asc', 'birth')"></i> -->
                 </th>
                 <th scope="col">Azioni</th>
             </tr>
         </thead>
-        <tbody *ngFor="let user of users, let i = index">
-            <tr>
+        <tbody *ngFor="let exam of examsList, let i = index">
+            <tr *ngIf="(!classroom || exam.classroom === classroom) && (!subject || exam.subject === subject)">
                 <th scope="row">{{i + 1}}</th>
-                <td>{{user.name}}</td>
-                <td>{{user.surname}}</td>
-                <td>{{user.birth}}</td>
-
-                <div class="dropdown d-flex">
-                    <i class="bi bi-gear-fill" data-bs-toggle="dropdown" aria-expanded="false" type="button"></i>
-                    <div class="dropdown-toggle ps-3" data-bs-toggle="dropdown" aria-expanded="false"></div>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" value="dettagli" (click)="onClickAction('dettagli')"
-                                [routerLink]="['/details']"><i class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
-                        <li><a class="dropdown-item" value="modifica" (click)="onClickAction('modifica')"
-                                [routerLink]="['/edit']"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
-                        <li><a role="button" class="dropdown-item" value="elimina" data-bs-toggle="modal"
-                                data-bs-target="#deleteModal" (click)="onClickAction('elimina')"><i
-                                    class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
-                    </ul>
-                </div>
+                <td>{{exam.examDate}}</td>
+                <td>{{exam.subject}}</td>
+                <td>{{exam.classroom}}</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-gear-fill"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" [routerLink]="'/details/'"><i
+                                        class="bi bi-eye-fill px-2"></i>Visualizza</a></li>
+                            <li><a class="dropdown-item" [routerLink]="'/esami/'"><i
+                                        class="bi bi-book-fill px-2"></i>Vai a Esami</a></li>
+                            <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -88,7 +89,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Sei sicuro di voler eliminare questo utente?
+                    Sei sicuro di voler eliminare questo esame?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
@@ -101,15 +102,17 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
+                <a class="page-link" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li *ngIf="page > 1" class="page-item"><a class="page-link" (click)="onChangePage(page - 1)">{{ page -1
+                    }}</a></li>
+            <li class="page-item"><a class="page-link">{{ page }}</a></li>
+            <li *ngIf="page < total / itemsPerPage" class="page-item"><a class="page-link"
+                    (click)="onChangePage(page + 1)"> {{ page + 1 }} </a></li>
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
+                <a class="page-link" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

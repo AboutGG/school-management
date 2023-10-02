@@ -10,7 +10,6 @@
   <div class="container d-flex justify-content-end mt-4">
     <div class="classes-header">
       <div class="input-container">
-        <span>Cerca: </span>
         <input type="text" name="" id="" placeholder="Scrivi per cercare..." [(ngModel)]="searchTerm" (input)="onSearch()" />
         <i style="cursor: pointer;" (click)="onSearch()" class="bi bi-search"></i>
       </div>
@@ -33,7 +32,7 @@
       <td>{{classroom.name_classroom}}</td>
       <td>{{classroom.student_count}}</td>
       <td>       
-        <button class="btn " value="dettagli"  [routerLink]="['/classes/', classroom.id_classroom]"><i class="bi bi-eye-fill"></i>Visualizza</button>
+        <button class="btn " value="dettagli"  [routerLink]="['/classes/', classroom.id_classroom]"><i class="bi bi-eye-fill "></i>Visualizza</button>
       </td>
     </tr>
   </tbody>

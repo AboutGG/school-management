@@ -8,7 +8,6 @@
 	</div>
 	<hr>
 </div>
-<h3 class="d-flex justify-content-center py-3">Studente: {{examsList.student.name + " " + examsList.student.surname}}</h3>
 <div class="container mt-6 bb">
 	<table class="table table-hover">
 		<thead>
@@ -38,10 +37,9 @@
 					<i *ngIf="this.orders.grade === 'desc'" class="bi bi-caret-down-fill"
 							(click)="getExams('Grade', 'asc', 'grade')"></i> -->
 				</th>
-				<th *ngIf="role === 'teacher'" scope="col-2">Azioni</th>
 			</tr>
 		</thead>
-		<tbody *ngFor="let exam of examsList.exams, let i = index">
+		<tbody *ngFor="let exam of examsList, let i = index">
 			<tr>
 				<th scope="row">{{i + 1}}</th>
 				<td>{{exam.date}}</td>
@@ -49,7 +47,7 @@
 				<td>{{exam.teacher}}</td>
 				<td>{{exam.grade}}</td>
 	
-				<div *ngIf="role === 'teacher'" class="dropdown d-flex">
+				<!-- <div class="dropdown d-flex">
 					<i class="bi bi-gear-fill" data-bs-toggle="dropdown" aria-expanded="false" type="button"></i>
 					<div class="dropdown-toggle ps-3" data-bs-toggle="dropdown" aria-expanded="false"></div>
 					<ul class="dropdown-menu">
@@ -60,8 +58,8 @@
 						<li><a role="button" class="dropdown-item" value="elimina" data-bs-toggle="modal"
 								data-bs-target="#deleteModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li>
 					</ul>
-					<!-- (click)="onClickAction('dettagli') (click)="onClickAction('modifica') (click)="onClickAction('elimina')" -->
-				</div>
+					(click)="onClickAction('dettagli') (click)="onClickAction('modifica') (click)="onClickAction('elimina')"
+				</div> -->
 			</tr>
 		</tbody>
 	</table>
