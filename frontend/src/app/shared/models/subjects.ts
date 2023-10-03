@@ -4,3 +4,10 @@ export interface TeacherSubject {
     classroomId: string;
     classroomName: string;
   }
+
+  export interface StudentSubject {
+    id: string;
+    name: string;
+    surname: string;
+    subjects: string [];
+  }
