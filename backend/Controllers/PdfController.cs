@@ -38,6 +38,7 @@ public class PdfController : Controller
                 Header = circular.header,
                 Body = circular.body,
                 Sign = circular.sign
+                
             };
 
             if (new GenericRepository<Circular>(_context).Create(c))
