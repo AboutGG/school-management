@@ -1,3 +1,5 @@
+import { TeacherSubject } from "./subjects"
+
 export interface Users {
   classroom?: string
   classroomId?: string
@@ -82,13 +84,38 @@ export interface StudentExams {
     }
   ]
 }
-export interface Classroom {
-  id: string;
-  id_classroom?: string;
-  name: string;
-  student_count?: number;
+
+// export interface TeacherExam {
+//   examId: string,
+//   examDate: string,
+//   classroom: string,
+//   subject: string
+// }
+
+// export interface Classroom {
+//   id_classroom?: string;
+//   name_classroom: string;
+//   student_count: number;
+// }
+
+export interface Teacher {
+  id: string,
+  name: string,
+  surname: string,
+  subjects: TeacherSubject[]
 }
 
+// export interface ListResponse {
+//   data: any[],
+//   total: number
+// }
+
+// export interface TeacherSubject {
+//   subjectId: string
+//   subjectName: string,
+//   classroomId: string
+//   classroomName: string
+// }
 
 export interface Teachers {
   id?: string;
@@ -102,9 +129,7 @@ export interface Students {
   name: string;
   surname: string;
 }
-export interface ClassDetails {
-  teachers: Teachers[];
-  students: Students[];
-}
+
+
 
 
