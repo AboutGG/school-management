@@ -102,19 +102,19 @@ public class MappingProfiles : Profile
                     .MapFrom(src => src.Subject.Name));
         
 
-        CreateMap<Exam, TeacherExamDto>()
-            .ForMember(destinationMember => destinationMember.ExamId,
-                opt => opt
-                    .MapFrom(src => src.Id))
-            .ForMember(destinationMember => destinationMember.ExamDate, 
-                opt => opt
-                    .MapFrom(src => src.Date))
-            .ForMember(destinationMember => destinationMember.Classroom,
-                opt => opt
-                    .MapFrom(src => src.TeacherSubjectClassroom.Classroom.Name))
-            .ForMember(destinationMember => destinationMember.Subject,
-                opt => opt
-                    .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
+        // CreateMap<Exam, TeacherExamDto>()
+        //     .ForMember(destinationMember => destinationMember.ExamId,
+        //         opt => opt
+        //             .MapFrom(src => src.Id))
+        //     .ForMember(destinationMember => destinationMember.ExamDate, 
+        //         opt => opt
+        //             .MapFrom(src => src.Date))
+        //     .ForMember(destinationMember => destinationMember.Classroom,
+        //         opt => opt
+        //             .MapFrom(src => src.TeacherSubjectClassroom.Classroom.Name))
+        //     .ForMember(destinationMember => destinationMember.Subject,
+        //         opt => opt
+        //             .MapFrom(src => src.TeacherSubjectClassroom.Subject.Name));
         
         CreateMap<Student, StudentDto>()
             .ForMember(destinationMember => destinationMember.id,
