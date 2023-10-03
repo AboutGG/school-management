@@ -172,7 +172,12 @@ public class ExamsController : Controller
     #endregion
 
     #region Put Exam
-
+    /// <summary> API call which update the grade taken on a Exam </summary>
+    /// <param name="Token">Token di autorizzazione</param>
+    /// <param name="InputStudentExam">Dto con lo scopo di passare il voto che deve ricevere lo studente in un determinato esame</param>
+    /// <param name="id">Students id</param>
+    /// <returns>Un messaggio se si modifica con successo il voto.</returns>
+    /// <exception cref="Exception">Gestione degli errori nei casi in cui chi effettua la chiamata non è un professore o nel caso in cui non venga modificato</exception>
     [HttpPut]
     [Route("{id}")]
     [ProducesResponseType(200)]

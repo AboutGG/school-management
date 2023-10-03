@@ -33,7 +33,7 @@ public class PdfController : Controller
                 Body = circular.body,
                 Sign = circular.sign
             };
-            var pdf = PdfHandler.GeneratePdf<Circular>(c, null);
+            var pdf = PdfHandler.GeneratePdf<Circular>(c, null, null, null);
 
             return File(pdf, "application/pdf", "generated.pdf");
         }

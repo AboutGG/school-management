@@ -292,9 +292,9 @@ public class StudentsController : Controller
             return StatusCode(StatusCodes.Status400BadRequest, $"The Student {takenStudent.Registry.Name} {takenStudent.Registry.Surname} in all the quarter hasn't any grades");
         }
         
-        var pdf = PdfHandler.GeneratePdf<SubjectGrade>(report, $"{takenStudent.Registry.Name} {takenStudent.Registry.Surname}");
+        var pdf = PdfHandler.GeneratePdf<SubjectGrade>(report, takenStudent, schoolYear, firstQuarter);
         return File(pdf, "application/pdf",
-            $"{takenStudent.Registry.Name}_{takenStudent.Registry.Surname}_student_report.pdf");
+            $"{takenStudent.Registry.Name}_{takenStudent.Registry.Surname}_report.pdf");
     }
 
     #endregion

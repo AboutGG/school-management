@@ -5,20 +5,19 @@ using iText.Html2pdf;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Layout;
-using Path = iText.Kernel.Geom.Path;
 
 namespace backend.Utils;
 
 public class PdfHandler
 {
-    public static byte[] GeneratePdf<T>(object data, string? fullName) where T : class
+    public static byte[] GeneratePdf<T>(object data, Student? student, string? schoolYear, bool? quarter) where T : class
     {
         string htmlContent = string.Empty;
         switch (typeof(T).Name.Trim().ToLower())
         {
             case "subjectgrade":
                 var list = data as List<T>;
-                htmlContent = GenerateTable("Assets/Table.html", list, fullName);
+                htmlContent = GenerateTable("Assets/Table.html", list, student, schoolYear, quarter);
               break;  
             case "circular":
                 var circular = data as Circular;
@@ -55,20 +54,19 @@ public class PdfHandler
         return htmlContent;
     }
 
-    private static string GenerateTable<T>(string path, List<T> table, string? fullName)
+    private static string GenerateTable<T>(string path, List<T> table, Student? student, string? schoolYear, bool? quarter)
     {
         string htmlPath, htmlContent;
         StringBuilder tableHtml = new StringBuilder();
         htmlPath = "Assets/Table.html";
         htmlContent = File.ReadAllText(htmlPath);
 
-
         var propertyNames = table.First().GetType().GetProperties().Select(p => p.Name);
         tableHtml.Append("<table>");
 
         tableHtml.AppendLine("<tr>");
         foreach (string dummy in propertyNames)
-            tableHtml.AppendLine("<td>").AppendLine(dummy).AppendLine("</td>");
+            tableHtml.AppendLine("<th>").AppendLine(dummy).AppendLine("</th>");
         tableHtml.AppendLine("</tr>");
 
 
@@ -88,7 +86,14 @@ public class PdfHandler
 
         tableHtml.Append("</table>");
         htmlContent = htmlContent.Replace("{{tabelle}}", tableHtml.ToString())
-            .Replace("{{fullName}}", fullName);
+            .Replace("{{quarter}}", quarter != null && quarter == true ? "primo quadrimestre" : "finale")
+            .Replace("{{name}}", student.Registry.Name)
+            .Replace("{{surname}}", student.Registry.Surname)
+            .Replace("{{birth}}", student.Registry.Birth.ToString())
+            .Replace("{{gender}}", student.Registry.Gender)
+            .Replace("{{schoolYear}}", schoolYear)
+            .Replace("{{relaseDate}}", DateOnly.FromDateTime(DateTime.UtcNow).ToString())
+            .Replace("{{classroom}}", student.Classroom.Name);
 
         return htmlContent;
     }
