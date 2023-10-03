@@ -52,7 +52,8 @@ public class PdfHandler
             .Replace("{{location}}", circular.Location)
             .Replace("{{number}}", circular.CircularNumber.ToString())
             .Replace("{{date}}", circular.UploadDate.ToString())
-            .Replace("{{header}}", circular.Header);
+            .Replace("{{header}}", circular.Header)
+            .Replace("{{sign}}", circular.Sign);
         return htmlContent;
     }
 

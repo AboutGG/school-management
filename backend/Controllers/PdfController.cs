@@ -24,7 +24,7 @@ public class PdfController : Controller
     [HttpPost]
     [Route("Circulars")]
     [ProducesResponseType(200, Type = typeof(CircularRequest))]
-    public IActionResult GetAll([FromBody] CircularRequest circular)
+    public IActionResult CreateCircular([FromBody] CircularRequest circular)
     {
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         
@@ -32,13 +32,12 @@ public class PdfController : Controller
         {
             Circular c = new()
             {
-                CircularNumber = circular.number,
-                UploadDate = circular.date,
+                CircularNumber = circular.CircularNumber,
+                UploadDate = circular.UploadDate,
                 Location = circular.location,
                 Header = circular.header,
                 Body = circular.body,
                 Sign = circular.sign
-                
             };
 
             if (new GenericRepository<Circular>(_context).Create(c))

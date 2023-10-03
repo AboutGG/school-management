@@ -8,9 +8,9 @@ namespace backend.Dto;
 
 public class CircularRequest
 {
-    public int number { get; set; }
+    public int CircularNumber { get; set; }
     
-    public DateOnly date { get; set; }
+    public DateOnly UploadDate { get; set; }
     
     public string location { get; set; }
 
