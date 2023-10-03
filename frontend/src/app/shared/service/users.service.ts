@@ -68,6 +68,7 @@ export class UsersService {
     return this.http.delete<Registry>(`https://localhost:7262/api/users/${id}`);
   };
 
+
   getDetailsUser(id: string): Observable<Registry> {
     return this.http.get<Registry>(`https://localhost:7262/api/details/${id}`);
   }
