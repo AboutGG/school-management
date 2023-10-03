@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ListResponse } from 'src/app/shared/models/listResponse';
+import { ListResponse } from 'src/app/shared/models/listresponse';
 import { TeacherSubject } from 'src/app/shared/models/subjects';
 import { Teachers } from 'src/app/shared/models/users';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';

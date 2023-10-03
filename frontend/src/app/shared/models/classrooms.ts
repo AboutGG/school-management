@@ -1,5 +1,5 @@
 import { Teachers, Students } from "./users";
-export interface Classroom {
+export interface TeacherClassroom {
     id_classroom?: string;
     name_classroom: string;
     student_count: number;

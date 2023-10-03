@@ -1,15 +1,17 @@
 <div class="container">
   <hr />
   <div class="row">
-    <div
-    class=" col-md-1 fs-5 fw-bold">
+    <div *ngIf="isTeacher" class=" col-md-1 fs-5 fw-bold">
     <span class="icon" style="cursor: pointer;" (click)="navigateToTeachersClasses()"><i class="bi bi-arrow-left"  ></i> </span>
    </div>
-  <div class="col-md-9 d-flex align-items-center justify-content-center fs-5 fw-bold" *ngIf="classDetails">
-  
+  <div *ngIf="!isTeacher" class="col-md-11 d-flex align-items-center justify-content-center fs-5 fw-bold" >
    CLASSE {{ classDetails.name_classroom}}
     <span class="icon"><i class="bi bi-person-vcard"></i> </span>
  </div>
+ <div *ngIf="isTeacher" class="col-md-9 d-flex align-items-center justify-content-center fs-5 fw-bold" >
+  CLASSE {{ classDetails.name_classroom}}
+   <span class="icon"><i class="bi bi-person-vcard"></i> </span>
+</div>
 </div>
   <hr class="mb-5"/>
 
