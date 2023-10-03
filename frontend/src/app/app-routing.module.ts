@@ -13,16 +13,19 @@ import { DetailUserComponent } from './components/pages/users/detail-user/detail
 import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
 import { ExamsStudentListComponent } from "./components/pages/exams-student-list/exams-student-list.component";
 import { ExamslistComponent } from "./components/pages/examslist/examslist.component";
+import { StudentSubjectsComponent } from "./components/pages/student-subjects/student-subjects.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard], pathMatch: 'full'},
   { path: "login", component: LoginComponent },
   { path: "add-user", component: AddUserComponent, canActivate: [AuthGuard] },
+  { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard] },
+  { path: "teachers/subjects", component:SubjectsComponent, canActivate: [AuthGuard] },
+  { path: "students/subjects", component:StudentSubjectsComponent, canActivate: [AuthGuard] },
   { path: 'teachers/classes', component: ClassesComponent, canActivate: [AuthGuard] },
   { path: 'students/classes/:id', component: ShowClassComponent, canActivate: [AuthGuard] },
   { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard]},
-  { path: "teachers/subjects", component:SubjectsComponent, canActivate: [AuthGuard] },
   { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },
   { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard] },
