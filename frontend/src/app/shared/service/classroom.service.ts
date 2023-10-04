@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ClassDetails } from '../models/classrooms';
-import { ListResponse } from '../models/listResponse';
+import { ListResponse } from '../models/listresponse';
 import { Classroom } from '../models/classrooms';
 
 @Injectable({

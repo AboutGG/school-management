@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { HttpParams } from '@angular/common/http';
 import { Classroom } from 'src/app/shared/models/classrooms';
-import { ListResponse } from 'src/app/shared/models/listResponse';
+import { ListResponse } from 'src/app/shared/models/listresponse';
 
 @Component({
   selector: 'app-classes',

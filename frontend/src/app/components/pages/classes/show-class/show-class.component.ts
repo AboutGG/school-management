@@ -4,7 +4,7 @@ import { Students, Teachers } from 'src/app/shared/models/users';
 import { ClassDetails, Classroom } from 'src/app/shared/models/classrooms';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
-import { ListResponse } from 'src/app/shared/models/listResponse';
+import { ListResponse } from 'src/app/shared/models/listresponse';
 import { HttpParams } from '@angular/common/http';
 
 @Component({
