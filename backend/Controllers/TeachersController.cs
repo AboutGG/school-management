@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using J2N.Text;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Controllers;
 
@@ -18,6 +19,7 @@ public class TeachersController : Controller
 {
     #region Attributes
 
+    private readonly ITransactionRepository _transactionRepository;
     private readonly SchoolContext _context;
     private readonly ITeacherRepository _teacherRepository;
     private readonly IMapper _mapper;
@@ -26,11 +28,12 @@ public class TeachersController : Controller
 
     #region Costructor
 
-    public TeachersController(ITeacherRepository teacherRepository, IMapper mapper, SchoolContext context)
+    public TeachersController(ITeacherRepository teacherRepository, IMapper mapper, SchoolContext context, ITransactionRepository transactionRepository)
     {
         _teacherRepository = teacherRepository;
         _mapper = mapper;
         _context = context;
+        _transactionRepository = transactionRepository;
     }
 
     #endregion
@@ -346,6 +349,71 @@ public class TeachersController : Controller
         }
     }
     #endregion
-    
+
+    #region UpdateExam
+    /// <summary>
+    /// Api call used to update the exam's details
+    /// </summary>
+    /// <param name="inputUpdateExamDto">are the data used to update the exam</param>
+    /// <param name="examId">is the id of an exam's instance</param>
+    /// <param name="teacherId">is the teacher's id which need to update the exam</param>
+    /// <returns>Return the exam which the teacher updates</returns>
+    /// <exception cref="Exception">if we don't found an exam and if teacher hasn't authorized to assign the class / subject which he has selected</exception>
+    [HttpPut]
+    [Route("{teacherId}/exams/{examId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public IActionResult AssignStudentsVote([FromBody] InputUpdateExamDto inputUpdateExamDto,[FromRoute] Guid examId, [FromRoute] Guid teacherId)
+    {
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        
+        try
+        {
+            //Prendo l'esame di cui mi interessa modificarne i parametri
+            Exam takenExam = new GenericRepository<Exam>(_context)
+                .GetByIdUsingIQueryable(el => el
+                    .Where(el => el.Id == examId)
+                );
+            
+            //Prendo l'instanza di teacherSubjectClassroom nel caso in cui bisogna modificare la classe o/e la materia dell'esame
+            var takenTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetByIdUsingIQueryable(
+                query => query
+                    .Where(el => el.ClassroomId == inputUpdateExamDto.classroomId && 
+                                 el.SubjectId == inputUpdateExamDto.subjectId && 
+                                 el.TeacherId == teacherId)
+                );
+
+            if (takenExam == null)
+            {
+                throw new Exception("NOT_FOUND");
+            }
+
+            if (takenTeacher == null)
+            {
+                throw new Exception("UNAUTHORIZED_UPDATE_EXAM");
+            }
+            
+            //Procedo con la modifica dei dati
+            takenExam.Date = inputUpdateExamDto.Date;
+            takenExam.TeacherSubjectClassroomId = takenTeacher.Id;
+            
+            
+            if (! new GenericRepository<Exam>(_context).UpdateEntity(takenExam))
+            {
+                throw new Exception("NOT_UPDATED");
+            }
+            
+            _transactionRepository.CommitTransaction(transaction);
+            return StatusCode(StatusCodes.Status200OK, takenExam);
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
+        }
+    }
+
+    #endregion
     #endregion
 }
