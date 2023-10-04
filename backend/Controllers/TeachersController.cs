@@ -295,5 +295,52 @@ public class TeachersController : Controller
 
     #endregion
 
+    #region GetClassroomFromSubject
+
+    [HttpGet]
+    [Route("{teacherId}/subjects")]
+    [ProducesResponseType(200, Type = typeof(List<SubjectDto>))]
+    [ProducesResponseType(401)]
+    public IActionResult GetSujectsFromClassroom([FromRoute] Guid teacherId, [FromQuery] Guid? classroomId)
+    {
+        try
+        {
+            List<TeacherSubjectClassroom> takenSubjects = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(null,
+                query => query
+                    .Where(el => el.TeacherId == teacherId)
+                    .Include(el => el.Subject)
+                    .Include(el => el.Classroom)
+                , out var total
+            );
+
+            if (classroomId != null)
+            {
+                takenSubjects = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(null,
+                    query => takenSubjects.AsQueryable()
+                        .Where(el => el.Classroom.Id == classroomId)
+                    , out total
+                );
+            }
+
+            List<SubjectDto> response = new List<SubjectDto>();
+
+
+            foreach (Subject el in takenSubjects.Select(el => el.Subject).Distinct().ToList())
+            {
+                response.Add(new SubjectDto(el));
+            }
+            
+            return Ok(response);
+
+        }
+        catch (Exception e)
+        {
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+    }
+    
+
+    #endregion
     #endregion
 }
