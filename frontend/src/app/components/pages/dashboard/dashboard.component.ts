@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { TypeCount } from "src/app/shared/models/users";
+import { AuthService } from "src/app/shared/service/auth.service";
+import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { CommonService } from "src/app/shared/service/common.service";
+import { TeacherService } from "src/app/shared/service/teacher.service";
 import { UsersService } from "src/app/shared/service/users.service";
 
 @Component({
@@ -10,7 +13,13 @@ import { UsersService } from "src/app/shared/service/users.service";
 })
 export class DashboardComponent implements OnInit {
 
-  count!: TypeCount
+  count: TypeCount = {
+    Users: 0,
+    Students: 0,
+    Teachers:0,
+    Classrooms:0
+  }
+  isTeacher = this.authService.isTeacher()
 
   pdfs = [
     {
@@ -56,10 +65,15 @@ export class DashboardComponent implements OnInit {
     },
   ]
 
-  constructor(private commonService: CommonService) { }
+  constructor(
+    private commonService: CommonService, 
+    private classroomService: ClassroomService,
+    private teacherService: TeacherService,
+    private authService: AuthService ){ }
 
   ngOnInit(): void {
-    this.getCount()
+    //this.getCount()
+    this.getClassroomCount()
   }
 
   getCount() {
@@ -68,7 +82,16 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  getClassroomCount()
+  {
+    this.classroomService.getDataClassroom().subscribe(({total}) => {
+      this.count.Classrooms = total;
+      console.log("totale", total);
+    });
+  }
 
-
-
+  getSubjectCount()
+  {
+    
+  }
 }

@@ -14,7 +14,7 @@ export class ClassroomService {
 
 
   // get teachers classes
-  getDataClassroom(params: {}): Observable<ListResponse<any>>{
+  getDataClassroom(params?: {}): Observable<ListResponse<any>>{
     return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/classrooms`,{params})
 
   }
