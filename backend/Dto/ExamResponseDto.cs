@@ -8,16 +8,8 @@ public class ExamResponseDto
     {
         this.Id = Id;
         this.Date = date;
-        Classroom = new ClassroomDto
-        {
-            Id = classroom.Id,
-            Name = classroom.Name
-        };
-        Subject = new SubjectDto
-        {
-            Id = subject.Id,
-            Name = subject.Name
-        };
+        Classroom = new ClassroomDto(classroom);
+        Subject = new SubjectDto(subject);
     }
     
     public Guid? Id { get; set; }

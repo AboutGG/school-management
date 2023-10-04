@@ -31,7 +31,10 @@ public static class ErrorManager
                 error = new ErrorResponse(StatusCodes.Status409Conflict, "The Id classroom is not valid", e.StackTrace);
                 return error;
             case "INVALID_PARAMETERS":
-                error = new ErrorResponse(StatusCodes.Status409Conflict, "The paremeters aren't valid", e.StackTrace);
+                error = new ErrorResponse(StatusCodes.Status409Conflict, "The parameters aren't valid", e.StackTrace);
+                return error;
+            case "UNAUTHORIZED_UPDATE_EXAM":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized, "You can't update this exam because you are not assigned on this classroom and/or subject", e.StackTrace);
                 return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
