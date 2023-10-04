@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard], pathMatch: 'full'},
   { path: "login", component: LoginComponent },
   { path: "add-user", component: AddUserComponent, canActivate: [AuthGuard] },
+  { path: "add-user/:id", component: AddUserComponent, canActivate: [AuthGuard] },
   { path: 'teachers/classes', component: ClassesComponent, canActivate: [AuthGuard] },
   { path: 'students/classes', component: ShowClassComponent, canActivate: [AuthGuard] },
   { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard]},

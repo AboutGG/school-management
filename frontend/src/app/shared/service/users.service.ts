@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Classroom, ListResponse, Registry, Users } from '../models/users';
+import { ListResponse, Registry, Users } from '../models/users';
+import { Classroom} from "../models/classrooms";
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -71,6 +72,10 @@ export class UsersService {
 
   getDetailsUser(id: string): Observable<Registry> {
     return this.http.get<Registry>(`https://localhost:7262/api/details/${id}`);
+  }
+
+  editUser(form: FormGroup, id?: string): Observable<Registry> {
+    return this.http.put<Registry>(`https://localhost:7262/api/details/${id}`, form);
   }
 
    getClassroom(): Observable<Classroom[]> {

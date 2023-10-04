@@ -86,7 +86,7 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" (click)="onClickAction('dettagli', registry.teacher != null ? registry.teacher!.userId : registry.student!.userId)" [routerLink]="['/details/', registry.teacher != null ? registry.teacher!.userId : registry.student!.userId]"><i
                   class="bi bi-eye-fill px-2"></i>Dettagli</a></li>
-            <li><a class="dropdown-item" (click)="onClickAction('modifica', registry.teacher != null ? registry.teacher!.userId : registry.student!.userId)" [routerLink]="['/add-user']"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
+            <li><a class="dropdown-item" (click)="onClickAction('modifica', registry.teacher != null ? registry.teacher!.userId : registry.student!.userId)" [routerLink]="['/add-user/', registry.teacher != null ? registry.teacher!.userId : registry.student!.userId]"><i class="bi bi-pencil-square px-2"></i>Modifica</a></li>
             <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal"
                   value="elimina" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="onClickAction('elimina', registry.teacher != null ? registry.teacher!.userId : registry.student!.userId)"><i class="bi bi-trash3-fill px-2"></i>Elimina</a>
             </li>

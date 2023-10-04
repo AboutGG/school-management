@@ -8,20 +8,6 @@ export interface Users {
   role: string
 }
 
-export interface Help {
-  classroom?: string;
-  classroomId?: string;
-  user: User;
-  registry: Registry;
-  role: string;
-}
-// export interface Prova {
-//   classroomId?: string
-//   user: User 
-//   registry: Registry
-//   role: string
-// }
-
 
 export interface User {
   id?: string

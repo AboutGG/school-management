@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { UsersService } from "src/app/shared/service/users.service";
 import { ActivatedRoute } from "@angular/router";
-import { Classroom } from "src/app/shared/models/users";
+import { Classroom } from "src/app/shared/models/classrooms";
 import { Registry } from "src/app/shared/models/users";
 import { Users } from "src/app/shared/models/users";
+import { AuthService } from "src/app/shared/service/auth.service";
 
 @Component({
   selector: "app-add-user",
@@ -16,7 +17,7 @@ export class AddUserComponent implements OnInit {
   roleValue: string = "";
   gender: string = "";
   alert: boolean = false;
-  classes: Classroom[] = [];
+  classes!: Classroom[];
   idUser!: string;
   classroom!: string;
 
@@ -24,7 +25,9 @@ export class AddUserComponent implements OnInit {
   user!: FormGroup;
   classroomId!: FormControl;
   role!: FormControl;
-  
+
+  id!: string;
+  details!: Registry
 
   constructor(
     private usersService: UsersService,
@@ -32,21 +35,31 @@ export class AddUserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.id = this.route.snapshot.params["id"];
+    console.log(this.id);
 
-      this.registry = new FormGroup({
-        name: new FormControl(null, Validators.required),
-        surname: new FormControl(null, Validators.required),
-        birth: new FormControl(null),
-        gender: new FormControl(null, Validators.required),
-        email: new FormControl(null, Validators.email),
-        address: new FormControl(null),
-        telephone: new FormControl(
-          null,
-          Validators.pattern(
-            /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
-          )
-        ),
-      }),
+    if (this.id){
+    this.usersService.getDetailsUser(this.id).subscribe((res: Registry) => { 
+      console.log(res)
+      this.details = res;
+        this.editUser();
+    })
+  };
+    
+    this.registry = new FormGroup({
+      name: new FormControl(null, Validators.required),
+      surname: new FormControl(null, Validators.required),
+      birth: new FormControl(null),
+      gender: new FormControl(null, Validators.required),
+      email: new FormControl(null, Validators.email),
+      address: new FormControl(null),
+      telephone: new FormControl(
+        null,
+        Validators.pattern(
+          /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
+        )
+      ),
+    }),
       this.user = new FormGroup({
         username: new FormControl(null, Validators.required),
         password: new FormControl(null, [
@@ -54,91 +67,22 @@ export class AddUserComponent implements OnInit {
           Validators.minLength(6),
         ]),
       });
-      this.classroomId = new FormControl(null),
+    this.classroomId = new FormControl(null),
       this.role = new FormControl(null, Validators.required),
-    
+      this.usersForm = new FormGroup({
+        registry: this.registry,
+        user: this.user,
+        classroomId: this.classroomId,
+        role: this.role,
+      });
 
-//form con dati moccati
-    // this.registry = new FormGroup({
-    //   name: new FormControl("serio", Validators.required),
-    //   surname: new FormControl("giorno", Validators.required),
-    //   birth: new FormControl("2001-01-08"),
-    //   gender: new FormControl("Maschio", Validators.required),
-    //   email: new FormControl("boh@gmail.com", Validators.email),
-    //   address: new FormControl("hhhhht"),
-    //   telephone: new FormControl(
-    //     "111-4568890",
-    //     Validators.pattern(
-    //       /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
-    //     )
-    //   ),
-    // });
-    // this.user = new FormGroup({
-    //   username: new FormControl("sgiii", Validators.required),
-    //   password: new FormControl("noooooooooo888", [
-    //     Validators.required,
-    //     Validators.minLength(6),
-    //   ]),
-    // });
-    // this.classroomId = new FormControl("0ed3811a-0a5c-4ed0-b7db-53090199aa27");
-    // this.role = new FormControl("student", Validators.required);
-
-  //form con 4 form prova con domenico
-    // this.usersForm = new FormGroup({
-    //   registry: new FormGroup({
-    //     name: new FormControl(null, Validators.required),
-    //     surname: new FormControl(null, Validators.required),
-    //     birth: new FormControl(null),
-    //     gender: new FormControl(null, Validators.required),
-    //     email: new FormControl(null, Validators.email),
-    //     address: new FormControl(null),
-    //     telephone: new FormControl(
-    //       null,
-    //       Validators.pattern(
-    //         /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
-    //       )
-    //     ),
-    //   }),
-    //   user: new FormGroup({
-    //     username: new FormControl(null, Validators.required),
-    //     password: new FormControl(null, [
-    //       Validators.required,
-    //       Validators.minLength(6),
-    //     ]),
-    //   }),
-    //   classroomId: new FormControl(null),
-    //   role: new FormControl(null, Validators.required),
-    // });
-
-    this.usersForm = new FormGroup({
-      registry: this.registry,
-      user: this.user,
-      classroomId: this.classroomId,
-      role: this.role,
-    });
-
-
-    // per la creazione del wizard
-    // this.route.queryParams.subscribe((params) => {
-    //   const mode = params["mode"];
-    //   console.log(mode);
-
-    //   if (mode === "edit") {
-    //     // mi serve caricare i dati dell'utente selezionato
-    //     this.idUser = this.route.snapshot.params["idUser"];
-    //     this.getDataUser(this.idUser);
-    //   } else {
-    //     this.usersForm.reset();
-    //   }
-    // });
     this.getClassroom();
   }
 
-  onClickRole(event: any): void {
 
+  onClickRole(event: any): void {
     this.roleValue = event.target.value;
     // this.roleValue = this.usersForm.get("role")?.value;
-    
     // console.log(this.usersForm.value.role);
     console.log(this.roleValue);
     this.usersForm
@@ -153,15 +97,8 @@ export class AddUserComponent implements OnInit {
     this.usersForm.get("gender")!.setValue(this.gender);
   }
 
-  // onClickClassroom(classId: string) {
-  //   // this.classes.map((classroom) => {
-  //   //   classroom.name = className;
-  //     this.usersForm.value.classroomId!.setValue(classId);
-  //   // });
-  // }
-
   getClassroomValidators(): any {
-    if (this.roleValue === 'student') {
+    if (this.roleValue === "student") {
       return Validators.required;
     }
   }
@@ -172,6 +109,11 @@ export class AddUserComponent implements OnInit {
   }
 
   onAddUser() {
+    if (this.id) {
+      console.log();
+      this.usersService.editUser(this.registry.value, this.id).subscribe()
+      console.log(this.registry.value);
+    }else {
       this.usersService.addUser(this.usersForm.value).subscribe({
         next: (res) => {
           console.log("ruolo", this.roleValue);
@@ -182,70 +124,14 @@ export class AddUserComponent implements OnInit {
           console.log(error);
         },
       });
-    
+    }
+
     console.log(this.usersForm.value);
   }
-  
-
-  // onAddUser() {
-  //   if (this.usersForm.valid && this.roleValue === "teacher") {
-  //     this.roleValue = "teacher";
-  //     this.usersService.addUser(this.usersForm.value).subscribe({
-  //       next: (res) => {
-  //         console.log("ruolo", this.roleValue);
-
-  //         console.log("tentativo", res);
-  //       },
-  //       error: (error) => {
-  //         console.log(error);
-  //       },
-  //     });
-  //   } else {
-  //     if (this.usersForm.valid && this.usersForm.value.classroom !== null) {
-  //       this.roleValue = "student";
-  //       this.usersService.addUser(this.usersForm.value).subscribe({
-  //         next: (res) => {
-  //           console.log(res);
-  //           console.log("ruolo", this.roleValue);
-  //           console.log(this.usersForm.value);
-  //         },
-  //         error: (error) => {
-  //           console.log(error);
-  //         },
-  //       });
-  //     }
-  //   }
-  //   console.log(this.usersForm.value);
-  // }
 
   selectClassroom(classroom: string) {
     this.usersForm.value.classroomId!.setValue(classroom);
   }
-
-  // onAddUser() {
-  //   console.log("onAddUser", this.role, this.usersForm.value);
-  //   if (this.usersForm.valid && this.role === "insegnante") {
-  //     this.usersService.addTeacher(this.usersForm.value, this.role).subscribe({
-  //       next: (res) => {
-  //         console.log("tentativo", res);
-  //       },
-  //       error: (error) => {
-  //         console.log(error);
-  //       },
-  //     });
-  //   } else {
-  //     if (this.usersForm.valid && this.usersForm.value.classroom !== null) {
-  //       this.usersService.addStudent(this.usersForm.value, this.role).subscribe({
-  //         next: (res) => {
-  //           console.log(res);
-  //         },
-  //         error: (error) => {
-  //           console.log(error);
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
 
   getDataUser(idUser: string) {
     this.usersService.getDetailsUser(idUser).subscribe((userData: Registry) => {
@@ -256,19 +142,24 @@ export class AddUserComponent implements OnInit {
     });
   }
 
-  // getDataUser() {
-  //   const idUser = this.route.snapshot.params["idUser"];
-  //   console.log(idUser);
-  //   this.usersService.getDetailsUser(idUser).subscribe((res: Registry) => {
-  //     console.log(res);
-  //     this.getDataUser;
-  //   });
-  // }
+  editUser() {
+    this.registry.patchValue({
+      name: this.details.name,
+      surname: this.details.surname,
+      birth: this.details.birth,
+      gender: this.details.gender,
+      email: this.details.email,
+      address: this.details.address,
+      telephone: this.details.telephone
+    })
+  }
 
   getClassroom() {
-    this.usersService.getClassroom().subscribe((data) => {
-      this.classes = data;
-      console.log("prova", this.classes);
+    this.usersService.getClassroom().subscribe({
+      next: (res) => {
+        this.classes = res;
+        console.log("prova", this.classes);
+      },
     });
   }
 }

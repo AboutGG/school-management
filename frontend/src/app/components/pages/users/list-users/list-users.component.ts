@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Registry, Users, ListResponse } from 'src/app/shared/models/users';
 import { UsersService } from 'src/app/shared/service/users.service';
 
@@ -9,7 +10,7 @@ import { UsersService } from 'src/app/shared/service/users.service';
   styleUrls: ["./list-users.component.scss"],
 })
 export class ListUsersComponent {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.page = 1;
@@ -17,7 +18,7 @@ export class ListUsersComponent {
   }
 
   registries: Registry[] = [];
-  users: Users[] = [];
+  // users: Users[] = [];
   filter: string = "";
   action: string = "";
   id!: string;
@@ -110,7 +111,7 @@ export class ListUsersComponent {
           // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
 
           this.registries = res.data;
-          console.log(this.users);
+          console.log(this.registries);
           
         },
         error: (error) => {
