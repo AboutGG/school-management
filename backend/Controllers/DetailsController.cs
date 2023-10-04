@@ -83,7 +83,7 @@ public class DetailsController : Controller
     #region Edit detail
 
     /// <summary> Edit the Teacher or Student details. </summary>
-    /// <param name="Id"></param>
+    /// <param name="Id">is the Userid</param>
     /// <param name="updatedUserDetail"></param>
     /// <returns>204 = Successfully, 404 = not found the id, 400 = bad request</returns>
     [HttpPut("{Id}")]

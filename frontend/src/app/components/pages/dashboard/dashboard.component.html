@@ -1,11 +1,11 @@
 <div class="container-fluid py-3 bg-light">
-  <div *ngIf="isTeacher "class="row">
-    <div class="col-md-3">
-      <div class="card card-body bg-warning mb-2">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-body bg-success mb-2">
         <div class="row justify-content-between">
           <div class="col-10">
-            <h3 class="mb-0 text-white">{{count.Users}}</h3>
-            <span class="text-uppercase text-white">Materie</span>
+            <h3 *ngIf="isTeacher" class="mb-0 text-white">{{count.Users}}</h3>
+            <h4 class="text-uppercase text-white">{{isTeacher ? 'Materie' : 'Prossimi Esami'}}</h4>
           </div>
           <div class="col-2 align-self-center p-0">
             <i class="bi bi-person-gear text-white fs-1 w-100"></i>
@@ -13,12 +13,12 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card card-body bg-danger mb-2">
+    <div class="col-md-6">
+      <div class="card card-body bg-info mb-2">
         <div class="row">
           <div class="col-10">
-            <h3 class="mb-0 text-white">{{count.Classrooms}}</h3>
-            <span class="text-uppercase text-white">Classi</span>
+            <h3 *ngIf="isTeacher" class="mb-0 text-white">{{count.Classrooms}}</h3>
+            <h4 class="text-uppercase text-white">{{isTeacher ? 'Classi' : 'Pagella'}}</h4>
           </div>
           <div class="col-2 align-self-center p-0">
             <i class="bi bi-people-fill text-white fs-1 w-100"></i>
@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <!-- <div class="col-md-3">
       <div class="card card-body bg-success mb-2">
         <div class="row">
           <div class="col-10">
@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   <div class="row py-5">
     <h4>CIRCOLARI SCOLASTICHE</h4>

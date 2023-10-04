@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ClassDetails } from '../models/classrooms';
 import { ListResponse } from '../models/listresponse';
-import { Classroom } from '../models/classrooms';
+import { TeacherClassroom } from '../models/classrooms';
 
 @Injectable({
   providedIn: 'root'
