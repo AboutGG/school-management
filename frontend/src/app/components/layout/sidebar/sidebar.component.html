@@ -50,7 +50,7 @@
           <i class="bi bi-newspaper"></i>
           <!--classes-->
         </div>
-        <div class="title">Classi</div>
+        <div class="title">{{ isTeacher ? 'Classi' : 'Classe' }}</div>
         <i class="invisible" *ngIf="isExpanded"
           [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
