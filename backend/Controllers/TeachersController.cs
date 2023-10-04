@@ -46,7 +46,7 @@ public class TeachersController : Controller
 
     [HttpGet]
     [Route("Classrooms")]
-    [ProducesResponseType(200, Type = typeof(List<ClassroomStudentCount>))]
+    [ProducesResponseType(200, Type = typeof(PaginationResponse<ClassroomStudentCount>))]
     [ProducesResponseType(400)]
     public IActionResult GetClassrooms([FromQuery] PaginationParams @params, [FromHeader] string Token)
     {
@@ -69,14 +69,15 @@ public class TeachersController : Controller
                     query => query
                         .Include(teacher => teacher.TeachersSubjectsClassrooms)
                         .ThenInclude(tsc => tsc.Classroom.Students)
+                        .Include(el => el.TeachersSubjectsClassrooms)
+                        .ThenInclude(el => el.Subject)
                         .Where(tsc => tsc.UserId == takenId),
                     out var total
                     )
                 .SelectMany(teacher =>
                     teacher.TeachersSubjectsClassrooms
                         .Select(tsc => tsc.Classroom)).Distinct().ToList();
-
-
+            
             var filteredClassroom = new GenericRepository<Classroom>(_context)
                 .GetAllUsingIQueryable(@params,
                 query => classrooms.AsQueryable()
@@ -125,7 +126,7 @@ public class TeachersController : Controller
     /// <exception cref="Exception">Errors if the token is not valid or more.</exception>
     [HttpGet]
     [Route("subjects")]
-    [ProducesResponseType(200, Type = typeof(SubjectClassroomDto))]
+    [ProducesResponseType(200, Type = typeof(PaginationResponse<SubjectClassroomDto>))]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public IActionResult GetSubjects([FromHeader] string Token, [FromQuery] PaginationParams @params)
@@ -295,8 +296,13 @@ public class TeachersController : Controller
 
     #endregion
 
-    #region GetClassroomFromSubject
-
+    #region GetSubjectsFromClassroom
+    /// <summary>
+    /// Api call which returns all the subject of a teacher
+    /// </summary>
+    /// <param name="teacherId">id to take the single instance of teacher</param>
+    /// <param name="classroomId">is used to filter the subjects by the classroom id, then returns all the subject witch teaches on the class</param>
+    /// <returns>All the teachers' subject</returns>
     [HttpGet]
     [Route("{teacherId}/subjects")]
     [ProducesResponseType(200, Type = typeof(List<SubjectDto>))]
@@ -339,8 +345,7 @@ public class TeachersController : Controller
             return StatusCode(error.statusCode, error);
         }
     }
-    
-
     #endregion
+    
     #endregion
 }
