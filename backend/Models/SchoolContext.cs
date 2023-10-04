@@ -16,6 +16,8 @@ public class SchoolContext : DbContext
     public DbSet<Exam> Exams { get; set; }
     public DbSet<StudentExam> RegistryExams { get; set; }
     public DbSet<Classroom> Classrooms { get; set; }
+    
+    public DbSet<PromotionHistory> PromotionsHistories { get; set; }
 
     #endregion
 
@@ -138,6 +140,23 @@ public class SchoolContext : DbContext
             .HasOne<Student>(re => re.Student)
             .WithMany(r => r.StudentExams)
             .HasForeignKey(re => re.StudentId);
+
+        #endregion
+
+        #region PromotionHistory
+
+        //PromotionHistory relation many-to-many
+
+        modelBuilder.Entity<PromotionHistory>()
+            .HasOne<Classroom>(ph => ph.PreviousClassroom)
+            .WithMany(c => c.PromotionHistories)
+            .HasForeignKey(ph => ph.PreviousClassroomId);
+
+        modelBuilder.Entity<PromotionHistory>()
+            .HasOne<Student>(ph => ph.Student)
+            .WithMany(s => s.PromotionHistories)
+            .HasForeignKey(ph => ph.StudentId);
+        
 
         #endregion
     }
