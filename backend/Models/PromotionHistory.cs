@@ -15,7 +15,7 @@ public class PromotionHistory: Deleted
     public virtual Student Student { get; set; }
     
     [Column("id_previous_classroom")]
-    [JsonPropertyName("id_student")]
+    [JsonPropertyName("id_previous_classroom")]
     public Guid PreviousClassroomId { get; set; }
     public virtual Classroom PreviousClassroom { get; set; }
     
@@ -29,7 +29,7 @@ public class PromotionHistory: Deleted
     
     [Column("scholastic_behavior")]
     [JsonPropertyName("scholastic_behavior")]
-    public Guid ScholasticBehavior { get; set; }
+    public int ScholasticBehavior { get; set; }
     
     [Column("promoted")]
     [JsonPropertyName("promoted")]

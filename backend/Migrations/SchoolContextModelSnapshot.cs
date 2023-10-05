@@ -137,7 +137,7 @@ namespace backend.Migrations
                     b.Property<Guid>("PreviousClassroomId")
                         .HasColumnType("uuid")
                         .HasColumnName("id_previous_classroom")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_student");
+                        .HasAnnotation("Relational:JsonPropertyName", "id_previous_classroom");
 
                     b.Property<string>("PreviousSchoolYear")
                         .IsRequired()
@@ -150,8 +150,8 @@ namespace backend.Migrations
                         .HasColumnName("promoted")
                         .HasAnnotation("Relational:JsonPropertyName", "promoted");
 
-                    b.Property<Guid>("ScholasticBehavior")
-                        .HasColumnType("uuid")
+                    b.Property<int>("ScholasticBehavior")
+                        .HasColumnType("integer")
                         .HasColumnName("scholastic_behavior")
                         .HasAnnotation("Relational:JsonPropertyName", "scholastic_behavior");
 

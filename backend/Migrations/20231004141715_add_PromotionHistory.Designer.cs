@@ -12,8 +12,8 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20231004130008_add_MigrationHistory")]
-    partial class add_MigrationHistory
+    [Migration("20231004141715_add_PromotionHistory")]
+    partial class add_PromotionHistory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -140,7 +140,7 @@ namespace backend.Migrations
                     b.Property<Guid>("PreviousClassroomId")
                         .HasColumnType("uuid")
                         .HasColumnName("id_previous_classroom")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_student");
+                        .HasAnnotation("Relational:JsonPropertyName", "id_previous_classroom");
 
                     b.Property<string>("PreviousSchoolYear")
                         .IsRequired()
@@ -153,8 +153,8 @@ namespace backend.Migrations
                         .HasColumnName("promoted")
                         .HasAnnotation("Relational:JsonPropertyName", "promoted");
 
-                    b.Property<Guid>("ScholasticBehavior")
-                        .HasColumnType("uuid")
+                    b.Property<int>("ScholasticBehavior")
+                        .HasColumnType("integer")
                         .HasColumnName("scholastic_behavior")
                         .HasAnnotation("Relational:JsonPropertyName", "scholastic_behavior");
 

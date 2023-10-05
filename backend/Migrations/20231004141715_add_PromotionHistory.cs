@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class add_MigrationHistory : Migration
+    public partial class add_PromotionHistory : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace backend.Migrations
                     id_previous_classroom = table.Column<Guid>(type: "uuid", nullable: false),
                     previous_school_year = table.Column<string>(type: "text", nullable: false),
                     final_graduation = table.Column<int>(type: "integer", nullable: false),
-                    scholastic_behavior = table.Column<Guid>(type: "uuid", nullable: false),
+                    scholastic_behavior = table.Column<int>(type: "integer", nullable: false),
                     promoted = table.Column<bool>(type: "boolean", nullable: false),
                     deleted_at = table.Column<DateOnly>(type: "date", nullable: true)
                 },
