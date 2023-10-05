@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { HttpParams } from '@angular/common/http';
-import { Classroom } from 'src/app/shared/models/classrooms';
-import { ListResponse } from 'src/app/shared/models/listResponse';
+import { TeacherClassroom } from 'src/app/shared/models/classrooms';
+import { ListResponse } from 'src/app/shared/models/listresponse';
 
 @Component({
   selector: 'app-classes',
@@ -14,7 +14,7 @@ import { ListResponse } from 'src/app/shared/models/listResponse';
 })
 export class ClassesComponent {
 
-  class: Classroom[] = [];
+  class: TeacherClassroom[] = [];
   searchTerm: string = '';
   currentPage : number = 1; 
   itemsPerPage : number = 5// numero di elementi per pagina
@@ -42,7 +42,7 @@ export class ClassesComponent {
         
         
       this.classroomService.getDataClassroom(params).subscribe({
-        next: (res: ListResponse<Classroom[]> ) => {
+        next: (res: ListResponse<TeacherClassroom[]> ) => {
           this.totalItems = res.total; // numero totale di elementi
           this.totalPages = this.totalItems/this.itemsPerPage;
           this.class = res.data;
