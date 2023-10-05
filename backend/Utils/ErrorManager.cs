@@ -36,6 +36,15 @@ public static class ErrorManager
             case "UNAUTHORIZED_UPDATE_EXAM":
                 error = new ErrorResponse(StatusCodes.Status401Unauthorized, "You can't update this exam because you are not assigned on this classroom and/or subject", e.StackTrace);
                 return error;
+            case "INVALID_PDF_TYPE":
+                error = new ErrorResponse(StatusCodes.Status400BadRequest, "The type of the PDF is not valid", e.StackTrace);
+                return error;
+            case "INVALID_SCHOOL_YEAR":
+                error = new ErrorResponse(StatusCodes.Status406NotAcceptable, "The school year is not valid", e.StackTrace); 
+                return error;
+            case "UNAUTHORIZED_QUARTER_REPORT":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized, "You can't access to the quarter reports", e.StackTrace); 
+                return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
                 return error;
