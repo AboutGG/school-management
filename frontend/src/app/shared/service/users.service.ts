@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Users } from '../models/users';
+import { Users, UsersMe } from '../models/users';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -59,6 +59,10 @@ export class UsersService {
 
   getUsers(): Observable<any> {
     return this.http.get<any>('https://localhost:7262/api/users')
+  }
+
+  getUsersMe(): Observable<UsersMe> {
+    return this.http.get<UsersMe>('https://localhost:7262/api/users/me')
   }
 
   

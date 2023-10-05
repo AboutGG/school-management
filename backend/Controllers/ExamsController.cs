@@ -171,44 +171,35 @@ public class ExamsController : Controller
 
     #endregion
 
-    #region Put Exam
-    /// <summary> API call which update the grade taken on a Exam </summary>
-    /// <param name="Token">Token di autorizzazione</param>
-    /// <param name="InputStudentExam">Dto con lo scopo di passare il voto che deve ricevere lo studente in un determinato esame</param>
-    /// <param name="id">Students id</param>
-    /// <returns>Un messaggio se si modifica con successo il voto.</returns>
-    /// <exception cref="Exception">Gestione degli errori nei casi in cui chi effettua la chiamata non è un professore o nel caso in cui non venga modificato</exception>
+    #region Update student vote
+    /// <summary>
+    /// Api call which edit the Vote of a single student which do an exams
+    /// </summary>
+    /// <param name="InputStudentExam">This object contains the parameters to update about the student and the studentId used to take the StudentExams' instance</param>
+    /// <param name="examId">is the id taken from the route to take a single instance of an exam </param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     [HttpPut]
-    [Route("{id}")]
+    [Route("{examId}/grades")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public IActionResult PutExam([FromHeader] string Token, [FromBody] InputStudentExamDto InputStudentExam, Guid id)
+    public IActionResult AssignStudentsVote([FromBody] InputStudentExamDto InputStudentExam,[FromRoute] Guid examId)
     {
-        JwtSecurityToken decodedToken;
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
-        Guid takenId;
-        string role;
         
         try
         {
-            //Decode the token
-            decodedToken = JWTHandler.DecodeJwtToken(Token);
-            takenId = new Guid(decodedToken.Payload["userid"].ToString());
-
-            //Controllo il ruolo dello User tramite l'Id
-            role = RoleSearcher.GetRole(takenId, _context);
-
-            //Se lo user non è un professore creo una nuova eccezione restituendo Unauthorized
-            if (role == "student" || role == "unknown")
-                throw new Exception("UNAUTHORIZED");
-            
             //Tramite l'id che passa il FE prendo lo studente con quell'id e a sua volta l'instanza dell'esame tramite l'oggetto in Input dal FE
-            var takenStudentExam = new GenericRepository<Student>(_context)
+            var takenStudentExam = new GenericRepository<StudentExam>(_context)
                 .GetByIdUsingIQueryable(query => query
-                        .Where(el => el.Id == id)
-                        .Include(s => s.StudentExams) // Include StudentExams navigation property
-                ).StudentExams
-                .FirstOrDefault(src => src.StudentId == id && src.ExamId == InputStudentExam.ExamId);
+                        .Where(el => el.ExamId == examId && el.StudentId == InputStudentExam.)
+                        .Include(s => s.Student) // Include StudentExams navigation property
+                );
+
+            if (takenStudentExam == null)
+            {
+                throw new Exception("NOT_FOUND");
+            }
             
             //Modifico il voto 
             takenStudentExam.Grade = InputStudentExam.Grade;
@@ -219,7 +210,7 @@ public class ExamsController : Controller
             }
             
             _transactionRepository.CommitTransaction(transaction);
-            return StatusCode(StatusCodes.Status200OK, "Grade successfully updated.");
+            return StatusCode(StatusCodes.Status200OK, takenStudentExam);
         }
         catch (Exception e)
         {
@@ -230,7 +221,7 @@ public class ExamsController : Controller
     }
 
     #endregion
-
+    
     #endregion
 
 }

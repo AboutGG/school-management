@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ListResponse } from '../models/listResponse';
+import { ListResponse } from '../models/listresponse';
 @Injectable({
   providedIn: 'root'
 })
