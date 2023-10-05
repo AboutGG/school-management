@@ -79,7 +79,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             query = queryFunc.Invoke(query);
         }
 
-        total = query.Count();
+        if (query != null)
+        {
+            total = query.Count();
+        }
+        else
+        {
+            total = 0;
+        }
 
         if (@params != null)
         {

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Students, Teachers } from 'src/app/shared/models/users';
-import { ClassDetails, Classroom } from 'src/app/shared/models/classrooms';
+import { ClassDetails, TeacherClassroom } from 'src/app/shared/models/classrooms';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
-import { ListResponse } from 'src/app/shared/models/listResponse';
+import { ListResponse } from 'src/app/shared/models/listresponse';
 import { HttpParams } from '@angular/common/http';
 
 @Component({
@@ -15,7 +15,7 @@ import { HttpParams } from '@angular/common/http';
 export class ShowClassComponent {
   classId!: string;
   classDetails!: ClassDetails;
-  isTeacher!: boolean; //memorizza se l'utente è insegnante
+  isTeacher: boolean = false; //memorizza se l'utente è insegnante
   order:string = 'Registry.Surname'
 
   constructor(private classroomService: ClassroomService, private authService: AuthService, private route: ActivatedRoute, private router: Router) {}

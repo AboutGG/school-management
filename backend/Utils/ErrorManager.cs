@@ -42,6 +42,12 @@ public static class ErrorManager
             case "UNAUTHORIZED_STUDENT_PROMOTION":
                 error = new ErrorResponse(StatusCodes.Status400BadRequest, "You are not authorized to proceed with the student promotion", e.StackTrace);
                 return error; 
+            case "INVALID_PDF_TYPE":
+                error = new ErrorResponse(StatusCodes.Status400BadRequest, "The type of the PDF is not valid", e.StackTrace);
+                return error;
+            case "UNAUTHORIZED_QUARTER_REPORT":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized, "You can't access to the quarter reports", e.StackTrace); 
+                return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
                 return error;
