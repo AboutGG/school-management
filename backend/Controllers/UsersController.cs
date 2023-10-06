@@ -297,7 +297,7 @@ public class UsersController : Controller
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         try
         {
-            //Decode the token
+            //Decodifico il token
             decodedToken = JWTHandler.DecodeJwtToken(Token);
             Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
@@ -318,9 +318,11 @@ public class UsersController : Controller
             {
                 throw new Exception("EQUALS_PASSWORDS");
             }
-
+            
+            //Modifico la password
             takenUser.Password = changePasswordDto.newPassword;
 
+            //Procedo con l'update della password nel Db
             if (!new GenericRepository<User>(_context).UpdateEntity(takenUser))
             {
                 throw new Exception("PASSWORD_NOT_CHANGED");
