@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
-using AutoMapper;
 using System.Linq.Dynamic;
 using backend.Dto;
 using backend.Interfaces;
@@ -22,7 +21,6 @@ public class UsersController : Controller
     #region Attributes
 
     private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
     private readonly SchoolContext _context;
     private readonly ITeacherRepository _teacherRepository;
     private readonly IRegistryRepository _registryRepository;
@@ -39,12 +37,10 @@ public class UsersController : Controller
         ITeacherRepository teacherRepository,
         IRegistryRepository registryRepository,
         IStudentRepository studentRepository,
-        IMapper mapper,
         SchoolContext context
     )
     {
         this._userRepository = userRepository;
-        this._mapper = mapper;
         _context = context;
         this._transactionRepository = transactionRepository;
         this._teacherRepository = teacherRepository;
