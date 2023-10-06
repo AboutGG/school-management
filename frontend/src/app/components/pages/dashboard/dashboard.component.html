@@ -1,5 +1,5 @@
 <div  class="container-fluid py-3 bg-light">
-  <hr>
+  
   <div class="row">
     <div class="col-md-3">
       <div class="card card-body bg-success mb-2">
@@ -62,41 +62,38 @@
         <h5 class="card-header">Bacheca</h5>
         <div style="display: flex; flex-direction: column;" class="card-body">
           <div *ngFor="let pdf of pdfs"  style="margin-bottom: 15px;" class="card">
-            <div style="background-color: #ffd45f; display: flex;" class="card-body">
-              <h5 class=" text-uppercase card-title">{{pdf.title + ' - ' + pdf.data}}</h5>
-              <img style="width: 50px;" class="" [src]="pdf.img" alt="logo" />       
+            <div style="background-color: #ffd45f; " class="card-body">
+              <h6 class=" text-uppercase card-title">{{pdf.title}} <p style="text-align: end;"><img style="width: 50px;" class="" [src]="pdf.img"  alt="logo" ></p></h6>
+              <p style="margin-top: 0; margin-bottom: 0;" class="">{{pdf.data}}</p>
+              
             </div>
           </div>
         </div>
       </div>
-
     </div>
     <div class="col-md-6">
-      <div style="margin-top: 20px;" class="card card-right-esami">
+      <div [ngClass]="{'card-left' : isTeacher, 'card-right-esami' : !isTeacher}" style="margin-top: 20px;" class="card card-right-esami">
         <h5 class="card-header">Prossimi Esami</h5>
         <div style=" display: flex; flex-direction: column" class="card-body card-body-bacheca">
           <div *ngFor="let card of cards" style="margin-bottom: 15px;" class="card">
             <div style="background-color: #ffd45f;" class="card-body">
-              <h5 class=" text-uppercase card-title">{{card.title}}</h5>
+              <h6 class=" text-uppercase card-title">{{card.title}}</h6>
               <p class="card-text">{{card.text + ' - ' + card.date}}</p>
               <hr>
-              <p style="text-align: end;" class=" card-text">Prof. {{card.teacher}}</p> 
-                
-            </div>
-            
+              <p style="text-align: end;" class=" card-text">{{isTeacher ? 'Classe ' + card.classroom : 'Prof. ' + card.teacher}}</p> 
+            </div>    
           </div>
-          <button [routerLink]="['/students/exams']" style="display: flex; align-items: center; justify-content: center;" class=" text-center btn card-header">Vai ai prossimi esami<i style="font-size: 11px; width: 20px; height: 15px;" class="bi bi-chevron-double-right"></i></button>
-            
+          <button [routerLink]="['/students/exams']" style="display: flex; align-items: center; justify-content: center;" class=" text-center btn card-header">Vai ai prossimi esami<i style="font-size: 11px; width: 20px; height: 13px;" class="bi bi-chevron-double-right"></i></button>         
         </div>
       </div>
     
-      <div class="col-md-12">
-        <div style="margin-top: 20px;" class="card card-right">
+      <div *ngIf="!isTeacher" class="col-md-12">
+        <div style="margin-top: 20px;" class="card card-right-pagella">
           <h5 class="card-header">Pagella</h5>
           <div class="card-body">
             <div  style="margin-bottom: 15px;" class="card">
               <div style="background-color: #ffd45f;" class="card-body">
-                <h5 class=" text-uppercase card-title">{{pagella.title}}</h5>       
+                <h6 class=" text-uppercase card-title">{{pagella.title}}</h6>       
               </div>
             </div>
           </div>

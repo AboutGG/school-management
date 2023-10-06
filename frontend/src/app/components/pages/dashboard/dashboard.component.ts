@@ -26,19 +26,22 @@ export class DashboardComponent implements OnInit {
       title: "Italiano",
       text: "Esame Scritto",
       date: "10/10/2023",
-      teacher: "Giordana Pistorio"
+      teacher: "Giordana Pistorio",
+      classroom: "1B"
     },
     {
       title: "Spagnolo",
       text: "Esame Orale",
       date: "20/10/2023",
-      teacher: "Francesca Scollo"
+      teacher: "Francesca Scollo",
+      classroom: "2A"
     },
     {
       title: "Inglese",
       text: "Esame Scritto",
       date: "25/10/2023",
-      teacher: "Gigi Giuliano"
+      teacher: "Gigi Giuliano",
+      classroom: "5C"
     },
 
   ]
@@ -106,16 +109,14 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  getClassroomCount()
-  {
+  getClassroomCount() {
     this.classroomService.getDataClassroom().subscribe(({total}) => {
       this.count.Classrooms = total;
       console.log("totale classi", total);
     });
   }
 
-  getSubjectCount()
-  {
+  getSubjectCount() {
     
   }
 }
