@@ -97,7 +97,7 @@ public class StudentsController : Controller
             ).Select(el => el.Teacher).ToList();
 
             var mappedResponse = _mapper.Map<List<TeacherDto>>(resultStudent.DistinctBy(el => el.Id));
-            
+
             return Ok(
                 new PaginationResponse<TeacherDto>
                 {
@@ -113,8 +113,9 @@ public class StudentsController : Controller
     }
 
     #endregion
-    
+
     #region Get Exams
+
     /// <summary> Having the token take the userId then takes the related exams </summary>
     /// <param name="token"></param>
     /// <returns>Return a list of Exams performed by the Student</returns>
@@ -156,10 +157,12 @@ public class StudentsController : Controller
 
             if (@params.Filter != null)
                 takenStudent = takenStudent.Where(el =>
-                    el.Exam.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()).ToList();
-            
+                        el.Exam.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() ==
+                        @params.Filter.Trim().ToLower())
+                    .ToList();
+
             var studentExamDtos = new List<StudentExamDto>();
-            
+
             foreach (var el in takenStudent)
             {
                 studentExamDtos.Add(new StudentExamDto(el));
@@ -180,5 +183,121 @@ public class StudentsController : Controller
 
     #endregion
 
+    #region Student Report
+
+    /// <summary> Api call which passing the UserId return the student's report </summary>
+    /// <param name="Id">UserId to take the student's instance</param>
+    /// <param name="firstQuarter">is a flag to indicate the quarter which we want to see for the report</param>
+    /// <returns>Return a PDF file with the student's report</returns>
+    [HttpGet]
+    [Route("{Id}/Reports")]
+    [ProducesResponseType(200)]
+    public IActionResult GetStudentReport([FromRoute] Guid Id, [FromQuery] bool firstQuarter,
+        [FromQuery] string schoolYear)
+    {
+        DateOnly startFirstQuarter;
+        DateOnly endFirstQuarter;
+        DateOnly startSecondQuarter;
+        DateOnly endSecondQuarter;
+        
+        try
+        {
+            var splittedSchoolYear = schoolYear.Split('-');
+
+            if (Convert.ToInt32(splittedSchoolYear[0]) +1 != Convert.ToInt32(splittedSchoolYear[1]))
+            {
+                throw new Exception("INVALID_SCHOOL_YEAR");
+            }
+            
+            startFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[0]), 09, 15);
+            endFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 01, 31);
+            startSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 02, 1);
+            endSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 05, 15);
+        
+            if(DateTime.UtcNow.Year == int.Parse(splittedSchoolYear[1]) || DateTime.UtcNow.Year == int.Parse(splittedSchoolYear[0]))
+            { 
+                if ((firstQuarter && DateOnly.FromDateTime(DateTime.UtcNow) < endFirstQuarter) ||
+                    (!firstQuarter &&  DateOnly.FromDateTime(DateTime.UtcNow) < endSecondQuarter))
+                {
+                    throw new Exception("UNAUTHORIZED_QUARTER_REPORT");
+                }
+            } else if (DateTime.UtcNow.Year < int.Parse(splittedSchoolYear[1]))
+            {
+                throw new Exception("INVALID_SCHOOL_YEAR");
+            }
+
+        }
+        catch (Exception e)
+        {
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+        
+
+        //Ottengo lo studente tramite l'id che viene passato dalla route
+        Student takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(query => query
+            .Where(el => el.UserId == Id)
+            .Include(el => el.Registry)
+            .Include(el => el.StudentExams)
+            .ThenInclude(el => el.Exam)
+            .ThenInclude(el => el.TeacherSubjectClassroom.Subject)
+        );
+
+        //Prendo le materie insegnate nella classe dello studente
+        List<Subject> subjectClassrooms = new GenericRepository<Classroom>(_context).GetByIdUsingIQueryable(
+            query => query
+                .Where(el => el.Id == takenStudent.ClassroomId)
+                .Include(el => el.TeacherSubjectsClassrooms)
+                .ThenInclude(el => el.Subject)
+        ).TeacherSubjectsClassrooms.Select(el => new Subject { Id = el.Subject.Id, Name = el.Subject.Name }).ToList();
+
+        List<SubjectGrade> report = new List<SubjectGrade>();
+
+        subjectClassrooms.ForEach(subject =>
+        {
+            // prendo gli esami svolti la singola materia insegnata nella classe dello studente 
+            List<StudentExam> studentExams = new GenericRepository<StudentExam>(_context).GetAllUsingIQueryable(null,
+                query => takenStudent.StudentExams.AsQueryable()
+                    .Where(el => el.Exam.TeacherSubjectClassroom.Subject.Id == subject.Id
+                                 //in base al valore del quadrimestre controlla i range: nel primo controlla dal 15 Settembre al 31 Gennaio
+                                 // nel secondo caso controlla dall'1 Febbraio al 10 Giugno
+                                 && (firstQuarter
+                                     ? el.Exam.Date >= startFirstQuarter &&
+                                       el.Exam.Date <= endFirstQuarter
+                                     : el.Exam.Date >= startSecondQuarter &&
+                                       el.Exam.Date <= endSecondQuarter
+                                 )
+                    )
+                , out var total);
+
+            double media = 0;
+            
+            //se l'alunno non ha eseguito esami in quella materia allora la media rimarrà a 0, invece nel caso opposto calcolerà la media di tutti i voti presi negli esami
+            if (studentExams != null)
+            {
+                foreach (StudentExam el in studentExams)
+                {
+                    media += el.Grade ?? 0;
+
+                    media /= total;
+                }
+            }
+
+            //Nel caso in cui la media non presenta un voto allora il voto in quella materia verrà sostituito da NC (non classificato)
+            report.Add(new SubjectGrade(subject.Name, media > 0 ? media.ToString() : "NC"));
+        });
+        
+        if (report.Count(el => el.Grade.Trim().ToLower() == "nc") == report.Count())
+        {
+            return StatusCode(StatusCodes.Status400BadRequest, $"The Student {takenStudent.Registry.Name} {takenStudent.Registry.Surname} in all the quarter hasn't any grades");
+        }
+        
+        var pdf = PdfHandler.GeneratePdf<SubjectGrade>(report, takenStudent, schoolYear, firstQuarter);
+        return File(pdf, "application/pdf",
+            $"{takenStudent.Registry.Name}_{takenStudent.Registry.Surname}_report.pdf");
+    }
+
+    #endregion
+    
     #endregion
 }

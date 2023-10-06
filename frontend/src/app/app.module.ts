@@ -21,6 +21,8 @@ import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
 import { ExamslistComponent } from './components/pages/examslist/examslist.component';
 import { ExamsStudentListComponent } from './components/pages/exams-student-list/exams-student-list.component';
 import { SubjectsComponent } from './components/pages/subjects/subjects.component';
+import { StudentSubjectsComponent } from './components/pages/student-subjects/student-subjects.component';
+
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { SubjectsComponent } from './components/pages/subjects/subjects.componen
     ExamslistComponent,
     ExamsStudentListComponent,
     SubjectsComponent,
+    StudentSubjectsComponent,
   ],
   imports: [
     BrowserModule,

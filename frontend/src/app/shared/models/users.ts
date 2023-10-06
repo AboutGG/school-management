@@ -116,6 +116,11 @@ export interface Students {
   surname: string;
 }
 
+export interface UsersMe{
+  id: string;
+  name: string;
+  classroomId: string;
+}
 
 
 

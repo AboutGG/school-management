@@ -16,7 +16,7 @@ public class SchoolContext : DbContext
     public DbSet<Exam> Exams { get; set; }
     public DbSet<StudentExam> RegistryExams { get; set; }
     public DbSet<Classroom> Classrooms { get; set; }
-
+    public DbSet<Circular> Circulars { get; set; }
     #endregion
 
     public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
@@ -39,7 +39,8 @@ public class SchoolContext : DbContext
         modelBuilder.Entity<Subject>().HasQueryFilter(el => el.DeletedAt == null);
         modelBuilder.Entity<StudentExam>().HasQueryFilter(el => el.DeletedAt == null);
         modelBuilder.Entity<TeacherSubjectClassroom>().HasQueryFilter(el => el.DeletedAt == null);
-
+        modelBuilder.Entity<Circular>().HasQueryFilter(el => el.DeletedAt == null);
+        
         #endregion
 
         #region Uniques
@@ -103,7 +104,7 @@ public class SchoolContext : DbContext
 
         modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Subject>(ts => ts.Subject)
-            .WithMany(s => s.TeacherSubjects)
+            .WithMany(s => s.TeacherSubjectsClassrooms)
             .HasForeignKey(ts => ts.SubjectId);
 
         modelBuilder.Entity<TeacherSubjectClassroom>()

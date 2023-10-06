@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { UsersMe } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
+import { UsersService } from "src/app/shared/service/users.service";
 
 @Component({
   selector: "app-sidebar",
@@ -10,15 +12,18 @@ export class SidebarComponent implements OnInit{
   /**
    *
    */
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private usersService: UsersService) { }
 
   @Input() isExpanded: boolean = false;
   isCollapsed = false;
   isTeacher = this.authService.isTeacher()
   linkByRole!: string
+  userId!: UsersMe;
 
   ngOnInit(): void {
     this.routerSwitchByRole()
+    this.usersMe();
+    
   }
 
   toggleCollapse() {
@@ -26,6 +31,20 @@ export class SidebarComponent implements OnInit{
   }
 
   routerSwitchByRole () {
-    this.linkByRole = this.isTeacher ? 'teachers' : 'students';    
+    this.linkByRole = this.isTeacher ? 'teachers' : 'students';
+  }
+  
+  usersMe(){
+    this.usersService.getUsersMe().subscribe({
+      next: (res: UsersMe) => {
+        this.userId = res;
+        console.log('get me',res)
+
+      },
+      error: (err) => {
+        console.log('error', err);
+      }
+    })
+    
   }
 }

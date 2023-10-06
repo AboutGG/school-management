@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -11,9 +12,11 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20230920152918_CircularTable")]
+    partial class CircularTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,15 +129,15 @@ namespace backend.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("Relational:JsonPropertyName", "id");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date")
-                        .HasColumnName("date")
-                        .HasAnnotation("Relational:JsonPropertyName", "date");
-
                     b.Property<DateOnly?>("DeletedAt")
                         .HasColumnType("date")
                         .HasColumnName("deleted_at")
                         .HasAnnotation("Relational:JsonPropertyName", "deleted_at");
+
+                    b.Property<DateOnly>("ExamDate")
+                        .HasColumnType("date")
+                        .HasColumnName("exam_date")
+                        .HasAnnotation("Relational:JsonPropertyName", "exam_date");
 
                     b.Property<Guid>("TeacherSubjectClassroomId")
                         .HasColumnType("uuid")
@@ -151,19 +154,19 @@ namespace backend.Migrations
                         new
                         {
                             Id = new Guid("55988821-2bc3-4122-aa50-e0fb3b8f42ad"),
-                            Date = new DateOnly(2023, 9, 6),
+                            ExamDate = new DateOnly(2023, 9, 6),
                             TeacherSubjectClassroomId = new Guid("0f69c148-07ab-47a8-838a-0c9dfce974bf")
                         },
                         new
                         {
                             Id = new Guid("06dec5ca-003e-4b39-af43-c745746d23e0"),
-                            Date = new DateOnly(2023, 9, 10),
+                            ExamDate = new DateOnly(2023, 9, 10),
                             TeacherSubjectClassroomId = new Guid("a0d8bde6-4ece-4eaa-96bd-6da7d2db7daa")
                         },
                         new
                         {
                             Id = new Guid("20ad1b3e-af97-4a45-815b-af9f34e52dc3"),
-                            Date = new DateOnly(2023, 9, 25),
+                            ExamDate = new DateOnly(2023, 9, 25),
                             TeacherSubjectClassroomId = new Guid("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d")
                         });
                 });

@@ -35,7 +35,7 @@ public class ClassroomsController : Controller
     /// <summary> This API call are used to take all the classrooms when you create an Student </summary>
     /// <returns>All the classrooms present on the Database</returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(PaginationResponse<StudentDto>))]
+    [ProducesResponseType(200, Type = typeof(ClassroomDto))]
     public IActionResult GetClassroomsList()
     {
         var classrooms = new GenericRepository<Classroom>(_context)

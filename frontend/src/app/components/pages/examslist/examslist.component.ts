@@ -3,7 +3,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';
-import { ListResponse } from 'src/app/shared/models/listResponse';
+import { ListResponse } from 'src/app/shared/models/listresponse';
 import { TeacherExam } from 'src/app/shared/models/teacherexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';

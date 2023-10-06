@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { ListResponse, Registry, Users } from '../models/users';
+import { ListResponse, Registry, Users, UsersMe } from '../models/users';
 import { Classroom} from "../models/classrooms";
 import { HttpClient } from '@angular/common/http';
 
@@ -69,6 +69,15 @@ export class UsersService {
     return this.http.delete<Registry>(`https://localhost:7262/api/users/${id}`);
   };
 
+  getUsers(): Observable<any> {
+    return this.http.get<any>('https://localhost:7262/api/users')
+  }
+
+  getUsersMe(): Observable<UsersMe> {
+    return this.http.get<UsersMe>('https://localhost:7262/api/users/me')
+  }
+
+  
 
   getDetailsUser(id: string): Observable<Registry> {
     return this.http.get<Registry>(`https://localhost:7262/api/details/${id}`);
