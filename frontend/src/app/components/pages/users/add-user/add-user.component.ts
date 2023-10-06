@@ -39,7 +39,6 @@ export class AddUserComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
     console.log(this.id);
-
     if (this.id){
     this.usersService.getDetailsUser(this.id).subscribe((res: Registry) => { 
       console.log(res)
@@ -127,7 +126,6 @@ export class AddUserComponent implements OnInit {
         },
       });
     }
-
     console.log(this.usersForm.value);
   }
 

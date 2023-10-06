@@ -25,6 +25,5 @@ export class DetailUserComponent {
       console.log(res);
       this.details = res;
     });
-    
   }
 }

@@ -18,23 +18,25 @@
       </div>
     </div>
 
-  <div class="card mb-5" style="width: 40rem;">
-    <div class="d-flex justify-content-center w-100 p-5">
-      <div class="icon-default-frame d-flex justify-content-center">
-        <img src="./../../../../../assets/users/icon-profile-default.png" class="icon-default card-img-top">
+    <div class="card mb-5" style="width: 40rem;">
+      <div class="d-flex justify-content-center w-100 p-5">
+        <div class="icon-default-frame d-flex justify-content-center">
+          <img src="./../../../../../assets/users/icon-profile-default.png" class="icon-default card-img-top">
+        </div>
       </div>
+      <ul class="list-group list-group-flush">
+        <div class="row m-0">
+          <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium text-warning">Nome: <span class="fw-normal text-dark">{{this.details.name}}</span></li>
+          <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium text-warning">Cognome: <span class="fw-normal text-dark">{{this.details.surname}}</span></li>
+          <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium text-warning">Ruolo: <span class="fw-normal text-dark">{{this.details.role == "student" ? "Studente": "Insegnante"}}</span></li>
+          <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium text-warning">Genere: <span class="fw-normal text-dark">{{(this.details.gender == "male" )? "Maschio": (this.details.gender == "female")? "Femmina": "Altro"}}</span></li>
+          <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium text-warning">Data di Nascita: <span class="fw-normal text-dark">{{this.details.birth}}</span></li>
+          <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium text-warning">Email: <span class="fw-normal text-dark">{{this.details.email}}</span></li>
+          <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium text-warning">Telefono: <span class="fw-normal text-dark">{{this.details.telephone}}</span></li>
+          <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium text-warning">Indirizzo: <span class="fw-normal text-dark">{{this.details.address}}</span></li>
+        </div>
+      </ul>
     </div>
-    <ul class="list-group list-group-flush">
-      <div class="row m-0">
-        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium">Nome: <span class="fw-light">{{this.details.name}}</span></li>
-        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium">Cognome: <span class="fw-light">{{this.details.surname}}</span></li>
-        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium">Ruolo: <span class="fw-light">{{this.details.role}}</span></li>
-        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium">Genere: <span class="fw-light">{{this.details.gender}}</span></li>
-        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium">Data di Nascita: <span class="fw-light">{{this.details.birth}}</span></li>
-        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium">Email: <span class="fw-light">{{this.details.email}}</span></li>
-        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium">Telefono: <span class="fw-light">{{this.details.telephone}}</span></li>
-        <li class="list-group-item d-flex justify-content-evenly pb-3 col-6 fw-medium ">Indirizzo: <span class="fw-light">{{this.details.address}}</span></li>
-      </div>
-    </ul>
   </div>
+</div>
   

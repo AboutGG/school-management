@@ -18,7 +18,6 @@ export class ListUsersComponent {
   }
 
   registries: Registry[] = [];
-  // users: Users[] = [];
   filter: string = "";
   action: string = "";
   id!: string;
@@ -36,14 +35,6 @@ export class ListUsersComponent {
     surname: "asc",
     birth: "asc",
   };
-
-  // onClickRole(event: any): void {
-  //   this.filter = event.target.value;
-  //   this.page = 1;
-  //   console.log(this.filter);
-
-  //   this.getData("Name", this.orders.name);
-  // }
 
   onClickRole(event: any): void {
     this.filter = event.target.value;
@@ -88,12 +79,10 @@ export class ListUsersComponent {
     console.log(this.filter);
 
     
-
     this.usersService
       .getUsers(order, type, this.page, this.filter, search).subscribe({
         next: (res: ListResponse<Registry[]>) => {
           console.log(res);
-          
           console.log(id);
 
           if (id) {
@@ -101,7 +90,6 @@ export class ListUsersComponent {
               name: "asc",
               surname: "asc",
               birth: "asc",
-
               [id]: type,
             };
           }
@@ -112,7 +100,6 @@ export class ListUsersComponent {
 
           this.registries = res.data;
           console.log(this.registries);
-          
         },
         error: (error) => {
           console.log(error);
