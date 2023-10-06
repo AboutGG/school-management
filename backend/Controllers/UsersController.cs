@@ -275,6 +275,72 @@ public class UsersController : Controller
     }
     
     #endregion
+
+    #region Change password
+
+    /// <summary>
+    /// Api call used to change the password of an user
+    /// </summary>
+    /// <param name="Token">token to check if you are authorized to change the password</param>
+    /// <param name="userId">userId to take the user which we want to change the password</param>
+    /// <param name="changePasswordDto">Dto used to take in input the new and old password</param>
+    /// <returns>Return a message if the password has successfully changed</returns>
+    /// <exception cref="Exception">Execeptions to show the error message if we are unauthorized to change the password or if the new password are equal then the old
+    /// or the password has not changed.
+    /// </exception>
+    [HttpPut]
+    [HttpPut("{userId}")]
+    public IActionResult ChangePassword([FromHeader] string Token, [FromRoute] Guid userId,
+        ChangePasswordDto changePasswordDto)
+    {
+        JwtSecurityToken decodedToken;
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        try
+        {
+            //Decodifico il token
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
+            Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
+
+            //Controllo se gli id passati tramite token e route sono diversi, in quel caso non si è autorizzati
+            if (takenId != userId)
+            {
+                throw new Exception("CHANGE_PASSWORD_ACCESS_DENIED");
+            }
+
+            //Prendo lo user a cui devo cambiare la password
+            User takenUser = new GenericRepository<User>(_context).GetByIdUsingIQueryable(
+                query => query
+                    .Where(el => el.Id == userId));
+
+            //Effettuo i controlli nel caso in cui la nuova password sia uguale a quella vecchia
+            if (changePasswordDto.oldPassword == changePasswordDto.newPassword ||
+                takenUser.Password == changePasswordDto.newPassword)
+            {
+                throw new Exception("EQUALS_PASSWORDS");
+            }
+            
+            //Modifico la password
+            takenUser.Password = changePasswordDto.newPassword;
+
+            //Procedo con l'update della password nel Db
+            if (!new GenericRepository<User>(_context).UpdateEntity(takenUser))
+            {
+                throw new Exception("PASSWORD_NOT_CHANGED");
+            }
+
+            _transactionRepository.CommitTransaction(transaction);
+            return StatusCode(StatusCodes.Status200OK, new MessageResponse("The password has successfully changed"));
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+    }
+
+    #endregion
     
     #endregion
 }
+
