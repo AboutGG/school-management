@@ -86,7 +86,4 @@ export class UsersService {
     return this.http.put<Registry>(`https://localhost:7262/api/details/${id}`, form);
   }
 
-   getClassroom(): Observable<Classroom[]> {
-     return this.http.get<Classroom[]>(`https://localhost:7262/api/classrooms`);
-   }
 }

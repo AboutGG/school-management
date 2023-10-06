@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { UsersService } from "src/app/shared/service/users.service";
+import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { ActivatedRoute } from "@angular/router";
 import { Classroom } from "src/app/shared/models/classrooms";
 import { Registry } from "src/app/shared/models/users";
@@ -31,6 +32,7 @@ export class AddUserComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
+    private classroomService: ClassroomService,
     private route: ActivatedRoute
   ) {}
 
@@ -155,7 +157,7 @@ export class AddUserComponent implements OnInit {
   }
 
   getClassroom() {
-    this.usersService.getClassroom().subscribe({
+    this.classroomService.getClassroom().subscribe({
       next: (res) => {
         this.classes = res;
         console.log("prova", this.classes);
