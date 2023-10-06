@@ -8,73 +8,87 @@ using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage;
 using Guid = System.Guid;
 
 namespace backend.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class ClassroomsController : Controller
 {
     private readonly ITransactionRepository _transactionRepository;
     private readonly SchoolContext _context;
     private readonly IClassroomRepository _classroomRepository;
-    private readonly IMapper _mapper;
     private readonly ITeacherRepository _teacherRepository;
 
     #region Costructor
 
     public ClassroomsController(
-            SchoolContext context, 
-            IClassroomRepository classroomRepository,
-            IMapper mapper,
-            ITeacherRepository teacherRepository, 
-            ITransactionRepository transactionRepository)
-        {
-            _context = context;
-            _classroomRepository = classroomRepository;
-            _mapper = mapper;
-            _teacherRepository = teacherRepository;
-            _transactionRepository = transactionRepository;
-        }
+        SchoolContext context,
+        IClassroomRepository classroomRepository,
+        ITeacherRepository teacherRepository, 
+        ITransactionRepository transactionRepository)
+    {
+        _context = context;
+        _classroomRepository = classroomRepository;
+        _teacherRepository = teacherRepository;
+        _transactionRepository = transactionRepository;
+    }
+    
+#endregion
 
-    #endregion
+#region Api Calls
 
-    #region Api Calls
+    #region GetClassrooms
 
-    #region Get classroom detail
-
-     /// <summary> This API call are used to take all the classrooms when you create an Student </summary>
+    /// <summary> This API call are used to take all the classrooms when you create an Student </summary>
     /// <returns>All the classrooms present on the Database</returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(ClassroomDto))]
+    [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
     public IActionResult GetClassroomsList()
     {
         var classrooms = new GenericRepository<Classroom>(_context)
-            .GetAllUsingIQueryable(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null, out var total);
-        return Ok(_mapper.Map<List<ClassroomDto>>(classrooms));
+            .GetAllUsingIQueryable(null, query => query, out var total);
+
+        List<ClassroomDto> response = new List<ClassroomDto>();
+
+        foreach (Classroom classroom in classrooms)
+        {
+            response.Add(new ClassroomDto(classroom));
+        }
+
+        return Ok(response);
     }
 
-    
+    #endregion
+
+    #region GetClassroomDetails
+
     [HttpGet]
     [Route("{id}")]
     [ProducesResponseType(200, Type = typeof(PaginationResponse<ClassroomDetails>))]
     public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
     {
-        var mappedStudents = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
+        List<Student> takenStudents = new GenericRepository<Student>(_context)
             .GetAllUsingIQueryable(@params,
                 query => query
-                    .Where(student => student.ClassroomId == id)
-                    .Include(student => student.Registry)
+                    .Where(el => el.ClassroomId == id)
+                    .Include(el => el.Registry)
+                    .Include(el => el.Classroom)
                 , out var totalStudents
-            )
+            );
 
-        );
+        List<StudentDto> responseStudents = new List<StudentDto>();
+        foreach (Student takenStudent in takenStudents)
+        {
+            responseStudents.Add(new StudentDto(takenStudent));
+        }
 
         var classroom = new GenericRepository<Classroom>(_context)
             .GetByIdUsingIQueryable(el => el.Where(classroom => classroom.Id == id)).Name;
-        
-        var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
+
+        var teachers = new GenericRepository<Teacher>(_context)
             .GetAllUsingIQueryable(
                 null,
                 query => query
@@ -84,7 +98,12 @@ public class ClassroomsController : Controller
                     .ThenInclude(tsc => tsc.Subject)
                     .Include(teacher => teacher.Registry),
                 out var totalTeachers
-            ));
+            );
+        List<TeacherDto> responseTeachers = new List<TeacherDto>();
+        foreach (var teacher in teachers)
+        {
+            responseTeachers.Add(new TeacherDto(teacher));
+        }
 
         return Ok(
             new PaginationResponse<ClassroomDetails>
@@ -93,8 +112,8 @@ public class ClassroomsController : Controller
                 Data = new ClassroomDetails
                 {
                     name_classroom = classroom,
-                    Students = mappedStudents,
-                    Teachers = teachers
+                    Students = responseStudents,
+                    Teachers = responseTeachers
                 }
             }
         );
@@ -190,7 +209,5 @@ public class ClassroomsController : Controller
     #endregion
     
     #endregion
-   
-
 
 }

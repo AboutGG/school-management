@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Dynamic.Core;
-using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -20,17 +19,15 @@ public class StudentsController : Controller
 
     private readonly SchoolContext _context;
     private readonly IStudentRepository _studentRepository;
-    private readonly IMapper _mapper;
 
     #endregion
 
     #region Costructor
 
-    public StudentsController(IStudentRepository studentRepository, SchoolContext context, IMapper mapper)
+    public StudentsController(IStudentRepository studentRepository, SchoolContext context)
     {
         _studentRepository = studentRepository;
         _context = context;
-        _mapper = mapper;
     }
 
     #endregion
@@ -42,10 +39,19 @@ public class StudentsController : Controller
     /// <summary> Get All Teachers with its Registry and user </summary>
     /// <returns>ICollection<TeacherDto></returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(List<Student>))]
+    [ProducesResponseType(200, Type = typeof(List<StudentDto>))]
     public IActionResult GetStudents()
     {
-        return Ok(_mapper.Map<List<StudentDto>>(_studentRepository.GetStudents()));
+        var takenStudents = _studentRepository.GetStudents().ToList();
+
+        List<StudentDto> responseStudents = new List<StudentDto>();
+
+        foreach (Student takenStudent in takenStudents)
+        {
+            responseStudents.Add(new StudentDto(takenStudent));
+        }
+        
+        return Ok(responseStudents);
     }
 
     #endregion
@@ -82,7 +88,7 @@ public class StudentsController : Controller
             }
 
             //Prendo le materie che pratica lo studente nella sua classe
-            var resultStudent = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(
+            var resultTeachers = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(
                 @params,
                 query => query
                     .Where(el => el.ClassroomId == studentclassroomId
@@ -94,9 +100,14 @@ public class StudentsController : Controller
                     .Include(el => el.Teacher.Registry)
                     .Include(el => el.Subject),
                 out var total
-            ).Select(el => el.Teacher).ToList();
+            ).Select(el => el.Teacher).DistinctBy(el => el.Id).ToList();
 
-            var mappedResponse = _mapper.Map<List<TeacherDto>>(resultStudent.DistinctBy(el => el.Id));
+            List<TeacherDto> mappedResponse = new List<TeacherDto>();
+
+            foreach (Teacher resultTeacher in resultTeachers)
+            {
+                mappedResponse.Add(new TeacherDto(resultTeacher));
+            }
 
             return Ok(
                 new PaginationResponse<TeacherDto>

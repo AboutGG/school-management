@@ -1,5 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -22,16 +21,14 @@ public class TeachersController : Controller
     private readonly ITransactionRepository _transactionRepository;
     private readonly SchoolContext _context;
     private readonly ITeacherRepository _teacherRepository;
-    private readonly IMapper _mapper;
 
     #endregion
 
     #region Costructor
 
-    public TeachersController(ITeacherRepository teacherRepository, IMapper mapper, SchoolContext context, ITransactionRepository transactionRepository)
+    public TeachersController(ITeacherRepository teacherRepository, SchoolContext context, ITransactionRepository transactionRepository)
     {
         _teacherRepository = teacherRepository;
-        _mapper = mapper;
         _context = context;
         _transactionRepository = transactionRepository;
     }
@@ -143,7 +140,7 @@ public class TeachersController : Controller
             decodedToken = JWTHandler.DecodeJwtToken(Token);
             takenId = new Guid(decodedToken.Payload["userid"].ToString());
 
-            var resultTeacher = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params,
+            var resultTeachers = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(@params,
                 query => query
                     .Where(el => el.Teacher.UserId == takenId
                     && (el.Classroom.Name.Trim().ToLower().Contains(@params.Search.Trim().ToLower())
@@ -162,12 +159,17 @@ public class TeachersController : Controller
             //                      || el.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
             //         ).ToList();
 
-            var mappedResponse = _mapper.Map<List<SubjectClassroomDto>>(resultTeacher);
+            List<SubjectClassroomDto> response = new List<SubjectClassroomDto>();
+
+            foreach (var resultTeacher in resultTeachers)
+            {
+                response.Add(new SubjectClassroomDto(resultTeacher));
+            }
             
             return Ok(new PaginationResponse<SubjectClassroomDto>
             {
                 Total = total,
-                Data = mappedResponse
+                Data = response
             });
         }
         catch (Exception e)
@@ -286,9 +288,9 @@ public class TeachersController : Controller
                 ,  out var total
                 );
 
-            ExamDto mappedExams = _mapper.Map<ExamDto>(takenExam);
+            ExamDto responseExam = new ExamDto(takenExam);
 
-            return Ok(mappedExams);
+            return Ok(responseExam);
         }
         catch (Exception e)
         {
