@@ -1,6 +1,7 @@
     <div class="container mt-5">
-        <div class="d-flex align-items-center justify-content-center fs-5 fw-bold">
-            {{ this.id === null ? 'Creazione utente' : 'Modifica utente' | uppercase }}
+        <div class="d-flex align-items-center justify-content-center fs-5 fw-bold text-uppercase ">
+            {{ this.id == null ? 'Creazione utente' : 'Modifica utente' }}
+
             <span class="icon-data ms-3">
                 <i class="bi bi-pencil-fill pencil-icon"></i>
             </span>
