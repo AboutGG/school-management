@@ -33,7 +33,6 @@ public class ClassroomsController : Controller
     /// <summary> This API call are used to take all the classrooms when you create an Student </summary>
     /// <returns>All the classrooms present on the Database</returns>
     [HttpGet]
-    [Route("")]
     [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
     public IActionResult GetClassroomsList()
     {
