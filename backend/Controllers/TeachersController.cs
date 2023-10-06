@@ -358,14 +358,14 @@ public class TeachersController : Controller
     /// </summary>
     /// <param name="inputUpdateExamDto">are the data used to update the exam</param>
     /// <param name="examId">is the id of an exam's instance</param>
-    /// <param name="teacherId">is the teacher's id which need to update the exam</param>
+    /// <param name="userId">is the teacher's id which need to update the exam</param>
     /// <returns>Return the exam which the teacher updates</returns>
     /// <exception cref="Exception">if we don't found an exam and if teacher hasn't authorized to assign the class / subject which he has selected</exception>
     [HttpPut]
-    [Route("{teacherId}/exams/{examId}")]
+    [Route("{userId}/exams/{examId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public IActionResult AssignStudentsVote([FromBody] InputUpdateExamDto inputUpdateExamDto,[FromRoute] Guid examId, [FromRoute] Guid teacherId)
+    public IActionResult AssignStudentsVote([FromBody] InputUpdateExamDto inputUpdateExamDto,[FromRoute] Guid examId, [FromRoute] Guid userId)
     {
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         
@@ -382,7 +382,8 @@ public class TeachersController : Controller
                 query => query
                     .Where(el => el.ClassroomId == inputUpdateExamDto.classroomId && 
                                  el.SubjectId == inputUpdateExamDto.subjectId && 
-                                 el.TeacherId == teacherId)
+                                 el.Teacher.UserId == userId)
+                    .Include(el => el.Teacher)
                 );
 
             if (takenExam == null)
@@ -417,5 +418,6 @@ public class TeachersController : Controller
     }
 
     #endregion
+    
     #endregion
 }
