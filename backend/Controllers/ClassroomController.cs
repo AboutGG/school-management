@@ -1,5 +1,4 @@
 ﻿using System.Linq.Dynamic.Core;
-using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -11,59 +10,74 @@ using Guid = System.Guid;
 
 namespace backend.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class ClassroomsController : Controller
 {
     private readonly SchoolContext _context;
     private readonly IClassroomRepository _classroomRepository;
-    private readonly IMapper _mapper;
     private readonly ITeacherRepository _teacherRepository;
 
     public ClassroomsController(
-        SchoolContext context, 
+        SchoolContext context,
         IClassroomRepository classroomRepository,
-        IMapper mapper,
         ITeacherRepository teacherRepository)
     {
         _context = context;
         _classroomRepository = classroomRepository;
-        _mapper = mapper;
         _teacherRepository = teacherRepository;
     }
-    
+
+    #region GetClassrooms
+
     /// <summary> This API call are used to take all the classrooms when you create an Student </summary>
     /// <returns>All the classrooms present on the Database</returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(ClassroomDto))]
+    [Route("")]
+    [ProducesResponseType(200, Type = typeof(List<ClassroomDto>))]
     public IActionResult GetClassroomsList()
     {
         var classrooms = new GenericRepository<Classroom>(_context)
-            .GetAllUsingIQueryable(null, (Func<IQueryable<Classroom>, IQueryable<Classroom>>?)null, out var total);
-        return Ok(_mapper.Map<List<ClassroomDto>>(classrooms));
+            .GetAllUsingIQueryable(null, query => query, out var total);
+
+        List<ClassroomDto> response = new List<ClassroomDto>();
+
+        foreach (Classroom classroom in classrooms)
+        {
+            response.Add(new ClassroomDto(classroom));
+        }
+
+        return Ok(response);
     }
 
+    #endregion
 
-    //TODO: fix the response of this api call
+    #region GetClassroomDetails
+
     [HttpGet]
     [Route("{id}")]
     [ProducesResponseType(200, Type = typeof(PaginationResponse<ClassroomDetails>))]
     public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
     {
-        var mappedStudents = _mapper.Map<List<StudentDto>>(new GenericRepository<Student>(_context)
+        List<Student> takenStudents = new GenericRepository<Student>(_context)
             .GetAllUsingIQueryable(@params,
                 query => query
-                    .Where(student => student.ClassroomId == id)
-                    .Include(student => student.Registry)
+                    .Where(el => el.ClassroomId == id)
+                    .Include(el => el.Registry)
+                    .Include(el => el.Classroom)
                 , out var totalStudents
-            )
+            );
 
-        );
+        List<StudentDto> responseStudents = new List<StudentDto>();
+        foreach (Student takenStudent in takenStudents)
+        {
+            responseStudents.Add(new StudentDto(takenStudent));
+        }
 
         var classroom = new GenericRepository<Classroom>(_context)
             .GetByIdUsingIQueryable(el => el.Where(classroom => classroom.Id == id)).Name;
-        
-        var teachers = _mapper.Map<List<TeacherDto>>(new GenericRepository<Teacher>(_context)
+
+        var teachers = new GenericRepository<Teacher>(_context)
             .GetAllUsingIQueryable(
                 null,
                 query => query
@@ -73,7 +87,12 @@ public class ClassroomsController : Controller
                     .ThenInclude(tsc => tsc.Subject)
                     .Include(teacher => teacher.Registry),
                 out var totalTeachers
-            ));
+            );
+        List<TeacherDto> responseTeachers = new List<TeacherDto>();
+        foreach (var teacher in teachers)
+        {
+            responseTeachers.Add(new TeacherDto(teacher));
+        }
 
         return Ok(
             new PaginationResponse<ClassroomDetails>
@@ -82,12 +101,13 @@ public class ClassroomsController : Controller
                 Data = new ClassroomDetails
                 {
                     name_classroom = classroom,
-                    Students = mappedStudents,
-                    Teachers = teachers
+                    Students = responseStudents,
+                    Teachers = responseTeachers
                 }
             }
         );
     }
 
+    #endregion
 
 }
