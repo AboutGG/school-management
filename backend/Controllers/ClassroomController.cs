@@ -174,7 +174,7 @@ public class ClassroomsController : Controller
             finalGraduation /= takenStudent.StudentExams.Count;
 
             
-            if ((inputStudentPromotion.Promoted && inputStudentPromotion.ScholasticBehavior < 6) || (inputStudentPromotion.Promoted && finalGraduation < 6))
+            if (inputStudentPromotion.Promoted && finalGraduation < 6)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, $"The student {takenStudent.Registry.Name} {takenStudent.Registry.Surname} doesn't respect the parameters to be promoted");
             }
