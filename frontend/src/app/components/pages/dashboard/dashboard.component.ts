@@ -21,6 +21,30 @@ export class DashboardComponent implements OnInit {
   }
   isTeacher = this.authService.isTeacher()
 
+  cards = [
+    {
+      title: "Italiano",
+      text: "Esame Scritto",
+      date: "10/10/2023",
+      teacher: "Giordana Pistorio"
+    },
+    {
+      title: "Spagnolo",
+      text: "Esame Orale",
+      date: "20/10/2023",
+      teacher: "Francesca Scollo"
+    },
+    {
+      title: "Inglese",
+      text: "Esame Scritto",
+      date: "25/10/2023",
+      teacher: "Gigi Giuliano"
+    },
+
+  ]
+
+  pagella = {title: "Pagella 1° Quadrimestre"}
+
   pdfs = [
     {
       title: "Nuovo ordinamento scolastico",
@@ -72,7 +96,7 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService ){ }
 
   ngOnInit(): void {
-    //this.getCount()
+    this.getCount()
     this.getClassroomCount()
   }
 
@@ -86,7 +110,7 @@ export class DashboardComponent implements OnInit {
   {
     this.classroomService.getDataClassroom().subscribe(({total}) => {
       this.count.Classrooms = total;
-      console.log("totale", total);
+      console.log("totale classi", total);
     });
   }
 

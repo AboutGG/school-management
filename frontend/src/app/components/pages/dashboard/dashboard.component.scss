@@ -1,3 +1,57 @@
+
 .pdfText {
-    font-size: 1.0rem;
+  font-size: 1.0rem;
+}
+hr{
+  margin: 1rem 0;
+  color: inherit;
+  border: 0;
+  border-top: var(--bs-border-width) solid;
+  opacity: 0.25;
+  margin-top: 5px;
+}
+.card{
+  border: 1px solid #ddd;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 20px;
+}
+.card-body{
+  border: 1px ;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 20px;
+
+}
+.card-header{
+  text-align: center;
+  background-color: #1d1e2c;
+  color: white;
+}
+
+
+.card-left {
+  max-height: 400px;
+  overflow-y: auto;
+
+}
+.card-right {
+  max-height: 157px;
+  overflow-y: auto;
+}
+.card-right-esami {
+  max-height: 225px;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #b6b6b6; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9b9a9a; 
 }
