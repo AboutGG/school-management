@@ -16,6 +16,6 @@ public class Subject : Deleted
     public string Name { get; set; }
 
     #region External ref
-    public IList<TeacherSubjectClassroom> TeacherSubjects { get; set; }
+    public IList<TeacherSubjectClassroom> TeacherSubjectsClassrooms { get; set; }
     #endregion
 }

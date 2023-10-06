@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
-using AutoMapper;
 using System.Linq.Dynamic;
 using backend.Dto;
 using backend.Interfaces;
@@ -22,7 +21,6 @@ public class UsersController : Controller
     #region Attributes
 
     private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
     private readonly SchoolContext _context;
     private readonly ITeacherRepository _teacherRepository;
     private readonly IRegistryRepository _registryRepository;
@@ -39,12 +37,10 @@ public class UsersController : Controller
         ITeacherRepository teacherRepository,
         IRegistryRepository registryRepository,
         IStudentRepository studentRepository,
-        IMapper mapper,
         SchoolContext context
     )
     {
         this._userRepository = userRepository;
-        this._mapper = mapper;
         _context = context;
         this._transactionRepository = transactionRepository;
         this._teacherRepository = teacherRepository;
@@ -223,23 +219,6 @@ public class UsersController : Controller
             ErrorResponse error = ErrorManager.Error(e);
             return StatusCode(error.statusCode, error);
         }
-    }
-
-    #endregion
-    
-    #region Pdf for circular and table
-
-    [HttpPost]
-    [Route("pdf")]
-    public IActionResult GetUsersOnPdf([FromBody] Circular? data, [FromQuery] string type = "table")
-    {
-        ///<summary>We return a Bytes array because the PDF is a sequence of binary bytes to represent the document content compactly. </summary>
-
-        var stream = PDF.GeneratePdf(type, _mapper.Map<List<UserDto>>(_userRepository.GetUsers()), data);
-
-        // Returns the PDF
-        return File(stream, "application/pdf", "generated.pdf");
-
     }
 
     #endregion
