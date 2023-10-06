@@ -8,7 +8,6 @@ using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage;
 using Guid = System.Guid;
 
 namespace backend.Controllers;
@@ -125,24 +124,31 @@ public class ClassroomsController : Controller
 
     [HttpPost]
     [Route("{classroomId}/students/{studentId}/graduations")]
-    [ProducesResponseType(200, Type = typeof(PaginationResponse<StudentDto>))]
+    [ProducesResponseType(200, Type = typeof(PromotionHistoryDto))]
     public IActionResult StudentPromotion([FromBody] InputStudentPromotionDto inputStudentPromotion, [FromRoute] Guid classroomId, [FromRoute] Guid studentId)
     {
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         try
         {
-            var splittedScholasticYear = inputStudentPromotion.SchoolYear.Split("-");
+            string[] splittedSchoolYear = inputStudentPromotion.SchoolYear.Split("-");
             
-            //Controllo se l'anno scolastico è valido
-            if (int.Parse(splittedScholasticYear[0]) +1 != int.Parse( splittedScholasticYear[1]))
-            {
-                throw new Exception("INVALID_SCHOOL_YEAR");
-            }
+            DateOnly startFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[0]), 09, 10);
+            DateOnly endSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 05, 15);
             
             //Controllo della data in modo da controllare se si è nel secondo quadrimestre e quindi si può procedere con la promozione
-            if (DateTime.UtcNow < new DateTime(int.Parse(splittedScholasticYear[1]), 06, 10))
+            if (DateTime.UtcNow.Year == int.Parse(splittedSchoolYear[1]) || DateTime.UtcNow.Year == int.Parse(splittedSchoolYear[0]))
             {
-                throw new Exception("UNAUTHORIZED_STUDENT_PROMOTION");
+                if (DateOnly.FromDateTime(DateTime.UtcNow) < endSecondQuarter)
+                {
+                   throw new Exception("UNAUTHORIZED_STUDENT_PROMOTION"); 
+                }
+            }
+            
+            //Controllo se l'anno scolastico è valido
+            if (int.Parse(splittedSchoolYear[0]) +1 != int.Parse(splittedSchoolYear[1]) || DateTime.UtcNow.Year < int.Parse(splittedSchoolYear[1]) 
+                || DateTime.UtcNow.Year > int.Parse(splittedSchoolYear[1]))
+            {
+                throw new Exception("INVALID_SCHOOL_YEAR");
             }
             
             //Prendo lo studente tramite l'id passato nella route
@@ -150,8 +156,9 @@ public class ClassroomsController : Controller
                 .GetByIdUsingIQueryable(query => query
                     .Where(el => el.Id == studentId)
                     .Include(el => el.StudentExams.Where(el =>
-                        el.Exam.Date.Year == int.Parse(splittedScholasticYear[0])
-                        || el.Exam.Date.Year == int.Parse(splittedScholasticYear[1])))
+                        el.Exam.Date >  startFirstQuarter
+                        && el.Exam.Date < endSecondQuarter)
+                    )
                     .ThenInclude(el => el.Exam)
                     .Include(el => el.Registry)
                 );
@@ -159,19 +166,20 @@ public class ClassroomsController : Controller
             //Calcolo la media di tutti i voti dello studente presi negli esami che ha svolto
             double finalGraduation = 0;
             
-            foreach (var el in takenStudent.StudentExams)
+            foreach (StudentExam el in takenStudent.StudentExams)
             {
                 finalGraduation += el.Grade ?? 0;
             }
 
             finalGraduation /= takenStudent.StudentExams.Count;
 
-            if (inputStudentPromotion.Promoted && finalGraduation < 6)
+            
+            if ((inputStudentPromotion.Promoted && inputStudentPromotion.ScholasticBehavior < 6) || (inputStudentPromotion.Promoted && finalGraduation < 6))
             {
                 return StatusCode(StatusCodes.Status400BadRequest, $"The student {takenStudent.Registry.Name} {takenStudent.Registry.Surname} doesn't respect the parameters to be promoted");
             }
             
-            //Creo una nuova instanza di PromotionHistory
+            //Creo una nuova instanza di PromotionHistory e modifico la classe dello studente
             PromotionHistory promotionHistory = new PromotionHistory()
             {
                 Id = Guid.NewGuid(),
@@ -184,6 +192,7 @@ public class ClassroomsController : Controller
             };
             takenStudent.ClassroomId = inputStudentPromotion.NextClassroom;
 
+            //Procedo con la creazione e l'update delle entità precedenti
             if (! new GenericRepository<PromotionHistory>(_context).Create(promotionHistory))
             {
                 throw new Exception("NOT_CREATED");
@@ -196,6 +205,7 @@ public class ClassroomsController : Controller
 
             PromotionHistoryDto response = new PromotionHistoryDto(promotionHistory);
             
+            _transactionRepository.CommitTransaction(transaction);
             return StatusCode(StatusCodes.Status200OK, response);
         }
         catch (Exception e)

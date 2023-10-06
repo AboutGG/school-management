@@ -203,8 +203,7 @@ public class StudentsController : Controller
     [HttpGet]
     [Route("{Id}/Reports")]
     [ProducesResponseType(200)]
-    public IActionResult GetStudentReport([FromRoute] Guid Id, [FromQuery] bool firstQuarter,
-        [FromQuery] string schoolYear)
+    public IActionResult GetStudentReport([FromRoute] Guid Id, [FromQuery] bool firstQuarter, [FromQuery] string schoolYear)
     {
         DateOnly startFirstQuarter;
         DateOnly endFirstQuarter;
