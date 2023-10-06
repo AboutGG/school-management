@@ -13,8 +13,6 @@ export class DetailUserComponent {
 
   details!: Registry;
 
-  // detailId!: any;
-
   constructor(
     private usersService: UsersService,
     private route: ActivatedRoute
@@ -26,7 +24,7 @@ export class DetailUserComponent {
     this.usersService.getDetailsUser(this.id).subscribe((res: Registry) => {
       console.log(res);
       this.details = res;
-      // this.detailId = this.route.snapshot.paramMap.get("details");
     });
+    
   }
 }
