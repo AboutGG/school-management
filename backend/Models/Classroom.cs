@@ -21,6 +21,7 @@ public class Classroom : Deleted
     #region External Keys
     public virtual ICollection<Student> Students { get; set; }
     public virtual IList<TeacherSubjectClassroom> TeacherSubjectsClassrooms { get; set; }
+    public virtual List<PromotionHistory> PromotionHistories { get; set; }
     
     #endregion
 }

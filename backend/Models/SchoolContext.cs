@@ -17,6 +17,8 @@ public class SchoolContext : DbContext
     public DbSet<StudentExam> RegistryExams { get; set; }
     public DbSet<Classroom> Classrooms { get; set; }
     public DbSet<Circular> Circulars { get; set; }
+    public DbSet<PromotionHistory> PromotionsHistories { get; set; }
+
     #endregion
 
     public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
@@ -40,6 +42,7 @@ public class SchoolContext : DbContext
         modelBuilder.Entity<StudentExam>().HasQueryFilter(el => el.DeletedAt == null);
         modelBuilder.Entity<TeacherSubjectClassroom>().HasQueryFilter(el => el.DeletedAt == null);
         modelBuilder.Entity<Circular>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<PromotionHistory>().HasQueryFilter(el => el.DeletedAt == null);
         
         #endregion
 
@@ -139,6 +142,23 @@ public class SchoolContext : DbContext
             .HasOne<Student>(re => re.Student)
             .WithMany(r => r.StudentExams)
             .HasForeignKey(re => re.StudentId);
+
+        #endregion
+
+        #region PromotionHistory
+
+        //PromotionHistory relation many-to-many
+
+        modelBuilder.Entity<PromotionHistory>()
+            .HasOne<Classroom>(ph => ph.PreviousClassroom)
+            .WithMany(c => c.PromotionHistories)
+            .HasForeignKey(ph => ph.PreviousClassroomId);
+
+        modelBuilder.Entity<PromotionHistory>()
+            .HasOne<Student>(ph => ph.Student)
+            .WithMany(s => s.PromotionHistories)
+            .HasForeignKey(ph => ph.StudentId);
+        
 
         #endregion
     }
