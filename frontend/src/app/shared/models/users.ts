@@ -2,9 +2,12 @@ import { TeacherSubject } from "./subjects"
 
 export interface Users {
   classroom?: string
+  classroomId?: string
   user: User
   registry: Registry
+  role: string
 }
+
 
 export interface User {
   id?: string
@@ -20,14 +23,36 @@ export interface TypeCount {
 }
 
 export interface Registry {
-  id?: string
-  name: string
-  surname: string
-  gender: string
-  birth?: string
-  email?: string
-  address?: string
-  telephone?: string //date format "yyyy-mm-dd"
+  id?: string;
+  name: string;
+  surname: string;
+  gender: string;
+  birth?: string;
+  email?: string;
+  address?: string;
+  telephone?: string; //date format "yyyy-mm-dd"
+  role?: string;
+
+  teacher?: Teacher;
+  student?: Student;
+}
+
+export interface ListResponse<T> {
+  data: T,
+  total: number
+}
+
+export interface Teacher {
+  id: string;
+  registryId: string;
+  userId: string;
+}
+
+export interface Student {
+  id: string;
+  registryId: string;
+  userId: string;
+  classroom: string;
 }
 
 export interface StudentExams {

@@ -244,7 +244,7 @@ public class UsersController : Controller
         }
 
         User userToDelete = users.GetById(user => user.Id == id, user => user.Student, user => user.Teacher);
-        Registry registryToDelete = registries.GetById(reg => reg.Id == userToDelete.Student.RegistryId);
+        Registry registryToDelete = registries.GetById(reg => userToDelete.Student != null ? reg.Id == userToDelete.Student.RegistryId : reg.Id == userToDelete.Teacher.RegistryId);
 
         //When i can't delete an Entity it returns a Throw exception error then i can rollback all
         try

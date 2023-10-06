@@ -13,3 +13,49 @@
   font-size: 30px;
   color: #ffc107;
 }/*# sourceMappingURL=list-users.component.css.map */
+
+hr {
+  margin: 1rem 0;
+  color: inherit;
+  border: 0;
+  border-top: var(--bs-border-width) solid;
+  opacity: 0.25;
+}
+
+td,
+th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* .icon-data {
+  border: 2px solid;
+  border-radius: 50px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffb900;
+  margin-left: 20px;
+} */
+
+.dropdown-toggle {
+  background-color: #ffc422;
+  color: black;
+  border: 2px solid;
+  border-color: #ffb900;
+
+}
+
+.dropdown-item:hover {
+  background-color: #ffc422;
+}
+
+.smallForm {
+  font-size: 12px;
+}
+
+select {
+  width: 150px;
+}

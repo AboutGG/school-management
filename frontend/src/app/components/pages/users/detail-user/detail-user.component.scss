@@ -9,10 +9,23 @@
     color:#ffc107;
 }
 
-.eye-icon {
-    font-size: 2rem;
-    color: black;
+.icon {
+    border: 2px solid;
+    border-radius: 50px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffb900;
+    margin-left: 20px;
 }
+
+.eye-icon {
+    font-size: 30px;
+        color: #ffc107;
+}
+
 
 .icon-default {
     width: 5rem;
@@ -28,4 +41,8 @@
     justify-content: center;
     align-items: center;
     color:#ffc107;
+}
+
+.btn-outline-warning {
+    color: black;
 }
