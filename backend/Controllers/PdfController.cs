@@ -35,6 +35,7 @@ public class PdfController : Controller
                 CircularNumber = circular.CircularNumber,
                 UploadDate = circular.UploadDate,
                 Location = circular.location,
+                Object = circular.Object,
                 Header = circular.header,
                 Body = circular.body,
                 Sign = circular.sign
