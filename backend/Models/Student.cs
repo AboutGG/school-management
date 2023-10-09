@@ -29,6 +29,8 @@ public class Student : Deleted
     #region Foreign Keys
 
     public virtual List<StudentExam> StudentExams{ get; set; }
+    
+    public virtual List<PromotionHistory> PromotionHistories { get; set; }
 
     #endregion
 }

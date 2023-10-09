@@ -15,7 +15,6 @@ import { ShowClassComponent } from './components/pages/classes/show-class/show-c
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
 import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
-import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
 import { NotFoundComponent } from './components/pages/not-found/not-found.component';
 import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
 import { ExamslistComponent } from './components/pages/examslist/examslist.component';
@@ -37,7 +36,6 @@ import { StudentSubjectsComponent } from './components/pages/student-subjects/st
     DashboardComponent,
     ListUsersComponent,
     DetailUserComponent,
-    EditUserComponent,
     NotFoundComponent,
     ExamslistComponent,
     ExamsStudentListComponent,

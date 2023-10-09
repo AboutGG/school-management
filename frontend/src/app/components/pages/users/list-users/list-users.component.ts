@@ -1,74 +1,134 @@
 import { Component } from '@angular/core';
-import { Registry, Users } from 'src/app/shared/models/users';
+import { ActivatedRoute } from '@angular/router';
+import { Registry, Users, ListResponse } from 'src/app/shared/models/users';
+import { UsersService } from 'src/app/shared/service/users.service';
+
 
 @Component({
-  selector: 'app-list-users',
-  templateUrl: './list-users.component.html',
-  styleUrls: ['./list-users.component.scss']
+  selector: "app-list-users",
+  templateUrl: "./list-users.component.html",
+  styleUrls: ["./list-users.component.scss"],
 })
 export class ListUsersComponent {
-  users: Registry[] = [{
-    name: "Giorgio",
-    surname: "Catania",
-    gender: "Uomo",
-    birth: "26-03-1991"
-  },{
-    name: "Andrea",
-    surname: "Palermo",
-    gender: "Uomo",
-    birth: "03-12-2001"
-  },
-  {
-    name: "Gigi",
-    surname: "Sedia",
-    gender: "Uomo",
-    birth: "12-05-1986"
-  },
-  {
-    name: "Angela",
-    surname: "Bianco",
-    gender: "Femmina",
-    birth: "07-02-1995"
-  },
-  {
-    name: "Anna",
-    surname: "Lina",
-    gender: "Other",
-    birth: "20-08-1991"
-  },
-  {
-    name: "Salvo",
-    surname: "Stanco",
-    gender: "Uomo",
-    birth: "13-10-1999"
-  },
-  {
-    name: "Maria",
-    surname: "Quoto",
-    gender: "Femmina",
-    birth: "02-11-1961"
-  },
-  {
-    name: "Mia",
-    surname: "Amica",
-    gender: "Femmina",
-    birth: "24-09-1971"
-  },
-  {
-    name: "Tino",
-    surname: "Gaetano",
-    gender: "Other",
-    birth: "14-12-2003"
-  }];
+  constructor(private usersService: UsersService, private route: ActivatedRoute) {}
 
-  role: string = "";
-  action: string = "";
-
-  onClickRole(role: string): void {
-    this.role = role;
+  ngOnInit(): void {
+    this.page = 1;
+    this.getUser("Name", "asc", "name");
   }
 
-  onClickAction(action: string): void {
+  registries: Registry[] = [];
+  filter: string = "";
+  action: string = "";
+  id!: string;
+  page: number = 1;
+  text: string = "";
+
+  userEdit!: string;
+
+  orders: {
+    name: "asc" | "desc";
+    surname: "asc" | "desc";
+    birth: "asc" | "desc";
+  } = {
+    name: "asc",
+    surname: "asc",
+    birth: "asc",
+  };
+
+  onClickRole(event: any): void {
+    this.filter = event.target.value;
+    this.page = 1;
+    console.log(this.filter);
+    if (this.filter === "all") {
+      window.location.reload();
+    } else {
+      this.getUser("Name", this.orders.name);
+    }
+  }
+
+  onClickAction(action: string, id: string): void {
     this.action = action;
+    this.id = id;
+    console.log(this.id);
+  }
+
+  onClickPage(page: number) {
+    this.page = page;
+    console.log(this.page);
+    this.getUser("Name", this.orders["name"]);
+  }
+
+  getUser(
+    order: string,
+    type: "asc" | "desc",
+    id?: keyof typeof this.orders,
+    search?: string
+  ): void {
+    let role = "";
+    search = this.text;
+
+    switch (this.filter) {
+      case "student":
+        role = "student";
+        break;
+      case "teacher":
+        role = "teacher";
+        break;
+    }
+    console.log(this.filter);
+
+    
+    this.usersService
+      .getUsers(order, type, this.page, this.filter, search).subscribe({
+        next: (res: ListResponse<Registry[]>) => {
+          console.log(res);
+          console.log(id);
+
+          if (id) {
+            this.orders = {
+              name: "asc",
+              surname: "asc",
+              birth: "asc",
+              [id]: type,
+            };
+          }
+          console.log("orders", this.orders);
+          // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
+          // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc";
+          // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
+
+          this.registries = res.data;
+          console.log(this.registries);
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+  }
+
+  // saveUser(user: string) {
+  //   this.userEdit = user;
+  //   this.getUser();
+  // }
+
+  dUser(id: string): void {
+    console.log(id);
+    this.usersService.deleteUser(id).subscribe({
+      next: (res) => {
+        this.page = 1;
+        this.getUser("Name", "asc", "name");
+        console.log(res);
+      },
+      error: (error) => {
+        console.log("error", error);
+      },
+    });
+  }
+
+  saveSearch(text: string) {
+    this.text = text;
+    this.getUser("Name", "asc", "name", this.text);
   }
 }
+
