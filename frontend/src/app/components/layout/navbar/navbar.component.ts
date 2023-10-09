@@ -57,7 +57,7 @@ export class NavbarComponent implements OnInit {
 
   onSubmit()
   {
-    this.accountService.putUser(this.accountForm.value).subscribe()
+    this.accountService.putUser(this.accountForm.value, this.users.id).subscribe()
     console.log(this.accountForm.value)
   }
 }
