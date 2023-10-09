@@ -66,6 +66,10 @@ public static class ErrorManager
                 error = new ErrorResponse(StatusCodes.Status400BadRequest,
                     "The password has not changed", e.StackTrace);
                 return error;
+            case "UNAUTHORIZED_DETAIL":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized,
+                    "You are not authorized to access on the other users detail", e.StackTrace);
+                return error;
             
             default:
                 error = new ErrorResponse(StatusCodes.Status400BadRequest, e.Message, e.StackTrace);
