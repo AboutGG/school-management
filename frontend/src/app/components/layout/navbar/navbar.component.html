@@ -1,35 +1,110 @@
 <nav class="navbar navbar-dark bg-dark position-fixed vw-100">
-  <div class="container-fluid wrapper">
+    <div class="container-fluid wrapper">
 
-    <div class="container-left d-flex flex-row">
+        <div class="container-left d-flex flex-row">
 
-      <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"> 
-        <img class="nav-logo" src="../../../../assets/logo.png" alt="logo"> 
-      </div>
+            <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <img class="nav-logo" src="../../../../assets/logo.png" alt="logo">
+            </div>
 
-      <button (click)="handleSidebarToggle()" class="navbar-toggler" type="button" data-bs-toggle="collapse"
-        data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false"
-        aria-label="Toggle navigation">
-        <i class="bi bi-list-nested text-white-img toggle-img"></i>
-      </button>
+            <button (click)="handleSidebarToggle()" class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="bi bi-list-nested text-white-img toggle-img"></i>
+            </button>
 
+        </div>
+
+        <div class="container-right d-flex flex-row align align-items-center">
+            <i class="bi bi-person-circle text-white profile-img"></i>
+
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle bg-transparent b-0" type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    Ciao, {{users.name}}
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-person-plus-fill"></i> Profilo </a></li>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i
+                            class="bi bi-gear-fill"></i> Impostazioni </a></li>
+                    <li (click)="logout()"><a class="dropdown-item" href="#"> <i class="bi bi-escape"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-
-    <div class="container-right d-flex flex-row align align-items-center">
-      <i class="bi bi-person-circle text-white profile-img"></i>
-
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle bg-transparent b-0" type="button" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          Ciao, {{users.name}}
-        </button>
-       
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#"> <i class="bi bi-person-plus-fill"></i> Profilo </a></li>
-          <li> <a class="dropdown-item" href="#"> <i class="bi bi-gear-fill"></i> Impostazioni </a> </li>
-          <li (click)="logout()"><a class="dropdown-item" href="#"> <i class="bi bi-escape"></i> Logout</a> </li>
-        </ul>
-      </div>
-    </div>
-  </div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark border-bottom-0">
+                <h5 class="modal-title text-white" id="exampleModalLabel">Impostazioni</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 ">
+                <div class="container ">
+                    <div class="row bg-pages rounded-bottom">
+                        <div class="col-3 bg-dark">
+                            <ul class="nav nav-pills flex-column mb-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" [ngClass]="{'active': selectedTab === ''}"
+                                       aria-current="page" (click)="switch('')">
+                                        Generale
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" [ngClass]="{'active': selectedTab === 'account'}"
+                                       (click)="switch('account')">
+                                        Account
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-auto p-3" [ngSwitch]="selectedTab">
+
+                            <!-- Account form-->
+                            <div *ngSwitchCase="'account'">
+                                <h6 style="padding-right: 12px">Cambia i dati di accesso</h6>
+                                <form [formGroup]="accountForm" (ngSubmit)="onSubmit()" class="container">
+
+                                    <div class="form-group">
+                                        <label for="username">Username:</label>
+                                        <input type="text" id="username" name="name" class="form-control"
+                                               formControlName="username">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="oldpassword">Old Password:</label>
+                                        <input type="password" id="oldpassword" name="oldpassword" class="form-control"
+                                               formControlName="oldpassword">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="newpassword">New Password:</label>
+                                        <input type="password" id="newpassword" name="newpassword" class="form-control"
+                                               formControlName="newpassword">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-secondary mt-3 ">Invia</button>
+                                </form>
+                            </div>
+
+                            <div *ngSwitchDefault>
+                                output2
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--      <div class="modal-footer">-->
+            <!--        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+            <!--        <button type="button" class="btn btn-primary">Save changes</button>-->
+            <!--      </div>-->
+        </div>
+    </div>
+</div>
