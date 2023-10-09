@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -56,9 +57,26 @@ public class DetailsController : Controller
     [ProducesResponseType(200, Type = typeof(UserDetailResponse))]
     [ProducesResponseType(404)]
     [ProducesResponseType(400)]
-    public IActionResult GetUserDetail([FromRoute]Guid Id, [FromHeader] string token)
+    public IActionResult GetUserDetail([FromRoute]Guid Id, [FromHeader] string Token)
     {
+        JwtSecurityToken decodedToken;
         UserDetailResponse response;
+        try
+        {
+            decodedToken = JWTHandler.DecodeJwtToken(Token);
+            Guid takenId = new Guid(decodedToken.Payload["userid"].ToString());
+            string takenRole = decodedToken.Payload["role"].ToString();
+
+            if (takenId != Id && takenRole.Trim().ToLower() != "teacher")
+            {
+                throw new Exception("UNAUTHORIZED_DETAIL");
+            }
+        }
+        catch (Exception e)
+        {
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
         
         var user = new GenericRepository<User>(_context)
             .GetByIdUsingIQueryable(query => query
