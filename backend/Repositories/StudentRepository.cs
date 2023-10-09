@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using backend.Dto;
+﻿using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,16 +10,14 @@ public class StudentRepository : IStudentRepository
     #region Attributes
 
     private readonly SchoolContext _context;
-    private readonly IMapper _mapper;
 
     #endregion
 
     #region Costructor
 
-    public StudentRepository(SchoolContext context, IMapper mapper)
+    public StudentRepository(SchoolContext context)
     {
         this._context = context;
-        _mapper = mapper;
     }
 
     #endregion

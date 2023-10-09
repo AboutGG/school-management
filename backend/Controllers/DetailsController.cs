@@ -1,4 +1,3 @@
-using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -14,8 +13,7 @@ namespace backend.Controllers;
 public class DetailsController : Controller
 {
     #region Attributes
-
-    private readonly IMapper _mapper;
+    
     private readonly IStudentRepository _studentRepository;
     private readonly ITeacherRepository _teacherRepository;
     private readonly IRegistryRepository _registryRepository;
@@ -28,8 +26,7 @@ public class DetailsController : Controller
 
     #region Costructor
 
-    public DetailsController(IMapper mapper,
-        IStudentRepository studentRepository,
+    public DetailsController(IStudentRepository studentRepository,
         ITeacherRepository teacherRepository,
         IRegistryRepository registryRepository,
         IUserRepository userRepository,
@@ -37,7 +34,6 @@ public class DetailsController : Controller
         IClassroomRepository classroomRepository,
         SchoolContext context)
     {
-        _mapper = mapper;
         _studentRepository = studentRepository;
         _teacherRepository = teacherRepository;
         _registryRepository = registryRepository;
@@ -83,7 +79,7 @@ public class DetailsController : Controller
     #region Edit detail
 
     /// <summary> Edit the Teacher or Student details. </summary>
-    /// <param name="Id"></param>
+    /// <param name="Id">is the Userid</param>
     /// <param name="updatedUserDetail"></param>
     /// <returns>204 = Successfully, 404 = not found the id, 400 = bad request</returns>
     [HttpPut("{Id}")]

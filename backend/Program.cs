@@ -43,9 +43,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// AutoMapper Links
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 // To make every route in lowercase
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 

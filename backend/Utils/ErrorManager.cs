@@ -10,7 +10,7 @@ public static class ErrorManager
         switch (e.Message)
         {
             case "NOT_FOUND":
-                error = new ErrorResponse(StatusCodes.Status404NotFound,"Item not found", e.StackTrace);
+                error = new ErrorResponse(StatusCodes.Status404NotFound, "Item not found", e.StackTrace);
                 return error;
             case "UNAUTHORIZED":
                 error = new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid", e.StackTrace);
@@ -31,19 +31,44 @@ public static class ErrorManager
                 error = new ErrorResponse(StatusCodes.Status409Conflict, "The Id classroom is not valid", e.StackTrace);
                 return error;
             case "INVALID_PARAMETERS":
-                error = new ErrorResponse(StatusCodes.Status409Conflict, "The paremeters aren't valid", e.StackTrace);
+                error = new ErrorResponse(StatusCodes.Status409Conflict, "The parameters aren't valid", e.StackTrace);
                 return error;
-            case "INVALID_PDF_TYPE":
-                error = new ErrorResponse(StatusCodes.Status400BadRequest, "The type of the PDF is not valid", e.StackTrace);
+            case "UNAUTHORIZED_UPDATE_EXAM":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized,
+                    "You can't update this exam because you are not assigned on this classroom and/or subject",
+                    e.StackTrace);
                 return error;
             case "INVALID_SCHOOL_YEAR":
-                error = new ErrorResponse(StatusCodes.Status406NotAcceptable, "The school year is not valid", e.StackTrace); 
+                error = new ErrorResponse(StatusCodes.Status400BadRequest,
+                    "The school year which you send is not valid", e.StackTrace);
+                return error;
+            case "UNAUTHORIZED_STUDENT_PROMOTION":
+                error = new ErrorResponse(StatusCodes.Status400BadRequest,
+                    "You are not authorized to proceed with the student promotion", e.StackTrace);
+                return error;
+            case "INVALID_PDF_TYPE":
+                error = new ErrorResponse(StatusCodes.Status400BadRequest, "The type of the PDF is not valid",
+                    e.StackTrace);
                 return error;
             case "UNAUTHORIZED_QUARTER_REPORT":
-                error = new ErrorResponse(StatusCodes.Status401Unauthorized, "You can't access to the quarter reports", e.StackTrace); 
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized, "You can't access to the quarter reports",
+                    e.StackTrace);
                 return error;
+            case "CHANGE_PASSWORD_ACCESS_DENIED":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized,
+                    "You haven't the permissions to change the password of another user", e.StackTrace);
+                return error;
+            case "EQUALS_PASSWORDS":
+                error = new ErrorResponse(StatusCodes.Status409Conflict,
+                    "The new password can't be equal then the older", e.StackTrace);
+                return error;
+            case "PASSWORD_NOT_CHANGED":
+                error = new ErrorResponse(StatusCodes.Status400BadRequest,
+                    "The password has not changed", e.StackTrace);
+                return error;
+            
             default:
-                error = new ErrorResponse(StatusCodes.Status500InternalServerError,e.Message, e.StackTrace);
+                error = new ErrorResponse(StatusCodes.Status400BadRequest, e.Message, e.StackTrace);
                 return error;
         }
     }

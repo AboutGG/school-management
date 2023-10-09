@@ -1,35 +1,41 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ClassDetails } from '../models/classrooms';
-import { ListResponse } from '../models/listResponse';
-import { Classroom } from '../models/classrooms';
+import { ClassDetails, Classroom } from '../models/classrooms';
+import { ListResponse } from '../models/listresponse';
+import { TeacherClassroom } from '../models/classrooms';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ClassroomService {
-
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient) {}
 
   // get teachers classes
-  getDataClassroom(params: {}): Observable<ListResponse<any>>{
-    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/classrooms`,{params})
-
+  getDataClassroom(params: {}): Observable<ListResponse<any>> {
+    return this.http.get<ListResponse<any>>(
+      `https://localhost:7262/api/teachers/classrooms`,
+      { params }
+    );
   }
 
   //get single class id
-  getSingleClassroom(id: string, params: {}): Observable<ListResponse<any>>{
-    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/classrooms/${id}`, {params})
-    
+  getSingleClassroom(id: string, params: {}): Observable<ListResponse<any>> {
+    return this.http.get<ListResponse<any>>(
+      `https://localhost:7262/api/classrooms/${id}`,
+      { params }
+    );
   }
 
-  //get teacher subjects 
+  //get teacher subjects
   getTeacherSubjects(params: {}): Observable<ListResponse<any>> {
-    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/subjects`, {params})
+    return this.http.get<ListResponse<any>>(
+      `https://localhost:7262/api/teachers/subjects`,
+      { params }
+    );
   }
-  
 
-  
+  getClassroom(): Observable<Classroom[]> {
+    return this.http.get<Classroom[]>(`https://localhost:7262/api/classrooms`);
+  }
 }

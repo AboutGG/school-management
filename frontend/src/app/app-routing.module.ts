@@ -10,7 +10,6 @@ import { ShowClassComponent } from './components/pages/classes/show-class/show-c
 import { SubjectsComponent } from "./components/pages/subjects/subjects.component";
 import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
 import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
-import { EditUserComponent } from './components/pages/users/edit-user/edit-user.component';
 import { ExamsStudentListComponent } from "./components/pages/exams-student-list/exams-student-list.component";
 import { ExamslistComponent } from "./components/pages/examslist/examslist.component";
 import { StudentSubjectsComponent } from "./components/pages/student-subjects/student-subjects.component";
@@ -23,13 +22,14 @@ const routes: Routes = [
   { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard] },
   { path: "teachers/subjects", component:SubjectsComponent, canActivate: [AuthGuard] },
   { path: "students/subjects", component:StudentSubjectsComponent, canActivate: [AuthGuard] },
+  { path: "add-user/:id", component: AddUserComponent, canActivate: [AuthGuard] },
   { path: 'teachers/classes', component: ClassesComponent, canActivate: [AuthGuard] },
-  { path: 'students/classes', component: ShowClassComponent, canActivate: [AuthGuard] },
+  { path: 'students/classes/:id', component: ShowClassComponent, canActivate: [AuthGuard] },
+  { path: 'classes/:id', component: ShowClassComponent, canActivate: [AuthGuard]},
   { path: "not-found/:statusCode", component: NotFoundComponent },
   { path: "not-found", component: NotFoundComponent },
-  { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard] },
-  { path: 'edit-user', component: EditUserComponent, canActivate: [AuthGuard] },
-  { path: 'details', component: DetailUserComponent, canActivate: [AuthGuard] },
+  { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard]},
+  { path: 'details/:id', component: DetailUserComponent, canActivate: [AuthGuard] },
   { path: 'students/exams', component: ExamsStudentListComponent, canActivate: [AuthGuard] },
   { path: 'teachers/exams', component: ExamslistComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "not-found" },

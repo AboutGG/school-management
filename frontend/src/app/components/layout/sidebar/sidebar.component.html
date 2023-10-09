@@ -23,7 +23,7 @@
       </div>
     </div> -->
 
-    <div (click)="toggleCollapse()" class="link">
+    <div (click)="toggleCollapse()" *ngIf="isTeacher" class="link">
       <div class="content">
         <div class="icon">
           <i class="bi bi-person"></i>
@@ -36,7 +36,7 @@
     <div *ngIf="isExpanded" [ngClass]="{'collapse-content': !isCollapsed}" [ngClass]="{ 'expanded': isExpanded }"
       class="custom-collapse collapse-content">
       <div [routerLink]="['/add-user']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
-        <p>Crea Utenti</p>
+        <p>Crea Utente</p>
       </div>
       <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
         class="link" class="link">
@@ -44,13 +44,13 @@
       </div>
     </div>
 
-    <div [routerLink]="[linkByRole + '/classes']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
+    <div [routerLink]="[isTeacher ? linkByRole + '/classes/' : linkByRole + '/classes/'+ userId.classroomId]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
         <div class="icon">
           <i class="bi bi-newspaper"></i>
           <!--classes-->
         </div>
-        <div class="title">Classi</div>
+        <div class="title">{{ isTeacher ? 'Classi' : 'Classe' }}</div>
         <i class="invisible" *ngIf="isExpanded"
           [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>

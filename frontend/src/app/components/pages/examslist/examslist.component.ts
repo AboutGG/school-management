@@ -2,8 +2,8 @@ import { TeacherSubject } from './../../../shared/models/subjects';
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Classroom } from 'src/app/shared/models/classrooms';
-import { ListResponse } from 'src/app/shared/models/listResponse';
+import { TeacherClassroom } from 'src/app/shared/models/classrooms';
+import { ListResponse } from 'src/app/shared/models/listresponse';
 import { TeacherExam } from 'src/app/shared/models/teacherexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
@@ -27,7 +27,7 @@ export class ExamslistComponent {
   subjects: TeacherSubject[] = []
   subjectsName: string[] = []
   classroom!: string
-  classrooms: Classroom[] = []
+  classrooms: TeacherClassroom[] = []
   orders = {
     date: 'asc',
     subject: 'asc',
