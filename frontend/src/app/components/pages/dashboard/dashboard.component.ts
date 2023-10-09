@@ -100,23 +100,19 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCount()
-    this.getClassroomCount()
+    //this.getClassroomCount()
   }
 
   getCount() {
     this.commonService.getCount().subscribe((res) => {
-      this.count = res
+      this.count = res;
     })
   }
 
-  getClassroomCount() {
-    this.classroomService.getDataClassroom().subscribe(({total}) => {
-      this.count.Classrooms = total;
-      console.log("totale classi", total);
-    });
-  }
-
-  getSubjectCount() {
-    
-  }
+  // getClassroomCount() {
+  //   this.classroomService.getDataClassroom().subscribe(({total}) => {
+  //     this.count.Classrooms = total;
+  //     console.log("totale classi", total);
+  //   });
+  // }
 }
