@@ -29,6 +29,15 @@ hr{
   color: white;
 }
 
+.card-button{
+  text-align: center;
+  background-color: #1d1e2c;
+  color: white;
+}
+.card-button:hover{
+  color:#ffd45f;
+  background-color: #272833;
+}
 
 .card-left {
   max-height: 400px;

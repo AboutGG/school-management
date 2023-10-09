@@ -1,8 +1,11 @@
+import { HttpParams } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
-import { TypeCount } from "src/app/shared/models/users";
+import { TeacherExam } from "src/app/shared/models/teacherexam";
+import { ListResponse, TypeCount } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { CommonService } from "src/app/shared/service/common.service";
+import { ExamsService } from "src/app/shared/service/exams.service";
 import { TeacherService } from "src/app/shared/service/teacher.service";
 import { UsersService } from "src/app/shared/service/users.service";
 
@@ -19,34 +22,9 @@ export class DashboardComponent implements OnInit {
     Teachers:0,
     Classrooms:0
   }
-  isTeacher = this.authService.isTeacher()
+  isTeacher = this.authService.isTeacher();
 
-  cards = [
-    {
-      title: "Italiano",
-      text: "Esame Scritto",
-      date: "10/10/2023",
-      teacher: "Giordana Pistorio",
-      classroom: "1B"
-    },
-    {
-      title: "Spagnolo",
-      text: "Esame Orale",
-      date: "20/10/2023",
-      teacher: "Francesca Scollo",
-      classroom: "2A"
-    },
-    {
-      title: "Inglese",
-      text: "Esame Scritto",
-      date: "25/10/2023",
-      teacher: "Gigi Giuliano",
-      classroom: "5C"
-    },
-
-  ]
-
-  pagella = {title: "Pagella 1° Quadrimestre"}
+  pagella = {title: "Pagella 1° Quadrimestre", img: "assets/dashboard/logoCircolari.jpg"}
 
   pdfs = [
     {
@@ -91,15 +69,20 @@ export class DashboardComponent implements OnInit {
       img: "assets/dashboard/logoCircolari.jpg"
     },
   ]
+  exams!: TeacherExam[];
+  itemsPerPage: number = 3;
+
 
   constructor(
     private commonService: CommonService, 
     private classroomService: ClassroomService,
     private teacherService: TeacherService,
+    private examsService: ExamsService,
     private authService: AuthService ){ }
 
   ngOnInit(): void {
     this.getCount()
+    this.getExams(this.isTeacher);
     //this.getClassroomCount()
   }
 
@@ -108,6 +91,32 @@ export class DashboardComponent implements OnInit {
       this.count = res;
     })
   }
+
+  getExams(isTeacher: boolean) {
+    const params = new HttpParams()
+    .set('ItemsPerPage', this.itemsPerPage)
+
+    if (isTeacher) {
+      this.examsService.getTeacherExams(params).subscribe({
+        next: (res: ListResponse<TeacherExam[]>) => {
+          this.exams = res.data;
+        },
+        error: (err) => {
+          console.log('error dash', err);
+        }
+      });
+    } else {
+      this.examsService.getStudentExams().subscribe({
+        next: (res: ListResponse<TeacherExam[]>) => {
+          this.exams = res.data;
+        },
+        error: (err) => {
+          console.log('error dash', err);
+        }
+      });
+    }
+  }
+  
 
   // getClassroomCount() {
   //   this.classroomService.getDataClassroom().subscribe(({total}) => {
