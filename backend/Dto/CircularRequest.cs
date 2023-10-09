@@ -13,7 +13,8 @@ public class CircularRequest
     public DateOnly UploadDate { get; set; }
     
     public string location { get; set; }
-
+    
+    public string Object { get; set; }
     public string header { get; set; }
 
     public string body { get; set; }

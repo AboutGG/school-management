@@ -26,7 +26,11 @@ public class Circular : Deleted
     [JsonPropertyName("header")]
     public string Header { get; set; }
     
-    [Column("body")] 
+    [Column("object")] 
+    [JsonPropertyName("object")]
+    public string Object { get; set; }
+    
+    [Column("body")]
     [JsonPropertyName("body")]
     public string Body { get; set; }
 
