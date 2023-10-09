@@ -25,7 +25,7 @@
         </button>
        
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#"> <i class="bi bi-person-plus-fill"></i> Profilo </a></li>
+          <li><a class="dropdown-item" href="#" [routerLink]="['/details/' + this.users.id]"> <i class="bi bi-person-plus-fill"></i> Profilo </a></li>
           <li> <a class="dropdown-item" href="#"> <i class="bi bi-gear-fill"></i> Impostazioni </a> </li>
           <li (click)="logout()"><a class="dropdown-item" href="#"> <i class="bi bi-escape"></i> Logout</a> </li>
         </ul>
