@@ -23,7 +23,7 @@
       </div>
     </div> -->
 
-    <div (click)="toggleCollapse()" class="link">
+    <div (click)="toggleCollapse()" *ngIf="isTeacher" class="link">
       <div class="content">
         <div class="icon">
           <i class="bi bi-person"></i>
@@ -36,7 +36,7 @@
     <div *ngIf="isExpanded" [ngClass]="{'collapse-content': !isCollapsed}" [ngClass]="{ 'expanded': isExpanded }"
       class="custom-collapse collapse-content">
       <div [routerLink]="['/add-user']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
-        <p>Crea Utenti</p>
+        <p>Crea Utente</p>
       </div>
       <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
         class="link" class="link">

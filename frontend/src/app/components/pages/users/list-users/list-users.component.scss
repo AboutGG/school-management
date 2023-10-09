@@ -1,3 +1,85 @@
+// .icon-data {
+//     border: 2px solid;
+//     border-radius: 50px;
+//     width: 65px;
+//     height: 65px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     color: #ffc107;
+// }
+
+.list-icon {
+    font-size: 30px;
+    color:#ffc107;
+}
+
+// hr {
+//     margin: 1rem 0;
+//     color: inherit;
+//     border: 0;
+//     border-top: var(--bs-border-width) solid;
+//     opacity: 0.25;
+// }
+.icon {
+    border: 2px solid;
+    border-radius: 50px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffb900;
+    margin-left: 20px;
+}
+
+.bi-card-list {
+    font-size: 30px;
+    color: #ffb900;
+}
+
+// .input-container {
+//     position: relative;
+//     display: inline-block;
+// }
+  
+// .input-container input {
+//     margin-left: 10px;
+//     width: 12.5rem;
+//     padding: 0.4375rem 0.875rem;
+//     padding-right: 30px;
+//     color: #333;
+//     background-color: #fff;
+//     border: 1px solid #ddd;
+//     border-radius: 0.1875rem;
+// }
+  
+// .input-container i {
+//     position: absolute;
+//     right: 8px;
+//     top: 50%;
+//     transform: translateY(-50%);
+// }
+  
+// .bi-search {
+//     color: unset;
+// }
+
+// thead,
+// tbody {
+//   border: 1px solid #ddd;
+//   background-color: #fff;
+// }
+
+// .dropdown-item:active {
+//     background-color: #f8f9fa;
+//     color: black;
+// }
+
+// .page-link {
+//     color: black;
+// }
+
 .icon-data {
     border: 2px solid;
     border-radius: 50px;
@@ -9,8 +91,56 @@
     color: #ffc107;
 }
 
-.pencil-icon {
-    font-size: 30px;
-    color:#ffc107;
+// .pencil-icon {
+//     font-size: 30px;
+//     color: #ffc107;
+// }
+
+/*# sourceMappingURL=list-users.component.css.map */
+
+hr {
+    margin: 1rem 0;
+    color: inherit;
+    border: 0;
+    border-top: var(--bs-border-width) solid;
+    opacity: 0.25;
+}
+
+td,
+th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* .icon-data {
+  border: 2px solid;
+  border-radius: 50px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffb900;
+  margin-left: 20px;
+} */
+
+.dropdown-toggle {
+    background-color: #ffc422;
+    color: black;
+    border: 2px solid;
+    border-color: #ffb900;
+
+}
+
+.dropdown-item:hover {
+    background-color: #ffc422;
+}
+
+.smallForm {
+    font-size: 12px;
+}
+
+select {
+    width: 150px;
 }
 

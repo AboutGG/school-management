@@ -16,6 +16,8 @@ public class SchoolContext : DbContext
     public DbSet<Exam> Exams { get; set; }
     public DbSet<StudentExam> RegistryExams { get; set; }
     public DbSet<Classroom> Classrooms { get; set; }
+    public DbSet<Circular> Circulars { get; set; }
+    public DbSet<PromotionHistory> PromotionsHistories { get; set; }
 
     #endregion
 
@@ -39,7 +41,9 @@ public class SchoolContext : DbContext
         modelBuilder.Entity<Subject>().HasQueryFilter(el => el.DeletedAt == null);
         modelBuilder.Entity<StudentExam>().HasQueryFilter(el => el.DeletedAt == null);
         modelBuilder.Entity<TeacherSubjectClassroom>().HasQueryFilter(el => el.DeletedAt == null);
-
+        modelBuilder.Entity<Circular>().HasQueryFilter(el => el.DeletedAt == null);
+        modelBuilder.Entity<PromotionHistory>().HasQueryFilter(el => el.DeletedAt == null);
+        
         #endregion
 
         #region Uniques
@@ -103,7 +107,7 @@ public class SchoolContext : DbContext
 
         modelBuilder.Entity<TeacherSubjectClassroom>()
             .HasOne<Subject>(ts => ts.Subject)
-            .WithMany(s => s.TeacherSubjects)
+            .WithMany(s => s.TeacherSubjectsClassrooms)
             .HasForeignKey(ts => ts.SubjectId);
 
         modelBuilder.Entity<TeacherSubjectClassroom>()
@@ -138,6 +142,23 @@ public class SchoolContext : DbContext
             .HasOne<Student>(re => re.Student)
             .WithMany(r => r.StudentExams)
             .HasForeignKey(re => re.StudentId);
+
+        #endregion
+
+        #region PromotionHistory
+
+        //PromotionHistory relation many-to-many
+
+        modelBuilder.Entity<PromotionHistory>()
+            .HasOne<Classroom>(ph => ph.PreviousClassroom)
+            .WithMany(c => c.PromotionHistories)
+            .HasForeignKey(ph => ph.PreviousClassroomId);
+
+        modelBuilder.Entity<PromotionHistory>()
+            .HasOne<Student>(ph => ph.Student)
+            .WithMany(s => s.PromotionHistories)
+            .HasForeignKey(ph => ph.StudentId);
+        
 
         #endregion
     }
