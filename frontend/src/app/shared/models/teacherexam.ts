@@ -1,6 +1,15 @@
 export interface TeacherExam {
-  examId: string,
-  examDate: string,
-  classroom: string,
-  subject: string
+  id?: string,
+  date: string,
+  classroom: {
+    id: string,
+    name: string
+  },
+  subject: Subject
 }
+
+export interface Subject {
+  id: string,
+  name: string,
+}
+

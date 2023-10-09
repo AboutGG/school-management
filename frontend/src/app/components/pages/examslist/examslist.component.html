@@ -9,24 +9,26 @@
     <hr>
 </div>
 <div class="container mt-6 bb">
-    <div class="d-flex justify-content-center align-items-center w-100 flex-column">
-    </div>
-    <div class="col-md-2 mb-3 d-flex w-100 justify-content-center">
-        <div class="d-flex">
-            <form [formGroup]="formSubjects" class="px-2">
+    <div class="row mb-3 justify-content-between">
+        <div class="col-6 d-flex">
+            <form [formGroup]="formSubjects" class="d-flex pe-2 justify-content-center ">
                 <select class="btn btn-warning" formControlName="subjects"
                     (click)="[onClickFilter = true, dropdownFilter()]">
                     <option selected value="">Tutte le materie</option>
                     <option *ngFor="let subject of subjects">{{subject.subjectName}}</option>
                 </select>
             </form>
-            <form [formGroup]="formClassrooms" class="px-2">
+            <form [formGroup]="formClassrooms" class="d-flex ps-2 justify-content-center ">
                 <select class="btn btn-warning" formControlName="classrooms"
                     (click)="[onClickFilter = false, dropdownFilter()]">
                     <option selected value="">Tutte le classi</option>
                     <option *ngFor="let classroom of classrooms">{{classroom.name_classroom}}</option>
                 </select>
             </form>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <button class="w-25 btn btn-warning" data-bs-target="#exam" data-bs-toggle="modal"
+                (click)="isEdit = false">Crea esame</button>
         </div>
     </div>
     <table class="table table-hover">
@@ -55,11 +57,11 @@
             </tr>
         </thead>
         <tbody *ngFor="let exam of examsList, let i = index">
-            <tr *ngIf="(!classroom || exam.classroom === classroom) && (!subject || exam.subject === subject)">
+            <tr>
                 <th scope="row">{{i + 1}}</th>
-                <td>{{exam.examDate}}</td>
-                <td>{{exam.subject}}</td>
-                <td>{{exam.classroom}}</td>
+                <td>{{exam.date}}</td>
+                <td>{{exam.subject.name}}</td>
+                <td>{{exam.classroom.name}}</td>
                 <td>
                     <div class="dropdown">
                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -69,10 +71,11 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" [routerLink]="'/details/'"><i
                                         class="bi bi-eye-fill px-2"></i>Visualizza</a></li>
-                            <li><a class="dropdown-item" [routerLink]="'/esami/'"><i
-                                        class="bi bi-book-fill px-2"></i>Vai a Esami</a></li>
-                            <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a>
+                            <li><a (click)="[editExam(exam), isEdit = true]" class="dropdown-item"
+                                    data-bs-toggle="modal" data-bs-target="#exam"><i
+                                        class="bi bi-book-fill px-2"></i>Modifica</a></li>
+                            <li><a class="dropdown-item" style="cursor: pointer" data-bs-toggle="modal"
+                                    data-bs-target="#deleteExam"><i class="bi bi-trash3-fill px-2"></i>Elimina</a>
                             </li>
                         </ul>
                     </div>
@@ -81,11 +84,54 @@
         </tbody>
     </table>
 
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteModalLabel">CONFERMA ELIMINAZIONE</h1>
+                    <h1 *ngIf="isEdit === false" class="modal-title fs-5" id="ExamLabel">CONFERMA CREAZIONE</h1>
+                    <h1 *ngIf="isEdit === true" class="modal-title fs-5" id="ExamLabel">CONFERMA MODIFICA</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="examForm">
+                        <div class="mt-5 mb-2">
+                            <label for="date" class="form-label">Data: </label>
+                            <input *ngIf="!isEdit" type="date" class="form-control"
+                                formControlName="date">
+                            <input *ngIf="isEdit" type="date" class="form-control"
+                                formControlName="date">
+                        </div>
+                        <div class="d-flex flex-column my-2" formGroupName="classroom">
+                            <label for="classroom" class="form-label">Classe: </label>
+                            <select class="btn btn-warning w-100" formControlName="classroom">
+                                <option>Scegli classe</option>
+                                <option *ngFor="let classroom of classrooms" (click)="getTeacherSubjectByClassroom(classroom.id_classroom)">
+                                    {{classroom.name_classroom}}</option>
+                            </select>
+                        </div>
+                        <div class="d-flex flex-column my-2" formGroupName="subject">
+                            <label for="subject" class="form-label">Materia: </label>
+                            <select class="btn btn-warning w-100" formControlName="subject" >
+                                <option *ngFor="let subject of subjects">
+                                    {{subject.subjectName}}</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button (click)="onClickModal()" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">CONFERMA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteExam" tabindex="-1" aria-labelledby="deleteExamLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteExamLabel">CONFERMA ELIMINAZIONE</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -93,7 +139,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ELIMINA</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CONFERMA</button>
                 </div>
             </div>
         </div>
