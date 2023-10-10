@@ -15,5 +15,13 @@ export class ExamsService {
   getTeacherExams(params?: HttpParams) {
     return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/exams`, { params })
   }
-  
+
+  getStudentsReports(params: HttpParams, id: string){
+    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/students/${id}/reports`, { params })
+
+  }
+
 }
+ 
+  
+

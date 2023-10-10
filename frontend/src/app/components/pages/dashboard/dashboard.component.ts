@@ -1,5 +1,6 @@
 import { HttpParams } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
+import { StudentExam } from "src/app/shared/models/studentexam";
 import { TeacherExam } from "src/app/shared/models/teacherexam";
 import { ListResponse, TypeCount } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
@@ -24,7 +25,10 @@ export class DashboardComponent implements OnInit {
   }
   isTeacher = this.authService.isTeacher();
 
-  pagella = {title: "Pagella 1° Quadrimestre", img: "assets/dashboard/logoCircolari.jpg"}
+  pagella = {
+    title: "Pagella 1° Quadrimestre", 
+    img: "assets/dashboard/logoCircolari.jpg"
+  }
 
   pdfs = [
     {
@@ -69,8 +73,10 @@ export class DashboardComponent implements OnInit {
       img: "assets/dashboard/logoCircolari.jpg"
     },
   ]
-  exams!: TeacherExam[];
+  examsTeachers!: TeacherExam[];
+  examsStudents!: StudentExam[];
   itemsPerPage: number = 3;
+  order: string = 'Date'
 
 
   constructor(
@@ -94,21 +100,22 @@ export class DashboardComponent implements OnInit {
 
   getExams(isTeacher: boolean) {
     const params = new HttpParams()
+    .set('Order', this.order)
     .set('ItemsPerPage', this.itemsPerPage)
 
     if (isTeacher) {
       this.examsService.getTeacherExams(params).subscribe({
         next: (res: ListResponse<TeacherExam[]>) => {
-          this.exams = res.data;
+          this.examsTeachers = res.data;
         },
         error: (err) => {
           console.log('error dash', err);
         }
       });
     } else {
-      this.examsService.getStudentExams().subscribe({
-        next: (res: ListResponse<TeacherExam[]>) => {
-          this.exams = res.data;
+      this.examsService.getStudentExams(params).subscribe({
+        next: (res: ListResponse<StudentExam[]>) => {
+          this.examsStudents = res.data;
         },
         error: (err) => {
           console.log('error dash', err);
