@@ -38,7 +38,7 @@ export class ExamslistComponent {
   filtered: string = ""
   search: string = ""
   orderType: string = "asc"
-  order: string = "Id"
+  order: string = "Date"
   onClickFilter: boolean = false
   totalPages!: number
   selectedPages!: number
@@ -52,10 +52,6 @@ export class ExamslistComponent {
   examForm!: FormGroup
 
   ngOnInit(): void {
-    this.getUser();
-    this.getTeacherExams();
-    this.getTeacherClassrooms();
-    this.getTeacherSubjects();
     this.date = new FormControl(null, Validators.required),
     this.classroom = new FormGroup({
       classroom: new FormControl(null, Validators.required)
@@ -68,6 +64,10 @@ export class ExamslistComponent {
       classroom: this.classroom,
       subject: this.subject
     });
+    this.getUser();
+    this.getTeacherExams();
+    this.getTeacherClassrooms();
+    this.getTeacherSubjects();
   }
 
 
@@ -88,7 +88,6 @@ export class ExamslistComponent {
       next: (res) => {
         this.user = res
         console.log("DEBUG USER ", this.user);
-        
       }
     })
   }
@@ -138,7 +137,6 @@ export class ExamslistComponent {
   }
 
   editExam(exam: TeacherExam) {
-    console.log(exam);
     this.examId = exam.id
     this.date.patchValue({
       date: exam.date,
@@ -149,15 +147,21 @@ export class ExamslistComponent {
     this.subject.patchValue({
       subject: exam.subject
     })
+    console.log(exam);
     console.log(this.date.value);
+    console.log(this.classroom.value);
+    console.log(this.subject.value);
+    
+    
   }
 
-  getTeacherSubjectByClassroom(classroomId: any){
+  getTeacherSubjectByClassroom(classroomId: string){
+    console.log(classroomId);
     const params = new HttpParams().set('classroomId', classroomId);
     this.teacherService.getTeacherSubjectByClassroom(this.user.id, params).subscribe({
       next: (res) => {
-        // this.subjectsByClassroom = res;
-        console.log("SONO RES ",res);
+        this.subjectsByClassroom = res;
+        console.log("SONO RES ", res);
       }
     })
   }

@@ -19,7 +19,8 @@ public class JWTHandler
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), 
             new (JwtRegisteredClaimNames.Sub, user.Username),
-            new("userid", user.Id.ToString())
+            new("userid", user.Id.ToString()),
+            new ("role", user.Teacher != null ? "teacher" : user.Student != null ? "student": "unknown")
         };
         
         // Crea il token descriptor

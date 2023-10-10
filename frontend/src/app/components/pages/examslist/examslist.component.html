@@ -59,7 +59,7 @@
         <tbody *ngFor="let exam of examsList, let i = index">
             <tr>
                 <th scope="row">{{i + 1}}</th>
-                <td>{{exam.date}}</td>
+                <td>{{exam.date | date: "dd/MM/yyyy"}}</td>
                 <td>{{exam.subject.name}}</td>
                 <td>{{exam.classroom.name}}</td>
                 <td>
@@ -103,17 +103,16 @@
                         </div>
                         <div class="d-flex flex-column my-2" formGroupName="classroom">
                             <label for="classroom" class="form-label">Classe: </label>
-                            <select class="btn btn-warning w-100" formControlName="classroom">
-                                <option>Scegli classe</option>
-                                <option *ngFor="let classroom of classrooms" (click)="getTeacherSubjectByClassroom(classroom.id_classroom)">
+                            <select class="btn btn-warning w-100" formControlName="name">
+                                <option value="classroom" *ngFor="let classroom of classrooms" (click)="getTeacherSubjectByClassroom(classroom.id_classroom!)">
                                     {{classroom.name_classroom}}</option>
                             </select>
                         </div>
                         <div class="d-flex flex-column my-2" formGroupName="subject">
                             <label for="subject" class="form-label">Materia: </label>
-                            <select class="btn btn-warning w-100" formControlName="subject" >
-                                <option *ngFor="let subject of subjects">
-                                    {{subject.subjectName}}</option>
+                            <select class="btn btn-warning w-100" formControlName="name">
+                                <option value="subject" *ngFor="let subject of subjectsByClassroom">
+                                    {{subject.name}}</option>
                             </select>
                         </div>
                     </form>
@@ -163,4 +162,4 @@
                 </a>
             </li>
         </ul>
-    </nav>
+    </nav> -->

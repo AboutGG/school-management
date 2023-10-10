@@ -10,3 +10,10 @@ export interface TeacherClassroom {
     students: Students[];
     name_classroom: string;
   }
+
+  export interface Classroom {
+    id: string;
+    name:string;
+
+  }
+

@@ -30,7 +30,10 @@ public class UserRepository : IUserRepository
 
     public User GetUser(string username)
     {
-        return this._context.Users.Where(u => u.Username.Trim().ToLower() == username.Trim().ToLower()).FirstOrDefault();
+        return this._context.Users.Where(u => u.Username.Trim().ToLower() == username.Trim().ToLower())
+            .Include(el => el.Student)
+            .Include(el => el.Teacher)
+            .FirstOrDefault();
     }
 
     public int CountUsers()
