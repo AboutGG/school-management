@@ -305,20 +305,20 @@ public class TeachersController : Controller
     /// <summary>
     /// Api call which returns all the subject of a teacher
     /// </summary>
-    /// <param name="teacherId">id to take the single instance of teacher</param>
+    /// <param name="userId">id to take the single instance of teacher</param>
     /// <param name="classroomId">is used to filter the subjects by the classroom id, then returns all the subject witch teaches on the class</param>
     /// <returns>All the teachers' subject</returns>
     [HttpGet]
-    [Route("{teacherId}/subjects")]
+    [Route("{userId}/subjects")]
     [ProducesResponseType(200, Type = typeof(List<SubjectDto>))]
     [ProducesResponseType(401)]
-    public IActionResult GetSujectsFromClassroom([FromRoute] Guid teacherId, [FromQuery] Guid? classroomId)
+    public IActionResult GetSujectsFromClassroom([FromRoute] Guid userId, [FromQuery] Guid? classroomId)
     {
         try
         {
             List<TeacherSubjectClassroom> takenSubjects = new GenericRepository<TeacherSubjectClassroom>(_context).GetAllUsingIQueryable(null,
                 query => query
-                    .Where(el => el.TeacherId == teacherId)
+                    .Where(el => el.Teacher.UserId == userId)
                     .Include(el => el.Subject)
                     .Include(el => el.Classroom)
                 , out var total
