@@ -311,7 +311,12 @@ public class UsersController : Controller
             User takenUser = new GenericRepository<User>(_context).GetByIdUsingIQueryable(
                 query => query
                     .Where(el => el.Id == userId));
-
+            //Controllo se la vecchia password è giusta
+            if (changePasswordDto.oldPassword != takenUser.Password)
+            {
+                throw new Exception("INVALID_OLD_PASSWORD");
+            }
+            
             //Effettuo i controlli nel caso in cui la nuova password sia uguale a quella vecchia
             if (changePasswordDto.oldPassword == changePasswordDto.newPassword ||
                 takenUser.Password == changePasswordDto.newPassword)
