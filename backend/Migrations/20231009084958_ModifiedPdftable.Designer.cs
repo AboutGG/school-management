@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Models;
@@ -11,9 +12,11 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20231009084958_ModifiedPdftable")]
+    partial class ModifiedPdftable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,59 +175,6 @@ namespace backend.Migrations
                             Date = new DateOnly(2023, 9, 25),
                             TeacherSubjectClassroomId = new Guid("7fb36228-d263-43d7-ba9a-58e7f6ff5f0d")
                         });
-                });
-
-            modelBuilder.Entity("backend.Models.PromotionHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
-
-                    b.Property<DateOnly?>("DeletedAt")
-                        .HasColumnType("date")
-                        .HasColumnName("deleted_at")
-                        .HasAnnotation("Relational:JsonPropertyName", "deleted_at");
-
-                    b.Property<int>("FinalGraduation")
-                        .HasColumnType("integer")
-                        .HasColumnName("final_graduation")
-                        .HasAnnotation("Relational:JsonPropertyName", "final_graduation");
-
-                    b.Property<Guid>("PreviousClassroomId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id_previous_classroom")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_previous_classroom");
-
-                    b.Property<string>("PreviousSchoolYear")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("previous_school_year")
-                        .HasAnnotation("Relational:JsonPropertyName", "previous_school_year");
-
-                    b.Property<bool>("Promoted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("promoted")
-                        .HasAnnotation("Relational:JsonPropertyName", "promoted");
-
-                    b.Property<int>("ScholasticBehavior")
-                        .HasColumnType("integer")
-                        .HasColumnName("scholastic_behavior")
-                        .HasAnnotation("Relational:JsonPropertyName", "scholastic_behavior");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id_student")
-                        .HasAnnotation("Relational:JsonPropertyName", "id_student");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PreviousClassroomId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("promotion_histories");
                 });
 
             modelBuilder.Entity("backend.Models.Registry", b =>
@@ -667,25 +617,6 @@ namespace backend.Migrations
                     b.Navigation("TeacherSubjectClassroom");
                 });
 
-            modelBuilder.Entity("backend.Models.PromotionHistory", b =>
-                {
-                    b.HasOne("backend.Models.Classroom", "PreviousClassroom")
-                        .WithMany("PromotionHistories")
-                        .HasForeignKey("PreviousClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("backend.Models.Student", "Student")
-                        .WithMany("PromotionHistories")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PreviousClassroom");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("backend.Models.Student", b =>
                 {
                     b.HasOne("backend.Models.Classroom", "Classroom")
@@ -780,8 +711,6 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Classroom", b =>
                 {
-                    b.Navigation("PromotionHistories");
-
                     b.Navigation("Students");
 
                     b.Navigation("TeacherSubjectsClassrooms");
@@ -803,8 +732,6 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Student", b =>
                 {
-                    b.Navigation("PromotionHistories");
-
                     b.Navigation("StudentExams");
                 });
 

@@ -16,7 +16,6 @@ import { DashboardComponent } from './components/pages/dashboard/dashboard.compo
 import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
 import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
 import { NotFoundComponent } from './components/pages/not-found/not-found.component';
-import { ErrorsInterceptor } from './shared/helpers/errors.interceptor';
 import { ExamslistComponent } from './components/pages/examslist/examslist.component';
 import { ExamsStudentListComponent } from './components/pages/exams-student-list/exams-student-list.component';
 import { SubjectsComponent } from './components/pages/subjects/subjects.component';
@@ -53,11 +52,6 @@ import { StudentSubjectsComponent } from './components/pages/student-subjects/st
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorsInterceptor,
       multi: true
     }
   ],

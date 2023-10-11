@@ -1,6 +1,12 @@
 export interface TeacherExam {
-  examId: string,
-  examDate: string,
-  classroom: string,
-  subject: string
+  id?: string,
+  date: string,
+  classroom: {
+    id: string,
+    name: string
+  },
+  subject: {
+    id: string,
+    name: string
+  }
 }
