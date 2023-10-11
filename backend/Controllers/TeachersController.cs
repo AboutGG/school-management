@@ -365,7 +365,7 @@ public class TeachersController : Controller
     [Route("{userId}/exams/{examId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public IActionResult AssignStudentsVote([FromBody] InputUpdateExamDto inputUpdateExamDto,[FromRoute] Guid examId, [FromRoute] Guid userId)
+    public IActionResult AssignStudentsVote([FromBody] ExamRequest inputUpdateExamDto,[FromRoute] Guid examId, [FromRoute] Guid userId)
     {
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         
@@ -397,7 +397,7 @@ public class TeachersController : Controller
             }
             
             //Procedo con la modifica dei dati
-            takenExam.Date = inputUpdateExamDto.Date;
+            takenExam.Date = inputUpdateExamDto.date;
             takenExam.TeacherSubjectClassroomId = takenTeacher.Id;
             
             
