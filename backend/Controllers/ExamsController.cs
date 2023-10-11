@@ -221,6 +221,58 @@ public class ExamsController : Controller
     }
 
     #endregion
+
+    #region Delete Exam
+    
+    /// <summary> Api call which delete an exam passing its id and the studentExam records  </summary>
+    /// <param name="examId">The id of the exam we want to delete</param>
+    /// <returns>The object which we want to delete</returns>
+    /// <exception cref="Exception"></exception>
+    [HttpDelete]
+    [Route("{examId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public IActionResult AssignStudentsVote([FromRoute] Guid examId)
+    {
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        try
+        {
+            Exam takenExam = new GenericRepository<Exam>(_context)
+                .GetByIdUsingIQueryable(query => query
+                    .Where(el => el.Id == examId)
+                    .Include(el => el.StudentExams)
+                );
+
+            if (takenExam == null)
+            {
+                throw new Exception("NOT_FOUND");
+            }
+
+            if (!new GenericRepository<Exam>(_context).Delete(takenExam))
+            {
+                throw new Exception("NOT_DELETED");
+            }
+
+            foreach (StudentExam studentExam in takenExam.StudentExams)
+            {
+                if (!new GenericRepository<StudentExam>(_context).Delete(studentExam))
+                {
+                    throw new Exception("NOT_DELETED");
+                }
+            }
+
+            _transactionRepository.CommitTransaction(transaction);
+            return StatusCode(StatusCodes.Status200OK, takenExam);
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
+        }
+    }
+
+    #endregion
     
     #endregion
 
