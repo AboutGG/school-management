@@ -1,5 +1,7 @@
 import { HttpParams } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
+import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from "@angular/forms";
+import { PdfCirculars } from "src/app/shared/models/pdf";
 import { StudentExam } from "src/app/shared/models/studentexam";
 import { TeacherExam } from "src/app/shared/models/teacherexam";
 import { ListResponse, TypeCount } from "src/app/shared/models/users";
@@ -76,7 +78,9 @@ export class DashboardComponent implements OnInit {
   examsTeachers!: TeacherExam[];
   examsStudents!: StudentExam[];
   itemsPerPage: number = 3;
-  order: string = 'Date'
+  order: string = 'Date';
+  editForm!: FormGroup;
+  pdf!: PdfCirculars;
 
 
   constructor(
@@ -84,12 +88,39 @@ export class DashboardComponent implements OnInit {
     private classroomService: ClassroomService,
     private teacherService: TeacherService,
     private examsService: ExamsService,
-    private authService: AuthService ){ }
+    private fb: NonNullableFormBuilder,
+
+    private authService: AuthService ){ 
+
+      this.editForm =this.fb.group({
+      circularNumber: new FormControl (null, Validators.required),
+      uploadDate: new FormControl(null, Validators.required),
+      location: new FormControl(null, Validators.required),
+      object: new FormControl(null, Validators.required),
+      header: new FormControl(null, Validators.required),
+      body: new FormControl(null, Validators.required),
+      sign: new FormControl(null, Validators.required),
+    })}
 
   ngOnInit(): void {
+   
+
     this.getCount()
     this.getExams(this.isTeacher);
+   
     //this.getClassroomCount()
+  }
+
+  addCircular() {
+    const data=this.editForm.value
+    console.log(data);
+    // this.editForm.value.uploadDate.toISOString().substring(0, 10)
+    // console.log('date', this.editForm.value.uploadDate.toISOString().substring(0, 10));
+    this.commonService.addCirculars(data).subscribe((res) => {
+      this.pdf = res;
+      console.log(data);
+     
+  })
   }
 
   getCount() {

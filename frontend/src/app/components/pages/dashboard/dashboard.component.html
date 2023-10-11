@@ -1,21 +1,22 @@
-<div  class="container-fluid py-3 bg-light">
+<div class="container-fluid py-3 bg-light">
   
   <div class="row">
     <div class="col-md-3">
-      <div class="card card-body bg-success mb-2">
+      <div style="cursor: pointer;" class="card card-body-count text-left bg-success mb-2"  data-bs-toggle="modal" data-bs-target="#exampleModal">
         <div class="row justify-content-between">
           <div class="col-10">
-            <h3 class="mb-0 text-white">{{count.Users}}</h3>
-            <span class="text-uppercase text-white">Utenti</span>
+            <h3 *ngIf="!isTeacher" class="mb-0 text-white">{{count.Users}}</h3>
+            <h5 class="text-uppercase text-white">{{isTeacher ? 'Nuova Circolare' : 'Utenti'}}</h5>
           </div>
           <div class="col-2 align-self-center p-0">
-            <i class="bi bi-person-gear text-white fs-1 w-100"></i>
+            <i *ngIf="isTeacher" class="bi bi-file-earmark-plus text-white fs-1 w-100"></i>
+            <i *ngIf="!isTeacher" class="bi bi-person-gear text-white fs-1 w-100"></i>
           </div>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div  class="card card-body bg-danger mb-2">
+      <div  class="card card-body-count bg-danger mb-2">
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Classrooms}}</h3>
@@ -28,7 +29,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card card-body bg-warning mb-2">
+      <div class="card card-body-count bg-warning mb-2">
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Students}}</h3>
@@ -41,7 +42,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card card-body bg-info mb-2">
+      <div class="card card-body-count bg-info mb-2">
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Teachers}}</h3>
@@ -125,32 +126,65 @@
     </div>
   </div>
 
-
-
-<!-- 
-  <div class=" card card-circolari mt-5">
-    <h4 class="card-header">CIRCOLARI SCOLASTICHE</h4>
-    <div class="row">
-    <div  *ngFor="let pdf of pdfs" class=" ">
-      <div  class="bg-white ">
-        <img style="width: 70px;" class="py-4" [src]="pdf.img" alt="logo" />
+<!-- Modal Circolari -->
+<div *ngIf="isTeacher" class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div style="background-color: #1d1e2c; color: white;" class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Nuova Circolare</h5>
+        <button style="background-color: white; color: white;" type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="bg-secondary bg-opacity-25">
-        <div class="px-3">
-          <div class="d-flex py-2">
-            <h5 *ngIf="pdf.title.length < 17; else longPdfname" class="m-0 pdfText">{{pdfs}}</h5>
-            <ng-template #longPdfname>
-              <h5 class="m-0 pdfText">{{pdf.title.slice(0, 18)}}...</h5>
-            </ng-template>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="d-flex flex-column">
+            <div class="row">
+            <div class="col-md-4">
+              <label for="circularNumber">N° Circolare</label>
+            <input id="circularNumber" type="number" formControlName="circularNumber">
+            <p class="text-danger" *ngIf="!editForm.get('circularNumber')!.valid && editForm.get('circularNumber')!.touched">Inserisci un N° Circolare</p>
           </div>
-          <div class="d-flex justify-content-between py-2"> 
-            <small class="m-0">Utente</small>
-            <small class="m-0">{{pdf.data}}</small>
+          <div class="col-md-4">
+            <label for="location">Luogo</label>
+            <input id="location" type="text" formControlName="location" placeholder="Es: Roma">
+            <p class="text-danger" *ngIf="!editForm.get('location')!.valid && editForm.get('location')!.touched">Inserisci un luogo</p>
+          </div>
+
+          <div class="col-md-4">
+            <label for="uploadDate">Data</label>
+            <input id="uploadDate" type= "date" formControlName="uploadDate">
+            <p class="text-danger" *ngIf="!editForm.get('uploadDate')!.valid && editForm.get('uploadDate')!.touched">Inserisci una data</p>           
           </div>
         </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <label for="object">Oggetto</label>
+            <input id="object" type="text" formControlName="object" placeholder="Es: Nuovo Ordinamento Scolastico...">
+            <p class="text-danger" *ngIf="!editForm.get('object')!.valid && editForm.get('object')!.touched">Inserisci un oggetto</p>
+           
+          </div>
+          <div class="col-md-6">
+            <label for="header">Intestazione</label>
+            <input id="header" type="text" formControlName="header" placeholder="Es: Al Personale Docente...">
+            <p class="text-danger" *ngIf="!editForm.get('header')!.valid && editForm.get('header')!.touched">Inserisci un'intestazione</p>
+          </div>
+        </div>
+
+            <label for="body">Corpo del testo</label>
+            <textarea style="height: 150px;" id="body" type="text" formControlName="body" placeholder="Es: Si comunica a tutto il personale docente..." ></textarea>
+            <p class="text-danger" *ngIf="!editForm.get('body')!.valid && editForm.get('body')!.touched">Inserisci un testo</p>
+
+
+            <label for="sign">Firma</label>
+            <input id="sign" type="text" formControlName="sign" placeholder="Es: Mario Rossi" >
+            <p class="text-danger" *ngIf="!editForm.get('sign')!.valid && editForm.get('sign')!.touched">Inserisci una firma</p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
+        <button  [disabled] = '!editForm.valid' type="button" (click)="addCircular()" data-bs-dismiss="modal" style="color: white; font-weight: 400;" class="btn btn-warning">Crea Circolare</button>
       </div>
     </div>
   </div>
-</div> -->
-
 </div>

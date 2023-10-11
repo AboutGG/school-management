@@ -1,4 +1,4 @@
-<div class="sidebar vh-100" [ngClass]="{ 'expanded': isExpanded }">
+<div *ngIf="userId" class="sidebar vh-100" [ngClass]="{ 'expanded': isExpanded }">
   <div class="content alt vh-100" [ngClass]="{ 'expanded': isExpanded }">
     <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link"
       class="link">

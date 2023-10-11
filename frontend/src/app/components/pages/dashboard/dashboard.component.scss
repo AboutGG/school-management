@@ -15,14 +15,27 @@ hr{
   border-spacing: 0;
   border-collapse: separate;
   border-radius: 20px;
+  max-height: 400px;
 }
 .card-body{
   border: 1px ;
   border-spacing: 0;
   border-collapse: separate;
   border-radius: 20px;
+  max-height: 400px;
+  overflow-y: auto;
 
 }
+.card-body-count{
+  border: 1px ;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 20px;
+  max-height: 400px;
+  padding: 15px;
+
+}
+
 .card-header{
   text-align: center;
   background-color: #1d1e2c;
@@ -45,7 +58,7 @@ hr{
 
 }
 .card-right-pagella {
-  max-height: 157px;
+  max-height: 151px;
   overflow-y: auto;
 }
 .card-right-esami {
@@ -64,4 +77,49 @@ hr{
 
 ::-webkit-scrollbar-thumb:hover {
   background: #9b9a9a; 
+}
+
+input[type=text]{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+input[type=text]:focus{
+  border: 2px solid #ffd45f;
+}
+
+input[type=date]{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+input[type=date]:focus{
+  border: 2px solid #ffd45f;
+}
+input[type=number]{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+input[type=number]:focus{
+  border: 2px solid #ffd45f;
+}
+textarea[type=text]{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+textarea[type=text]:focus{
+  border: 2px solid #ffd45f;
+}
+label{
+  margin-top: 10px;
 }
