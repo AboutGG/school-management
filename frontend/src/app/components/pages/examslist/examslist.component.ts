@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';
 import { ListResponse } from 'src/app/shared/models/listresponse';
-import { Subject, TeacherExam } from 'src/app/shared/models/teacherexam';
+import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';
@@ -45,25 +45,23 @@ export class ExamslistComponent {
   total!: number
   isEdit: boolean = false
   examId?: string
-  subjectsByClassroom?: Subject[]
-  classroom!: FormGroup
-  subject!: FormGroup
+  subjectsByClassroom?: IdName[]
+  classroomId!: FormControl
+  subjectId!: FormControl
   date!: FormControl
   examForm!: FormGroup
 
   ngOnInit(): void {
     this.date = new FormControl(null, Validators.required),
-    this.classroom = new FormGroup({
-      classroom: new FormControl(null, Validators.required)
-    });
-    this.subject = new FormGroup({
-      subject: new FormControl(null, Validators.required)
-    });
+    this.classroomId = new FormControl(null, Validators.required),
+    this.subjectId = new FormControl(null, Validators.required)
+
     this.examForm = new FormGroup({
       date: this.date,
-      classroom: this.classroom,
-      subject: this.subject
+      classroomId: this.classroomId,
+      subjectId: this.subjectId
     });
+
     this.getUser();
     this.getTeacherExams();
     this.getTeacherClassrooms();
@@ -138,48 +136,40 @@ export class ExamslistComponent {
 
   editExam(exam: TeacherExam) {
     this.examId = exam.id
-    this.date.patchValue({
+    this.examForm.patchValue({
       date: exam.date,
+      classroomId: exam.classroom.id,
+      subjectId: exam.subject.id
     })
-    this.classroom.patchValue({
-      classroom: exam.classroom
-    })
-    this.subject.patchValue({
-      subject: exam.subject
-    })
-    console.log(exam);
-    console.log(this.date.value);
-    console.log(this.classroom.value);
-    console.log(this.subject.value);
-    
-    
+    this.getTeacherSubjectByClassroom(this.examForm.value.classroomId)
   }
 
   getTeacherSubjectByClassroom(classroomId: string){
     console.log(classroomId);
     const params = new HttpParams().set('classroomId', classroomId);
     this.teacherService.getTeacherSubjectByClassroom(this.user.id, params).subscribe({
-      next: (res) => {
+      next: (res: IdName[]) => {
         this.subjectsByClassroom = res;
         console.log("SONO RES ", res);
       }
     })
   }
 
-  onClickModal() {
+  onClickModal() { 
     if (this.isEdit === false) {
-      console.log("PRIMA: ", this.examForm.value);
+      console.log("PRIMA ADD: ", this.examForm.value);
       this.examsService.addExam(this.examForm.value).subscribe({
         next: () => {          
           this.getTeacherExams()
-          console.log("DOPO ",this.examForm.value);
+          console.log("DOPO ADD ",this.examForm.value);
         }
       });
     } else {
-      this.examsService.editExam(this.examForm.value, this.examId).subscribe({
+      console.log("PRIMA EDIT: ", this.examForm.value);
+      this.examsService.editExam(this.examForm.value, this.user.id, this.examId).subscribe({
         next: () => {
           this.getTeacherExams()
-          console.log(this.examForm.value);
+          console.log("DOPO EDIT ",this.examForm.value);
         }
       })
     }

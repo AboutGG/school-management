@@ -3,11 +3,11 @@ import { FormControl } from "@angular/forms"
 export interface TeacherExam {
   id?: string,
   date: string,
-  classroom: Subject
-  subject: Subject
+  classroom: IdName
+  subject: IdName
 }
 
-export interface Subject {
+export interface IdName {
   id: string,
   name: string
 }

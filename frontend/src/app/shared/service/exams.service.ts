@@ -24,8 +24,8 @@ export class ExamsService {
     return this.http.post<TeacherExam>(`https://localhost:7262/api/exams`, form)
   }
 
-  editExam (form: FormGroup, id?: string) {
-    return this.http.put<TeacherExam>(`https://localhost:7262/api/exams/${id}`, form)
+  editExam (form: FormGroup, userId?: string ,examId?: string) {
+    return this.http.put<TeacherExam>(`https://localhost:7262/api/teachers/${userId}/exams/${examId}`, form)
   }
 
   deleteExam (id: string) {

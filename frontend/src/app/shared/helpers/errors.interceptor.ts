@@ -23,7 +23,6 @@ export class ErrorsInterceptor implements HttpInterceptor {
         if (err instanceof HttpErrorResponse) {
           if (this.router.url !== "/login") {
             if (err.status === 400 || err.status === 404) {
-
               this.router.navigate(["/not-found/" + err.status]);
             }
             if (err.status === 401 && /\/details\/\d+/.test(this.router.url)) {

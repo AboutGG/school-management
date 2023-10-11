@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ListResponse } from '../models/listresponse';
-import { Subject } from '../models/teacherexam';
+import { IdName } from '../models/teacherexam';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,8 +20,8 @@ export class TeacherService {
     return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/classrooms`)
   }
 
-  getTeacherSubjectByClassroom(userId: string, params: HttpParams) : Observable<Subject[]> {
-    return this.http.get<Subject[]>(`https://localhost:7262/api/teachers/${userId}/subjects`, { params })
+  getTeacherSubjectByClassroom(userId: string, params: HttpParams) : Observable<IdName[]> {
+    return this.http.get<IdName[]>(`https://localhost:7262/api/teachers/${userId}/subjects`, { params })
   }
 
 }

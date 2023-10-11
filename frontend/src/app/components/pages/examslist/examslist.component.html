@@ -101,17 +101,17 @@
                             <input *ngIf="isEdit" type="date" class="form-control"
                                 formControlName="date">
                         </div>
-                        <div class="d-flex flex-column my-2" formGroupName="classroom">
+                        <div class="d-flex flex-column my-2">
                             <label for="classroom" class="form-label">Classe: </label>
-                            <select class="btn btn-warning w-100" formControlName="name">
-                                <option value="classroom" *ngFor="let classroom of classrooms" (click)="getTeacherSubjectByClassroom(classroom.id_classroom!)">
+                            <select class="btn btn-warning w-100" formControlName="classroomId">
+                                <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms">
                                     {{classroom.name_classroom}}</option>
                             </select>
                         </div>
-                        <div class="d-flex flex-column my-2" formGroupName="subject">
+                        <div class="d-flex flex-column my-2">
                             <label for="subject" class="form-label">Materia: </label>
-                            <select class="btn btn-warning w-100" formControlName="name">
-                                <option value="subject" *ngFor="let subject of subjectsByClassroom">
+                            <select class="btn btn-warning w-100" formControlName="subjectId">
+                                <option [value]="subject.id" *ngFor="let subject of subjectsByClassroom">
                                     {{subject.name}}</option>
                             </select>
                         </div>
@@ -162,4 +162,4 @@
                 </a>
             </li>
         </ul>
-    </nav> -->
+    </nav> 
