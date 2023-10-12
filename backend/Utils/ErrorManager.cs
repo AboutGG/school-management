@@ -10,7 +10,7 @@ public static class ErrorManager
         switch (e.Message)
         {
             case "NOT_FOUND":
-                error = new ErrorResponse(StatusCodes.Status404NotFound, "Item not found", e.StackTrace);
+                error = new ErrorResponse(StatusCodes.Status404NotFound, "The entity has not found", e.StackTrace);
                 return error;
             case "UNAUTHORIZED":
                 error = new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid", e.StackTrace);

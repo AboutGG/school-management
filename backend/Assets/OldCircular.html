@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous" />
+        <title>Prova</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row flex-nowrap container justify-content-center align-items-center">
+                <div class="col-auto px-5">
+                    <img width="75px" src="Emblem_of_Italy.svg"
+                        alt="Italian Emblem">
+                </div>
+                <div class="col-auto text-center">
+                    <h1 style="font-size: small">ISTITUTO COMPRENSIVO</h1>
+                    <h1 style="font-size: small">“ALCIDE DE GASPERI”</h1>
+                    <h1 style="font-size: small">
+                        VIA FORNARA - STRASATTI – 91025 MARSALA
+                    </h1>
+                    <h1 style="font-size: small">TEL. 0923-961292 FAX
+                        0923-741129</h1>
+                    <h1 style="font-size: small">
+                        E-mail: tpic81600v@istruzione.it –
+                        www.icdegasperimarsala.edu.it
+                    </h1>
+                    <h1 style="font-size: small">C.M. TPIC81600V - C.f.
+                        82006360810</h1>
+                </div>
+                <div class="col-auto px-5">
+                    <img width="75px"
+                        src="Flag_of_European_Union.svg"
+                        alt="EU Flag">
+                </div>
+
+            </div>
+
+            <div class="row justify-content-center align-items-center">
+                <div class="col-6">
+                    <h5>Circular N°{{number}}</h5>
+                </div>
+                <div class="col-6">
+                    <h5 style="word-wrap: break-word;">{{location}} {{date}}</h5>
+                </div>
+            </div>
+
+            <div class="container justify-content-end">
+                <p style="word-wrap: break-word; max-width: 200px">{{header}}</p>
+            </div>
+
+            <div class="container">
+                <p>Oggetto:{{body}}</p>
+            </div>
+
+            <div class="container justify-content-end">
+                <p>Firma:{{sign}}</p>
+            </div>
+        </div>
+    </body>
+</html>

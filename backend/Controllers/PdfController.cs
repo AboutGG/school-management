@@ -20,7 +20,9 @@ public class PdfController : Controller
         _context = context;
         _transactionRepository = transactionRepository;
     }
-    
+
+    #region Create Circular
+
     [HttpPost]
     [Route("Circulars")]
     [ProducesResponseType(200, Type = typeof(CircularRequest))]
@@ -59,4 +61,40 @@ public class PdfController : Controller
             return StatusCode(error.statusCode, error);
         }
     }
+
+    #endregion
+
+    #region Get circular
+    [HttpGet]
+    [Route("circulars/{circularNumber}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    public IActionResult GetCircular([FromRoute] int circularNumber)
+    {
+        
+        try
+        {
+            var takenCircular = new GenericRepository<Circular>(_context)
+                .GetByIdUsingIQueryable(query => query
+                .Where(el => el.CircularNumber == circularNumber));
+
+            if (takenCircular == null)
+            {
+                throw new Exception("NOT_FOUND");
+            }
+            
+            var pdf = PdfHandler.GeneratePdf<Circular>(takenCircular, null, null, null);
+            
+            return File(pdf, "application/pdf", $"circular_n°{circularNumber}.pdf");
+        }
+        catch (Exception e)
+        {
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+    }
+
+    #endregion
+   
+    
 }
