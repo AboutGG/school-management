@@ -1,8 +1,8 @@
-<div class="container-fluid py-3 bg-light">
+<div class="container py-3 bg-light">
   
-  <div class="row">
+  <div style="cursor:default;" class="row">
     <div class="col-md-3">
-      <div style="cursor: pointer;" class="card card-body-count text-left bg-success mb-2"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <div style="cursor: pointer;" [ngClass]="{'card-body-count-circolare' : isTeacher, 'card-body-count' : !isTeacher}" class="card card-body-count text-left bg-success mb-2"  data-bs-toggle="modal" data-bs-target="#exampleModal">
         <div class="row justify-content-between">
           <div class="col-10">
             <h3 *ngIf="!isTeacher" class="mb-0 text-white">{{count.Users}}</h3>
@@ -20,7 +20,7 @@
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Classrooms}}</h3>
-            <span class="text-uppercase text-white">Classi</span>
+            <h5 class="text-uppercase text-white">Classi</h5>
           </div>
           <div class="col-2 align-self-center p-0">
             <i class="bi bi-people-fill text-white fs-1 w-100"></i>
@@ -33,7 +33,7 @@
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Students}}</h3>
-            <span class="text-uppercase text-white">Studenti</span>
+            <h5 class="text-uppercase text-white">Studenti</h5>
           </div>
           <div class="col-2 align-self-center p-0">
             <i class="bi bi-person-square text-white fs-1 w-100"></i>
@@ -46,7 +46,7 @@
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Teachers}}</h3>
-            <span class="text-uppercase text-white">Insegnanti</span>
+            <h5 class="text-uppercase text-white">Insegnanti</h5>
           </div>
           <div class="col-2 align-self-center p-0">
             <i class="bi bi-person-video3 text-white fs-1 w-100"></i>
@@ -57,7 +57,7 @@
     <hr>
 
   </div>
-  <div class="row">
+  <div style="cursor: default;" class="row">
     <div class="col-md-6">
       <div style="margin-top: 20px;" class="card card-left">
         <h5 class="card-header">Bacheca</h5>
@@ -141,48 +141,48 @@
             <div class="col-md-4">
               <label for="circularNumber">N° Circolare</label>
             <input id="circularNumber" type="number" formControlName="circularNumber">
-            <p class="text-danger" *ngIf="!editForm.get('circularNumber')!.valid && editForm.get('circularNumber')!.touched">Inserisci un N° Circolare</p>
+            <small class="text-danger" *ngIf="!editForm.get('circularNumber')!.valid && editForm.get('circularNumber')!.touched">Inserisci un numero</small>
           </div>
           <div class="col-md-4">
             <label for="location">Luogo</label>
             <input id="location" type="text" formControlName="location" placeholder="Es: Roma">
-            <p class="text-danger" *ngIf="!editForm.get('location')!.valid && editForm.get('location')!.touched">Inserisci un luogo</p>
+            <small class="text-danger" *ngIf="!editForm.get('location')!.valid && editForm.get('location')!.touched">Inserisci un luogo</small>
           </div>
 
           <div class="col-md-4">
             <label for="uploadDate">Data</label>
             <input id="uploadDate" type= "date" formControlName="uploadDate">
-            <p class="text-danger" *ngIf="!editForm.get('uploadDate')!.valid && editForm.get('uploadDate')!.touched">Inserisci una data</p>           
+            <small class="text-danger" *ngIf="!editForm.get('uploadDate')!.valid && editForm.get('uploadDate')!.touched">Inserisci una data</small>           
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-6">
             <label for="object">Oggetto</label>
-            <input id="object" type="text" formControlName="object" placeholder="Es: Nuovo Ordinamento Scolastico...">
-            <p class="text-danger" *ngIf="!editForm.get('object')!.valid && editForm.get('object')!.touched">Inserisci un oggetto</p>
+            <input id="object" type="text" formControlName="object" placeholder="Es: Assemblea d'Istituto...">
+            <small class="text-danger" *ngIf="!editForm.get('object')!.valid && editForm.get('object')!.touched">Inserisci un oggetto</small>
            
           </div>
           <div class="col-md-6">
             <label for="header">Intestazione</label>
             <input id="header" type="text" formControlName="header" placeholder="Es: Al Personale Docente...">
-            <p class="text-danger" *ngIf="!editForm.get('header')!.valid && editForm.get('header')!.touched">Inserisci un'intestazione</p>
+            <small class="text-danger" *ngIf="!editForm.get('header')!.valid && editForm.get('header')!.touched">Inserisci un'intestazione</small>
           </div>
         </div>
 
             <label for="body">Corpo del testo</label>
             <textarea style="height: 150px;" id="body" type="text" formControlName="body" placeholder="Es: Si comunica a tutto il personale docente..." ></textarea>
-            <p class="text-danger" *ngIf="!editForm.get('body')!.valid && editForm.get('body')!.touched">Inserisci un testo</p>
+            <small class="text-danger" *ngIf="!editForm.get('body')!.valid && editForm.get('body')!.touched">Inserisci un testo</small>
 
 
             <label for="sign">Firma</label>
             <input id="sign" type="text" formControlName="sign" placeholder="Es: Mario Rossi" >
-            <p class="text-danger" *ngIf="!editForm.get('sign')!.valid && editForm.get('sign')!.touched">Inserisci una firma</p>
+            <small class="text-danger" *ngIf="!editForm.get('sign')!.valid && editForm.get('sign')!.touched">Inserisci una firma</small>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
         <button  [disabled] = '!editForm.valid' type="button" (click)="addCircular()" data-bs-dismiss="modal" style="color: white; font-weight: 400;" class="btn btn-warning">Crea Circolare</button>
       </div>
     </div>
