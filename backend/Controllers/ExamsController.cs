@@ -88,7 +88,7 @@ public class ExamsController : Controller
     [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(400)]
-    public IActionResult CreateExam([FromHeader] string Token, ExamResponseDto InputExam)
+    public IActionResult CreateExam([FromHeader] string Token, ExamRequest InputExam)
     {
         JwtSecurityToken decodedToken;
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
@@ -118,8 +118,8 @@ public class ExamsController : Controller
             //Prendo l'id di teacherSubjectClassroom in modo da poter procedere con la creazione dell'esame 
             Guid teacherSubjectClassroomId = new GenericRepository<TeacherSubjectClassroom>(_context)
                 .GetByIdUsingIQueryable(query => query
-                    .Where(el => el.ClassroomId == InputExam.Classroom.Id
-                                 && el.SubjectId == InputExam.Subject.Id
+                    .Where(el => el.ClassroomId == InputExam.classroomId
+                                 && el.SubjectId == InputExam.subjectId
                                  && el.TeacherId == teacherId)).Id;
             
             //Creo l'esame che tramite i dati che passerà il FE
@@ -127,7 +127,7 @@ public class ExamsController : Controller
             {
                 Id = new Guid(),
                 TeacherSubjectClassroomId = teacherSubjectClassroomId,
-                Date = InputExam.Date
+                Date = InputExam.date
             };
 
             //Nel caso non dovesse essere creato genererà un'eccezione
@@ -140,7 +140,7 @@ public class ExamsController : Controller
             List<Student> students = new GenericRepository<Student>(_context).GetAllUsingIQueryable(
                 null,
                 query => query
-                    .Where(el => el.ClassroomId == InputExam.Classroom.Id),
+                    .Where(el => el.ClassroomId == InputExam.classroomId),
                 out var total
             );
             
@@ -211,6 +211,58 @@ public class ExamsController : Controller
             
             _transactionRepository.CommitTransaction(transaction);
             return StatusCode(StatusCodes.Status200OK, takenStudentExam);
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return BadRequest(error);
+        }
+    }
+
+    #endregion
+
+    #region Delete Exam
+    
+    /// <summary> Api call which delete an exam passing its id and the studentExam records  </summary>
+    /// <param name="examId">The id of the exam we want to delete</param>
+    /// <returns>The object which we want to delete</returns>
+    /// <exception cref="Exception"></exception>
+    [HttpDelete]
+    [Route("{examId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public IActionResult AssignStudentsVote([FromRoute] Guid examId)
+    {
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        try
+        {
+            Exam takenExam = new GenericRepository<Exam>(_context)
+                .GetByIdUsingIQueryable(query => query
+                    .Where(el => el.Id == examId)
+                    .Include(el => el.StudentExams)
+                );
+
+            if (takenExam == null)
+            {
+                throw new Exception("NOT_FOUND");
+            }
+
+            if (!new GenericRepository<Exam>(_context).Delete(takenExam))
+            {
+                throw new Exception("NOT_DELETED");
+            }
+
+            foreach (StudentExam studentExam in takenExam.StudentExams)
+            {
+                if (!new GenericRepository<StudentExam>(_context).Delete(studentExam))
+                {
+                    throw new Exception("NOT_DELETED");
+                }
+            }
+
+            _transactionRepository.CommitTransaction(transaction);
+            return StatusCode(StatusCodes.Status200OK, takenExam);
         }
         catch (Exception e)
         {

@@ -10,7 +10,7 @@ public static class ErrorManager
         switch (e.Message)
         {
             case "NOT_FOUND":
-                error = new ErrorResponse(StatusCodes.Status404NotFound, "Item not found", e.StackTrace);
+                error = new ErrorResponse(StatusCodes.Status404NotFound, "The entity has not found", e.StackTrace);
                 return error;
             case "UNAUTHORIZED":
                 error = new ErrorResponse(StatusCodes.Status401Unauthorized, "The token is not valid", e.StackTrace);
@@ -69,6 +69,10 @@ public static class ErrorManager
             case "UNAUTHORIZED_DETAIL":
                 error = new ErrorResponse(StatusCodes.Status401Unauthorized,
                     "You are not authorized to access on the other users detail", e.StackTrace);
+                return error;
+            case "INVALID_OLD_PASSWORD":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized,
+                    "The new password is equal then the older.", e.StackTrace);
                 return error;
             
             default:

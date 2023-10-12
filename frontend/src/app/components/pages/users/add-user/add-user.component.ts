@@ -70,6 +70,7 @@ export class AddUserComponent implements OnInit {
       });
     this.classroomId = new FormControl(null),
       this.role = new FormControl(null, Validators.required),
+      
       this.usersForm = new FormGroup({
         registry: this.registry,
         user: this.user,
