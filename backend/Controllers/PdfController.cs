@@ -20,7 +20,9 @@ public class PdfController : Controller
         _context = context;
         _transactionRepository = transactionRepository;
     }
-    
+
+    #region Create Circular
+
     [HttpPost]
     [Route("Circulars")]
     [ProducesResponseType(200, Type = typeof(CircularRequest))]
@@ -59,4 +61,70 @@ public class PdfController : Controller
             return StatusCode(error.statusCode, error);
         }
     }
+
+    #endregion
+
+    #region Get circulars
+    [HttpGet]
+    [Route("circulars")]
+    [ProducesResponseType(200, Type = typeof(List<Circular>))]
+    [ProducesResponseType(401)]
+    public IActionResult GetCirculars([FromQuery] PaginationParams @params,[FromRoute] int circularNumber)
+    {
+        
+        try
+        {
+            List<Circular> takenCircular = new GenericRepository<Circular>(_context)
+                .GetAllUsingIQueryable(@params, query => query
+                , out var total
+                );
+            
+            return StatusCode(StatusCodes.Status200OK, new PaginationResponse<Circular>()
+            {
+                Total = total,
+                Data = takenCircular
+            });
+        }
+        catch (Exception e)
+        {
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+    }
+
+    #endregion
+    
+    #region Get circular
+    [HttpGet]
+    [Route("circulars/{circularId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    public IActionResult GetCircular([FromRoute] int circularId)
+    {
+        
+        try
+        {
+            var takenCircular = new GenericRepository<Circular>(_context)
+                .GetByIdUsingIQueryable(query => query
+                .Where(el => el.CircularNumber == circularId));
+
+            if (takenCircular == null)
+            {
+                throw new Exception("NOT_FOUND");
+            }
+            
+            var pdf = PdfHandler.GeneratePdf<Circular>(takenCircular, null, null, null);
+            
+            return File(pdf, "application/pdf", $"circular_n°{circularId}.pdf");
+        }
+        catch (Exception e)
+        {
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+    }
+
+    #endregion
+   
+    
 }
