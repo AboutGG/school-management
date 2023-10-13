@@ -75,6 +75,15 @@ hr{
   overflow-y: auto;
 }
 
+.card-text-pdf {
+  text-decoration: none;
+  cursor: pointer;
+  color: black;
+}
+.card-text-pdf:hover{
+  text-decoration:underline;
+}
+
 
 ::-webkit-scrollbar {
   width: 10px;

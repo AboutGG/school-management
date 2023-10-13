@@ -4,13 +4,14 @@ import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from "@ang
 import { PdfCirculars } from "src/app/shared/models/pdf";
 import { StudentExam } from "src/app/shared/models/studentexam";
 import { TeacherExam } from "src/app/shared/models/teacherexam";
-import { ListResponse, TypeCount } from "src/app/shared/models/users";
+import { TypeCount } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { CommonService } from "src/app/shared/service/common.service";
 import { ExamsService } from "src/app/shared/service/exams.service";
 import { TeacherService } from "src/app/shared/service/teacher.service";
 import { UsersService } from "src/app/shared/service/users.service";
+import { ListResponse } from 'src/app/shared/models/listresponse';
 
 @Component({
   selector: "app-dashboard",
@@ -32,55 +33,57 @@ export class DashboardComponent implements OnInit {
     img: "assets/dashboard/logoCircolari.jpg"
   }
 
-  pdfs = [
-    {
-      title: "Nuovo ordinamento scolastico",
-      data: "10/10/2023",
-      img: "assets/dashboard/logoCircolari.jpg"
-    },
-    {
-      title: "Fine anno scolastico",
-      data: "01/06/2023",
-      img: "assets/dashboard/logoCircolari.jpg"
-    },
-    {
-      title: "Programma esami di stato",
-      data: "16/05/2023",
-      img: "assets/dashboard/logoCircolari.jpg"
-    },
-    {
-      title: "Convocazione consiglio d'istituto",
-      data: "28/04/2023",
-      img: "assets/dashboard/logoCircolari.jpg"
-    },
-    {
-      title: "Assemblea d'istituto",
-      data: "10/04/2023",
-      img: "assets/dashboard/logoCircolari.jpg"
+  // pdfs = [
+  //   {
+  //     title: "Nuovo ordinamento scolastico",
+  //     data: "10/10/2023",
+  //     img: "assets/dashboard/logoCircolari.jpg"
+  //   },
+  //   {
+  //     title: "Fine anno scolastico",
+  //     data: "01/06/2023",
+  //     img: "assets/dashboard/logoCircolari.jpg"
+  //   },
+  //   {
+  //     title: "Programma esami di stato",
+  //     data: "16/05/2023",
+  //     img: "assets/dashboard/logoCircolari.jpg"
+  //   },
+  //   {
+  //     title: "Convocazione consiglio d'istituto",
+  //     data: "28/04/2023",
+  //     img: "assets/dashboard/logoCircolari.jpg"
+  //   },
+  //   {
+  //     title: "Assemblea d'istituto",
+  //     data: "10/04/2023",
+  //     img: "assets/dashboard/logoCircolari.jpg"
 
-    },
-    {
-      title: "Programma Carnevale a scuola",
-      data: "03/02/2023",
-      img: "assets/dashboard/logoCircolari.jpg"
-    },
-    {
-      title: "Incontro scuola famiglia",
-      data: "12/01/2023",
-      img: "assets/dashboard/logoCircolari.jpg"
-    },
-    {
-      title: "Circolare di fine anno solare",
-      data: "21/12/2023",
-      img: "assets/dashboard/logoCircolari.jpg"
-    },
-  ]
+  //   },
+  //   {
+  //     title: "Programma Carnevale a scuola",
+  //     data: "03/02/2023",
+  //     img: "assets/dashboard/logoCircolari.jpg"
+  //   },
+  //   {
+  //     title: "Incontro scuola famiglia",
+  //     data: "12/01/2023",
+  //     img: "assets/dashboard/logoCircolari.jpg"
+  //   },
+  //   {
+  //     title: "Circolare di fine anno solare",
+  //     data: "21/12/2023",
+  //     img: "assets/dashboard/logoCircolari.jpg"
+  //   },
+  // ]
   examsTeachers!: TeacherExam[];
   examsStudents!: StudentExam[];
   itemsPerPage: number = 3;
   order: string = 'Date';
+  orderPdf: string = 'UploadDate'
   editForm!: FormGroup;
   pdf!: PdfCirculars;
+  pdfs!: PdfCirculars[];
 
 
   constructor(
@@ -103,10 +106,10 @@ export class DashboardComponent implements OnInit {
     })}
 
   ngOnInit(): void {
-   
-
     this.getCount()
     this.getExams(this.isTeacher);
+    this.getCirculars();
+    this.getCircularsById();
    
     //this.getClassroomCount()
   }
@@ -114,13 +117,30 @@ export class DashboardComponent implements OnInit {
   addCircular() {
     const data=this.editForm.value
     console.log(data);
-    // this.editForm.value.uploadDate.toISOString().substring(0, 10)
-    // console.log('date', this.editForm.value.uploadDate.toISOString().substring(0, 10));
     this.commonService.addCirculars(data).subscribe((res) => {
       this.pdf = res;
       console.log(data);
-     
   })
+  }
+
+  getCirculars() { 
+    const params = new HttpParams()
+    .set('Order', this.orderPdf)
+    this.commonService.getCirculars(params).subscribe({
+      next: (res: ListResponse<PdfCirculars[]>) => {
+        this.pdfs = res.data;
+        console.log(this.pdfs);
+        
+      },
+      error:(err) => {
+        console.log("error",err);
+      }
+
+    })
+  }
+
+  getCircularsById(){
+
   }
 
   getCount() {

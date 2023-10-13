@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TypeCount } from '../models/users';
+import { ListResponse, TypeCount } from '../models/users';
 import { Observable } from 'rxjs';
 import { PdfCirculars } from '../models/pdf';
 import { FormGroup } from '@angular/forms';
@@ -18,6 +18,11 @@ export class CommonService {
 
   addCirculars(form: FormGroup): Observable<PdfCirculars> {
     return this.http.post<PdfCirculars>(`https://localhost:7262/api/pdf/circulars`, form);
+  }
+
+  getCirculars(params?: HttpParams): Observable <ListResponse<any>>{
+    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/pdf/circulars`, {params})
+
   }
 }
 
