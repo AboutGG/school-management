@@ -26,13 +26,13 @@
             </tr>
           </thead>
           <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
-            <tr *ngIf="classDetails" style="cursor: pointer" [routerLink]="'/details/'+ teacher.id">
+            <tr style="cursor: pointer">
               <td scope="row">{{i + 1}}</td>
-               <td>{{ teacher.surname +' '+ teacher.name}}</td>             
-               <td>{{ teacher.subjects.join(', ') }}</td>
+              <td *ngIf="isTeacher" [routerLink]="['/details', teacher.id]">{{ teacher.surname + ' ' + teacher.name }}</td>
+              <td style="cursor: default;" *ngIf="!isTeacher">{{ teacher.surname + ' ' + teacher.name }}</td>
+               <td style="cursor: default;">{{ teacher.subjects.join(', ') }}</td>
             </tr>
             <tr>
-             
             </tr>
           </tbody>
         </table>
@@ -46,16 +46,18 @@
           <th>#</th>
           <th>Cognome</th>
           <th>Nome</th>
-          <th>Azioni</th>
+          <th *ngIf="isTeacher" >Azioni</th>
         </tr>
       </thead>
       <tbody *ngFor="let student of classDetails?.students let i = index">
         <tr >
           <td scope="row">{{i + 1}}</td> 
-          <td style="cursor: pointer" [routerLink]="'/details/'+ student.id">{{student.surname}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'+ student.id">{{student.name}}</td>
-          
-          <td>
+          <td *ngIf="isTeacher" style="cursor: pointer" [routerLink]="'/details/'+ student.id">{{student.surname}}</td>
+          <td *ngIf="isTeacher" style="cursor: pointer" [routerLink]="'/details/'+ student.id">{{student.name}}</td>
+          <td *ngIf="!isTeacher">{{student.surname}}</td>
+          <td *ngIf="!isTeacher">{{student.name}}</td>
+
+          <td *ngIf="isTeacher">
             <div class="dropdown">
               <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-gear-fill"></i>
