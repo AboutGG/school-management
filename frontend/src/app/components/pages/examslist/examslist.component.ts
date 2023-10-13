@@ -50,24 +50,32 @@ export class ExamslistComponent {
   subjectId!: FormControl
   date!: FormControl
   examForm!: FormGroup
+  onAdd: boolean = false
+  currentDate = new Date()
+  today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
+  // today = new Date(new Date().getTime()).toISOString().substring(0, 10);
+  examDate!: string
+  alert: boolean = false;
 
   ngOnInit(): void {
+    console.log(this.examDate);    
+    
     this.date = new FormControl(null, Validators.required),
-    this.classroomId = new FormControl(null, Validators.required),
-    this.subjectId = new FormControl(null, Validators.required)
+      this.classroomId = new FormControl(null, Validators.required),
+      this.subjectId = new FormControl(null, Validators.required)
 
     this.examForm = new FormGroup({
       date: this.date,
       classroomId: this.classroomId,
       subjectId: this.subjectId
     });
+    console.log(this.today);
 
     this.getUser();
     this.getTeacherExams();
     this.getTeacherClassrooms();
     this.getTeacherSubjects();
   }
-
 
   onChangePage(newPage: number) {
     this.page = newPage
@@ -142,9 +150,13 @@ export class ExamslistComponent {
       subjectId: exam.subject.id
     })
     this.getTeacherSubjectByClassroom(this.examForm.value.classroomId)
+    console.log("Exam Id: ", this.examId);
+    console.log(exam.date, typeof exam.date);
+
+
   }
 
-  getTeacherSubjectByClassroom(classroomId: string){
+  getTeacherSubjectByClassroom(classroomId: string) {
     console.log(classroomId);
     const params = new HttpParams().set('classroomId', classroomId);
     this.teacherService.getTeacherSubjectByClassroom(this.user.id, params).subscribe({
@@ -155,24 +167,41 @@ export class ExamslistComponent {
     })
   }
 
-  onClickModal() { 
+  onClickModal() {
     if (this.isEdit === false) {
-      console.log("PRIMA ADD: ", this.examForm.value);
-      this.examsService.addExam(this.examForm.value).subscribe({
-        next: () => {          
-          this.getTeacherExams()
-          console.log("DOPO ADD ",this.examForm.value);
-        }
-      });
+      if (this.examForm.value.date > this.today) {
+        this.examsService.addExam(this.examForm.value).subscribe({
+          next: () => {
+            this.getTeacherExams()
+          }
+        })
+      } else {
+        alert('Seleziona una data successiva ad oggi')
+      }
     } else {
-      console.log("PRIMA EDIT: ", this.examForm.value);
-      this.examsService.editExam(this.examForm.value, this.user.id, this.examId).subscribe({
-        next: () => {
-          this.getTeacherExams()
-          console.log("DOPO EDIT ",this.examForm.value);
-        }
-      })
+      if (this.examForm.value.date > this.today) {
+        this.examsService.editExam(this.examForm.value, this.user.id, this.examId).subscribe({
+          next: () => {
+            this.getTeacherExams()
+            this.examForm.reset()
+          }
+        })
+      } else {
+        alert('Impossibile creare un esame antecedente ad oggi')
+      }
     }
+  }
+
+  onDelete(id: string) {
+    this.examId = id;
+  }
+
+  deleteExam() {
+    this.examsService.deleteExam(this.examId!).subscribe({
+      next: () => {
+        this.getTeacherExams();
+      }
+    })
   }
 
 }
