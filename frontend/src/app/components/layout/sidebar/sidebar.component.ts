@@ -9,9 +9,6 @@ import { UsersService } from "src/app/shared/service/users.service";
   styleUrls: ["./sidebar.component.scss"]
 })
 export class SidebarComponent implements OnInit{
-  /**
-   *
-   */
   constructor(private authService: AuthService, private usersService: UsersService) { }
 
   @Input() isExpanded: boolean = false;

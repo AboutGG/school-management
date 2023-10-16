@@ -1,35 +1,115 @@
 <nav *ngIf="users" class="navbar navbar-dark bg-dark position-fixed vw-100">
   <div class="container-fluid wrapper">
 
-    <div class="container-left d-flex flex-row">
+        <div class="container-left d-flex flex-row">
 
-      <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"> 
-        <img class="nav-logo" src="../../../../assets/logo.png" alt="logo"> 
-      </div>
+            <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <img class="nav-logo" src="../../../../assets/logo.png" alt="logo">
+            </div>
 
-      <button (click)="handleSidebarToggle()" class="navbar-toggler" type="button" data-bs-toggle="collapse"
-        data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false"
-        aria-label="Toggle navigation">
-        <i class="bi bi-list-nested text-white-img toggle-img"></i>
-      </button>
+            <button (click)="handleSidebarToggle()" class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="bi bi-list-nested text-white-img toggle-img"></i>
+            </button>
 
+        </div>
+
+        <div class="container-right d-flex flex-row align align-items-center">
+            <i class="bi bi-person-circle text-white profile-img"></i>            
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle bg-transparent b-0" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Ciao, {{users.name}}
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" [routerLink]="['/details/' + this.users.id]"> <i class="bi bi-person-plus-fill"></i> Profilo </a></li>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i
+                            class="bi bi-gear-fill"></i> Impostazioni </a></li>
+                    <li (click)="logout()"><a class="dropdown-item" href="#"> <i class="bi bi-escape"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-
-    <div class="container-right d-flex flex-row align align-items-center">
-      <i class="bi bi-person-circle text-white profile-img"></i>
-
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle bg-transparent b-0" type="button" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          Ciao, {{users.name}}
-        </button>
-       
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#" [routerLink]="['/details/' + this.users.id]"> <i class="bi bi-person-plus-fill"></i> Profilo </a></li>
-          <li> <a class="dropdown-item" href="#"> <i class="bi bi-gear-fill"></i> Impostazioni </a> </li>
-          <li (click)="logout()"><a class="dropdown-item" href="#"> <i class="bi bi-escape"></i> Logout</a> </li>
-        </ul>
-      </div>
-    </div>
-  </div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title text-white" id="exampleModalLabel">{{'impostazioni' | uppercase}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 ">
+                <div class="container ">
+                    <div class="row bg-pages rounded-bottom">
+                        <div class="col-3 mini-sidebar p-0">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link text-black text-center" [ngClass]="{'active': selectedTab === ''}"
+                                       aria-current="page" (click)="switch('')">
+                                        Generale
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-black text-center" [ngClass]="{'active': selectedTab === 'account'}"
+                                       (click)="switch('account')">
+                                        Account
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-9  p-3" [ngSwitch]="selectedTab">
+
+                            <div *ngSwitchCase="'account'">
+                                <h6 class="text-center mt-1">Modifica la password</h6>
+                                <form [formGroup]="accountForm" class="container" (ngSubmit)="onSubmit()">
+
+                                    <div class="form-group mt-4">
+                                        <label for="oldpassword" class="form-label">Password attuale:<span class="text-danger">*</span></label>
+                                        <input type="password" id="oldpassword" name="oldpassword" title="oldpassword" class="form-control placeholder-input"
+                                               formControlName="oldpassword">
+                                        
+
+                                    </div>
+
+                                    <div class="form-group mt-3">
+                                        <label for="newpassword">Nuova Password:<span class="text-danger">*</span></label>
+                                        <input type="password" id="newpassword" name="newpassword" class="form-control"
+                                               formControlName="newpassword">
+                                    </div>
+                                    <div class="modal-body p-0">
+                                        <div *ngIf="successEdit" class="alert alert-success mt-3">
+                                            La password è stata modificata con successo.
+                                        </div>
+                                        <div *ngIf="error" class="alert alert-danger mt-3">
+                                            La password attuale inserita è errata.
+                                        </div>
+                                    </div>
+
+
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button type="submit" [disabled]="accountForm.invalid" class="col-4 btn btn-warning mt-3">SALVA</button>
+                                </div>  
+                                </form>
+                            </div>
+
+                            <div *ngSwitchDefault>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--      <div class="modal-footer">-->
+            <!--        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+            <!--        <button type="button" class="btn btn-primary">Save changes</button>-->
+            <!--      </div>-->
+        </div>
+      
+    </div>
+</div>
