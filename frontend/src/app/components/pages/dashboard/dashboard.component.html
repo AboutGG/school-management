@@ -1,5 +1,4 @@
 <div class="container py-3 bg-light">
-  
   <div style="cursor:default;" class="row">
     <div class="col-md-3">
       <div [ngClass]="{'card-body-count-circolare' : isTeacher, 'card-body-count' : !isTeacher}" class="card card-body-count text-left bg-success mb-2"  data-bs-toggle="modal" data-bs-target="#ModalCirculars">
@@ -62,6 +61,7 @@
       <div style="margin-top: 20px;" class="card card-left">
         <h5 class="card-header">Bacheca</h5>
         <div style="display: flex; flex-direction: column;" class="card-body">
+          <ng-container *ngIf="pdfs && pdfs.length > 0; else noCirculars">
           <div *ngFor="let pdf of pdfs"  style="margin-bottom: 15px;">
             <div style="background-color: #ffd45f; " class="card-body d-flex flex-column">
               <h6 class=" text-uppercase card-title">{{pdf.object}} 
@@ -71,6 +71,14 @@
               <a (click)="getCircularsById(pdf)" style="text-align: end;" class="card-text-pdf">Scarica PDF</a>       
             </div>
           </div>
+        </ng-container>
+        <ng-template #noCirculars>
+          <div>
+            <div style="background-color: #ffd45f;" class="card-body">
+            <h6 class="text-uppercase text-center card-title">{{ 'Bacheca Vuota' }}</h6>
+            </div>
+          </div>
+        </ng-template>
         </div>
       </div>
     </div>
@@ -102,7 +110,7 @@
           </div>
           </ng-container>
           <ng-template #noExams>
-          <div class="card" style="margin-bottom: 50px;">
+          <div style="margin-bottom: 30px;">
             <div style="background-color: #ffd45f;" class="card-body">
             <h6 class="text-uppercase text-center card-title">{{ 'Non ci sono esami in programma' }}</h6>
             </div>

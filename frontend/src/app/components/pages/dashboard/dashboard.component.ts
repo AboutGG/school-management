@@ -34,49 +34,6 @@ export class DashboardComponent implements OnInit {
     img: "assets/dashboard/logoCircolari.jpg"
   }
 
-  // pdfs = [
-  //   {
-  //     title: "Nuovo ordinamento scolastico",
-  //     data: "10/10/2023",
-  //     img: "assets/dashboard/logoCircolari.jpg"
-  //   },
-  //   {
-  //     title: "Fine anno scolastico",
-  //     data: "01/06/2023",
-  //     img: "assets/dashboard/logoCircolari.jpg"
-  //   },
-  //   {
-  //     title: "Programma esami di stato",
-  //     data: "16/05/2023",
-  //     img: "assets/dashboard/logoCircolari.jpg"
-  //   },
-  //   {
-  //     title: "Convocazione consiglio d'istituto",
-  //     data: "28/04/2023",
-  //     img: "assets/dashboard/logoCircolari.jpg"
-  //   },
-  //   {
-  //     title: "Assemblea d'istituto",
-  //     data: "10/04/2023",
-  //     img: "assets/dashboard/logoCircolari.jpg"
-
-  //   },
-  //   {
-  //     title: "Programma Carnevale a scuola",
-  //     data: "03/02/2023",
-  //     img: "assets/dashboard/logoCircolari.jpg"
-  //   },
-  //   {
-  //     title: "Incontro scuola famiglia",
-  //     data: "12/01/2023",
-  //     img: "assets/dashboard/logoCircolari.jpg"
-  //   },
-  //   {
-  //     title: "Circolare di fine anno solare",
-  //     data: "21/12/2023",
-  //     img: "assets/dashboard/logoCircolari.jpg"
-  //   },
-  // ]
   examsTeachers!: TeacherExam[];
   examsStudents!: StudentExam[];
   order: string = 'Date';
@@ -133,6 +90,7 @@ export class DashboardComponent implements OnInit {
   getCirculars() { 
     const params = new HttpParams()
     .set('Order', this.orderPdf)
+    .set('OrderType', 'desc')
     this.commonService.getCirculars(params).subscribe({
       next: (res: ListResponse<PdfCirculars[]>) => {
         this.pdfs = res.data;
@@ -148,14 +106,15 @@ export class DashboardComponent implements OnInit {
     this.commonService.getCircularsById(pdf.id).subscribe( blob => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = url; 
       a.download = pdf.object;
       a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
+      document.body.appendChild(a); 
+      a.click(); 
       window.URL.revokeObjectURL(url);
     });
   }
+
 
   getCount() {
     this.commonService.getCount().subscribe((res) => {
@@ -174,7 +133,6 @@ export class DashboardComponent implements OnInit {
           this.examsTeachers = res.data
             .filter((item, index) => item.date > this.today)
             .filter((_, index) => index < this.itemsPerPage);
-          console.log('exams teacher',this.examsTeachers); 
 
         },
         error: (err) => {
