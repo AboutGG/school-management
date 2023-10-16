@@ -12,6 +12,7 @@ import { ExamsService } from "src/app/shared/service/exams.service";
 import { TeacherService } from "src/app/shared/service/teacher.service";
 import { UsersService } from "src/app/shared/service/users.service";
 import { ListResponse } from 'src/app/shared/models/listresponse';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-dashboard",
@@ -98,6 +99,7 @@ export class DashboardComponent implements OnInit {
     private teacherService: TeacherService,
     private examsService: ExamsService,
     private fb: NonNullableFormBuilder,
+    private route: ActivatedRoute,
 
     private authService: AuthService ){ 
 
@@ -115,7 +117,6 @@ export class DashboardComponent implements OnInit {
     this.getCount()
     this.getExams(this.isTeacher);
     this.getCirculars();
-    //this.getCircularsById();
    
     //this.getClassroomCount()
   }
@@ -143,8 +144,17 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  getCircularsById(){
-
+  getCircularsById(pdf: PdfCirculars){
+    this.commonService.getCircularsById(pdf.id).subscribe( blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = pdf.object;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
   }
 
   getCount() {
