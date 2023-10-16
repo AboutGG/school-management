@@ -1,7 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import {Component, EventEmitter, inject, OnInit, Output} from "@angular/core";
 import { UsersMe } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import { UsersService } from "src/app/shared/service/users.service";
+import { FormControl, FormGroup, Validators} from "@angular/forms";
+import { AccountService} from "../../../shared/service/account.service";
+import { catchError } from "rxjs";
 
 @Component({
   selector: "app-navbar",
@@ -11,15 +14,37 @@ import { UsersService } from "src/app/shared/service/users.service";
 export class NavbarComponent implements OnInit {
   @Output() toggleSidebar: EventEmitter<void> = new EventEmitter<void>();
 
-  /**
-   *
-   */
-  constructor(private authService: AuthService, private usersService: UsersService) { }
+  accountService = inject(AccountService);
 
-  users! : UsersMe;
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService
+  ) {}
+
+  users!: UsersMe;
+  selectedTab: string = "";
+  accountForm!: FormGroup;
+
+  // alert: boolean = false;
+  error: boolean = false;
+  successEdit: boolean = false;
+
+  switch(prova: string): void {
+    this.selectedTab = prova;
+  }
 
   ngOnInit(): void {
     this.usersMe();
+    this.accountForm = new FormGroup({
+      oldpassword: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      newpassword: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+    });
   }
 
   handleSidebarToggle(): void {
@@ -30,17 +55,37 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
   }
 
-  usersMe(){
+  usersMe() {
     this.usersService.getUsersMe().subscribe({
       next: (res: UsersMe) => {
         this.users = res;
-        console.log('get me',res)
-
+        console.log("get me", res);
       },
       error: (err) => {
-        console.log('error', err);
-      }
-    })
-    
+        console.log("error", err);
+      },
+    });
+  }
+
+  onSubmit() {
+    this.accountService
+      .putUser(this.accountForm.value, this.users.id)
+      .subscribe({
+        next: (res: any) => {
+          this.successEdit = true;
+          this.error = false;
+        },
+        error: (err) => {
+          this.error = true;
+          this.successEdit = false;
+        },
+      });
+    this.accountForm.reset();
+    console.log(this.accountForm.value);
+  }
+
+  showAlerts(formControlName: string): boolean {
+    const formControl = this.accountForm.get(formControlName);
+    return !!formControl && formControl.invalid;
   }
 }
