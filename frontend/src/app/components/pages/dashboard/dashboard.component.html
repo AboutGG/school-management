@@ -2,7 +2,7 @@
   
   <div style="cursor:default;" class="row">
     <div class="col-md-3">
-      <div style="cursor: pointer;" [ngClass]="{'card-body-count-circolare' : isTeacher, 'card-body-count' : !isTeacher}" class="card card-body-count text-left bg-success mb-2"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <div [ngClass]="{'card-body-count-circolare' : isTeacher, 'card-body-count' : !isTeacher}" class="card card-body-count text-left bg-success mb-2"  data-bs-toggle="modal" data-bs-target="#ModalCirculars">
         <div class="row justify-content-between">
           <div class="col-10">
             <h3 *ngIf="!isTeacher" class="mb-0 text-white">{{count.Users}}</h3>
@@ -81,9 +81,6 @@
           <ng-container *ngIf="examsTeachers && examsTeachers.length || examsStudents && examsStudents.length > 0; else noExams">
             <div *ngIf="isTeacher">
             <div *ngFor="let exam of examsTeachers">
-              
-              
-                
               <div style="background-color: #ffd45f; margin-bottom: 15px;" class="card-body d-flex flex-column" >  
                 <h6 class=" text-uppercase card-title">{{exam.subject.name}}</h6>
                 <p class="card-text">{{ exam.date | date: "dd/MM/yyyy"}}</p>
@@ -121,8 +118,9 @@
           <h5 class="card-header">Pagella</h5>
           <div class="card-body">
             <div  style="margin-bottom: 15px;">
-              <div style="background-color: #ffd45f;" class="card-body d-flex justify-content-between">
-                <h6 class=" text-uppercase card-title">{{pagella.title}}</h6> <img style="width: 32px;" class="" [src]="pagella.img"  alt="logo" >     
+              <div style="background-color: #ffd45f;" class="card-body d-flex justify-content-between ">
+                <h6 class=" text-uppercase card-title">{{pagella.title}}</h6>
+                <a style="text-align: end;" class="card-text-pdf">Scarica PDF</a>
               </div>
             </div>
           </div>
@@ -132,7 +130,7 @@
   </div>
 
 <!-- Modal Circolari -->
-<div *ngIf="isTeacher" class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div *ngIf="isTeacher" class="modal fade" id="ModalCirculars" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div style="background-color: #1d1e2c; color: white;" class="modal-header">
