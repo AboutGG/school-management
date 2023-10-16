@@ -20,8 +20,13 @@ export class CommonService {
     return this.http.post<PdfCirculars>(`https://localhost:7262/api/pdf/circulars`, form);
   }
 
-  getCirculars(params?: HttpParams): Observable <ListResponse<any>>{
+  getCirculars(params?: HttpParams): Observable<ListResponse<any>>{
     return this.http.get<ListResponse<any>>(`https://localhost:7262/api/pdf/circulars`, {params})
+
+  }
+
+  getCircularsById(id: string, params?: HttpParams): Observable<ListResponse<any>>{
+    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/pdf/circulars/${id}`, {params})
 
   }
 }

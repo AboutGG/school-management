@@ -78,12 +78,18 @@ export class DashboardComponent implements OnInit {
   // ]
   examsTeachers!: TeacherExam[];
   examsStudents!: StudentExam[];
-  itemsPerPage: number = 3;
   order: string = 'Date';
   orderPdf: string = 'UploadDate'
   editForm!: FormGroup;
   pdf!: PdfCirculars;
   pdfs!: PdfCirculars[];
+  circularId!: string;
+  currentDate = new Date();
+  day = this.currentDate.getDate();
+  month = this.currentDate.getMonth() + 1;
+  year = this.currentDate.getFullYear();
+  today = this.year + "-" + this.month + "-" + this.day;
+  itemsPerPage = 3;
 
 
   constructor(
@@ -109,7 +115,7 @@ export class DashboardComponent implements OnInit {
     this.getCount()
     this.getExams(this.isTeacher);
     this.getCirculars();
-    this.getCircularsById();
+    //this.getCircularsById();
    
     //this.getClassroomCount()
   }
@@ -129,8 +135,6 @@ export class DashboardComponent implements OnInit {
     this.commonService.getCirculars(params).subscribe({
       next: (res: ListResponse<PdfCirculars[]>) => {
         this.pdfs = res.data;
-        console.log(this.pdfs);
-        
       },
       error:(err) => {
         console.log("error",err);
@@ -152,12 +156,16 @@ export class DashboardComponent implements OnInit {
   getExams(isTeacher: boolean) {
     const params = new HttpParams()
     .set('Order', this.order)
-    .set('ItemsPerPage', this.itemsPerPage)
-
+    
     if (isTeacher) {
       this.examsService.getTeacherExams(params).subscribe({
         next: (res: ListResponse<TeacherExam[]>) => {
-          this.examsTeachers = res.data;
+
+          this.examsTeachers = res.data
+            .filter((item, index) => item.date > this.today)
+            .filter((_, index) => index < this.itemsPerPage);
+          console.log('exams teacher',this.examsTeachers); 
+
         },
         error: (err) => {
           console.log('error dash', err);
@@ -166,7 +174,10 @@ export class DashboardComponent implements OnInit {
     } else {
       this.examsService.getStudentExams(params).subscribe({
         next: (res: ListResponse<StudentExam[]>) => {
-          this.examsStudents = res.data;
+          
+          this.examsStudents = res.data
+            .filter((item, index) => item.date > this.today)
+            .filter((_, index) => index < this.itemsPerPage);
         },
         error: (err) => {
           console.log('error dash', err);
