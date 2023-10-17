@@ -174,7 +174,8 @@ public class UsersController : Controller
                             Id = Guid.NewGuid(),
                             UserId = newUser.Id,
                             RegistryId = newRegistry.Id,
-                            ClassroomId = inputUser.ClassroomId ?? throw new Exception("UNKNOWN_CLASSROOM")
+                            ClassroomId = inputUser.ClassroomId ?? throw new Exception("UNKNOWN_CLASSROOM"),
+                            SchoolYear = CurrentSchoolYear.GetCurrentSchoolYear()
                         };
 
                         if (!new GenericRepository<Student>(_context).Create(newStudent))
