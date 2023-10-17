@@ -308,6 +308,33 @@ public class StudentsController : Controller
     }
 
     #endregion
-    
+
+    #region Get Student school years
+
+    /// <summary>
+    /// Api call which return all the schoolYears which the student did on his school career
+    /// </summary>
+    /// <param name="userId">Id of the user which we take the student</param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("{userId}/school_years")]
+    [ProducesResponseType(200)]
+    public IActionResult GetStudentReport([FromRoute] Guid userId)
+    {
+        var takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(
+            query => query
+                .Where(el => el.UserId == userId));
+
+        var takenSchoolYear = new GenericRepository<PromotionHistory>(_context).GetAllUsingIQueryable(
+            null, query => query
+                .Where(el => el.StudentId == takenStudent.Id)
+            , out var total).Select(el => el.PreviousSchoolYear).ToList();
+        takenSchoolYear.Add(takenStudent.SchoolYear);
+        takenSchoolYear = takenSchoolYear.Distinct().ToList();
+        
+        return Ok(takenSchoolYear);
+    }
+
+    #endregion
     #endregion
 }

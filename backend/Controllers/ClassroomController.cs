@@ -185,12 +185,13 @@ public class ClassroomsController : Controller
                 Id = Guid.NewGuid(),
                 StudentId = studentId,
                 PreviousClassroomId = takenStudent.ClassroomId,
-                PreviousSchoolYear = inputStudentPromotion.SchoolYear,
+                PreviousSchoolYear = takenStudent.SchoolYear,
                 FinalGraduation = Convert.ToInt32(finalGraduation),
                 ScholasticBehavior = inputStudentPromotion.ScholasticBehavior,
                 Promoted = inputStudentPromotion.Promoted
             };
             takenStudent.ClassroomId = inputStudentPromotion.NextClassroom;
+            takenStudent.SchoolYear = CurrentSchoolYear.GetCurrentSchoolYear();
 
             //Procedo con la creazione e l'update delle entità precedenti
             if (! new GenericRepository<PromotionHistory>(_context).Create(promotionHistory))
