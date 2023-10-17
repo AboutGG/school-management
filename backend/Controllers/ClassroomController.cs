@@ -130,10 +130,26 @@ public class ClassroomsController : Controller
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         try
         {
-            string[] splittedSchoolYear = inputStudentPromotion.SchoolYear.Split("-");
+            //Prendo lo studente tramite l'id passato nella route
+            Student takenStudent = new GenericRepository<Student>(_context)
+                .GetByIdUsingIQueryable(query => query
+                    .Where(el => el.Id == studentId)
+                    .Include(el => el.Registry)
+                    .Include(el => el.StudentExams)
+                    .ThenInclude(el => el.Exam)
+                );
+            string[] splittedSchoolYear = takenStudent.SchoolYear.Split("-");
             
             DateOnly startFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[0]), 09, 10);
             DateOnly endSecondQuarter = new DateOnly(int.Parse(splittedSchoolYear[1]), 05, 15);
+
+            takenStudent.StudentExams = new GenericRepository<StudentExam>(_context).GetAllUsingIQueryable(null,
+                query => takenStudent.StudentExams.AsQueryable()
+                    .Where(el =>
+                        el.Exam.Date >  startFirstQuarter
+                        && el.Exam.Date < endSecondQuarter)
+                , out var total
+            );
             
             //Controllo della data in modo da controllare se si è nel secondo quadrimestre e quindi si può procedere con la promozione
             if (DateTime.UtcNow.Year == int.Parse(splittedSchoolYear[1]) || DateTime.UtcNow.Year == int.Parse(splittedSchoolYear[0]))
@@ -151,17 +167,7 @@ public class ClassroomsController : Controller
                 throw new Exception("INVALID_SCHOOL_YEAR");
             }
             
-            //Prendo lo studente tramite l'id passato nella route
-            Student takenStudent = new GenericRepository<Student>(_context)
-                .GetByIdUsingIQueryable(query => query
-                    .Where(el => el.Id == studentId)
-                    .Include(el => el.StudentExams.Where(el =>
-                        el.Exam.Date >  startFirstQuarter
-                        && el.Exam.Date < endSecondQuarter)
-                    )
-                    .ThenInclude(el => el.Exam)
-                    .Include(el => el.Registry)
-                );
+            
 
             //Calcolo la media di tutti i voti dello studente presi negli esami che ha svolto
             double finalGraduation = 0;
