@@ -13,6 +13,7 @@ import { TeacherService } from "src/app/shared/service/teacher.service";
 import { UsersService } from "src/app/shared/service/users.service";
 import { ListResponse } from 'src/app/shared/models/listresponse';
 import { ActivatedRoute } from "@angular/router";
+import { StudentService } from "src/app/shared/service/student.service";
 
 @Component({
   selector: "app-dashboard",
@@ -30,8 +31,19 @@ export class DashboardComponent implements OnInit {
   isTeacher = this.authService.isTeacher();
 
   pagella = {
-    title: "Pagella 1° Quadrimestre", 
-    img: "assets/dashboard/logoCircolari.jpg"
+    title: "Visualizza Pagella", 
+    img: "assets/dashboard/logoCircolari.jpg",
+    year: [
+      "2023-2024",
+      "2022-2023",
+      "2021-2022",
+      "2020-2021",
+      "2019-2020"
+    ],
+    quarter: [
+      "1° Quadrimestre",
+      "2° Quadrimestre"
+    ]
   }
 
   examsTeachers!: TeacherExam[];
@@ -39,6 +51,7 @@ export class DashboardComponent implements OnInit {
   order: string = 'Date';
   orderPdf: string = 'UploadDate'
   editForm!: FormGroup;
+  selectReport!: FormGroup;
   pdf!: PdfCirculars;
   pdfs!: PdfCirculars[];
   circularId!: string;
@@ -54,6 +67,7 @@ export class DashboardComponent implements OnInit {
     private commonService: CommonService, 
     private classroomService: ClassroomService,
     private teacherService: TeacherService,
+    private studentService: StudentService,
     private examsService: ExamsService,
     private fb: NonNullableFormBuilder,
     private route: ActivatedRoute,
@@ -68,7 +82,12 @@ export class DashboardComponent implements OnInit {
       header: new FormControl(null, Validators.required),
       body: new FormControl(null, Validators.required),
       sign: new FormControl(null, Validators.required),
-    })}
+    })
+
+    this.selectReport = this.fb.group({
+
+    })
+  }
 
   ngOnInit(): void {
     this.getCount()
@@ -93,7 +112,7 @@ export class DashboardComponent implements OnInit {
     .set('OrderType', 'desc')
     this.commonService.getCirculars(params).subscribe({
       next: (res: ListResponse<PdfCirculars[]>) => {
-        this.pdfs = res.data;
+        this.pdfs = res.data; 
       },
       error:(err) => {
         console.log("error",err);
@@ -131,7 +150,7 @@ export class DashboardComponent implements OnInit {
         next: (res: ListResponse<TeacherExam[]>) => {
 
           this.examsTeachers = res.data
-            .filter((item, index) => item.date > this.today)
+            .filter((item, index) => item.date >= this.today)
             .filter((_, index) => index < this.itemsPerPage);
 
         },
@@ -144,7 +163,7 @@ export class DashboardComponent implements OnInit {
         next: (res: ListResponse<StudentExam[]>) => {
           
           this.examsStudents = res.data
-            .filter((item, index) => item.date > this.today)
+            .filter((item, index) => item.date >= this.today)
             .filter((_, index) => index < this.itemsPerPage);
         },
         error: (err) => {
@@ -152,6 +171,11 @@ export class DashboardComponent implements OnInit {
         }
       });
     }
+  }
+
+  getStudentReports(){
+    
+
   }
   
 

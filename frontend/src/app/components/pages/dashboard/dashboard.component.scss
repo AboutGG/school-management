@@ -142,3 +142,13 @@ textarea[type=text]:focus{
 label{
   margin-top: 10px;
 }
+select{
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+select:focus{
+  border: 2px solid #ffd45f;
+
+}
