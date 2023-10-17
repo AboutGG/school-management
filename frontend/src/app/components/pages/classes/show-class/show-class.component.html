@@ -32,7 +32,7 @@
                <td>{{ teacher.subjects.join(', ') }}</td>
             </tr>
             <tr>
-             
+
             </tr>
           </tbody>
         </table>
@@ -63,6 +63,8 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/teachers/exams']"><i class="bi bi-book-fill"></i>Visualizza Pagella</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#graduationModal"> <i
+                            class="bi bi-gear-fill"></i>Promozione</a></li>
                 <!-- <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li> -->
               </ul>
             </div>
@@ -73,6 +75,22 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="graduationModal" tabindex="-1" aria-labelledby="graduationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{'promozione studente' | uppercase}}</h1>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="col-4 btn btn-warning">{{'salva' | uppercase}}</button>
+      </div>
+    </div>
+  </div>
+</div>
   <!-- Modal delete -->
   <!-- <div
     class="modal fade"
@@ -110,4 +128,83 @@
       </div>
     </div>
   </div> -->
+
+
+
+
+<!-- 
+<div class="modal fade" id="exgraduationModal" tabindex="-1" aria-labelledby="graduationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title text-white" id="graduationModalLabel">{{'impostazioni' | uppercase}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 ">
+                <div class="container ">
+                    <div class="row bg-pages rounded-bottom">
+                        <div class="col-3 mini-sidebar p-0">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link text-black text-center">
+                                        Generale
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-black text-center" >
+                                        Account
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-9 p-3">
+
+                            <div *ngSwitchCase="'account'">
+                                <h6 class="text-center mt-1">Modifica la password</h6>
+                                <form class="container">
+                                <!-- <form [formGroup]="accountForm" class="container" (ngSubmit)="onSubmit()"> -->
+
+                                    <!-- <div class="form-group mt-4">
+                                        <label for="oldpassword" class="form-label">Password attuale:<span class="text-danger">*</span></label>
+                                        <input type="password" id="oldpassword" name="oldpassword" title="oldpassword" class="form-control placeholder-input"
+                                               formControlName="oldpassword">
+                                        
+
+                                    </div>
+
+                                    <div class="form-group mt-3">
+                                        <label for="newpassword">Nuova Password:<span class="text-danger">*</span></label>
+                                        <input type="password" id="newpassword" name="newpassword" class="form-control"
+                                               formControlName="newpassword">
+                                    </div>
+                                    <div class="modal-body p-0">
+                                        <div class="alert alert-success mt-3">
+                                            La password è stata modificata con successo.
+                                        </div>
+                                        <div class="alert alert-danger mt-3">
+                                            La password attuale inserita è errata.
+                                        </div>
+                                    </div>
+
+
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button type="submit" class="col-4 btn btn-warning mt-3">SALVA</button>
+                                </div>  
+                                </form>
+                            </div>
+
+                            <div *ngSwitchDefault>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         
+        </div>
+      
+    </div>
+</div> -->
+
+
 </div>

@@ -171,7 +171,7 @@ public class ClassroomsController : Controller
                 finalGraduation += el.Grade ?? 0;
             }
 
-            finalGraduation /= takenStudent.StudentExams.Count;
+            finalGraduation = takenStudent.StudentExams.Count > 0 ? finalGraduation / takenStudent.StudentExams.Count : 0;
 
             
             if (inputStudentPromotion.Promoted && finalGraduation < 6)
