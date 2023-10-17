@@ -11,8 +11,8 @@ export class TeacherService {
   constructor(private http: HttpClient) { }
 
   //get teacher subjects 
-  getTeacherSubjects(): Observable<ListResponse<any>> {
-    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/subjects`)
+  getTeacherSubjects(userId: string): Observable<IdName[]> {
+    return this.http.get<IdName[]>(`https://localhost:7262/api/teachers/${userId}/subjects`)
   }
 
   // get all classes
@@ -20,7 +20,7 @@ export class TeacherService {
     return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/classrooms`)
   }
 
-  getTeacherSubjectByClassroom(userId: string, params: HttpParams) : Observable<IdName[]> {
+  getTeacherSubjectByClassroom(userId: string, params?: HttpParams) : Observable<IdName[]> {
     return this.http.get<IdName[]>(`https://localhost:7262/api/teachers/${userId}/subjects`, { params })
   }
 

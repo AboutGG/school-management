@@ -1,7 +1,6 @@
 import { UsersService } from './../../../shared/service/users.service';
-import { TeacherSubject } from './../../../shared/models/subjects';
 import { HttpParams } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';
 import { ListResponse } from 'src/app/shared/models/listresponse';
@@ -15,7 +14,7 @@ import { UsersMe } from 'src/app/shared/models/users';
   templateUrl: './examslist.component.html',
   styleUrls: ['./examslist.component.scss']
 })
-export class ExamslistComponent {
+export class ExamslistComponent implements OnInit {
   constructor(private examsService: ExamsService, private teacherService: TeacherService, private usersService: UsersService) { }
 
   user!: UsersMe
@@ -26,7 +25,7 @@ export class ExamslistComponent {
     classrooms: new FormControl('')
   });
   examsList!: TeacherExam[]
-  subjects!: TeacherSubject[]
+  subjects!: IdName[]
   classrooms!: TeacherClassroom[]
   orders = {
     date: 'asc',
@@ -44,13 +43,13 @@ export class ExamslistComponent {
   selectedPages!: number
   total!: number
   isEdit: boolean = false
+  successEditOrNew: boolean = false
   examId?: string
   subjectsByClassroom?: IdName[]
   classroomId!: FormControl
   subjectId!: FormControl
   date!: FormControl
   examForm!: FormGroup
-  onAdd: boolean = false
   currentDate = new Date()
   today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
   // today = new Date(new Date().getTime()).toISOString().substring(0, 10);
@@ -58,8 +57,6 @@ export class ExamslistComponent {
   alert: boolean = false;
 
   ngOnInit(): void {
-    console.log(this.examDate);    
-    
     this.date = new FormControl(null, Validators.required),
       this.classroomId = new FormControl(null, Validators.required),
       this.subjectId = new FormControl(null, Validators.required)
@@ -69,12 +66,10 @@ export class ExamslistComponent {
       classroomId: this.classroomId,
       subjectId: this.subjectId
     });
-    console.log(this.today);
 
     this.getUser();
     this.getTeacherExams();
     this.getTeacherClassrooms();
-    this.getTeacherSubjects();
   }
 
   onChangePage(newPage: number) {
@@ -93,6 +88,7 @@ export class ExamslistComponent {
     this.usersService.getUsersMe().subscribe({
       next: (res) => {
         this.user = res
+        this.getTeacherSubjects();
         console.log("DEBUG USER ", this.user);
       }
     })
@@ -135,11 +131,23 @@ export class ExamslistComponent {
   }
 
   getTeacherSubjects() {
-    this.teacherService.getTeacherSubjects().subscribe({
+    this.teacherService.getTeacherSubjects(this.user?.id).subscribe({
       next: (res) => {
-        this.subjects = res.data
+        this.subjects = res
+        console.log(res);
       }
     });
+  }
+
+  getTeacherSubjectByClassroom(classroomId: string) {
+    // const params = classroomId ? new HttpParams().set('classroomId', classroomId) : new HttpParams();
+    const params = new HttpParams().set('classroomId', classroomId)
+    console.log(params)
+    this.teacherService.getTeacherSubjectByClassroom(this.user?.id, params).subscribe({
+      next: (res: IdName[]) => {
+        this.subjectsByClassroom = res;
+      }
+    })
   }
 
   editExam(exam: TeacherExam) {
@@ -150,21 +158,6 @@ export class ExamslistComponent {
       subjectId: exam.subject.id
     })
     this.getTeacherSubjectByClassroom(this.examForm.value.classroomId)
-    console.log("Exam Id: ", this.examId);
-    console.log(exam.date, typeof exam.date);
-
-
-  }
-
-  getTeacherSubjectByClassroom(classroomId: string) {
-    console.log(classroomId);
-    const params = new HttpParams().set('classroomId', classroomId);
-    this.teacherService.getTeacherSubjectByClassroom(this.user.id, params).subscribe({
-      next: (res: IdName[]) => {
-        this.subjectsByClassroom = res;
-        console.log("SONO RES ", res);
-      }
-    })
   }
 
   onClickModal() {
@@ -172,24 +165,29 @@ export class ExamslistComponent {
       if (this.examForm.value.date > this.today) {
         this.examsService.addExam(this.examForm.value).subscribe({
           next: () => {
+            this.examForm.reset();
             this.getTeacherExams()
           }
         })
       } else {
-        alert('Seleziona una data successiva ad oggi')
+        alert("Selezionare una data successiva a quella odierna");
       }
+
     } else {
       if (this.examForm.value.date > this.today) {
+        this.successEditOrNew = false
         this.examsService.editExam(this.examForm.value, this.user.id, this.examId).subscribe({
           next: () => {
+            this.successEditOrNew = true
+            setTimeout(() => this.successEditOrNew = false, 4000)
             this.getTeacherExams()
-            this.examForm.reset()
           }
         })
       } else {
-        alert('Impossibile creare un esame antecedente ad oggi')
+        alert("Selezionare una data successiva a quella odierna");
       }
     }
+
   }
 
   onDelete(id: string) {
