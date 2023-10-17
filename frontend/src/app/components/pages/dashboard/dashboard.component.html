@@ -167,19 +167,17 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-md-6">
             <label for="object">Oggetto</label>
             <input id="object" type="text" formControlName="object" placeholder="Es: Assemblea d'Istituto...">
             <small class="text-danger" *ngIf="!editForm.get('object')!.valid && editForm.get('object')!.touched">Inserisci un oggetto</small>
            
-          </div>
-          <div class="col-md-6">
+          
+          
             <label for="header">Intestazione</label>
             <input id="header" type="text" formControlName="header" placeholder="Es: Al Personale Docente...">
             <small class="text-danger" *ngIf="!editForm.get('header')!.valid && editForm.get('header')!.touched">Inserisci un'intestazione</small>
-          </div>
-        </div>
+         
+        
 
             <label for="body">Corpo del testo</label>
             <textarea style="height: 150px;" id="body" type="text" formControlName="body" placeholder="Es: Si comunica a tutto il personale docente..." ></textarea>

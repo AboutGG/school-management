@@ -52,7 +52,6 @@ export class DashboardComponent implements OnInit {
   orderPdf: string = 'UploadDate'
   editForm!: FormGroup;
   selectReport!: FormGroup;
-  pdf!: PdfCirculars;
   pdfs!: PdfCirculars[];
   circularId!: string;
   currentDate = new Date();
@@ -61,6 +60,8 @@ export class DashboardComponent implements OnInit {
   year = this.currentDate.getFullYear();
   today = this.year + "-" + this.month + "-" + this.day;
   itemsPerPage = 3;
+  studentId!: string;
+  studentReports!: any
 
 
   constructor(
@@ -97,29 +98,29 @@ export class DashboardComponent implements OnInit {
     //this.getClassroomCount()
   }
 
-  addCircular() {
-    const data=this.editForm.value
-    console.log(data);
-    this.commonService.addCirculars(data).subscribe((res) => {
-      this.pdf = res;
-      console.log(data);
-  })
-  }
-
   getCirculars() { 
     const params = new HttpParams()
     .set('Order', this.orderPdf)
     .set('OrderType', 'desc')
     this.commonService.getCirculars(params).subscribe({
       next: (res: ListResponse<PdfCirculars[]>) => {
-        this.pdfs = res.data; 
+        this.pdfs = res.data;
+        console.log('get circolari', res.data);
       },
       error:(err) => {
         console.log("error",err);
       }
-
     })
   }
+
+  addCircular() {
+    const data=this.editForm.value
+    this.commonService.addCirculars(data).subscribe((res) => {
+      
+  })
+  this.getCirculars()
+  }
+
 
   getCircularsById(pdf: PdfCirculars){
     this.commonService.getCircularsById(pdf.id).subscribe( blob => {
@@ -174,8 +175,14 @@ export class DashboardComponent implements OnInit {
   }
 
   getStudentReports(){
-    
+    this.studentService.getStudentsReports(this.studentId).subscribe({
+      next: (res: any) => {
+        this.studentReports = res;
+      }
 
+      })
+    }
+    
   }
   
 
@@ -185,4 +192,4 @@ export class DashboardComponent implements OnInit {
   //     console.log("totale classi", total);
   //   });
   // }
-}
+

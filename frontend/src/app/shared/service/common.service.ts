@@ -21,7 +21,12 @@ export class CommonService {
   }
 
   getCirculars(params?: HttpParams): Observable<ListResponse<any>>{
-    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/pdf/circulars`, {params})
+    const headers = new HttpHeaders({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/pdf/circulars`, {params, headers})
 
   }
 
