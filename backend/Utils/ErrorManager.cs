@@ -74,7 +74,14 @@ public static class ErrorManager
                 error = new ErrorResponse(StatusCodes.Status401Unauthorized,
                     "The new password is equal then the older.", e.StackTrace);
                 return error;
-            
+            case "INVALID_STUDENT_CLASSROOM":
+                error = new ErrorResponse(StatusCodes.Status404NotFound,
+                    "In this classroom there isn't this student", e.StackTrace);
+                return error;
+            case "UNAUTHORIZED_STUDENT_GRADES":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized,
+                    "You can't access to the final mean of the student", e.StackTrace);
+                return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status400BadRequest, e.Message, e.StackTrace);
                 return error;
