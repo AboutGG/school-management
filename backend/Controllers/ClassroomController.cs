@@ -147,6 +147,11 @@ public class ClassroomsController : Controller
                     .Include(el => el.StudentExams)
                     .ThenInclude(el => el.Exam)
                 );
+            if (takenStudent.SchoolYear == null)
+            {
+                throw new Exception("SCHOOL_YEAR_NOT_FOUND");
+            }
+            
             string[] splittedSchoolYear = takenStudent.SchoolYear.Split("-");
 
             DateOnly startFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[0]), 09, 10);
@@ -208,7 +213,7 @@ public class ClassroomsController : Controller
                 ScholasticBehavior = inputStudentPromotion.ScholasticBehavior,
                 Promoted = inputStudentPromotion.Promoted
             };
-            takenStudent.ClassroomId = inputStudentPromotion.NextClassroom;
+            takenStudent.ClassroomId = inputStudentPromotion.Promoted ? inputStudentPromotion.NextClassroom : takenStudent.ClassroomId;
             takenStudent.SchoolYear = CurrentSchoolYear.GetCurrentSchoolYear();
 
             //Procedo con la creazione e l'update delle entità precedenti

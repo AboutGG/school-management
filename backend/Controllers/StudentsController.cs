@@ -321,18 +321,35 @@ public class StudentsController : Controller
     [ProducesResponseType(200)]
     public IActionResult GetStudentReport([FromRoute] Guid userId)
     {
-        var takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(
-            query => query
-                .Where(el => el.UserId == userId));
+        try
+        {
+            var takenStudent = new GenericRepository<Student>(_context).GetByIdUsingIQueryable(
+                query => query
+                    .Where(el => el.UserId == userId));
+            if (takenStudent == null)
+            {
+                throw new Exception("NOT_FOUND");
+            }
 
-        var takenSchoolYear = new GenericRepository<PromotionHistory>(_context).GetAllUsingIQueryable(
-            null, query => query
-                .Where(el => el.StudentId == takenStudent.Id)
-            , out var total).Select(el => el.PreviousSchoolYear).ToList();
-        takenSchoolYear.Add(takenStudent.SchoolYear);
-        takenSchoolYear = takenSchoolYear.Distinct().ToList();
+            if (takenStudent.SchoolYear == null)
+            {
+                throw new Exception("SCHOOL_YEAR_NOT_FOUND");
+            }
+            var takenSchoolYear = new GenericRepository<PromotionHistory>(_context).GetAllUsingIQueryable(
+                null, query => query
+                    .Where(el => el.StudentId == takenStudent.Id)
+                , out var total).Select(el => el.PreviousSchoolYear).ToList();
+            takenSchoolYear.Add(takenStudent.SchoolYear);
+            takenSchoolYear = takenSchoolYear.Distinct().ToList();
         
-        return Ok(takenSchoolYear);
+            return Ok(takenSchoolYear);
+        }
+        catch (Exception e)
+        {
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+       
     }
 
     #endregion
