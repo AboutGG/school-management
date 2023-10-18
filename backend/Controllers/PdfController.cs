@@ -99,14 +99,14 @@ public class PdfController : Controller
     [Route("circulars/{circularId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]
-    public IActionResult GetCircular([FromRoute] int circularId)
+    public IActionResult GetCircular([FromRoute] Guid circularId)
     {
         
         try
         {
             var takenCircular = new GenericRepository<Circular>(_context)
                 .GetByIdUsingIQueryable(query => query
-                .Where(el => el.CircularNumber == circularId));
+                .Where(el => el.Id == circularId));
 
             if (takenCircular == null)
             {
