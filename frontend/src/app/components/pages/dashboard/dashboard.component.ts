@@ -14,6 +14,7 @@ import { UsersService } from "src/app/shared/service/users.service";
 import { ListResponse } from 'src/app/shared/models/listresponse';
 import { ActivatedRoute } from "@angular/router";
 import { StudentService } from "src/app/shared/service/student.service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: "app-dashboard",
@@ -59,6 +60,7 @@ export class DashboardComponent implements OnInit {
   month = this.currentDate.getMonth() + 1;
   year = this.currentDate.getFullYear();
   today = this.year + "-" + this.month + "-" + this.day;
+  
   itemsPerPage = 3;
   studentId!: string;
   studentReports!: any
@@ -98,6 +100,7 @@ export class DashboardComponent implements OnInit {
     //this.getClassroomCount()
   }
 
+
   getCirculars() { 
     const params = new HttpParams()
     .set('Order', this.orderPdf)
@@ -118,7 +121,21 @@ export class DashboardComponent implements OnInit {
     this.commonService.addCirculars(data).subscribe((res) => {
       
   })
-  this.getCirculars()
+    this.getCirculars();
+    this.showAlert();
+    this.editForm.reset();
+  }
+
+   showAlert() {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Creazione avvenuta con successo',
+      showConfirmButton: false,
+      timer: 3500,
+
+    });
   }
 
 

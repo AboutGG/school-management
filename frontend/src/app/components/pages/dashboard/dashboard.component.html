@@ -68,7 +68,7 @@
                </h6>
               <p class="card-text">{{pdf.uploadDate | date: "dd/MM/yyyy"}}</p> 
               <hr>
-              <a (click)="getCircularsById(pdf)" style="text-align: end;" class="card-text-pdf">Scarica PDF</a>       
+              <a (click)="getCircularsById(pdf); showAlert();" style="text-align: end;" class="card-text-pdf">Scarica PDF</a>       
             </div>
           </div>
         </ng-container>
@@ -162,27 +162,22 @@
 
           <div class="col-md-4">
             <label for="uploadDate">Data</label>
-            <input id="uploadDate" type= "date" formControlName="uploadDate">
+            <input id="uploadDate" type= "date" [(ngModel)]="today" formControlName="uploadDate">
             <small class="text-danger" *ngIf="!editForm.get('uploadDate')!.valid && editForm.get('uploadDate')!.touched">Inserisci una data</small>           
           </div>
         </div>
-
-            <label for="object">Oggetto</label>
-            <input id="object" type="text" formControlName="object" placeholder="Es: Assemblea d'Istituto...">
-            <small class="text-danger" *ngIf="!editForm.get('object')!.valid && editForm.get('object')!.touched">Inserisci un oggetto</small>
-           
-          
           
             <label for="header">Intestazione</label>
             <input id="header" type="text" formControlName="header" placeholder="Es: Al Personale Docente...">
             <small class="text-danger" *ngIf="!editForm.get('header')!.valid && editForm.get('header')!.touched">Inserisci un'intestazione</small>
-         
-        
+
+            <label for="object">Oggetto</label>
+            <input id="object" type="text" formControlName="object" placeholder="Es: Assemblea d'Istituto...">
+            <small class="text-danger" *ngIf="!editForm.get('object')!.valid && editForm.get('object')!.touched">Inserisci un oggetto</small>
 
             <label for="body">Corpo del testo</label>
             <textarea style="height: 150px;" id="body" type="text" formControlName="body" placeholder="Es: Si comunica a tutto il personale docente..." ></textarea>
             <small class="text-danger" *ngIf="!editForm.get('body')!.valid && editForm.get('body')!.touched">Inserisci un testo</small>
-
 
             <label for="sign">Firma</label>
             <input id="sign" type="text" formControlName="sign" placeholder="Es: Mario Rossi" >
