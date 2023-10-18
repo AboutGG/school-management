@@ -53,7 +53,6 @@ export class ExamslistComponent implements OnInit {
   currentDate = new Date()
   today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
   // today = new Date(new Date().getTime()).toISOString().substring(0, 10);
-  examDate!: string
   alert: boolean = false;
 
   ngOnInit(): void {
@@ -139,11 +138,11 @@ export class ExamslistComponent implements OnInit {
     });
   }
 
-  getTeacherSubjectByClassroom(classroomId: string) {
+  getTeacherSubjectsByClassroom(classroomId: string) {
     // const params = classroomId ? new HttpParams().set('classroomId', classroomId) : new HttpParams();
     const params = new HttpParams().set('classroomId', classroomId)
     console.log(params)
-    this.teacherService.getTeacherSubjectByClassroom(this.user?.id, params).subscribe({
+    this.teacherService.getTeacherSubjectsByClassroom(this.user?.id, params).subscribe({
       next: (res: IdName[]) => {
         this.subjectsByClassroom = res;
       }
@@ -157,14 +156,17 @@ export class ExamslistComponent implements OnInit {
       classroomId: exam.classroom.id,
       subjectId: exam.subject.id
     })
-    this.getTeacherSubjectByClassroom(this.examForm.value.classroomId)
+    this.getTeacherSubjectsByClassroom(this.examForm.value.classroomId)
   }
 
   onClickModal() {
     if (this.isEdit === false) {
       if (this.examForm.value.date > this.today) {
+        this.successEditOrNew = false;
         this.examsService.addExam(this.examForm.value).subscribe({
           next: () => {
+            this.successEditOrNew = true;
+            setTimeout(() => this.successEditOrNew = false, 4000)
             this.examForm.reset();
             this.getTeacherExams()
           }

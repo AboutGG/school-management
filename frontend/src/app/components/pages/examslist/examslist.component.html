@@ -33,7 +33,10 @@
                 </select>
             </form>
         </div>
-        <div *ngIf="successEditOrNew" class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
+        <div *ngIf="successEditOrNew && !isEdit" class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
+            Esame creato con successo.
+        </div>
+        <div *ngIf="successEditOrNew && isEdit" class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
             Esame modificato con successo.
         </div>
         <div class="col-3 d-flex justify-content-end">
@@ -125,7 +128,7 @@
                             <select id="classroom" class="w-100 p-1 btn btn-outline-warning text-dark"
                                 formControlName="classroomId">
                                 <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms"
-                                    (click)="getTeacherSubjectByClassroom(classroom.id_classroom!)">
+                                    (click)="getTeacherSubjectsByClassroom(classroom.id_classroom!)">
                                     {{classroom.name_classroom}}</option>
                             </select>
                             <!-- <small

@@ -20,7 +20,7 @@ export class TeacherService {
     return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/classrooms`)
   }
 
-  getTeacherSubjectByClassroom(userId: string, params?: HttpParams) : Observable<IdName[]> {
+  getTeacherSubjectsByClassroom(userId: string, params?: HttpParams) : Observable<IdName[]> {
     return this.http.get<IdName[]>(`https://localhost:7262/api/teachers/${userId}/subjects`, { params })
   }
 
