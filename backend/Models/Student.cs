@@ -15,6 +15,10 @@ public class Student : Deleted
     [JsonPropertyName("id_classroom")]
     public Guid ClassroomId { get; set; }
     public virtual Classroom Classroom { get; set; }
+    
+    [Column("school_year")]
+    [JsonPropertyName("school_year")]
+    public string? SchoolYear { get; set; }
 
     [Column("id_user")]
     [JsonPropertyName("id_user")]
@@ -25,7 +29,7 @@ public class Student : Deleted
     [JsonPropertyName("id_registry")]
     public Guid RegistryId { get; set; }
     public virtual Registry Registry { get; set; }
-
+    
     #region Foreign Keys
 
     public virtual List<StudentExam> StudentExams{ get; set; }
