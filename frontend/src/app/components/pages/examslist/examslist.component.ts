@@ -1,21 +1,23 @@
-import { TeacherSubject } from './../../../shared/models/subjects';
+import { UsersService } from './../../../shared/service/users.service';
 import { HttpParams } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';
 import { ListResponse } from 'src/app/shared/models/listresponse';
-import { TeacherExam } from 'src/app/shared/models/teacherexam';
+import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
+import { UsersMe } from 'src/app/shared/models/users';
 
 @Component({
   selector: 'app-examslist',
   templateUrl: './examslist.component.html',
   styleUrls: ['./examslist.component.scss']
 })
-export class ExamslistComponent {
-  constructor(private examsService: ExamsService, private teacherService: TeacherService) { }
+export class ExamslistComponent implements OnInit {
+  constructor(private examsService: ExamsService, private teacherService: TeacherService, private usersService: UsersService) { }
 
+  user!: UsersMe
   formSubjects = new FormGroup({
     subjects: new FormControl('')
   })
@@ -23,11 +25,8 @@ export class ExamslistComponent {
     classrooms: new FormControl('')
   });
   examsList!: TeacherExam[]
-  subject!: string
-  subjects: TeacherSubject[] = []
-  subjectsName: string[] = []
-  classroom!: string
-  classrooms: TeacherClassroom[] = []
+  subjects!: IdName[]
+  classrooms!: TeacherClassroom[]
   orders = {
     date: 'asc',
     subject: 'asc',
@@ -38,16 +37,38 @@ export class ExamslistComponent {
   filtered: string = ""
   search: string = ""
   orderType: string = "asc"
-  order: string = "Id"
+  order: string = "Date"
   onClickFilter: boolean = false
   totalPages!: number
   selectedPages!: number
   total!: number
+  isEdit: boolean = false
+  successEditOrNew: boolean = false
+  examId?: string
+  subjectsByClassroom?: IdName[]
+  classroomId!: FormControl
+  subjectId!: FormControl
+  date!: FormControl
+  examForm!: FormGroup
+  currentDate = new Date()
+  today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
+  // today = new Date(new Date().getTime()).toISOString().substring(0, 10);
+  alert: boolean = false;
 
   ngOnInit(): void {
+    this.date = new FormControl(null, Validators.required),
+      this.classroomId = new FormControl(null, Validators.required),
+      this.subjectId = new FormControl(null, Validators.required)
+
+    this.examForm = new FormGroup({
+      date: this.date,
+      classroomId: this.classroomId,
+      subjectId: this.subjectId
+    });
+
+    this.getUser();
     this.getTeacherExams();
     this.getTeacherClassrooms();
-    this.getTeacherSubjects();
   }
 
   onChangePage(newPage: number) {
@@ -60,6 +81,16 @@ export class ExamslistComponent {
   dropdownFilter() {
     this.onClickFilter === true ? [this.formClassrooms.reset({ classrooms: "" })] && [this.filtered = this.formSubjects.value.subjects as string] : [this.formSubjects.reset({ subjects: "" })] && [this.filtered = this.formClassrooms.value.classrooms as string];
     this.getTeacherExams()
+  }
+
+  getUser() {
+    this.usersService.getUsersMe().subscribe({
+      next: (res) => {
+        this.user = res
+        this.getTeacherSubjects();
+        console.log("DEBUG USER ", this.user);
+      }
+    })
   }
 
   getTeacherExams() {
@@ -93,25 +124,84 @@ export class ExamslistComponent {
   getTeacherClassrooms() {
     this.teacherService.getDataClassroom().subscribe({
       next: (res) => {
-        this.classrooms = res.data        
+        this.classrooms = res.data
       }
     });
   }
 
-  // getTeacherClassrooms() {
-  //   this.teacherService.getDataClassroom().subscribe({
-  //     next: (res) => {
-  //       console.log(res);
-  //     }
-  //   });
-  // }
-
   getTeacherSubjects() {
-    this.teacherService.getTeacherSubjects().subscribe({
+    this.teacherService.getTeacherSubjects(this.user?.id).subscribe({
       next: (res) => {
-        this.subjects = res.data
+        this.subjects = res
+        console.log(res);
       }
     });
+  }
+
+  getTeacherSubjectsByClassroom(classroomId: string) {
+    // const params = classroomId ? new HttpParams().set('classroomId', classroomId) : new HttpParams();
+    const params = new HttpParams().set('classroomId', classroomId)
+    console.log(params)
+    this.teacherService.getTeacherSubjectsByClassroom(this.user?.id, params).subscribe({
+      next: (res: IdName[]) => {
+        this.subjectsByClassroom = res;
+      }
+    })
+  }
+
+  editExam(exam: TeacherExam) {
+    this.examId = exam.id
+    this.examForm.patchValue({
+      date: exam.date,
+      classroomId: exam.classroom.id,
+      subjectId: exam.subject.id
+    })
+    this.getTeacherSubjectsByClassroom(this.examForm.value.classroomId)
+  }
+
+  onClickModal() {
+    if (this.isEdit === false) {
+      if (this.examForm.value.date > this.today) {
+        this.successEditOrNew = false;
+        this.examsService.addExam(this.examForm.value).subscribe({
+          next: () => {
+            this.successEditOrNew = true;
+            setTimeout(() => this.successEditOrNew = false, 4000)
+            this.examForm.reset();
+            this.getTeacherExams()
+          }
+        })
+      } else {
+        alert("Selezionare una data successiva a quella odierna");
+      }
+
+    } else {
+      if (this.examForm.value.date > this.today) {
+        this.successEditOrNew = false
+        this.examsService.editExam(this.examForm.value, this.user.id, this.examId).subscribe({
+          next: () => {
+            this.successEditOrNew = true
+            setTimeout(() => this.successEditOrNew = false, 4000)
+            this.getTeacherExams()
+          }
+        })
+      } else {
+        alert("Selezionare una data successiva a quella odierna");
+      }
+    }
+
+  }
+
+  onDelete(id: string) {
+    this.examId = id;
+  }
+
+  deleteExam() {
+    this.examsService.deleteExam(this.examId!).subscribe({
+      next: () => {
+        this.getTeacherExams();
+      }
+    })
   }
 
 }
