@@ -54,7 +54,6 @@
           <td scope="row">{{i + 1}}</td> 
           <td style="cursor: pointer" [routerLink]="'/details/'">{{student.surname}}</td>
           <td style="cursor: pointer" [routerLink]="'/details/'">{{student.name}}</td>
-          
           <td>
             <div class="dropdown">
               <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,8 +62,8 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/teachers/exams']"><i class="bi bi-book-fill"></i>Visualizza Pagella</a></li>
-                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#graduationModal"> <i
-                            class="bi bi-gear-fill"></i>Promozione</a></li>
+                <!-- <li><a (click)="getFinalGrade()" class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#graduationModal"> <i -->
+                            <!-- class="bi bi-gear-fill"></i>Promozione</a></li> -->
                 <!-- <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li> -->
               </ul>
             </div>
@@ -76,6 +75,49 @@
 </div>
 
 <!-- Modal -->
+<div class="modal fade" id="graduationModal" tabindex="-1" aria-labelledby="graduationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ExamLabel">{{'promozione studente' | uppercase}}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="graduationForm">
+                        <div class="mt-5 mb-2">
+                            <label for="scholasticBehavior" class="form-label">Voto condotta: </label>
+                            <input type="number" name="scholasticBehavior" id="scholasticBehavior" min="0" max="10" step="1" value="0" formControlName="scholasticBehavior">
+
+                        </div>
+                        <div class="d-flex flex-column my-2">
+                            <label for="promoted" class="form-label">Promozione: </label>
+                            <select id="promoted" class="w-100 p-1 btn btn-outline-warning text-dark"
+                                formControlName="promoted">
+                            </select>
+                        </div>
+                        <div class="d-flex flex-column my-2">
+                            <label for="nextClassroom" class="form-label">Classe successiva: </label>
+
+                            <select class="form-select">
+                              <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary border-0 text-white"
+                        data-bs-dismiss="modal">Chiudi</button>
+                    <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white"
+                        [disabled]="!graduationForm.valid">CONFERMA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 <div class="modal fade" id="graduationModal" tabindex="-1" aria-labelledby="graduationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">

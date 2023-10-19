@@ -1,6 +1,10 @@
 export interface StudentGraduation {
-  schoolYear: string;
   scholasticBehavior: number;
   promoted: boolean;
   nextClassroom: string;
+}
+
+export interface Grade {
+  fullName: string;
+  finalGrade: number;
 }
