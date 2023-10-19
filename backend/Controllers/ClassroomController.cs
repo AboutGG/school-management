@@ -127,14 +127,14 @@ public class ClassroomsController : Controller
     /// </summary>
     /// <param name="inputStudentPromotion">The data taken by the FE</param>
     /// <param name="classroomId"></param>
-    /// <param name="studentId"></param>
+    /// <param name="userId"></param>
     /// <returns>The promotion history about the student</returns>
     /// <exception cref="Exception"></exception>
     [HttpPost]
-    [Route("{classroomId}/students/{studentId}/graduations")]
+    [Route("{classroomId}/students/{userId}/graduations")]
     [ProducesResponseType(200, Type = typeof(PromotionHistoryDto))]
     public IActionResult StudentPromotion([FromBody] InputStudentPromotionDto inputStudentPromotion,
-        [FromRoute] Guid classroomId, [FromRoute] Guid studentId)
+        [FromRoute] Guid classroomId, [FromRoute] Guid userId)
     {
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         try
@@ -142,11 +142,16 @@ public class ClassroomsController : Controller
             //Prendo lo studente tramite l'id passato nella route
             Student takenStudent = new GenericRepository<Student>(_context)
                 .GetByIdUsingIQueryable(query => query
-                    .Where(el => el.Id == studentId)
+                    .Where(el => el.UserId == userId)
                     .Include(el => el.Registry)
                     .Include(el => el.StudentExams)
                     .ThenInclude(el => el.Exam)
                 );
+            if (takenStudent.SchoolYear == null)
+            {
+                throw new Exception("SCHOOL_YEAR_NOT_FOUND");
+            }
+            
             string[] splittedSchoolYear = takenStudent.SchoolYear.Split("-");
 
             DateOnly startFirstQuarter = new DateOnly(int.Parse(splittedSchoolYear[0]), 09, 10);
@@ -201,14 +206,14 @@ public class ClassroomsController : Controller
             PromotionHistory promotionHistory = new PromotionHistory()
             {
                 Id = Guid.NewGuid(),
-                StudentId = studentId,
+                StudentId = takenStudent.Id,
                 PreviousClassroomId = takenStudent.ClassroomId,
                 PreviousSchoolYear = takenStudent.SchoolYear,
                 FinalGraduation = Convert.ToInt32(finalGraduation),
                 ScholasticBehavior = inputStudentPromotion.ScholasticBehavior,
                 Promoted = inputStudentPromotion.Promoted
             };
-            takenStudent.ClassroomId = inputStudentPromotion.NextClassroom;
+            takenStudent.ClassroomId = inputStudentPromotion.Promoted ? inputStudentPromotion.NextClassroom : takenStudent.ClassroomId;
             takenStudent.SchoolYear = CurrentSchoolYear.GetCurrentSchoolYear();
 
             //Procedo con la creazione e l'update delle entità precedenti
