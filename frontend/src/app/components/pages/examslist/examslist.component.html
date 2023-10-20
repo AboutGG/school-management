@@ -33,10 +33,12 @@
                 </select>
             </form>
         </div>
-        <div *ngIf="successEditOrNew && !isEdit" class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
+        <div *ngIf="successEditOrNew && !isEdit"
+            class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
             Esame creato con successo.
         </div>
-        <div *ngIf="successEditOrNew && isEdit" class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
+        <div *ngIf="successEditOrNew && isEdit"
+            class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
             Esame modificato con successo.
         </div>
         <div class="col-3 d-flex justify-content-end">
@@ -83,7 +85,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li [title]="(today > exam.date) ? 'Impossibile modificare un esame già svolto' : '' ">
-                                <button class="dropdown-item" [routerLink]="'/details/'"><i
+                                <button class="dropdown-item" [routerLink]="['/teachers/exams/' + exam.id]"><i
                                         class="bi bi-eye-fill px-2"></i>Visualizza</button>
                             </li>
                             <li [title]="(today > exam.date) ? 'Impossibile modificare un esame già svolto' : '' ">
@@ -92,7 +94,7 @@
                                     <i class="bi px-2" [ngClass]="{
                                             'bi-book-fill': today <= exam.date,
                                             'bi-lock-fill': today > exam.date
-                                          }"></i>Modifica</button>
+                                        }"></i>Modifica</button>
                             </li>
                             <li><button (click)="onDelete(exam.id!)" class="dropdown-item" style="cursor: pointer"
                                     data-bs-toggle="modal" data-bs-target="#deleteExam"
