@@ -192,7 +192,7 @@ public class ExamsController : Controller
             //Tramite l'id che passa il FE prendo lo studente con quell'id e a sua volta l'instanza dell'esame tramite l'oggetto in Input dal FE
             var takenStudentExam = new GenericRepository<StudentExam>(_context)
                 .GetByIdUsingIQueryable(query => query
-                        .Where(el => el.ExamId == examId && el.StudentId == InputStudentExam.studentId)
+                        .Where(el => el.ExamId == examId && el.Student.UserId == InputStudentExam.userId)
                         .Include(s => s.Student) // Include StudentExams navigation property
                 );
 
