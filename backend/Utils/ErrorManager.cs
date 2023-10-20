@@ -82,6 +82,10 @@ public static class ErrorManager
                 error = new ErrorResponse(StatusCodes.Status401Unauthorized,
                     "You can't access to the final mean of the student", e.StackTrace);
                 return error;
+            case "SCHOOL_YEAR_NOT_FOUND":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized,
+                    "The student hasn't the school year", e.StackTrace);
+                return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status400BadRequest, e.Message, e.StackTrace);
                 return error;
