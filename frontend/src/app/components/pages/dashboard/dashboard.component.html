@@ -125,10 +125,10 @@
         <div style="margin-top: 20px;" class=" card card-right-pagella">
           <h5 class="card-header">Pagella</h5>
           <div class="card-body">
-            <div  style="margin-bottom: 15px;">
+            <div>
               <div style="background-color: #ffd45f;" class="card-body d-flex justify-content-between ">
                 <h6 class=" text-uppercase card-title">{{pagella.title}}</h6>
-                <a style="text-align: end;" class="card-text-pdf" data-bs-toggle="modal" data-bs-target="#ModalPagella">Scarica PDF</a>
+                <a (click)="getStudentYears()" style="text-align: end;" class="card-text-pdf" data-bs-toggle="modal" data-bs-target="#ModalPagella">Scarica PDF</a>
               </div>
             </div>
           </div>
@@ -201,33 +201,34 @@
         <h5 class="modal-title" id="staticBackdropLabel">Visualizza Pagella</h5>
         <button style="background-color: white; color: white;" type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div style="margin-bottom: 20px;" *ngIf="isQuadrimestreTerminato()" class="modal-body text-center">
         <form >
           <div class="d-flex flex-column">
             <div class="row">
             <div class="col-md-6">
               <label for="circularNumber">Anno Scolastico</label>
-              <select name="report">
-                <option *ngFor="let report of pagella.year">
-                  {{report}}
+              <select style="cursor: pointer;" name="years">
+                <option *ngFor="let year of studentYears">
+                  {{year}}
                 </option>
               </select>
-          </div>
-          <div class="col-md-6">
-            <label for="circularNumber">Quadrimestre</label>
-              <select name="report">
+            </div>
+              <div class="col-md-6">
+                <label for="circularNumber">Quadrimestre</label>
+                <select style="cursor: pointer;" name="quarters">
                 <option *ngFor="let report of pagella.quarter">
                   {{report}}
                 </option>       
-              </select>
-          </div>   
-        </div>
-
-           
-          </div>
+                </select>
+              </div>   
+            </div>
+          </div> 
         </form>
       </div>
-      <div class="modal-footer">
+      <div class="modal-body text-uppercase text-center" *ngIf="isQuadrimestreInCorso()">
+        <h5>Quadrimestre ancora in corso</h5>
+      </div>
+      <div *ngIf="isQuadrimestreTerminato()" class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
         <button  type="button" data-bs-dismiss="modal" style="color: white; font-weight: 400;" class="btn btn-warning">Scarica Pagella</button>
       </div>

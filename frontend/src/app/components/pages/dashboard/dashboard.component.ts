@@ -4,7 +4,7 @@ import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from "@ang
 import { PdfCirculars } from "src/app/shared/models/pdf";
 import { StudentExam } from "src/app/shared/models/studentexam";
 import { TeacherExam } from "src/app/shared/models/teacherexam";
-import { TypeCount } from "src/app/shared/models/users";
+import { TypeCount, UsersMe } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { CommonService } from "src/app/shared/service/common.service";
@@ -34,13 +34,6 @@ export class DashboardComponent implements OnInit {
   pagella = {
     title: "Visualizza Pagella", 
     img: "assets/dashboard/logoCircolari.jpg",
-    year: [
-      "2023-2024",
-      "2022-2023",
-      "2021-2022",
-      "2020-2021",
-      "2019-2020"
-    ],
     quarter: [
       "1° Quadrimestre",
       "2° Quadrimestre"
@@ -60,10 +53,12 @@ export class DashboardComponent implements OnInit {
   month = this.currentDate.getMonth() + 1;
   year = this.currentDate.getFullYear();
   today = this.year + "-" + this.month + "-" + this.day;
-  
+
+  quadrimestreInizio1: number = 9;  // Settembre
+  quadrimestreFine1: number = 1;    // Gennaio
+  quadrimestreInizio2: number = 2;  // Febbraio
+  quadrimestreFine2: number = 6;    // Giugno
   itemsPerPage = 3;
-  studentId!: string;
-  studentReports!: any
 
 
   constructor(
@@ -74,17 +69,19 @@ export class DashboardComponent implements OnInit {
     private examsService: ExamsService,
     private fb: NonNullableFormBuilder,
     private route: ActivatedRoute,
+    private userService: UsersService,
 
     private authService: AuthService ){ 
 
       this.editForm =this.fb.group({
       circularNumber: new FormControl (null, Validators.required),
-      uploadDate: new FormControl(null, Validators.required),
+      uploadDate: new FormControl(null, Validators.required,),
       location: new FormControl(null, Validators.required),
       object: new FormControl(null, Validators.required),
       header: new FormControl(null, Validators.required),
       body: new FormControl(null, Validators.required),
       sign: new FormControl(null, Validators.required),
+      
     })
 
     this.selectReport = this.fb.group({
@@ -93,10 +90,11 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.usersMe()
     this.getCount()
     this.getExams(this.isTeacher);
     this.getCirculars();
-   
+  
     //this.getClassroomCount()
   }
 
@@ -133,7 +131,8 @@ export class DashboardComponent implements OnInit {
       icon: 'success',
       title: 'Creazione avvenuta con successo',
       showConfirmButton: false,
-      timer: 3500,
+      timer: 2500,
+      background: '#ffd45f'
 
     });
   }
@@ -191,16 +190,50 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getStudentReports(){
-    this.studentService.getStudentsReports(this.studentId).subscribe({
-      next: (res: any) => {
-        this.studentReports = res;
-      }
+  studentYears: string[] = []
+  userData!: UsersMe;
 
-      })
-    }
+  usersMe(){
+    this.userService.getUsersMe().subscribe({
+      next: (res: UsersMe) => {
+        this.userData = res;
+        console.log('get userMe',res)
+      },
+      error: (err) => {
+        console.log('error', err);
+      }
+    })
     
   }
+
+  getStudentYears(){
+    this.studentService.getStudentsSchoolYears(this.userData.id).subscribe({
+      next: (res) => {
+        this.studentYears = res;
+        console.log('years',this.studentYears);
+      }
+
+    })
+  }
+
+  isQuadrimestreInCorso(): boolean {
+    const isCurrentQuadrimestre =
+      (this.month >= this.quadrimestreInizio1 && this.month >= this.quadrimestreFine1);
+  
+    console.log('1° Quadrimestre in corso:', isCurrentQuadrimestre);
+    console.log('mese corrente', this.month)
+
+    return isCurrentQuadrimestre;
+  
+  }
+
+  isQuadrimestreTerminato(): boolean {
+    
+    return !this.isQuadrimestreInCorso();
+  }
+  
+
+}
   
 
   // getClassroomCount() {
