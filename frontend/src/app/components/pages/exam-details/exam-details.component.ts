@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ExamDetails, ExamStudentDetails } from 'src/app/shared/models/examdetails';
+import { AuthService } from 'src/app/shared/service/auth.service';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 
 @Component({
@@ -15,15 +16,16 @@ export class ExamDetailsComponent implements OnInit {
   examId!: string
   studentDetails!: ExamStudentDetails
   grade!: FormControl
+  currentDate = new Date()
+  today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
   
-
   constructor(private examService: ExamsService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.examId = params['id'];
-    this.getExamDetails();
-    this.grade = new FormControl(null, Validators.required)
+      this.grade = new FormControl(null, Validators.required)
+      this.getExamDetails();
     })
   }
 
@@ -35,19 +37,18 @@ export class ExamDetailsComponent implements OnInit {
     })
   }
 
-  editExamDetails(studentId: string) {
-    this.studentDetails = {
-      studentId : "8767fd02-7891-4b47-8b02-3cc0d07ac334",
-      grade : this.grade.value
-     }
-    console.log(this.examId);
-    
-    this.examService.editExamDetails(this.studentDetails, this.examId).subscribe({
-      next: (res: ExamDetails) => {
-        console.log(res);
-        
-      }
-    })
+  editExamDetails(userId: string) {
+    if(this.grade.value >= 2 && this.grade.value <= 10) {
+      this.studentDetails = {
+        userId : userId,
+        grade : this.grade.value
+       }
+      this.examService.editExamDetails(this.studentDetails, this.examId).subscribe()
+      this.getExamDetails()
+    }
+    else {
+      alert("Impostare un valore da 2 a 10")
+    }
   }
 
 }

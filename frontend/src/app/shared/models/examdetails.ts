@@ -1,11 +1,12 @@
 export interface ExamStudentDetails {
-	studentId: string,
+	userId: string,
 	grade: number
 }
 
 export interface ExamDetails {
 	examDate: string,
   subject: string,
+  classroom: string,
   studentExams: [
     {
       student: {

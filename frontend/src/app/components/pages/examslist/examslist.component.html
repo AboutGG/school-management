@@ -72,7 +72,7 @@
             </tr>
         </thead>
         <tbody *ngFor="let exam of examsList, let i = index">
-            <tr [title]="(today > exam.date) ? 'Impossibile eliminare un esame già svolto' : '' ">
+            <tr [title]="(today > exam.date) ? 'Esame già svolto' : '' ">
                 <th scope="row">{{i + 1}}</th>
                 <td [ngClass]="{'text-secondary' : today > exam.date}">{{exam.date | date: "dd/MM/yyyy"}}</td>
                 <td [ngClass]="{'text-secondary' : today > exam.date}">{{exam.subject.name}}</td>
@@ -84,7 +84,7 @@
                             <i class="bi bi-gear-fill"></i>
                         </button>
                         <ul class="dropdown-menu">
-                            <li [title]="(today > exam.date) ? 'Impossibile modificare un esame già svolto' : '' ">
+                            <li>
                                 <button class="dropdown-item" [routerLink]="['/teachers/exams/' + exam.id]"><i
                                         class="bi bi-eye-fill px-2"></i>Visualizza</button>
                             </li>
@@ -96,7 +96,8 @@
                                             'bi-lock-fill': today > exam.date
                                         }"></i>Modifica</button>
                             </li>
-                            <li><button (click)="onDelete(exam.id!)" class="dropdown-item" style="cursor: pointer"
+                            <li [title]="(today > exam.date) ? 'Impossibile eliminare un esame già svolto' : '' ">
+                                <button (click)="onDelete(exam.id!)" class="dropdown-item" style="cursor: pointer"
                                     data-bs-toggle="modal" data-bs-target="#deleteExam"
                                     [disabled]="today > exam.date"><i class="bi px-2" [ngClass]="{
                                             'bi-trash3-fill' : today <= exam.date,
@@ -153,7 +154,7 @@
                     <button type="button" class="btn btn-secondary border-0 text-white"
                         data-bs-dismiss="modal">Chiudi</button>
                     <button (click)="onClickModal()" type="button" class="btn btn-warning border-0 text-white"
-                        [disabled]="!examForm.valid">CONFERMA</button>
+                        data-bs-dismiss="modal" [disabled]="!examForm.valid">CONFERMA</button>
                 </div>
             </div>
         </div>
