@@ -26,6 +26,12 @@ hr{
   overflow-y: auto;
 
 }
+.card-body-pagella{
+  
+ 
+ 
+
+}
 .card-body-count{
   border: 1px ;
   border-spacing: 0;
@@ -67,11 +73,12 @@ hr{
   overflow-y: auto;
 
 }
-.card-right-pagella {
-  height: 135px;
+.card-right-esami {
+  max-height: 229px;
   overflow-y: auto;
 }
-.card-right-esami {
+
+.card-right-pagella {
   max-height: 244px;
   overflow-y: auto;
 }
