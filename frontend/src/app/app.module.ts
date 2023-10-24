@@ -20,6 +20,7 @@ import { ExamslistComponent } from './components/pages/examslist/examslist.compo
 import { ExamsStudentListComponent } from './components/pages/exams-student-list/exams-student-list.component';
 import { SubjectsComponent } from './components/pages/subjects/subjects.component';
 import { StudentSubjectsComponent } from './components/pages/student-subjects/student-subjects.component';
+import { ExamDetailsComponent } from './components/pages/exam-details/exam-details.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { StudentSubjectsComponent } from './components/pages/student-subjects/st
     ExamsStudentListComponent,
     SubjectsComponent,
     StudentSubjectsComponent,
+    ExamDetailsComponent,
   ],
   imports: [
     BrowserModule,

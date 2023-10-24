@@ -22,7 +22,7 @@ export class ClassroomService {
   }
 
   //get single class id
-  getSingleClassroom(id: string, params: {}): Observable<ListResponse<any>> {
+  getSingleClassroom(id: string, params?: {}): Observable<ListResponse<any>> {
     return this.http.get<ListResponse<any>>(
       `https://localhost:7262/api/classrooms/${id}`,
       { params }
