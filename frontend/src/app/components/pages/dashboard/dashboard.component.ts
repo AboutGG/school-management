@@ -28,15 +28,15 @@ export class DashboardComponent implements OnInit {
     Students: 0,
     Teachers:0,
     Classrooms:0
-  }
+  };
+
   isTeacher = this.authService.isTeacher();
 
   examsTeachers!: TeacherExam[];
   examsStudents!: StudentExam[];
   order: string = 'Date';
-  orderPdf: string = 'UploadDate'
+  orderPdf: string = 'UploadDate';
   editForm!: FormGroup;
-  selectReport!: FormGroup;
   pdfs!: PdfCirculars[];
   circularId!: string;
   currentDate = new Date();
@@ -49,7 +49,13 @@ export class DashboardComponent implements OnInit {
   quadrimestreFine1: number = 1;    // Gennaio
   quadrimestreInizio2: number = 2;  // Febbraio
   quadrimestreFine2: number = 6;    // Giugno
-  itemsPerPage = 3;
+  itemsPerPage = 3; // per prossimi esami 
+
+  studentYears: string[] = [];
+  userData!: UsersMe;
+  isCurrentQuadrimestre!: boolean;
+  schoolYear!: string;
+  chosenQuadrimestre: boolean = true;
 
 
   constructor(
@@ -66,7 +72,7 @@ export class DashboardComponent implements OnInit {
 
       this.editForm =this.fb.group({
       circularNumber: new FormControl (null, Validators.required),
-      uploadDate: new FormControl(null, Validators.required,),
+      uploadDate: new FormControl(this.today, [Validators.required],),
       location: new FormControl(null, Validators.required),
       object: new FormControl(null, Validators.required),
       header: new FormControl(null, Validators.required),
@@ -81,12 +87,12 @@ export class DashboardComponent implements OnInit {
     this.getCount()
     this.getExams(this.isTeacher);
     this.getCirculars();
-    this.isQuadrimestreInCorso()
-  
+    this.isQuadrimestreInCorso();
     //this.getClassroomCount()
   }
 
 
+  // get circolari 
   getCirculars() { 
     const params = new HttpParams()
     .set('Order', this.orderPdf)
@@ -102,17 +108,18 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  // aggiunta circolare con form group 
   addCircular() {
-    const data=this.editForm.value
+    const data=this.editForm.value;
+     
+    this.editForm.reset();
+
+    // ripristina la data odierna
+    this.editForm.get('uploadDate')?.setValue(this.today);
+
     this.commonService.addCirculars(data).subscribe((res) => {
       
   })
-    this.getCirculars();
-    this.showAlert();
-    this.editForm.reset();
-  }
-
-   showAlert() {
     Swal.fire({
       toast: true,
       position: 'top-end',
@@ -120,12 +127,13 @@ export class DashboardComponent implements OnInit {
       title: 'Creazione avvenuta con successo',
       showConfirmButton: false,
       timer: 2500,
-      background: '#ffd45f'
-
     });
+  
+    this.getCirculars();
   }
 
 
+  // pdf circolari 
   getCircularsById(pdf: PdfCirculars){
     this.commonService.getCircularsById(pdf.id).subscribe( blob => {
       const url = window.URL.createObjectURL(blob);
@@ -140,12 +148,14 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  // count users, classi, studenti, insegnanti 
   getCount() {
     this.commonService.getCount().subscribe((res) => {
       this.count = res;
     })
   }
 
+  //get prossimi esami insegnante e studente
   getExams(isTeacher: boolean) {
     const params = new HttpParams()
     .set('Order', this.order)
@@ -156,8 +166,7 @@ export class DashboardComponent implements OnInit {
 
           this.examsTeachers = res.data
             .filter((item, index) => item.date >= this.today)
-            .filter((_, index) => index < this.itemsPerPage);
-
+            .filter((_, index) => index < this.itemsPerPage); 
         },
         error: (err) => {
           console.log('error dash', err);
@@ -178,13 +187,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  studentYears: string[] = []
-  userData!: UsersMe;
-  student!: Students;
-  isCurrentQuadrimestre!: boolean
-  schoolYear!: string;
-  chosenQuadrimestre: boolean = true;
-
+  // me per prendere l'id user
   usersMe(){
     this.userService.getUsersMe().subscribe({
       next: (res: UsersMe) => {
@@ -195,10 +198,10 @@ export class DashboardComponent implements OnInit {
       error: (err) => {
         console.log('error', err);
       }
-    })
-    
+    }) 
   }
 
+  // get anni scolastici studente
   getStudentYears(){
     this.studentService.getStudentsSchoolYears(this.userData.id).subscribe({
       next: (res) => {
@@ -206,10 +209,10 @@ export class DashboardComponent implements OnInit {
         this.schoolYear = this.studentYears[0];
         console.log('years',this.studentYears);
       }
-
     })
   }
 
+  // scelta quadrimestre
   chooseQuadrimestre(chosenQuadrimestre: boolean){
     if (chosenQuadrimestre){
       this.chosenQuadrimestre = true;
@@ -221,6 +224,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  // pdf pagelle
   getStudentsReports(){
     const params = new HttpParams()
     .set('firstQuarter', this.chosenQuadrimestre)
@@ -231,16 +235,28 @@ export class DashboardComponent implements OnInit {
     this.studentService.getStudentsReports(this.userData.id, params).subscribe( blob => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; 
+      a.href = url;
+      a.download = 'pagella.pdf';
       a.style.display = 'none';
       document.body.appendChild(a); 
       a.click(); 
       window.URL.revokeObjectURL(url);
+    }, (error) => {
       
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Pagella non ancora disponibile',
+        showConfirmButton: false,
+        timer: 2500,
+  
+      });
 
     })
   }
 
+  // funzione per controllo mese corrente
   isQuadrimestreInCorso(): boolean {
      this.isCurrentQuadrimestre =
       (this.month >= this.quadrimestreInizio1 && this.month >= this.quadrimestreFine1);
@@ -251,33 +267,4 @@ export class DashboardComponent implements OnInit {
     return this.isCurrentQuadrimestre;
   
   }
-
-
-// isSecondQuadrimestre: boolean = false;
-
-// is2QuadrimestreInCorso(): boolean {
-//   this.isSecondQuadrimestre = (this.month >= this.quadrimestreInizio2 && this.month <= this.quadrimestreFine2);
-
-//   console.log('2° Quadrimestre:', this.isSecondQuadrimestre);
-//   console.log('mese corrente', this.month);
-//   return this.isSecondQuadrimestre;
-// }
-
-
-//   isQuadrimestreTerminato(): boolean {
-    
-//     return !this.isQuadrimestreInCorso();
-    
-//   }
-  
-
-// }
-  
-
-  // getClassroomCount() {
-  //   this.classroomService.getDataClassroom().subscribe(({total}) => {
-  //     this.count.Classrooms = total;
-  //     console.log("totale classi", total);
-  //   });
-  // }
 }

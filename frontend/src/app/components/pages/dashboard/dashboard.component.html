@@ -68,7 +68,7 @@
                </h6>
               <p class="card-text">{{pdf.uploadDate | date: "dd/MM/yyyy"}}</p> 
               <hr>
-              <a (click)="getCircularsById(pdf); showAlert();" style="text-align: end;" class="card-text-pdf">Scarica PDF</a>       
+              <a (click)="getCircularsById(pdf);" style="text-align: end;" class="card-text-pdf">Scarica PDF</a>       
             </div>
           </div>
         </ng-container>
@@ -168,7 +168,7 @@
 
           <div class="col-md-4">
             <label for="uploadDate">Data</label>
-            <input id="uploadDate" type= "date" [(ngModel)]="today" formControlName="uploadDate">
+            <input id="uploadDate" type= "date" formControlName="uploadDate">
             <small class="text-danger" *ngIf="!editForm.get('uploadDate')!.valid && editForm.get('uploadDate')!.touched">Inserisci una data</small>           
           </div>
         </div>
