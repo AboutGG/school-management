@@ -446,7 +446,8 @@ public class TeachersController : Controller
     /// <returns></returns>
     [HttpPost]
     [Route("{userId}/desk")]
-    public IActionResult UpdateTeacher ([FromRoute] Guid userId, UpdateTeacherRequest[] body, [FromHeader] string Token, [FromHeader] string Role)
+    [ProducesResponseType(200, Type = typeof(List<TeacherSubjectClassroom>))]
+    public IActionResult AssignDesk ([FromRoute] Guid userId, List<UpdateTeacherRequest> body, [FromHeader] string Token, [FromHeader] string Role)
     {
         IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
         List<TeacherSubjectClassroom> result;

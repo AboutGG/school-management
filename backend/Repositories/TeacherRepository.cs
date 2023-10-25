@@ -76,7 +76,7 @@ public class TeacherRepository : ITeacherRepository
 
     #region UpdateTeacherDesk
 
-    public List<TeacherSubjectClassroom> AssignTeacherDesk(Guid userId, UpdateTeacherRequest[] request)
+    public List<TeacherSubjectClassroom> AssignTeacherDesk(Guid userId, List<UpdateTeacherRequest> request)
     {
         var teacherId = GetTeacherByUserId(userId).Id;
 

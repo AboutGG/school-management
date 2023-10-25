@@ -35,7 +35,7 @@ public interface ITeacherRepository
     /// <param name="userId"></param>
     /// <param name="request"></param>
     /// <returns></returns>
-    public List<TeacherSubjectClassroom> AssignTeacherDesk(Guid userId, UpdateTeacherRequest[] request);
+    public List<TeacherSubjectClassroom> AssignTeacherDesk(Guid userId, List<UpdateTeacherRequest> request);
     
     //object GetTeacherSubjectClassroom(Guid id);
     bool Save();
