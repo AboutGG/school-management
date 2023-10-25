@@ -110,7 +110,7 @@
           </div>
           </ng-container>
           <ng-template #noExams>
-          <div style="margin-bottom: 30px;">
+          <div style="margin-bottom: 36px; margin-top: 20px;">
             <div style="background-color: #ffd45f;" class="card-body">
             <h6 class="text-uppercase text-center card-title">{{ 'Non ci sono esami in programma' }}</h6>
             </div>
@@ -126,7 +126,7 @@
           <h5 class="card-header">Pagella</h5>
           <div class="card-body">
             <div>
-              <div *ngIf="isCurrentQuadrimestre" style="background-color: #ffd45f;" class="card-body text-center">
+              <div *ngIf="isCurrentQuadrimestre" style="background-color: #ffd45f; margin-top: 11px; margin-bottom: 11px;" class="card-body text-center">
                 <h6 class=" text-uppercase card-title">Quadrimestre ancora in corso</h6>
               </div>
               <div *ngIf="!isCurrentQuadrimestre" style="background-color: #ffd45f; ;" class="card-body d-flex justify-content-between ">
