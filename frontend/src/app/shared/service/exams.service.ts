@@ -1,3 +1,4 @@
+import { ClassDetails } from './../models/classrooms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ListResponse } from '../models/listresponse';
@@ -5,6 +6,7 @@ import { StudentExams, User } from '../models/users';
 import { FormGroup } from '@angular/forms';
 import { TeacherExam } from '../models/teacherexam';
 import { Observable } from 'rxjs';
+import { ExamDetails, ExamStudentDetails } from '../models/examdetails';
 @Injectable({
   providedIn: 'root'
 })
@@ -33,6 +35,14 @@ export class ExamsService {
 
   deleteExam (id: string) {
     return this.http.delete<TeacherExam>(`https://localhost:7262/api/exams/${id}`)
+  }
+
+  editExamDetails (studentDetails: ExamStudentDetails, examId: string) {
+    return this.http.put<ExamDetails>(`https://localhost:7262/api/exams/${examId}/grades`, studentDetails)
+  }
+
+  getExamDetails (id: string) {
+    return this.http.get<ExamDetails>(`https://localhost:7262/api/teachers/exams/${id}`)
   }
 
 }
