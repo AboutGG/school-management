@@ -24,7 +24,7 @@ public class RoleMiddleware : IMiddleware
         var dbContext = context.RequestServices.GetRequiredService<SchoolContext>();
         
         //controllo endpoint in modo da eseguire la funzione
-        if ((context.Request.Path.Value.Contains("api/students") || context.Request.Path.Value.Contains("api/teachers") || context.Request.Path.Value.Contains("api/users")) ^ context.Request.Path.Value.Contains("api/users/"))
+        if ((context.Request.Path.Value.Contains("api/students") || context.Request.Path.Value.Contains("api/teachers") || context.Request.Path.Value.Contains("api/users")) ^ context.Request.Path.Value.Contains("api/users/me"))
         {
             try
             {

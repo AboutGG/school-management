@@ -11,11 +11,7 @@ public class ClassroomDto
         Id = classroom.Id;
         Name = classroom.Name;
     }
-
-    public ClassroomDto()
-    {
-
-    }
+    
 
     public Guid Id { get; set; }
     public String Name { get; set; }

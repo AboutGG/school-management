@@ -1,4 +1,5 @@
-﻿using backend.Interfaces;
+﻿using backend.Dto;
+using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,15 +10,21 @@ public class TeacherRepository : ITeacherRepository
     #region Attributes
 
     private readonly SchoolContext _context;
-
+    private readonly IGenericRepository<Teacher> _teacherGenericRepository;
+    private readonly IGenericRepository<TeacherSubjectClassroom> _tscGenericRepository;
 
     #endregion
 
     #region Costructor
 
-    public TeacherRepository(SchoolContext context)
+    public TeacherRepository(
+        SchoolContext context,
+        IGenericRepository<Teacher> teacherGenericRepository,
+        IGenericRepository<TeacherSubjectClassroom> tscGenericRepository)
     {
         _context = context;
+        _teacherGenericRepository = teacherGenericRepository;
+        _tscGenericRepository = tscGenericRepository;
     }
 
     #endregion
@@ -45,6 +52,15 @@ public class TeacherRepository : ITeacherRepository
             .FirstOrDefault();
         return teacher;
     }
+    
+    public Teacher GetTeacherByUserId(Guid id)
+    {
+        var teacher = _teacherGenericRepository
+            .GetByIdUsingIQueryable(query =>
+                query.Where(el => el.UserId == id));
+        
+        return teacher;
+    }
 
     public List<Classroom> GetClassroomByTeacherId(Guid id)
     {
@@ -58,30 +74,32 @@ public class TeacherRepository : ITeacherRepository
         return classrooms;
     }
 
-    #region Old GetTeacherSubjectClassroom
+    #region UpdateTeacherDesk
 
-    // public object GetTeacherSubjectClassroom(Guid id)
-    // {
-    //prendo il professore che ha come id quello proveniente dal token
-    //     var result = _context.Teachers.Where(el => el.UserId == id)
-    //         .Include(el => el.TeacherSubjectsClassrooms)
-    //         .ThenInclude(el => el.Classroom)
-    //         .Include(el => el.TeacherSubjectsClassrooms)
-    //         .ThenInclude(el => el.Subject)
-    //         .Select(el => new
-    //         {
-    //             Classrooms = el.TeacherSubjectsClassrooms.Select(el => new
-    //             {
-    //                 section = el.Classroom.Name,
-    //                 subject = el.Subject.Name
-    //             })
-    //         }).ToList();
-    //
-    //     return result;
-    // }
+    public List<TeacherSubjectClassroom> AssignTeacherDesk(Guid userId, UpdateTeacherRequest[] request)
+    {
+        var teacherId = GetTeacherByUserId(userId).Id;
+
+        if (teacherId == null)
+            throw new Exception("NOT_FOUND");
+
+        List<TeacherSubjectClassroom> result = new List<TeacherSubjectClassroom>();
+        foreach (var desk in request)
+        {
+            TeacherSubjectClassroom tsc = new TeacherSubjectClassroom
+            {
+                Id = Guid.NewGuid(),
+                TeacherId = teacherId,
+                ClassroomId = desk.classroomId,
+                SubjectId = desk.subjectId
+            };
+            _tscGenericRepository.Create(tsc);
+            result.Add(tsc);
+        }
+        return result;
+    }
 
     #endregion
-
 
     public int CountTeachers()
     {

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using backend.Interfaces;
 using backend.Middleware;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found");
@@ -31,7 +33,10 @@ builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<JWTHandler>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-
+builder.Services.AddScoped<IGenericRepository<Subject>, GenericRepository<Subject>>();
+builder.Services.AddScoped<IGenericRepository<Classroom>, GenericRepository<Classroom>>();
+builder.Services.AddScoped<IGenericRepository<Teacher>, GenericRepository<Teacher>>();
+builder.Services.AddScoped<IGenericRepository<TeacherSubjectClassroom>, GenericRepository<TeacherSubjectClassroom>>();
 builder.Services.AddScoped<PdfHandler>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
@@ -41,7 +46,12 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+    {
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    }
+);
 
 // To make every route in lowercase
 builder.Services.AddRouting(options => options.LowercaseUrls = true);

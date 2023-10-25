@@ -418,6 +418,54 @@ public class TeachersController : Controller
     }
 
     #endregion
+
+    #region Desk
+    
+    /// <summary>
+    /// Updates the working desk of a teacher
+    /// </summary>
+    /// <param name="userId">The id of the user</param>
+    /// <param name="body"></param>
+    /// <param name="Token"></param>
+    /// <param name="role"></param>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /{userid}/desk
+    ///     [
+    ///         {
+    ///             "subjectId": 1,
+    ///             "classroomId": 2
+    ///         },
+    ///         {
+    ///             "subjectId": 3,
+    ///             "classroomId": 2
+    ///         },
+    ///     ]
+    /// </remarks>
+    /// <returns></returns>
+    [HttpPost]
+    [Route("{userId}/desk")]
+    public IActionResult UpdateTeacher ([FromRoute] Guid userId, UpdateTeacherRequest[] body, [FromHeader] string Token, [FromHeader] string Role)
+    {
+        IDbContextTransaction transaction = _transactionRepository.BeginTransaction();
+        List<TeacherSubjectClassroom> result;
+        try
+        {
+            result = _teacherRepository.AssignTeacherDesk(userId, body);
+            _transactionRepository.CommitTransaction(transaction);
+        }
+        catch (Exception e)
+        {
+            _transactionRepository.RollbackTransaction(transaction);
+            ErrorResponse error = ErrorManager.Error(e);
+            return StatusCode(error.statusCode, error);
+        }
+        
+        return Ok(result);
+    }
+    
+    #endregion
     
     #endregion
 }

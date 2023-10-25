@@ -26,6 +26,16 @@ public interface ITeacherRepository
     bool UpdateTeacher(Teacher teacher);
 
     List<Classroom> GetClassroomByTeacherId(Guid id);
+
+    public Teacher GetTeacherByUserId(Guid id);
+
+    /// <summary>
+    /// Create the instance of TeacherSubjectClassroom
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public List<TeacherSubjectClassroom> AssignTeacherDesk(Guid userId, UpdateTeacherRequest[] request);
     
     //object GetTeacherSubjectClassroom(Guid id);
     bool Save();
