@@ -66,12 +66,17 @@ public class ClassroomsController : Controller
     [HttpGet]
     [Route("{id}")]
     [ProducesResponseType(200, Type = typeof(PaginationResponse<ClassroomDetails>))]
-    public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
+    public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromQuery] bool isCurrentYear,
+        [FromRoute] Guid id)
     {
         List<Student> takenStudents = new GenericRepository<Student>(_context)
             .GetAllUsingIQueryable(@params,
                 query => query
-                    .Where(el => el.ClassroomId == id && el.SchoolYear == CurrentSchoolYear.GetCurrentSchoolYear())
+                    .Where(el =>
+                        el.ClassroomId == id && 
+                        //effettuo un controllo per selezionare gli alunni appartenenti al corrente o prossimo anno scolastico
+                        isCurrentYear ? el.SchoolYear == SchoolYearUtils.GetCurrentSchoolYear()
+                            : el.SchoolYear == SchoolYearUtils.GetNextSchoolYear())
                     .Include(el => el.Registry)
                     .Include(el => el.Classroom)
                 , out var totalStudents
@@ -218,7 +223,7 @@ public class ClassroomsController : Controller
                 Promoted = inputStudentPromotion.Promoted
             };
             takenStudent.ClassroomId = inputStudentPromotion.Promoted ? inputStudentPromotion.NextClassroom : takenStudent.ClassroomId;
-            takenStudent.SchoolYear = CurrentSchoolYear.GetCurrentSchoolYear();
+            takenStudent.SchoolYear = SchoolYearUtils.GetCurrentSchoolYear();
 
             //Procedo con la creazione e l'update delle entità precedenti
             if (!new GenericRepository<PromotionHistory>(_context).Create(promotionHistory))
