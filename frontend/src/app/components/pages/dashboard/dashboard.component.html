@@ -1,24 +1,25 @@
-<div class="container-fluid py-3 bg-light">
-  <div class="row">
-    <div class="col-3">
-      <div class="card card-body bg-warning">
+<div class="container py-3 bg-light">
+  <div style="cursor:default;" class="row">
+    <div class="col-md-3">
+      <div [ngClass]="{'card-body-count-circolare' : isTeacher, 'card-body-count' : !isTeacher}" class="card card-body-count text-left bg-success mb-2"  data-bs-toggle="modal" data-bs-target="#ModalCirculars">
         <div class="row justify-content-between">
           <div class="col-10">
-            <h3 class="mb-0 text-white">{{count.Users}}</h3>
-            <span class="text-uppercase text-white">Amministratori</span>
+            <h3 *ngIf="!isTeacher" class="mb-0 text-white">{{count.Users}}</h3>
+            <h5 class="text-uppercase text-white">{{isTeacher ? 'Nuova Circolare' : 'Utenti'}}</h5>
           </div>
           <div class="col-2 align-self-center p-0">
-            <i class="bi bi-person-gear text-white fs-1 w-100"></i>
+            <i *ngIf="isTeacher" class="bi bi-file-earmark-plus text-white fs-1 w-100"></i>
+            <i *ngIf="!isTeacher" class="bi bi-person-gear text-white fs-1 w-100"></i>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-3">
-      <div class="card card-body bg-danger">
+    <div class="col-md-3">
+      <div  class="card card-body-count bg-danger mb-2">
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Classrooms}}</h3>
-            <span class="text-uppercase text-white">Classi</span>
+            <h5 class="text-uppercase text-white">Classi</h5>
           </div>
           <div class="col-2 align-self-center p-0">
             <i class="bi bi-people-fill text-white fs-1 w-100"></i>
@@ -26,12 +27,12 @@
         </div>
       </div>
     </div>
-    <div class="col-3">
-      <div class="card card-body bg-success">
+    <div class="col-md-3">
+      <div class="card card-body-count bg-warning mb-2">
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Students}}</h3>
-            <span class="text-uppercase text-white">Studenti</span>
+            <h5 class="text-uppercase text-white">Studenti</h5>
           </div>
           <div class="col-2 align-self-center p-0">
             <i class="bi bi-person-square text-white fs-1 w-100"></i>
@@ -39,12 +40,12 @@
         </div>
       </div>
     </div>
-    <div class="col-3">
-      <div class="card card-body bg-info">
+    <div class="col-md-3">
+      <div class="card card-body-count bg-info mb-2">
         <div class="row">
           <div class="col-10">
             <h3 class="mb-0 text-white">{{count.Teachers}}</h3>
-            <span class="text-uppercase text-white">Insegnanti</span>
+            <h5 class="text-uppercase text-white">Insegnanti</h5>
           </div>
           <div class="col-2 align-self-center p-0">
             <i class="bi bi-person-video3 text-white fs-1 w-100"></i>
@@ -52,27 +53,191 @@
         </div>
       </div>
     </div>
+    <hr>
+
   </div>
-  <div class="row py-5">
-    <h4>CIRCOLARI SCOLASTICHE</h4>
-    <div *ngFor="let pdf of pdfs" class="col-2 py-2">
-      <div class="bg-white d-flex justify-content-center align-items-center">
-        <img class="w-50 py-4" [src]="pdf.img" alt="logo" />
-      </div>
-      <div class="bg-secondary bg-opacity-25">
-        <div class="px-3">
-          <div class="d-flex py-2">
-            <h5 *ngIf="pdf.title.length < 17; else longPdfname" class="m-0 pdfText">{{pdfs}}</h5>
-            <ng-template #longPdfname>
-              <h5 class="m-0 pdfText">{{pdf.title.slice(0, 18)}}...</h5>
-            </ng-template>
+  <div class="row">
+    <div class="col-md-6">
+      <div style="margin-top: 20px;" class="card card-left">
+        <h5 class="card-header">Bacheca</h5>
+        <div style="display: flex; flex-direction: column;" class="card-body">
+          <ng-container *ngIf="pdfs && pdfs.length > 0; else noCirculars">
+          <div *ngFor="let pdf of pdfs"  style="margin-bottom: 15px;">
+            <div style="background-color: #ffd45f; " class="card-body d-flex flex-column">
+              <h6 class=" text-uppercase card-title">{{pdf.object}} 
+               </h6>
+              <p class="card-text">{{pdf.uploadDate | date: "dd/MM/yyyy"}}</p> 
+              <hr>
+              <a (click)="getCircularsById(pdf);" style="text-align: end;" class="card-text-pdf">Scarica PDF</a>       
+            </div>
           </div>
-          <div class="d-flex justify-content-between py-2">
-            <!-- <small class="m-0">Utente</small> -->
-            <small class="m-0">{{pdf.data}}</small>
+        </ng-container>
+        <ng-template #noCirculars>
+          <div>
+            <div style="background-color: #ffd45f;" class="card-body">
+            <h6 class="text-uppercase text-center card-title">{{ 'Bacheca Vuota' }}</h6>
+            </div>
           </div>
+        </ng-template>
         </div>
       </div>
     </div>
+    <div class="col-md-6">
+      <div [ngClass]="{'card-left' : isTeacher, 'card-right-esami' : !isTeacher}" style="margin-top: 20px;" class="card card-right-esami">
+        <h5 class="card-header">Prossimi Esami</h5>
+        <div style="display: flex; flex-direction: column" class="card-body card-body-bacheca">
+          <ng-container *ngIf="examsTeachers && examsTeachers.length || examsStudents && examsStudents.length > 0; else noExams">
+            <div *ngIf="isTeacher">
+            <div *ngFor="let exam of examsTeachers">
+              <div style="background-color: #ffd45f; margin-bottom: 15px;" class="card-body d-flex flex-column" >  
+                <h6 class=" text-uppercase card-title">{{exam.subject.name}}</h6>
+                <p class="card-text">{{ exam.date | date: "dd/MM/yyyy"}}</p>
+                <hr>
+                <p style="text-align: end;" class=" card-text">{{'Classe ' + exam.classroom.name }}</p> 
+              </div>
+              </div>
+            </div>
+          
+          <div *ngIf="!isTeacher">
+            <div *ngFor="let exam of examsStudents" style="margin-bottom: 15px;">
+              <div style="background-color: #ffd45f;" class="card-body">
+                <h6 class=" text-uppercase card-title">{{exam.subject}}</h6>
+                <p class="card-text">{{ exam.date | date: "dd/MM/yyyy"}}</p>
+                <hr>
+                <p style="text-align: end;" class=" card-text">{{'Prof. ' + exam.teacher }}</p> 
+              </div>
+            </div>
+          </div>
+          </ng-container>
+          <ng-template #noExams>
+          <div style="margin-bottom: 36px; margin-top: 20px;">
+            <div style="background-color: #ffd45f;" class="card-body">
+            <h6 class="text-uppercase text-center card-title">{{ 'Non ci sono esami in programma' }}</h6>
+            </div>
+          </div>
+          </ng-template>
+            <button [routerLink]="[isTeacher ? '/teachers/exams' : '/students/exams']" style="display: flex; align-items: center; justify-content: center;" class="text-center btn card-button">Vai ai prossimi esami<i style="font-size: 11px; width: 20px; height: 13px;" class="bi bi-chevron-double-right"></i></button>
+        </div>
+      </div>
+      
+    
+      <div *ngIf="!isTeacher" class="col-md-12">
+        <div style="margin-top: 20px;" class="card card-right-pagella">
+          <h5 class="card-header">Pagella</h5>
+          <div class="card-body">
+            <div>
+              <div *ngIf="isCurrentQuadrimestre" style="background-color: #ffd45f; margin-top: 11px; margin-bottom: 11px;" class="card-body text-center">
+                <h6 class=" text-uppercase card-title">Quadrimestre ancora in corso</h6>
+              </div>
+              <div *ngIf="!isCurrentQuadrimestre" style="background-color: #ffd45f; ;" class="card-body d-flex justify-content-between ">
+                <select style="cursor: pointer; background-color: #ffd45f; border: none;" name="quarters" [(ngModel)]="chosenQuadrimestre">
+                  <option [ngValue]="true">1° Quadrimestre</option>
+                  <option [ngValue]="false">2° Quadrimestre</option>   
+                </select>                
+                <a (click)="getStudentsReports()" style="text-align:right; margin-top: 25px;" class="card-text-pdf">Scarica PDF</a>
+              </div>
+            </div>
+          </div> 
+        </div>    
+      </div>     
+    </div>
   </div>
+
+<!-- Modal Circolari -->
+<div *ngIf="isTeacher" class="modal fade" id="ModalCirculars" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div style="background-color: #1d1e2c; color: white;" class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Nuova Circolare</h5>
+        <button style="background-color: white; color: white;" type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="d-flex flex-column">
+            <div class="row">
+            <div class="col-md-4">
+              <label for="circularNumber">N° Circolare</label>
+            <input id="circularNumber" type="number" formControlName="circularNumber">
+            <small class="text-danger" *ngIf="!editForm.get('circularNumber')!.valid && editForm.get('circularNumber')!.touched">Inserisci un numero</small>
+          </div>
+          <div class="col-md-4">
+            <label for="location">Luogo</label>
+            <input id="location" type="text" formControlName="location" placeholder="Es: Roma">
+            <small class="text-danger" *ngIf="!editForm.get('location')!.valid && editForm.get('location')!.touched">Inserisci un luogo</small>
+          </div>
+
+          <div class="col-md-4">
+            <label for="uploadDate">Data</label>
+            <input id="uploadDate" type= "date" formControlName="uploadDate">
+            <small class="text-danger" *ngIf="!editForm.get('uploadDate')!.valid && editForm.get('uploadDate')!.touched">Inserisci una data</small>           
+          </div>
+        </div>
+          
+            <label for="header">Intestazione</label>
+            <input id="header" type="text" formControlName="header" placeholder="Es: Al Personale Docente...">
+            <small class="text-danger" *ngIf="!editForm.get('header')!.valid && editForm.get('header')!.touched">Inserisci un'intestazione</small>
+
+            <label for="object">Oggetto</label>
+            <input id="object" type="text" formControlName="object" placeholder="Es: Assemblea d'Istituto...">
+            <small class="text-danger" *ngIf="!editForm.get('object')!.valid && editForm.get('object')!.touched">Inserisci un oggetto</small>
+
+            <label for="body">Corpo del testo</label>
+            <textarea style="height: 150px;" id="body" type="text" formControlName="body" placeholder="Es: Si comunica a tutto il personale docente..." ></textarea>
+            <small class="text-danger" *ngIf="!editForm.get('body')!.valid && editForm.get('body')!.touched">Inserisci un testo</small>
+
+            <label for="sign">Firma</label>
+            <input id="sign" type="text" formControlName="sign" placeholder="Es: Mario Rossi" >
+            <small class="text-danger" *ngIf="!editForm.get('sign')!.valid && editForm.get('sign')!.touched">Inserisci una firma</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        <button  [disabled] = '!editForm.valid' type="button" (click)="addCircular()" data-bs-dismiss="modal" style="color: white; font-weight: 400;" class="btn btn-warning">Crea Circolare</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Pagella -->
+<!-- <div class="modal fade" id="ModalPagella" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div style="background-color: #1d1e2c; color: white;" class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Visualizza Pagella</h5>
+        <button style="background-color: white; color: white;" type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div style="margin-bottom: 20px;" *ngIf="isQuadrimestreTerminato()"  class="modal-body text-center">
+        <form >
+          <div class="d-flex flex-column">
+            <div class="row">
+            <div class="col-md-6">
+              <label for="circularNumber">Anno Scolastico</label>
+              <select style="cursor: pointer;" name="years">
+                <option (click)="chooseYear(year)" *ngFor="let year of studentYears">
+                  {{year}}
+                </option>
+              </select>
+            </div>
+              <div class="col-md-6">
+                <label for="circularNumber">Quadrimestre</label>
+                <select style="cursor: pointer;" name="quarters" >
+                  <option value="true">1° Quadrimestre</option>
+                  <option value="false">2° Quadrimestre</option>      
+                </select>
+              </div>  
+            </div>
+          </div> 
+        </form>
+      </div>
+      <div class="modal-body text-uppercase text-center" *ngIf="isQuadrimestreInCorso()">
+        <h5 style="color:#1d1e2c">Quadrimestre ancora in corso</h5>
+      </div>
+      <div *ngIf="is2QuadrimestreInCorso()" class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        <a (click)="getStudentsReports()"  type="button" data-bs-dismiss="modal" style="color: white; font-weight: 400;" class="btn btn-warning">Scarica Pagella</a>
+      </div>
+    </div>
+  </div>
+</div> -->
 </div>

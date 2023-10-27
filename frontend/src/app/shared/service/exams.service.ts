@@ -14,14 +14,17 @@ export class ExamsService {
 
   constructor(private http: HttpClient) { }
 
-  getStudentExams(params: HttpParams) {
+  getStudentExams(params?: HttpParams) {
     return this.http.get<ListResponse<any>>(`https://localhost:7262/api/students/exams`, { params })
   }
 
-  getTeacherExams(params: HttpParams) {
+  getTeacherExams(params?: HttpParams) {
     return this.http.get<ListResponse<any>>(`https://localhost:7262/api/teachers/exams`, { params })
   }
 
+  getStudentsReports(params: HttpParams, id: string){
+    return this.http.get<ListResponse<any>>(`https://localhost:7262/api/students/${id}/reports`, { params })
+  }
   addExam (form: any) {
     return this.http.post<TeacherExam>(`https://localhost:7262/api/exams`, form)
   }
@@ -43,3 +46,6 @@ export class ExamsService {
   }
 
 }
+ 
+  
+

@@ -1,4 +1,4 @@
-<div class="container">
+<div style="cursor: default;" *ngIf="classDetails" class="container">
   <hr />
   <div class="row">
     <div *ngIf="isTeacher" class=" col-md-1 fs-5 fw-bold">
@@ -30,13 +30,13 @@
             </tr>
           </thead>
           <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
-            <tr *ngIf="classDetails" style="cursor: pointer" [routerLink]="'/details/'">
+            <tr style="cursor: pointer">
               <td scope="row">{{i + 1}}</td>
-               <td>{{ teacher.surname +' '+ teacher.name}}</td>             
-               <td>{{ teacher.subjects.join(', ') }}</td>
+              <td *ngIf="isTeacher" [routerLink]="['/details', teacher.id]">{{ teacher.surname + ' ' + teacher.name }}</td>
+              <td style="cursor: default;" *ngIf="!isTeacher">{{ teacher.surname + ' ' + teacher.name }}</td>
+               <td style="cursor: default;">{{ teacher.subjects.join(', ') }}</td>
             </tr>
             <tr>
-
             </tr>
           </tbody>
         </table>
@@ -69,7 +69,7 @@
                 <i class="bi bi-gear-fill"></i>
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
+                <li ><a class="dropdown-item" [routerLink]="'/details/'+ student.id"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/teachers/exams']"><i class="bi bi-book-fill"></i>Visualizza Pagella</a></li>
                 <li><a (click)="getFinalGrade(student.id!)" class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#graduationModal">
                   <i class="bi bi-gear-fill"></i>Promozione</a></li>
