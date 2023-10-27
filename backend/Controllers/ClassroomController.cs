@@ -71,7 +71,7 @@ public class ClassroomsController : Controller
         List<Student> takenStudents = new GenericRepository<Student>(_context)
             .GetAllUsingIQueryable(@params,
                 query => query
-                    .Where(el => el.ClassroomId == id)
+                    .Where(el => el.ClassroomId == id && el.SchoolYear == CurrentSchoolYear.GetCurrentSchoolYear())
                     .Include(el => el.Registry)
                     .Include(el => el.Classroom)
                 , out var totalStudents
