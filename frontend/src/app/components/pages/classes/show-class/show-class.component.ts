@@ -28,7 +28,10 @@ export class ShowClassComponent {
   idUser!: string;
   fullName!: string;
   finalGrade!: number;
+  nameSurname!: string;
   promotion: boolean = true;
+  // historyPromotionForm!: FormGroup;
+
 
   constructor(
     private classroomService: ClassroomService,
@@ -51,6 +54,10 @@ export class ShowClassComponent {
       nextClassroom: new FormControl(null, Validators.required),
     });
 
+    // this.historyPromotionForm = new FormGroup({
+    //   studentId: new FormControl(null),
+    // });
+
     this.getClassroom();
   }
 
@@ -59,7 +66,24 @@ export class ShowClassComponent {
     this.classroomService.getSingleClassroom(this.classId, params).subscribe({
       next: (res: ListResponse<ClassDetails>) => {
         this.classDetails = res.data;
-        this.classDetails.students.map((student) => {});
+        this.classDetails.students.map((student : Students) => {
+
+          const userId = student.id
+          this.classroomService.getGrade(this.classId, userId!).subscribe({
+            next: (res) => {
+              student.finalGrade = res.finalGrade;
+              student.fullName = res.fullName;
+              // this.finalGrade = student.finalGrade;
+              console.log(this.finalGrade);
+              console.log(this.fullName);
+              
+            }
+          })
+
+          // console.log(student.id);
+          // const dummy  = this.getFinalGrade(student.id!);
+          // student.finalGrade = dummy.
+        });
         console.log(res.data);
       },
       error: (err) => {
@@ -71,23 +95,6 @@ export class ShowClassComponent {
   navigateToTeachersClasses() {
     this.router.navigate(["teachers/classes"]);
   }
-
-  // getFinalGrade(idUser: string) {
-  //   this.idUser = idUser;
-  //   this.classroomService.getGrade(this.classId, this.idUser).subscribe({
-  //     next: (res: Grade) => {
-  //       this.studentGrade = res;
-
-  //       if (this.studentGrade.finalGrade >= 6) {
-  //         this.graduationForm.value.promoted = true;
-  //       } else {
-  //         this.graduationForm.value.promoted = false;
-  //       }
-
-  //       console.log("res", res);
-  //     },
-  //   });
-  // }
 
   getFinalGrade(idUser: string) {
     this.idUser = idUser;
@@ -118,6 +125,7 @@ export class ShowClassComponent {
     this.classroomService.addStudentGraduation(this.graduationForm.value,this.classId,this.idUser).subscribe({
         next: (res) => {
           console.log("tentativo", this.graduationForm.value);
+          alert("promozione inserita con successo");
         },
         error: (error) => {
           console.log(error);

@@ -91,10 +91,6 @@ export interface Teacher {
   subjects: TeacherSubject[]
 }
 
-// export interface ListResponse {
-//   data: any[],
-//   total: number
-// }
 
 // export interface TeacherSubject {
 //   subjectId: string
@@ -114,6 +110,8 @@ export interface Students {
   id?: string;
   name: string;
   surname: string;
+  fullName: string;
+  finalGrade: number;
 }
 
 export interface UsersMe{

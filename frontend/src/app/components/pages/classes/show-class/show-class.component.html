@@ -13,7 +13,11 @@
    <span class="icon"><i class="bi bi-person-vcard"></i> </span>
 </div>
 </div>
-  <hr class="mb-5"/>
+  <hr class="mb-2"/>
+
+  <div class="button m-3 d-flex w-100 justify-content-end pe-5">
+        <a class="btn btn-warning" [routerLink]="['/history-promotion/' + this.classId]"><i class="bi bi-card-list px-2"></i>STORICO PROMOZIONI</a>
+      </div>
 
     <div  class="row justify-content-center">    
       <div class="col-md-5">
@@ -37,23 +41,28 @@
           </tbody>
         </table>
       </div>
-    
+
 
   <div class="col-md-7">
     <table class="table table-students table-hover w-100">
       <thead class="text-center">
         <tr>
           <th>#</th>
-          <th>Cognome</th>
-          <th>Nome</th>
+          <th>Studente</th>
+          <!-- <th>Nome</th> -->
+          <th>Esito finale</th>
           <th>Azioni</th>
         </tr>
       </thead>
       <tbody *ngFor="let student of classDetails?.students let i = index">
         <tr>
           <td scope="row">{{i + 1}}</td> 
-          <td style="cursor: pointer" [routerLink]="'/details/'">{{student.surname}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'">{{student.name}}</td>
+          <!-- <td style="cursor: pointer" [routerLink]="'/details/'">{{student.surname}}</td> -->
+          <td style="cursor: pointer" [routerLink]="'/details/'">{{student && student.surname + ' ' +  student.name}}</td>
+          <td style="cursor: pointer" [routerLink]="'/details/'">
+           <h6 class="mt-2">{{student && student.finalGrade >= 6 ? "NON A RISCHIO": "A RISCHIO"}}</h6>
+          </td>
+
           <td>
             <div class="dropdown">
               <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
