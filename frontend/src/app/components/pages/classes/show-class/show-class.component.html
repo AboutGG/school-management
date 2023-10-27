@@ -1,4 +1,4 @@
-<div class="container">
+<div style="cursor: default;" *ngIf="classDetails" class="container">
   <hr />
   <div class="row">
     <div *ngIf="isTeacher" class=" col-md-1 fs-5 fw-bold">
@@ -26,13 +26,13 @@
             </tr>
           </thead>
           <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
-            <tr *ngIf="classDetails" style="cursor: pointer" [routerLink]="'/details/'">
+            <tr style="cursor: pointer">
               <td scope="row">{{i + 1}}</td>
-               <td>{{ teacher.surname +' '+ teacher.name}}</td>             
-               <td>{{ teacher.subjects.join(', ') }}</td>
+              <td *ngIf="isTeacher" [routerLink]="['/details', teacher.id]">{{ teacher.surname + ' ' + teacher.name }}</td>
+              <td style="cursor: default;" *ngIf="!isTeacher">{{ teacher.surname + ' ' + teacher.name }}</td>
+               <td style="cursor: default;">{{ teacher.subjects.join(', ') }}</td>
             </tr>
             <tr>
-             
             </tr>
           </tbody>
         </table>
@@ -46,24 +46,25 @@
           <th>#</th>
           <th>Cognome</th>
           <th>Nome</th>
-          <th>Azioni</th>
+          <th *ngIf="isTeacher" >Azioni</th>
         </tr>
       </thead>
       <tbody *ngFor="let student of classDetails?.students let i = index">
         <tr >
           <td scope="row">{{i + 1}}</td> 
-          <td style="cursor: pointer" [routerLink]="'/details/'">{{student.surname}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'">{{student.name}}</td>
-          
-          <td>
+          <td *ngIf="isTeacher" style="cursor: pointer" [routerLink]="'/details/'+ student.id">{{student.surname}}</td>
+          <td *ngIf="isTeacher" style="cursor: pointer" [routerLink]="'/details/'+ student.id">{{student.name}}</td>
+          <td *ngIf="!isTeacher">{{student.surname}}</td>
+          <td *ngIf="!isTeacher">{{student.name}}</td>
+
+          <td *ngIf="isTeacher">
             <div class="dropdown">
               <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-gear-fill"></i>
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
+                <li ><a class="dropdown-item" [routerLink]="'/details/'+ student.id"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/teachers/exams']"><i class="bi bi-book-fill"></i>Visualizza Pagella</a></li>
-                <!-- <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li> -->
               </ul>
             </div>
           </td>
@@ -72,42 +73,4 @@
     </table>
   </div>
 </div>
-
-  <!-- Modal delete -->
-  <!-- <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Sei sicuro?</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          Una volta eliminato, non potrai tornare indietro!
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Chiudi
-          </button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            Elimina
-          </button>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>

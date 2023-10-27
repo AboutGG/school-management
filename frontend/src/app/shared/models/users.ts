@@ -111,7 +111,7 @@ export interface Teachers {
 }
 
 export interface Students {
-  id?: string;
+  id: string;
   name: string;
   surname: string;
 }
