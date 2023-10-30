@@ -8,6 +8,7 @@ import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-examslist',
@@ -203,5 +204,18 @@ export class ExamslistComponent implements OnInit {
       }
     })
   }
+
+  showAlert() {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Esame creato con successo',
+      showConfirmButton: false,
+      timer: 2500,
+      background: '#f5d67a'
+
+    });
+  }
 
 }

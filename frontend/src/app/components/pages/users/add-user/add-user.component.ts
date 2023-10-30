@@ -7,6 +7,7 @@ import { Classroom } from "src/app/shared/models/classrooms";
 import { Registry } from "src/app/shared/models/users";
 import { Users } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-add-user",
@@ -33,7 +34,7 @@ export class AddUserComponent implements OnInit {
   constructor(
     private usersService: UsersService,
     private classroomService: ClassroomService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -110,11 +111,14 @@ export class AddUserComponent implements OnInit {
     return !!formControl && formControl.invalid;
   }
 
+
+
+
   onAddUser() {
     if (this.id) {
       console.log();
       this.usersService.editUser(this.registry.value, this.id).subscribe()
-      console.log(this.registry.value);
+      console.log(Response);
     }else {
       this.usersService.addUser(this.usersForm.value).subscribe({
         next: (res) => {
@@ -124,11 +128,15 @@ export class AddUserComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
+
         },
       });
     }
     console.log(this.usersForm.value);
+    this.showAlert()
   }
+
+ 
 
   selectClassroom(classroom: string) {
     this.usersForm.value.classroomId!.setValue(classroom);
@@ -163,4 +171,17 @@ export class AddUserComponent implements OnInit {
       },
     });
   }
+
+  showAlert() {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Creazione avvenuta con successo',
+      showConfirmButton: false,
+      timer: 2500,
+      background: '#f5d67a'
+
+    });
+  }
 }

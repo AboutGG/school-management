@@ -2,6 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { StudentExam } from 'src/app/shared/models/studentexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-exams-student-list',
@@ -54,5 +55,19 @@ export class ExamsStudentListComponent implements OnInit {
       this.examsList = res.data
     })
   }
+
+  showAlert() {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Esame creato con successo',
+      showConfirmButton: false,
+      timer: 2500,
+      background: '#f5d67a'
+
+    });
+  }
+
 
 }
