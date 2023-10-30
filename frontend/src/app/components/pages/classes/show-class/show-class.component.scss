@@ -77,6 +77,7 @@ hr{
   td{
     text-align: center;
     vertical-align: middle;
+    padding: 15px;
   }
   
   table {
@@ -127,6 +128,18 @@ hr{
 
   .bi-eye-fill{
     margin-right: 10px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: #b6b6b6; 
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9b9a9a; 
   }
 
 

@@ -1,3 +1,161 @@
+
 .pdfText {
-    font-size: 1.0rem;
+  font-size: 1.0rem;
+}
+hr{
+  margin: 1rem 0;
+  color: inherit;
+  border: 0;
+  border-top: var(--bs-border-width) solid;
+  opacity: 0.25;
+  margin-top: 5px;
+}
+.card{
+  border: 1px solid #ddd;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 20px;
+  max-height: 400px;
+}
+.card-body{
+  border: 1px ;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+
+}
+.card-body-pagella{
+  
+ 
+ 
+
+}
+.card-body-count{
+  border: 1px ;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 20px;
+  max-height: 400px;
+  padding: 15px;
+
+}
+
+.card-body-count-circolare{
+  border: 1px ;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 20px;
+  max-height: 400px;
+  padding: 17px;
+  cursor: pointer;
+
+}
+.card-header{
+  text-align: center;
+  background-color: #1d1e2c;
+  color: white;
+}
+
+.card-button{
+  text-align: center;
+  background-color: #1d1e2c;
+  color: white;
+}
+.card-button:hover{
+  color:#ffd45f;
+  background-color: #272833;
+}
+
+.card-left {
+  max-height: 405px;
+  overflow-y: auto;
+
+}
+.card-right-esami {
+  max-height: 229px;
+  overflow-y: auto;
+}
+
+.card-right-pagella {
+  max-height: 244px;
+  overflow-y: auto;
+}
+
+.card-text-pdf {
+  text-decoration: none;
+  cursor: pointer;
+  color: black;
+}
+.card-text-pdf:hover{
+  text-decoration:underline;
+}
+
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #b6b6b6; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9b9a9a; 
+}
+
+input[type=text]{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+input[type=text]:focus{
+  border: 2px solid #ffd45f;
+}
+
+input[type=date]{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+input[type=date]:focus{
+  border: 2px solid #ffd45f;
+}
+input[type=number]{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+input[type=number]:focus{
+  border: 2px solid #ffd45f;
+}
+textarea[type=text]{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+textarea[type=text]:focus{
+  border: 2px solid #ffd45f;
+}
+label{
+  margin-top: 10px;
+}
+select{
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+select:focus{
+  border: 2px solid #ffd45f;
+
 }
