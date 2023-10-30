@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
 
   showInvalidInput: boolean = false;
   error: boolean = false;
+  passwordInputType: string = 'password';
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -37,5 +38,10 @@ export class LoginComponent implements OnInit {
       this.error = true;
     })
   }
+
+  showPassword() {
+    this.passwordInputType === 'password' ? this.passwordInputType = 'text' : this.passwordInputType = 'password'
+  }
+
 }
 

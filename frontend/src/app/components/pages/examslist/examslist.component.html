@@ -129,8 +129,8 @@
                         <div class="d-flex flex-column my-2">
                             <label for="classroom" class="form-label">Classe: </label>
                             <select id="classroom" class="w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="classroomId">
-                                <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms"
+                                formControlName="classroomId" (change)="subjectEvent($event)">
+                                <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms "
                                     (click)="getTeacherSubjectsByClassroom(classroom.id_classroom!)">
                                     {{classroom.name_classroom}}</option>
                             </select>

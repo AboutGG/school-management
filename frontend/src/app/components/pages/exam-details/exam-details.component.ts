@@ -36,6 +36,7 @@ export class ExamDetailsComponent implements OnInit {
       }
     })
   }
+  
 
   editExamDetails(userId: string) {
     if(this.grade.value >= 2 && this.grade.value <= 10) {
@@ -43,8 +44,12 @@ export class ExamDetailsComponent implements OnInit {
         userId : userId,
         grade : this.grade.value
        }
-      this.examService.editExamDetails(this.studentDetails, this.examId).subscribe()
-      this.getExamDetails()
+      this.examService.editExamDetails(this.studentDetails, this.examId).subscribe({
+        next: () => {
+          this.getExamDetails()
+        }
+      })
+
     }
     else {
       alert("Impostare un valore da 2 a 10")

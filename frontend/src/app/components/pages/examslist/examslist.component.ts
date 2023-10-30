@@ -159,6 +159,10 @@ export class ExamslistComponent implements OnInit {
     this.getTeacherSubjectsByClassroom(this.examForm.value.classroomId)
   }
 
+  subjectEvent(event: any) {
+    this.getTeacherSubjectsByClassroom(event.target.value)
+  }
+
   onClickModal() {
     if (this.isEdit === false) {
       if (this.examForm.value.date > this.today) {

@@ -1,3 +1,17 @@
 .form-check {
-    display: flex;
+  display: flex;
+}
+
+.input-container {
+  position: relative;
+  display: inline-block;
+}
+
+.input-container {
+  i {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
