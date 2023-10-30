@@ -35,6 +35,5 @@ export class DetailUserComponent {
   ngOnDestroy(): void {
     this.unsubscribe$.next(true);
     this.unsubscribe$.complete(); 
-    
   }
 }
