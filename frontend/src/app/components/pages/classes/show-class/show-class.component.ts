@@ -32,10 +32,10 @@ export class ShowClassComponent {
   promotion: boolean = true;
   // historyPromotionForm!: FormGroup;
   currentDate = new Date();
-  promotionStartDate = new Date('2024/06/01');
-  promotionEndDate = new Date('2024/07/31');
+  promotionStartDate = new Date();
+  promotionEndDate = new Date();
 
-  today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
+
 
   constructor(
     private classroomService: ClassroomService,
@@ -62,6 +62,12 @@ export class ShowClassComponent {
     //   studentId: new FormControl(null),
     // });
 
+    this.promotionStartDate.setMonth(5);
+    this.promotionStartDate.setDate(1);
+
+    this.promotionEndDate.setMonth(6);
+    this.promotionEndDate.setDate(31);  
+
     this.getClassroom();
   }
 
@@ -79,8 +85,8 @@ export class ShowClassComponent {
               student.finalGrade = res.finalGrade;
               student.fullName = res.fullName;
               // this.finalGrade = student.finalGrade;
-              console.log(this.finalGrade);
-              console.log(this.fullName);
+              console.log(student.finalGrade);
+              console.log(student.fullName);
             },
           });
 

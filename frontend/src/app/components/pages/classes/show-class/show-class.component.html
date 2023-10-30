@@ -49,11 +49,11 @@
         <tr>
           <th>#</th>
           <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Studenti</th>
-          <th *ngIf="isTeacher && currentDate < promotionStartDate || currentDate > promotionEndDate">Cognome</th>
-          <th *ngIf="isTeacher && currentDate < promotionStartDate || currentDate > promotionEndDate">Nome</th>
+          <th *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">Cognome</th>
+          <th *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">Nome</th>
           <th *ngIf="!isTeacher">Cognome</th>
           <th *ngIf="!isTeacher">Nome</th>
-          <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Esito finale</th>
+          <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Andamento</th>
           <th *ngIf="isTeacher">Azioni</th>
         </tr>
       </thead>
@@ -61,8 +61,8 @@
         <tr>
           <td scope="row">{{i + 1}}</td> 
           <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">{{student && student.surname + ' ' +  student.name}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && currentDate < promotionStartDate || currentDate > promotionEndDate">{{student.surname}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && currentDate < promotionStartDate || currentDate > promotionEndDate">{{student.name}}</td>
+          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.surname}}</td>
+          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.name}}</td>
           <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="!isTeacher">{{student.surname}}</td>
           <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="!isTeacher">{{student.name}}</td>
           <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">
