@@ -10,7 +10,7 @@
 
     <div class="d-flex w-100">
       <div class="button m-3 d-flex w-100 justify-content-start">
-        <a *ngIf="isTeacher" class="btn btn-warning" [routerLink]="['/list-users']"><i class="bi bi-caret-left-fill"></i>LISTA UTENTI</a>
+        <a *ngIf="isTeacher" class="btn btn-warning" [routerLink]="['/list-users']"><i class="bi bi-caret-left-fill px-1"></i>LISTA UTENTI</a>
       </div>
       <div class="button m-3 d-flex w-100 justify-content-end">
         <a *ngIf="isTeacher" class="btn btn-warning" [routerLink]="['/add-user/' + this.id]"><i class="bi bi-pencil-square px-2"></i>MODIFICA UTENTE</a>
@@ -44,7 +44,7 @@
           </div>
           <div class="col-md-6 d-flex justify-content-start pb-4">
             <span class="fw-medium text-warning px-4">Data di Nascita:</span>
-            <span class="fw-normal text-dark">{{this.details.birth || '-'}}</span>
+            <span class="fw-normal text-dark">{{this.details.birth || '-' | date: "dd/MM/yyyy"}}</span>
           </div>
           <div class="col-md-6 d-flex justify-content-start pb-4">
             <span class="fw-medium text-warning px-4">Email:</span>

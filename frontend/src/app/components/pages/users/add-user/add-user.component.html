@@ -2,9 +2,9 @@
         <hr>
         <div class="row">
             <div class=" col-md-1 fs-5 fw-bold">
-                <span class="icon-back" style="cursor: pointer;" ><i class="bi bi-arrow-left" (click)="navigateTo()"  ></i> </span>
+                <span class="icon-back" style="cursor: pointer;" ><i class="bi bi-arrow-left" (click)="navigateTo()"></i></span>
                </div>
-        <div class="col-md-11 d-flex align-items-center justify-content-center fs-5 fw-bold text-uppercase">
+        <div class="col-md-10 d-flex align-items-center justify-content-center fs-5 fw-bold text-uppercase">
             {{ this.id == null ? 'Creazione utente' : 'Modifica utente' }}
             <span class="icon-data ms-3">
                 <i class="bi bi-pencil-fill pencil-icon"></i>
@@ -104,7 +104,7 @@
                     <span class="text-danger">* campo obbligatorio</span>
                 </div>
             <div class="col-md-2">
-                <button style="width: 80px;" (click)="this.alert=true; onAddUser()" type="submit" class="btn btn-warning form-control" [disabled]="usersForm.invalid" [routerLink]="['/list-users']">SALVA</button>
+                <button style="width: 80px;" (click)="this.alert=true; onAddUser()" type="submit" class="btn btn-warning form-control" [disabled]="!usersForm.valid && !registry.valid" [routerLink]="['/list-users']">SALVA</button>
             </div>
         </div>
           

@@ -66,21 +66,27 @@
     color: unset;
 }
 
-// thead,
-// tbody {
-//   border: 1px solid #ddd;
-//   background-color: #fff;
-// }
+thead,
+tbody {
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
 
-// .dropdown-item:active {
-//     background-color: #f8f9fa;
-//     color: black;
-// }
+.dropdown-item:active {
+    background-color: #f8f9fa;
+    color: black;
+}
 
-// .page-link {
-//     color: black;
-// }
+.page-link {
+    color: black;
+}
+.page-link:hover{
+    background-color: #ffb900;
+  }
 
+table {
+    border-bottom: 1px solid #ddd;
+  }
 .icon-data {
     border: 2px solid;
     border-radius: 50px;

@@ -13,16 +13,6 @@
       </div>
     </div>
 
-    <!--students-->
-    <!-- <div [routerLink]="['/students']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"  class="link">
-      <div class="content">
-        <div class="icon">
-          <i class="bi bi-person-lines-fill"></i> 
-        </div>
-        <div class="title">Students</div>
-      </div>
-    </div> -->
-
     <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="isTeacher" class="link">
       <div class="content">
         <div class="icon">
@@ -32,17 +22,6 @@
         <i class="invisible" *ngIf="isExpanded" [ngClass]="!isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
     </div>
-
-    <!-- <div *ngIf="isExpanded" [ngClass]="{'collapse-content': !isCollapsed}" [ngClass]="{ 'expanded': isExpanded }"
-      class="custom-collapse collapse-content">
-      <div [routerLink]="['/add-user']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
-        <p>Crea Utente</p>
-      </div>
-      <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-        class="link" class="link">
-        <p>Gestisci Utenti</p>
-      </div>
-    </div> -->
 
     <div [routerLink]="[isTeacher ? linkByRole + '/classes/' : linkByRole + '/classes/'+ userId.classroomId]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
