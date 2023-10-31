@@ -1,116 +1,116 @@
-    <div class="container mt-5">
-        <div class="d-flex align-items-center justify-content-center fs-5 fw-bold text-uppercase ">
+    <div class="container">
+        <hr>
+        <div class="row">
+            <div class=" col-md-1 fs-5 fw-bold">
+                <span class="icon-back" style="cursor: pointer;" ><i class="bi bi-arrow-left" (click)="navigateTo()"></i></span>
+               </div>
+        <div class="col-md-10 d-flex align-items-center justify-content-center fs-5 fw-bold text-uppercase">
             {{ this.id == null ? 'Creazione utente' : 'Modifica utente' }}
             <span class="icon-data ms-3">
                 <i class="bi bi-pencil-fill pencil-icon"></i>
             </span>
         </div>
+    </div>
+    <hr>
     
         <form [formGroup]="usersForm" class="row g-3 form-container ms-5 me-4">
-            <div class="row position-relative ms-5 mb-4">
-                <div class="row position-relative mb-3 align-items-center">
+            <div class="container">
+                <div class="row mb-3">
                     <div class="col-md-2 role-select" *ngIf="id == null">
                         <label for="role" class="form-label">Ruolo:<span class="text-danger">*</span></label>
-                        <select class="form-select" formControlName="role" (change)="onClickRole($event)">
+                        <select style="cursor: pointer;" class="form-select" formControlName="role" (change)="onClickRole($event)">
                             <option value="student">Studente</option>
                             <option value="teacher">Insegnante</option>
                         </select>
-                        <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('role')">
-                            <span>Campo obbligatorio</span>
-                        </div> 
+                        <small class="text-danger" *ngIf="!role.valid && role.touched">Inserisci un ruolo</small> 
                     </div>
-                    <div class="col-md-8" *ngIf="id == null">
+                    <div class="col-md-10" *ngIf="id == null">
                         <div formGroupName="user">
-                            <div class="row position-relative mb-3">
-                                <div class="col-md-6 mb-3">
+                          <div class="row">
+                                <div class="col-md-6">
                                     <label class="form-label" for="username">Username:<span class="text-danger">*</span></label>
-                                    <input class="form-control placeholder-input" type="text" title="username" formControlName="username" placeholder="mariorossi2023">
-                                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('username')">
-                                        <span>Campo obbligatorio</span>
-                                    </div>
+                                    <input class="form-control placeholder-input" type="text" title="Username" formControlName="username" placeholder="mariorossi2023">
+                                    <small class="text-danger" *ngIf="!user.get('username')!.valid && user.get('username')!.touched">Inserisci uno username</small>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                
+                               <div class="col-md-6">
                                     <label class="form-label" for="password">Password:<span class="text-danger">*</span></label>
-                                    <input class="form-control placeholder-input" type="password" title="password" formControlName="password">
-                                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('password')">
-                                        <span>Campo obbligatorio</span>
-                                    </div>
+                                    <input class="form-control placeholder-input" placeholder="minimo 8 caratteri" type="password" title="Password" formControlName="password">
+                                    <small class="text-danger" *ngIf="!user.get('password')!.valid && user.get('password')!.touched">Inserisci una password</small>
                                 </div>
-                            </div>
                         </div>
+                    </div>
                     </div>
                 </div>
                 
-                <div class="col-md-12">
+                <div class="">
                     <div formGroupName="registry" *ngIf="registry">
-                        <div class="row position-relative mb-4">
-                            <div class="col-md-2 mb-3">
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
                                 <label for="name" class="form-label">Nome:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control placeholder-input" title="name" formControlName="name" placeholder="Mario">
-                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('name')">
-                                    <span>Campo obbligatorio</span>
-                                </div>
+                                <input type="text" class="form-control placeholder-input" title="Nome" formControlName="name" placeholder="Mario">
+                                <small class="text-danger" *ngIf="!registry.get('name')!.valid && registry.get('name')!.touched">Inserisci un nome</small>
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="surname" class="form-label">Cognome:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control placeholder-input" title="surname" formControlName="surname" placeholder="Rossi">
-                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('surname')">
-                                    <span>Campo obbligatorio</span>
-                                </div>
+                                <input type="text" class="form-control placeholder-input" title="Cognome" formControlName="surname" placeholder="Rossi">
+                                <small class="text-danger" *ngIf="!registry.get('surname')!.valid && registry.get('surname')!.touched">Inserisci un cognome</small>
                             </div>
-                            <div class="col-md-5 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="email" class="form-label">Email:</label>
-                                <input type="text" title="email" formControlName="email" class="form-control placeholder-input" placeholder="mariorossi2023@gmail.com">
-                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('email')">
-                                    <span>Email non valida</span>
-                                </div>
+                                <input type="text" title="Email" formControlName="email" class="form-control placeholder-input" placeholder="mariorossi2023@gmail.com">
+                                <small class="text-danger" *ngIf="!registry.get('email')!.valid && registry.get('email')!.touched">Inserisci un'email valida</small>
                             </div>
                         </div>
-                        <div class="row position-relative mb-4 align-items-end">
+                        <div class="row mb-4">
                             <div class="col-md-2 mb-3">
                                 <label for="gender" class="form-label">Genere:<span class="text-danger">*</span></label>
-                                <select class="form-select" formControlName="gender" (change)="onClickGender()">
+                                <select style="cursor: pointer;" class="form-select" formControlName="gender" (change)="onClickGender()">
                                     <option value="male">Maschio</option>
                                     <option value="female">Femmina</option>
                                     <option value="other">Altro</option>
                                 </select>
-                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('gender')">
-                                    <span>Campo obbligatorio</span>
-                                </div>
+                                <small class="text-danger" *ngIf="!registry.get('gender')!.valid && registry.get('gender')!.touched">Inserisci un genere</small>
                             </div>
-                            <div class="col-md-2 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label for="birth" class="form-label">Data di nascita:</label>
-                                <input type="date" class="form-control placeholder-input" title="birth" formControlName="birth">
+                                <input type="date" class="form-control placeholder-input" title="Data di nascita" formControlName="birth">
                             </div>
-                            <div class="col-md-2 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label for="telephone" class="form-label">Telefono:</label>
-                                <input type="text" class="form-control placeholder-input" title="telephone" formControlName="telephone" placeholder="391-45678920">
-                                <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('telephone')">
-                                    <span>Numero non valido</span>
-                                </div>
+                                <input type="text" class="form-control placeholder-input" title="Telefono" formControlName="telephone" placeholder="391-45678920">
+                                <small class="text-danger" *ngIf="!registry.get('telephone')!.valid && registry.get('telephone')!.touched">Inserisci un numero valido</small>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="address" class="form-label">Indirizzo:</label>
-                                <input type="text" title="address" formControlName="address" class="form-control placeholder-input" placeholder="Via Roma 90, 95030, Catania">
+                                <input type="text" title="Indirizzo" formControlName="address" class="form-control placeholder-input" placeholder="Via Roma 90, 95030, Catania">
                             </div>
                         </div>
                     </div>
                 </div>
-
+                <div class="row">
                 <div class="col-md-2 mb-5" *ngIf="this.roleValue === 'student' && id == null">
                     <label for="classroomId" class="form-label">Classe:<span class="text-danger">*</span></label>
-                    <select class="form-select" formControlName="classroomId">
+                    <select style="cursor: pointer;" class="form-select" formControlName="classroomId">
                         <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
                     </select>
-                    <div class="text-danger position-absolute" *ngIf="this.alert && showAlerts('classroomId')">
-                        <span>Campo obbligatorio</span>
-                    </div> 
-                </div>   
+                    <small class="text-danger" *ngIf="!classroomId.valid && classroomId.touched">Inserisci una classe</small>
+
+                </div> 
+            </div>  
             </div>
-        </form>
-        <div class="d-flex justify-content-end mb-5 pe-5">
+            <div class="row mt-5 mb-5">
+                <div class="col-md-10">
+                    <span class="text-danger">* campo obbligatorio</span>
+                </div>
             <div class="col-md-2">
-                <button (click)="this.alert=true; onAddUser()" type="submit" class="btn btn-warning form-control" [routerLink]="['/list-users']">SALVA</button>
+                <button style="width: 80px;" (click)="this.alert=true; onAddUser()" type="submit" class="btn btn-warning form-control" [disabled]="!usersForm.valid && !registry.valid" [routerLink]="['/list-users']">SALVA</button>
             </div>
         </div>
+          
+        </form>
+        
+       
     </div>
+    
+    

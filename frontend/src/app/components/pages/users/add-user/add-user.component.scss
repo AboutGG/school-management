@@ -1,13 +1,34 @@
+
 .icon-data {
     border: 2px solid;
     border-radius: 50px;
-    width: 65px;
-    height: 65px;
+    width: 60px;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color:#ffc107;
-}
+    color: #ffb900;
+    margin-left: 20px;
+  }
+.icon-back {
+    border: 2px solid;
+    border-radius: 50px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffb900;
+    margin-left: 20px;
+  }
+  .bi-person-vcard{
+    font-size: 30px;
+      color: #ffb900;
+  }
+  .bi-arrow-left{
+    font-size: 25px;
+      color: #ffb900;
+  }
 
 .pencil-icon {
     font-size: 30px;
