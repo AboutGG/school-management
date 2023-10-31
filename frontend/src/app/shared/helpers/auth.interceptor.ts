@@ -31,14 +31,13 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((err: HttpErrorResponse) => {
         if (err instanceof HttpErrorResponse) {
           if (this.router.url !== "/login") {
-            if (err.status === 400 || err.status === 404) {
+            if (err.status === 404) {
               this.router.navigate(["/not-found/" + err.status]);
             }
             else if (err.status === 401 && /\/details\/\d+/.test(this.router.url)) {
-              console.log("capiamo");
-              this.router.navigate(["/not-found" + err.status]);
+              console.log(err.status);
+              this.router.navigate(["/not-found/" + err.status]);
             }
-            
           }
         }
         return throwError(err);
