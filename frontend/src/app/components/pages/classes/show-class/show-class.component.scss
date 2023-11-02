@@ -78,6 +78,7 @@ hr{
     text-align: center;
     vertical-align: middle;
     padding: 15px;
+    padding: 15px;
   }
   
   table {
@@ -130,7 +131,9 @@ hr{
     margin-right: 10px;
   }
 
-  ::-webkit-scrollbar {
+  .bi-gear-fill{
+    margin-right: 10px; 
+  }  ::-webkit-scrollbar {
     width: 10px;
   }
    
@@ -143,5 +146,7 @@ hr{
   }
 
 
-  
 
+  .modal-dialog {
+    width: 400px;
+  }
