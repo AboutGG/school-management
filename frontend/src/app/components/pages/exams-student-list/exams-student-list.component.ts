@@ -1,5 +1,7 @@
+import { Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { StudentExam } from 'src/app/shared/models/studentexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 
@@ -8,7 +10,7 @@ import { ExamsService } from 'src/app/shared/service/exams.service';
   templateUrl: './exams-student-list.component.html',
   styleUrls: ['./exams-student-list.component.scss']
 })
-export class ExamsStudentListComponent implements OnInit {
+export class ExamsStudentListComponent implements OnInit, OnDestroy {
   examsList!: StudentExam[]
   page: number = 1;
   filtered!: string
@@ -21,11 +23,17 @@ export class ExamsStudentListComponent implements OnInit {
     matter: 'asc',
     grade: 'asc'
   }
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private examsService: ExamsService) { }
+  constructor(private examsService: ExamsService, private location: Location) { }
 
   ngOnInit(): void {
     this.getStudentExams()
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
   }
 
   // getExams(order: string, type: 'asc' | 'desc', key: keyof typeof this.orders) {
@@ -50,9 +58,13 @@ export class ExamsStudentListComponent implements OnInit {
       .set('OrderType', this.orderType)
       .set('Order', this.order)
       .set('ItemsPerPage', this.itemsPerPage)
-    this.examsService.getStudentExams(params).subscribe(res => {
+    this.examsService.getStudentExams(params).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
       this.examsList = res.data
     })
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

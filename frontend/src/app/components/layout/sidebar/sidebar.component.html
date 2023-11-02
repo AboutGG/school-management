@@ -1,4 +1,4 @@
-<div *ngIf="userId" class="sidebar vh-100" [ngClass]="{ 'expanded': isExpanded }">
+<div *ngIf="userMe" class="sidebar vh-100" [ngClass]="{ 'expanded': isExpanded }">
   <div class="content alt vh-100" [ngClass]="{ 'expanded': isExpanded }">
     <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link"
       class="link">
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div [routerLink]="[isTeacher ? linkByRole + '/classes/' : linkByRole + '/classes/'+ userId.classroomId]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
+    <div [routerLink]="[isTeacher ? linkByRole + '/classes/' : linkByRole + '/classes/'+ userMe.classroomId]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
         <div class="icon">
           <i class="bi bi-newspaper"></i>

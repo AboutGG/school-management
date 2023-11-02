@@ -1,6 +1,6 @@
 import { UsersService } from './../../../shared/service/users.service';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';
 import { ListResponse } from 'src/app/shared/models/listresponse';
@@ -10,6 +10,8 @@ import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { Subject, takeUntil } from 'rxjs';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-examslist',
@@ -17,8 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./examslist.component.scss'],
 
 })
-export class ExamslistComponent implements OnInit {
-  constructor(private examsService: ExamsService, private teacherService: TeacherService, private usersService: UsersService) { }
+export class ExamslistComponent implements OnInit, OnDestroy {
+  constructor(private examsService: ExamsService, private teacherService: TeacherService, private usersService: UsersService, private location: Location) { }
 
   user!: UsersMe
   formSubjects = new FormGroup({
@@ -57,6 +59,7 @@ export class ExamslistComponent implements OnInit {
   today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
   // today = new Date(new Date().getTime()).toISOString().substring(0, 10);
   alert: boolean = false;
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   ngOnInit(): void {
     this.date = new FormControl(null, Validators.required),
@@ -74,6 +77,11 @@ export class ExamslistComponent implements OnInit {
     this.getTeacherClassrooms();
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
+  }  
+
   onChangePage(newPage: number) {
     this.page = newPage
     this.getTeacherExams()
@@ -87,7 +95,7 @@ export class ExamslistComponent implements OnInit {
   }
 
   getUser() {
-    this.usersService.getUsersMe().subscribe({
+    this.usersService.getUsersMe().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
         this.user = res
         this.getTeacherSubjects();
@@ -104,7 +112,7 @@ export class ExamslistComponent implements OnInit {
       .set('OrderType', this.orderType)
       .set('Order', this.order)
       .set('ItemsPerPage', this.itemsPerPage)
-    this.examsService.getTeacherExams(params).subscribe({
+    this.examsService.getTeacherExams(params).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res: ListResponse<TeacherExam[]>) => {
         // this.orders = {
         //   name: 'asc',
@@ -125,7 +133,7 @@ export class ExamslistComponent implements OnInit {
   }
 
   getTeacherClassrooms() {
-    this.teacherService.getDataClassroom().subscribe({
+    this.teacherService.getDataClassroom().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
         this.classrooms = res.data
       }
@@ -133,7 +141,7 @@ export class ExamslistComponent implements OnInit {
   }
 
   getTeacherSubjects() {
-    this.teacherService.getTeacherSubjects(this.user?.id).subscribe({
+    this.teacherService.getTeacherSubjects(this.user?.id).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
         this.subjects = res
         console.log(res);
@@ -145,7 +153,7 @@ export class ExamslistComponent implements OnInit {
     // const params = classroomId ? new HttpParams().set('classroomId', classroomId) : new HttpParams();
     const params = new HttpParams().set('classroomId', classroomId)
     console.log(params)
-    this.teacherService.getTeacherSubjectsByClassroom(this.user?.id, params).subscribe({
+    this.teacherService.getTeacherSubjectsByClassroom(this.user?.id, params).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res: IdName[]) => {
         this.subjectsByClassroom = res;
       }
@@ -162,11 +170,15 @@ export class ExamslistComponent implements OnInit {
     this.getTeacherSubjectsByClassroom(this.examForm.value.classroomId)
   }
 
+  subjectEvent(event: any) {
+    this.getTeacherSubjectsByClassroom(event.target.value)
+  }
+
   onClickModal() {
     if (this.isEdit === false) {
       if (this.examForm.value.date > this.today) {
         this.successEditOrNew = false;
-        this.examsService.addExam(this.examForm.value).subscribe({
+        this.examsService.addExam(this.examForm.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
           next: () => {
             this.successEditOrNew = true;
             setTimeout(() => this.successEditOrNew = false, 4000)
@@ -181,7 +193,7 @@ export class ExamslistComponent implements OnInit {
     } else {
       if (this.examForm.value.date > this.today) {
         this.successEditOrNew = false
-        this.examsService.editExam(this.examForm.value, this.user.id, this.examId).subscribe({
+        this.examsService.editExam(this.examForm.value, this.user.id, this.examId).pipe(takeUntil(this.unsubscribe$)).subscribe({
           next: () => {
             this.successEditOrNew = true
             setTimeout(() => this.successEditOrNew = false, 4000)
@@ -200,11 +212,15 @@ export class ExamslistComponent implements OnInit {
   }
 
   deleteExam() {
-    this.examsService.deleteExam(this.examId!).subscribe({
+    this.examsService.deleteExam(this.examId!).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: () => {
         this.getTeacherExams();
       }
     })
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

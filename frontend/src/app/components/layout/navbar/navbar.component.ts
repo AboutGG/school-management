@@ -1,10 +1,10 @@
-import {Component, EventEmitter, inject, OnInit, Output} from "@angular/core";
+import { Component, EventEmitter, inject, OnInit, Output } from "@angular/core";
 import { UsersMe } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import { UsersService } from "src/app/shared/service/users.service";
-import { FormControl, FormGroup, Validators} from "@angular/forms";
-import { AccountService} from "../../../shared/service/account.service";
-import { catchError } from "rxjs";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AccountService } from "../../../shared/service/account.service";
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: "app-navbar",
@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   users!: UsersMe;
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
   selectedTab: string = "";
   accountForm!: FormGroup;
 
@@ -56,7 +57,7 @@ export class NavbarComponent implements OnInit {
   }
 
   usersMe() {
-    this.usersService.getUsersMe().subscribe({
+    this.usersService.getUsersMe().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res: UsersMe) => {
         this.users = res;
         console.log("get me", res);
@@ -87,5 +88,10 @@ export class NavbarComponent implements OnInit {
   showAlerts(formControlName: string): boolean {
     const formControl = this.accountForm.get(formControlName);
     return !!formControl && formControl.invalid;
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
   }
 }
