@@ -1,6 +1,6 @@
 namespace backend.Utils;
 
-public static class CurrentSchoolYear
+public static class SchoolYearUtils
 {
     public static string GetCurrentSchoolYear()
     {
@@ -25,6 +25,15 @@ public static class CurrentSchoolYear
         }
         
         return currentSchoolYear;
+    }
+
+    public static string GetNextSchoolYear()
+    {
+        string response = string.Empty;
+        string[] currentSchoolYear = GetCurrentSchoolYear().Split("-");
+
+        response = $"{int.Parse(currentSchoolYear[0]) + 1}-{int.Parse(currentSchoolYear[1]) + 1}";
+        return response;
     }
     
 }

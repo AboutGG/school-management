@@ -2,12 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { UsersService } from "src/app/shared/service/users.service";
 import { ClassroomService } from "src/app/shared/service/classroom.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Classroom } from "src/app/shared/models/classrooms";
 import { Registry } from "src/app/shared/models/users";
 import { Users } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import Swal from "sweetalert2";
+import { Location } from "@angular/common";
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: "app-add-user",
@@ -31,17 +33,20 @@ export class AddUserComponent implements OnInit {
   id!: string;
   details!: Registry
 
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+
   constructor(
     private usersService: UsersService,
     private classroomService: ClassroomService,
     private route: ActivatedRoute,
+    private location: Location,
   ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
     console.log(this.id);
     if (this.id){
-    this.usersService.getDetailsUser(this.id).subscribe((res: Registry) => { 
+    this.usersService.getDetailsUser(this.id).pipe(takeUntil(this.unsubscribe$)).subscribe((res: Registry) => { 
       console.log(res)
       this.details = res;
         this.editUser();
@@ -117,8 +122,8 @@ export class AddUserComponent implements OnInit {
   onAddUser() {
     if (this.id) {
       console.log();
-      this.usersService.editUser(this.registry.value, this.id).subscribe()
-      console.log(Response);
+      this.usersService.editUser(this.registry.value, this.id).pipe(takeUntil(this.unsubscribe$)).subscribe()
+      console.log(this.registry.value);
     }else {
       this.usersService.addUser(this.usersForm.value).subscribe({
         next: (res) => {
@@ -127,6 +132,7 @@ export class AddUserComponent implements OnInit {
           console.log("tentativo", res);
         },
         error: (error) => {
+         
           console.log(error);
 
         },
@@ -143,7 +149,7 @@ export class AddUserComponent implements OnInit {
   }
 
   getDataUser(idUser: string) {
-    this.usersService.getDetailsUser(idUser).subscribe((userData: Registry) => {
+    this.usersService.getDetailsUser(idUser).pipe(takeUntil(this.unsubscribe$)).subscribe((userData: Registry) => {
       this.usersForm.patchValue({
         name: userData.name,
         surname: userData.surname,
@@ -164,7 +170,7 @@ export class AddUserComponent implements OnInit {
   }
 
   getClassroom() {
-    this.classroomService.getClassroom().subscribe({
+    this.classroomService.getClassroom().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
         this.classes = res;
         console.log("prova", this.classes);
@@ -184,4 +190,12 @@ export class AddUserComponent implements OnInit {
 
     });
   }
+  navigateTo() {
+    this.location.back();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete(); 
+  }
 }

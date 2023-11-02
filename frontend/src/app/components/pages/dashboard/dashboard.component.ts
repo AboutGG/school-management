@@ -15,6 +15,7 @@ import { ListResponse } from 'src/app/shared/models/listresponse';
 import { ActivatedRoute } from "@angular/router";
 import { StudentService } from "src/app/shared/service/student.service";
 import Swal from 'sweetalert2';
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: "app-dashboard",
@@ -31,6 +32,7 @@ export class DashboardComponent implements OnInit {
   };
 
   isTeacher = this.authService.isTeacher();
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   examsTeachers!: TeacherExam[];
   examsStudents!: StudentExam[];
@@ -97,7 +99,7 @@ export class DashboardComponent implements OnInit {
     const params = new HttpParams()
     .set('Order', this.orderPdf)
     .set('OrderType', 'desc')
-    this.commonService.getCirculars(params).subscribe({
+    this.commonService.getCirculars(params).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res: ListResponse<PdfCirculars[]>) => {
         this.pdfs = res.data;
         console.log('get circolari', res.data);
@@ -117,9 +119,11 @@ export class DashboardComponent implements OnInit {
     // ripristina la data odierna
     this.editForm.get('uploadDate')?.setValue(this.today);
 
-    this.commonService.addCirculars(data).subscribe((res) => {
-      
-  })
+    this.commonService.addCirculars(data).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (data) => {
+        console.log(data)
+      }
+    })
     Swal.fire({
       toast: true,
       position: 'top-end',
@@ -128,14 +132,16 @@ export class DashboardComponent implements OnInit {
       showConfirmButton: false,
       timer: 2500,
     });
-  
+    
     this.getCirculars();
+  
+   
   }
 
 
   // pdf circolari 
   getCircularsById(pdf: PdfCirculars){
-    this.commonService.getCircularsById(pdf.id).subscribe( blob => {
+    this.commonService.getCircularsById(pdf.id).pipe(takeUntil(this.unsubscribe$)).subscribe( blob => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url; 
@@ -150,7 +156,7 @@ export class DashboardComponent implements OnInit {
 
   // count users, classi, studenti, insegnanti 
   getCount() {
-    this.commonService.getCount().subscribe((res) => {
+    this.commonService.getCount().pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
       this.count = res;
     })
   }
@@ -173,7 +179,7 @@ export class DashboardComponent implements OnInit {
         }
       });
     } else {
-      this.examsService.getStudentExams(params).subscribe({
+      this.examsService.getStudentExams(params).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (res: ListResponse<StudentExam[]>) => {
           
           this.examsStudents = res.data
@@ -189,7 +195,7 @@ export class DashboardComponent implements OnInit {
 
   // me per prendere l'id user
   usersMe(){
-    this.userService.getUsersMe().subscribe({
+    this.userService.getUsersMe().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res: UsersMe) => {
         this.userData = res;
         this.getStudentYears();
@@ -203,7 +209,7 @@ export class DashboardComponent implements OnInit {
 
   // get anni scolastici studente
   getStudentYears(){
-    this.studentService.getStudentsSchoolYears(this.userData.id).subscribe({
+    this.studentService.getStudentsSchoolYears(this.userData.id).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
         this.studentYears = res;
         this.schoolYear = this.studentYears[0];
@@ -232,7 +238,7 @@ export class DashboardComponent implements OnInit {
     console.log(this.chosenQuadrimestre);
     console.log(this.schoolYear);
     
-    this.studentService.getStudentsReports(this.userData.id, params).subscribe( blob => {
+    this.studentService.getStudentsReports(this.userData.id, params).pipe(takeUntil(this.unsubscribe$)).subscribe( blob => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -266,5 +272,10 @@ export class DashboardComponent implements OnInit {
 
     return this.isCurrentQuadrimestre;
   
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete(); 
   }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { Registry, Users, ListResponse } from 'src/app/shared/models/users';
 import { UsersService } from 'src/app/shared/service/users.service';
 import Swal from 'sweetalert2';
@@ -24,6 +25,7 @@ export class ListUsersComponent {
   id!: string;
   page: number = 1;
   text: string = "";
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   userEdit!: string;
 
@@ -41,11 +43,8 @@ export class ListUsersComponent {
     this.filter = event.target.value;
     this.page = 1;
     console.log(this.filter);
-    if (this.filter === "all") {
-      window.location.reload();
-    } else {
       this.getUser("Name", this.orders.name);
-    }
+    
   }
 
   onClickAction(action: string, id: string): void {
@@ -81,7 +80,7 @@ export class ListUsersComponent {
 
     
     this.usersService
-      .getUsers(order, type, this.page, this.filter, search).subscribe({
+      .getUsers(order, type, this.page, this.filter, search).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (res: ListResponse<Registry[]>) => {
           console.log(res);
           console.log(id);
@@ -115,7 +114,7 @@ export class ListUsersComponent {
 
   dUser(id: string): void {
     console.log(id);
-    this.usersService.deleteUser(id).subscribe({
+    this.usersService.deleteUser(id).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
         this.page = 1;
         this.getUser("Name", "asc", "name");
@@ -149,5 +148,9 @@ export class ListUsersComponent {
 
     });
   }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete(); 
+  }
 }
 

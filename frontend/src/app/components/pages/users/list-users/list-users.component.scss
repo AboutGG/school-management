@@ -38,48 +38,55 @@
     color: #ffb900;
 }
 
-// .input-container {
-//     position: relative;
-//     display: inline-block;
-// }
+.input-container {
+    position: relative;
+    display: inline-block;
+   
+}
   
-// .input-container input {
-//     margin-left: 10px;
-//     width: 12.5rem;
-//     padding: 0.4375rem 0.875rem;
-//     padding-right: 30px;
-//     color: #333;
-//     background-color: #fff;
-//     border: 1px solid #ddd;
-//     border-radius: 0.1875rem;
-// }
+.input-container input {
+    margin-left: 10px;
+    width: 12.5rem;
+    padding: 0.4375rem 0.875rem;
+    padding-right: 30px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.1875rem;
+}
   
-// .input-container i {
-//     position: absolute;
-//     right: 8px;
-//     top: 50%;
-//     transform: translateY(-50%);
-// }
+.input-container i {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
   
-// .bi-search {
-//     color: unset;
-// }
+.bi-search {
+    color: unset;
+}
 
-// thead,
-// tbody {
-//   border: 1px solid #ddd;
-//   background-color: #fff;
-// }
+thead,
+tbody {
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
 
-// .dropdown-item:active {
-//     background-color: #f8f9fa;
-//     color: black;
-// }
+.dropdown-item:active {
+    background-color: #f8f9fa;
+    color: black;
+}
 
-// .page-link {
-//     color: black;
-// }
+.page-link {
+    color: black;
+}
+.page-link:hover{
+    background-color: #ffb900;
+  }
 
+table {
+    border-bottom: 1px solid #ddd;
+  }
 .icon-data {
     border: 2px solid;
     border-radius: 50px;

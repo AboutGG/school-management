@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { ExamDetails, ExamStudentDetails } from 'src/app/shared/models/examdetails';
-import { AuthService } from 'src/app/shared/service/auth.service';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { ExamsService } from 'src/app/shared/service/exams.service';
   templateUrl: './exam-details.component.html',
   styleUrls: ['./exam-details.component.scss']
 })
-export class ExamDetailsComponent implements OnInit {
+export class ExamDetailsComponent implements OnInit, OnDestroy {
 
   examDetails!: ExamDetails
   examId!: string
@@ -18,8 +19,9 @@ export class ExamDetailsComponent implements OnInit {
   grade!: FormControl
   currentDate = new Date()
   today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
   
-  constructor(private examService: ExamsService, private route: ActivatedRoute) { }
+  constructor(private examService: ExamsService, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -29,13 +31,19 @@ export class ExamDetailsComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
+  }
+
   getExamDetails() {
-    this.examService.getExamDetails(this.examId).subscribe({
+    this.examService.getExamDetails(this.examId).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res: ExamDetails) => {
         this.examDetails = res
       }
     })
   }
+  
 
   editExamDetails(userId: string) {
     if(this.grade.value >= 2 && this.grade.value <= 10) {
@@ -43,12 +51,20 @@ export class ExamDetailsComponent implements OnInit {
         userId : userId,
         grade : this.grade.value
        }
-      this.examService.editExamDetails(this.studentDetails, this.examId).subscribe()
-      this.getExamDetails()
+      this.examService.editExamDetails(this.studentDetails, this.examId).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: () => {
+          this.getExamDetails()
+        }
+      })
+
     }
     else {
       alert("Impostare un valore da 2 a 10")
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }
