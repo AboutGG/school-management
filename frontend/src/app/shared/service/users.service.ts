@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ListResponse, Registry, Users, UsersMe } from '../models/users';
 import { Classroom} from "../models/classrooms";
 import { HttpClient } from '@angular/common/http';
@@ -11,9 +11,18 @@ import { HttpClient } from '@angular/common/http';
 export class UsersService {
 
   role!: string
-  newUser!: FormGroup
+  newUser!: FormGroup;
+  user! : UsersMe
+  userMe: BehaviorSubject<UsersMe>
 
-  constructor(private http: HttpClient) {}
+  
+  constructor(private http: HttpClient) {
+    this.userMe = new BehaviorSubject<UsersMe>(this.user)
+   }
+
+  getUserMeValue(): UsersMe {
+    return this.userMe.value;
+  }
 
   // addTeacher = (user: FormGroup, role: string): Observable<Users> => {
   //   let newUser: Users = {
