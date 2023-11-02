@@ -86,6 +86,10 @@ public static class ErrorManager
                 error = new ErrorResponse(StatusCodes.Status401Unauthorized,
                     "The student hasn't the school year", e.StackTrace);
                 return error;
+            case "STUDENT_HASNT_EXAMS":
+                error = new ErrorResponse(StatusCodes.Status401Unauthorized,
+                    "The student doesn't have any exam", e.StackTrace);
+                return error;
             default:
                 error = new ErrorResponse(StatusCodes.Status400BadRequest, e.Message, e.StackTrace);
                 return error;

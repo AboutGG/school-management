@@ -1,5 +1,4 @@
 ﻿using System.Linq.Dynamic.Core;
-using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
@@ -67,12 +66,17 @@ public class ClassroomsController : Controller
     [HttpGet]
     [Route("{id}")]
     [ProducesResponseType(200, Type = typeof(PaginationResponse<ClassroomDetails>))]
-    public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromRoute] Guid id)
+    public IActionResult GetClassroomDetails([FromQuery] PaginationParams @params, [FromQuery] bool isCurrentYear,
+        [FromRoute] Guid id)
     {
         List<Student> takenStudents = new GenericRepository<Student>(_context)
             .GetAllUsingIQueryable(@params,
                 query => query
-                    .Where(el => el.ClassroomId == id)
+                    .Where(el =>
+                        el.ClassroomId == id && 
+                        //effettuo un controllo per selezionare gli alunni appartenenti al corrente o prossimo anno scolastico
+                        isCurrentYear ? el.SchoolYear == SchoolYearUtils.GetCurrentSchoolYear()
+                            : el.SchoolYear == SchoolYearUtils.GetNextSchoolYear())
                     .Include(el => el.Registry)
                     .Include(el => el.Classroom)
                 , out var totalStudents
@@ -151,6 +155,11 @@ public class ClassroomsController : Controller
             {
                 throw new Exception("SCHOOL_YEAR_NOT_FOUND");
             }
+
+            if (takenStudent.StudentExams == null)
+            {
+                throw new Exception("STUDENT_HASNT_EXAMS");
+            }
             
             string[] splittedSchoolYear = takenStudent.SchoolYear.Split("-");
 
@@ -193,7 +202,7 @@ public class ClassroomsController : Controller
                 finalGraduation += el.Grade ?? 0;
             }
 
-            finalGraduation /= takenStudent.StudentExams.Count;
+            finalGraduation = takenStudent.StudentExams.Count > 0 ? finalGraduation / takenStudent.StudentExams.Count : 0;
 
 
             if (inputStudentPromotion.Promoted && finalGraduation < 6)
@@ -214,7 +223,7 @@ public class ClassroomsController : Controller
                 Promoted = inputStudentPromotion.Promoted
             };
             takenStudent.ClassroomId = inputStudentPromotion.Promoted ? inputStudentPromotion.NextClassroom : takenStudent.ClassroomId;
-            takenStudent.SchoolYear = CurrentSchoolYear.GetCurrentSchoolYear();
+            takenStudent.SchoolYear = SchoolYearUtils.GetCurrentSchoolYear();
 
             //Procedo con la creazione e l'update delle entità precedenti
             if (!new GenericRepository<PromotionHistory>(_context).Create(promotionHistory))
