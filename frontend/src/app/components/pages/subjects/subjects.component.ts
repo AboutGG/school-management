@@ -5,11 +5,17 @@ import { ListResponse } from 'src/app/shared/models/listresponse';
 import { TeacherSubject } from 'src/app/shared/models/subjects';
 import { Teachers } from 'src/app/shared/models/users';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
+import {MatDialog, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { ModalAddExamWizardComponent } from '../modal-add-exam-wizard/modal-add-exam-wizard.component';
 
 @Component({
   selector: "app-subjects",
   templateUrl: "./subjects.component.html",
   styleUrls: ["./subjects.component.scss"],
+
+  
 })
 export class SubjectsComponent {
   teachers: TeacherSubject[] = [];
@@ -22,7 +28,7 @@ export class SubjectsComponent {
   totalPages!: number;
   order: string = 'Classroom.Name'
 
-  constructor(private classroomService: ClassroomService) {}
+  constructor(private classroomService: ClassroomService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.fetchData();
@@ -62,4 +68,16 @@ export class SubjectsComponent {
     this.fetchData();
     console.log("page", this.currentPage);
   }
+
+  // Open Modal Componente padre
+  openModalExam(teacher: TeacherSubject){
+  const dialogRef = this.dialog.open(ModalAddExamWizardComponent, {
+    width: '400px',
+    height: '400px',
+    data: teacher,
+  });
+  dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.close();
+  });
+}
 }

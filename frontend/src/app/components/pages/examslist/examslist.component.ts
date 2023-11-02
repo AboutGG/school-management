@@ -8,11 +8,14 @@ import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-examslist',
   templateUrl: './examslist.component.html',
-  styleUrls: ['./examslist.component.scss']
+  styleUrls: ['./examslist.component.scss'],
+
 })
 export class ExamslistComponent implements OnInit {
   constructor(private examsService: ExamsService, private teacherService: TeacherService, private usersService: UsersService) { }

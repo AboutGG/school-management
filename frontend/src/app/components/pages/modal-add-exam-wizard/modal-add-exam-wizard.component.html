@@ -1,0 +1,73 @@
+
+  <!-- <mat-dialog-content>
+    {{data.subjectName}}
+ {{data.classroomName}}
+</mat-dialog-content>
+<mat-dialog-actions class="actions-container">
+    <button mat-raised-button color="accent" (click)="onSaveClick()">Salva</button>
+</mat-dialog-actions> -->
+
+
+
+<!-- Modal -->
+
+<!-- <div id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Crea Esame</h1>
+        <button (click)="onSaveClick()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{data.subjectName}}
+        {{data.classroomName}}
+      </div>
+      <div class="modal-footer">
+        <button (click)="onSaveClick()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button (click)="onSaveClick()" type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="ExamLabel">CREA ESAME</h1>
+              <!-- <h1 *ngIf="isEdit === true" class="modal-title fs-5" id="ExamLabel">CONFERMA MODIFICA</h1> -->
+              <button (click)="onCloseModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="examForm">
+                  <div class="mt-5 mb-2">
+                      <label for="date" class="form-label">Data: </label>
+                      <input type="date" class="form-control w-100 p-1 btn btn-outline-warning text-dark"
+                          formControlName="date">
+                  </div>
+                  <div class="d-flex flex-column my-2">
+                      <label for="classroomId" class="form-label">Classe: </label>
+                      <label for="classroomId" class="w-100 p-1 btn btn-outline-warning text-dark" >                  
+                          {{data.classroomName}}
+                      </label>  
+                  </div>
+                  <div class="d-flex flex-column my-2">
+                      <label for="subjectId" class="form-label">Materia: </label>
+                      <label for="subjectId" class="w-100 p-1 btn btn-outline-warning text-dark" 
+                          >
+                          {{data.subjectName}}
+                      </label> 
+                  </div>
+                </form>
+          </div>
+          <div class="modal-footer">
+              <button (click)="onCloseModal()" type="button" class="btn btn-secondary border-0 text-white"
+                  data-bs-dismiss="modal">Chiudi</button>
+              <button (click)="onSaveClick()" type="button" class="btn btn-warning border-0 text-white"
+                  data-bs-dismiss="modal">CONFERMA</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
