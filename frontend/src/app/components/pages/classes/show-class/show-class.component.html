@@ -4,28 +4,29 @@
     <div *ngIf="isTeacher" class=" col-md-1 fs-5 fw-bold">
     <span class="icon-back" style="cursor: pointer;" (click)="navigateToTeachersClasses()"><i class="bi bi-arrow-left"  ></i> </span>
    </div>
-  <div *ngIf="!isTeacher" class="col-md-11 d-flex align-items-center justify-content-center fs-5 fw-bold" >
+  <div *ngIf="!isTeacher" class="col-md-12 d-flex align-items-center justify-content-center fs-5 fw-bold" >
    CLASSE {{ classDetails && classDetails.name_classroom}}
     <span class="icon"><i class="bi bi-person-vcard"></i> </span>
  </div>
- <div *ngIf="isTeacher" class="col-md-9 d-flex align-items-center justify-content-center fs-5 fw-bold" >
+ <div *ngIf="isTeacher" class="col-md-10 d-flex align-items-center justify-content-center fs-5 fw-bold" >
   CLASSE {{ classDetails && classDetails.name_classroom}}
    <span class="icon"><i class="bi bi-person-vcard"></i> </span>
 </div>
 </div>
-  <hr class="mb-2"/>
+  <hr class="mb-4"/>
 
-  <div class="button m-3 d-flex w-100 justify-content-end pe-5">
+  <!-- <div class="button m-3 d-flex w-100 justify-content-end pe-5">
         <a class="btn btn-warning" *ngIf="isTeacher" [routerLink]="['/history-promotion/' + this.classId]"><i class="bi bi-card-list px-2"></i>STORICO PROMOZIONI</a>
-      </div>
+  </div> -->
+  
 
     <div  class="row justify-content-center">    
-      <div [ngClass]="{'col-md-5': isTeacher, 'col-md-6': !isTeacher}">
+      <div [ngClass]="{'col-md-5 table-teachers-1': isTeacher, 'col-md-6 table-teachers-2': !isTeacher}">
         <table class="table table-teachers table-hover mb-5">
           <thead class="text-center">
             <tr>
               <th scope="col-1">#</th>
-              <th scope="col-2">Docenti</th>
+              <th scope="col-2">Docente</th>
               <th scope="col-3">Materie</th>
             </tr>
           </thead>
@@ -43,12 +44,12 @@
       </div>
 
 
-  <div [ngClass]="{'col-md-7': isTeacher, 'col-md-6': !isTeacher}">
+  <div [ngClass]="{'col-md-7 table-students-1': isTeacher, 'col-md-6 table-students-2': !isTeacher}">
     <table class="table table-students table-hover w-100">
       <thead class="text-center">
         <tr>
           <th>#</th>
-          <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Studenti</th>
+          <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Studente</th>
           <th *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">Cognome</th>
           <th *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">Nome</th>
           <th *ngIf="!isTeacher">Cognome</th>
@@ -75,11 +76,11 @@
                 <i class="bi bi-gear-fill"></i>
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" [routerLink]="'/details/' + student.id"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
-                <li><a class="dropdown-item" [routerLink]="['/teachers/exams']"><i class="bi bi-book-fill"></i>Visualizza Pagella</a></li>
+                <li><a class="dropdown-item" [routerLink]="'/details/' + student.id"><i class="bi bi-eye-fill"></i>Profilo</a></li>
+                <!-- <li><a class="dropdown-item" [routerLink]="['/teachers/exams']"><i class="bi bi-book-fill"></i>Visualizza Pagella</a></li> -->
                 <li><a (click)="getFinalGrade(student.id!)" class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#graduationModal" 
                   *ngIf="currentDate >= promotionStartDate && currentDate <= promotionEndDate">
-                <i class="bi bi-gear-fill"></i>Promozione</a></li>
+                <i class="bi bi-award-fill"></i>Promozione</a></li>
       <!-- <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li> -->
               </ul>
             </div>
