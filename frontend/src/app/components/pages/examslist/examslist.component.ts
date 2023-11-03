@@ -52,16 +52,14 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   subjectId!: FormControl
   date!: FormControl
   examForm!: FormGroup
-  currentDate = new Date()
-  today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
-  // today = new Date(new Date().getTime()).toISOString().substring(0, 10);
+  today = new Date(new Date().getTime()).toISOString().substring(0, 10);
   alert: boolean = false;
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   ngOnInit(): void {
     this.date = new FormControl(null, Validators.required),
-      this.classroomId = new FormControl(null, Validators.required),
-      this.subjectId = new FormControl(null, Validators.required)
+    this.classroomId = new FormControl(null, Validators.required),
+    this.subjectId = new FormControl(null, Validators.required)
 
     this.examForm = new FormGroup({
       date: this.date,
@@ -77,7 +75,7 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next(true);
     this.unsubscribe$.complete();
-  }  
+  }
 
   onChangePage(newPage: number) {
     this.page = newPage
@@ -173,33 +171,25 @@ export class ExamslistComponent implements OnInit, OnDestroy {
 
   onClickModal() {
     if (this.isEdit === false) {
-      if (this.examForm.value.date > this.today) {
-        this.successEditOrNew = false;
-        this.examsService.addExam(this.examForm.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
-          next: () => {
-            this.successEditOrNew = true;
-            setTimeout(() => this.successEditOrNew = false, 4000)
-            this.examForm.reset();
-            this.getTeacherExams()
-          }
-        })
-      } else {
-        alert("Selezionare una data successiva a quella odierna");
-      }
-
-    } else {
-      if (this.examForm.value.date > this.today) {
-        this.successEditOrNew = false
-        this.examsService.editExam(this.examForm.value, this.user.id, this.examId).pipe(takeUntil(this.unsubscribe$)).subscribe({
-          next: () => {
-            this.successEditOrNew = true
-            setTimeout(() => this.successEditOrNew = false, 4000)
-            this.getTeacherExams()
-          }
-        })
-      } else {
-        alert("Selezionare una data successiva a quella odierna");
-      }
+      this.successEditOrNew = false;
+      this.examsService.addExam(this.examForm.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: () => {
+          this.successEditOrNew = true;
+          setTimeout(() => this.successEditOrNew = false, 4000)
+          this.examForm.reset();
+          this.getTeacherExams()
+        }
+      })
+    }
+    else {
+      this.successEditOrNew = false
+      this.examsService.editExam(this.examForm.value, this.user.id, this.examId).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: () => {
+          this.successEditOrNew = true
+          setTimeout(() => this.successEditOrNew = false, 4000)
+          this.getTeacherExams()
+        }
+      })
     }
 
   }

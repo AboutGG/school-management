@@ -127,7 +127,7 @@
                         <div class="mt-5 mb-2">
                             <label for="date" class="form-label">Data: </label>
                             <input type="date" class="form-control w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="date">
+                                formControlName="date" [min]="today">
                         </div>
                         <div class="d-flex flex-column my-2">
                             <label for="classroom" class="form-label">Classe: </label>
