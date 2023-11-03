@@ -30,7 +30,7 @@
   </div>
 </div> -->
 
-<div id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
+<div class="modal-exams" id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
@@ -43,27 +43,25 @@
                   <div class="mt-5 mb-2">
                       <label for="date" class="form-label">Data: </label>
                       <input type="date" class="form-control w-100 p-1 btn btn-outline-warning text-dark"
-                          formControlName="date">
+                          formControlName="date" [min]="today">
                   </div>
                   <div class="d-flex flex-column my-2">
                       <label for="classroomId" class="form-label">Classe: </label>
-                      <label for="classroomId" class="w-100 p-1 btn btn-outline-warning text-dark" >                  
-                          {{data.classroomName}}
-                      </label>  
+                      <label class="w-100 p-1 btn btn-outline-warning text-dark">{{data.classroomName}}</label>
+                      <input type="hidden" formControlName="classroomId" [value]="classroomId">
                   </div>
                   <div class="d-flex flex-column my-2">
                       <label for="subjectId" class="form-label">Materia: </label>
-                      <label for="subjectId" class="w-100 p-1 btn btn-outline-warning text-dark" 
-                          >
-                          {{data.subjectName}}
-                      </label> 
+                      <label class="w-100 p-1 btn btn-outline-warning text-dark">{{data.subjectName}}</label>
+                      <input type="hidden" formControlName="subjectId" [value]="subjectId">
+                     
                   </div>
                 </form>
           </div>
-          <div class="modal-footer">
-              <button (click)="onCloseModal()" type="button" class="btn btn-secondary border-0 text-white"
+          <div class="modal-footer d-flex mt-3">
+              <button style="margin-right: 10px;" (click)="onCloseModal()" type="button" class="btn btn-secondary border-0 text-white"
                   data-bs-dismiss="modal">Chiudi</button>
-              <button (click)="onSaveClick()" type="button" class="btn btn-warning border-0 text-white"
+              <button [disabled]="!examForm.valid" (click)="onSaveClick()" type="button" class="btn btn-warning border-0 text-white"
                   data-bs-dismiss="modal">CONFERMA</button>
           </div>
       </div>

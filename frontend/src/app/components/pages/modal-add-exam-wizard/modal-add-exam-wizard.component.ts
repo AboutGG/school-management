@@ -32,18 +32,20 @@ export class ModalAddExamWizardComponent implements OnInit {
   onClickFilter: boolean = false
   totalPages!: number
   selectedPages!: number
+  currentDate = new Date()
+  today = new Date(new Date().getTime()).toISOString().substring(0,10);
 
   ngOnInit(): void {
     this.date = new FormControl(null, Validators.required),
-    this.classroomId = new FormControl(null, Validators.required),
-    this.subjectId = new FormControl(null, Validators.required)
+    this.classroomId = new FormControl(this.data.classroomId, Validators.required),
+    this.subjectId = new FormControl(this.data.subjectId, Validators.required)
 
   this.examForm = new FormGroup({
     date: this.date,
     classroomId: this.classroomId,
     subjectId: this.subjectId
   });
-      console.log(this.data);
+      console.log('onInit',this.data);
       
   }
 
@@ -53,14 +55,17 @@ export class ModalAddExamWizardComponent implements OnInit {
   }
 
   onSaveClick() {
+    console.log('onSaveClick',this.examForm.value);
+    if (this.examForm.value.date > this.today) {
     this.examsService.addExam(this.examForm.value).subscribe({
       next: () => {
-        this.getTeacherExams()
-        
+        this.getTeacherExams();
+       
       }
     })
-     this.dialogRef.close()
+     this.dialogRef.close();
     }
+  }
 
     getTeacherExams() {
       const params = new HttpParams()

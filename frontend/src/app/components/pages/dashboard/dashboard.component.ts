@@ -46,6 +46,7 @@ export class DashboardComponent implements OnInit {
   month = this.currentDate.getMonth() + 1;
   year = this.currentDate.getFullYear();
   today = this.year + "-" + this.month + "-" + this.day;
+  todayExams = new Date(new Date().getTime()).toISOString().substring(0,10);
 
   quadrimestreInizio1: number = 9;  // Settembre
   quadrimestreFine1: number = 1;    // Gennaio
@@ -171,8 +172,12 @@ export class DashboardComponent implements OnInit {
         next: (res: ListResponse<TeacherExam[]>) => {
 
           this.examsTeachers = res.data
-            .filter((item, index) => item.date >= this.today)
+            .filter((item, index) => item.date >= this.todayExams)
             .filter((_, index) => index < this.itemsPerPage); 
+            console.log(this.examsTeachers);
+            console.log();
+            
+            
         },
         error: (err) => {
           console.log('error dash', err);
@@ -183,8 +188,9 @@ export class DashboardComponent implements OnInit {
         next: (res: ListResponse<StudentExam[]>) => {
           
           this.examsStudents = res.data
-            .filter((item, index) => item.date >= this.today)
-            .filter((_, index) => index < this.itemsPerPage);
+            .filter((item, index) => item.date >= this.todayExams)
+            .filter((_, index) => index < this.itemsPerPage)    
+            
         },
         error: (err) => {
           console.log('error dash', err);

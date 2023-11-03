@@ -56,8 +56,7 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   date!: FormControl
   examForm!: FormGroup
   currentDate = new Date()
-  today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
-  // today = new Date(new Date().getTime()).toISOString().substring(0, 10);
+  today = new Date(new Date().getTime()).toISOString().substring(0,10);
   alert: boolean = false;
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
