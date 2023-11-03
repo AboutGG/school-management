@@ -205,7 +205,6 @@ export class DashboardComponent implements OnInit {
       next: (res: UsersMe) => {
         this.userData = res;
         this.getStudentYears();
-        console.log('get userMe',res)
       },
       error: (err) => {
         console.log('error', err);
