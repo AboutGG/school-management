@@ -85,16 +85,29 @@ hr{
     border-bottom: 1px solid #ddd;
     
   }
-  .col-md-7{
+  
+  .table-students-1{
     
-      max-height: 300px; 
+      max-height: 500px; 
       overflow-y: auto;  
   
   }
-  .col-md-5{
+
+    .table-students-2 {
+  
+      max-height: 500px;
+      overflow-y: auto;
+  
+    }
+
+  .table-teachers-1{
     max-height: 300px; 
     overflow-y: auto;  
+}
 
+.table-teachers-2 {
+  max-height: 300px;
+  overflow-y: auto;
 }
  
   .page-item a:hover{
@@ -130,6 +143,10 @@ hr{
   .bi-eye-fill{
     margin-right: 10px;
   }
+
+    .bi-award-fill {
+      margin-right: 10px;
+    }
 
   .bi-gear-fill{
     margin-right: 10px; 
