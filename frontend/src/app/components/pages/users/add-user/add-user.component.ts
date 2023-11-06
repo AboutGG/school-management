@@ -186,7 +186,8 @@ export class AddUserComponent implements OnInit {
       title: 'Creazione avvenuta con successo',
       showConfirmButton: false,
       timer: 2500,
-      background: '#f5d67a'
+      background: '#fce6a4'
+
 
     });
   }

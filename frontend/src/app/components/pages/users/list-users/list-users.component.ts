@@ -144,7 +144,7 @@ export class ListUsersComponent {
       title: 'Utente eliminato',
       showConfirmButton: false,
       timer: 2500,
-      background:'#ffebad'
+      background:'#fce6a4'
 
     });
   }

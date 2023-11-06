@@ -256,7 +256,8 @@ export class DashboardComponent implements OnInit {
         title: 'Pagella non ancora disponibile',
         showConfirmButton: false,
         timer: 2500,
-  
+        background: '#f5d67a'
+
       });
 
     })
