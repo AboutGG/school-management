@@ -1,8 +1,7 @@
 <div class="d-flex flex-column align-items-center vh-100">
   <img class="py-5" src="../../../../assets/not-found/default_transparent_1000x1000-removebg-preview.png" alt="">
   <div class="py-5" [ngSwitch]="statusCode">
-    <h3 *ngSwitchCase="400">Richiesta errata</h3>
-    <h3 *ngSwitchCase="401">Non autorizzato</h3>
+    <h3 *ngSwitchCase="401">Non hai i permessi per visualizzare questa pagina</h3>
     <h3 *ngSwitchCase="404">Pagina non trovata</h3>
     <h3 *ngSwitchCase="500">Errore lato server</h3>
     <h3 *ngSwitchDefault>Impossibile elaborare la richiesta</h3>

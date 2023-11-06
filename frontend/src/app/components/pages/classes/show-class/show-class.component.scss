@@ -77,22 +77,37 @@ hr{
   td{
     text-align: center;
     vertical-align: middle;
+    padding: 15px;
+    padding: 15px;
   }
   
   table {
     border-bottom: 1px solid #ddd;
     
   }
-  .col-md-7{
+  
+  .table-students-1{
     
-      max-height: 300px; 
+      max-height: 500px; 
       overflow-y: auto;  
   
   }
-  .col-md-5{
+
+    .table-students-2 {
+  
+      max-height: 500px;
+      overflow-y: auto;
+  
+    }
+
+  .table-teachers-1{
     max-height: 300px; 
     overflow-y: auto;  
+}
 
+.table-teachers-2 {
+  max-height: 300px;
+  overflow-y: auto;
 }
  
   .page-item a:hover{
@@ -129,6 +144,26 @@ hr{
     margin-right: 10px;
   }
 
+    .bi-award-fill {
+      margin-right: 10px;
+    }
 
+  .bi-gear-fill{
+    margin-right: 10px; 
+  }  ::-webkit-scrollbar {
+    width: 10px;
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: #b6b6b6; 
+  }
   
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9b9a9a; 
+  }
 
+
+
+  .modal-dialog {
+    width: 400px;
+  }

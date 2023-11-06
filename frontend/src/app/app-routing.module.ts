@@ -14,6 +14,7 @@ import { DetailUserComponent } from './components/pages/users/detail-user/detail
 import { ExamsStudentListComponent } from "./components/pages/exams-student-list/exams-student-list.component";
 import { ExamslistComponent } from "./components/pages/examslist/examslist.component";
 import { StudentSubjectsComponent } from "./components/pages/student-subjects/student-subjects.component";
+import { ExamDetailsComponent } from "./components/pages/exam-details/exam-details.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'details/:id', component: DetailUserComponent, canActivate: [AuthGuard] },
   { path: 'students/exams', component: ExamsStudentListComponent, canActivate: [AuthGuard] },
   { path: 'teachers/exams', component: ExamslistComponent, canActivate: [AuthGuard] },
+  { path: 'teachers/exams/:id', component: ExamDetailsComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "not-found" },
 ];
 

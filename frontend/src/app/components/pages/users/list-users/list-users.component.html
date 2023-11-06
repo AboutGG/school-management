@@ -1,54 +1,57 @@
-<div class="container mt-5">
+<div class="container">
+  <hr>
   <div class="d-flex align-items-center justify-content-center fs-5 fw-bold">
     {{'Lista Utenti' | uppercase}}
       <span class="icon">
       <i class="bi bi-card-list"></i>
     </span>
   </div> 
+  <hr>
 </div>
 
-<div class="container mt-12 bb mt-5">
-  <div class="row position-relative mb-3 align-items-center">
-    <div class="col-md-2 d-flex ">
+<div class="container mt-12 mt-5">
+  <div class="row mb-4">
+    <div class="col-md-3 d-flex ">
       <label for="role" class="form-label d-flex align-items-center mb-0 px-3">Ruolo:</label>
-      <select class="form-select" (change)="onClickRole($event)">
-        <option value="all">Tutti</option>
+      <select style="cursor: pointer;" class="form-select" (change)="onClickRole($event)">
+        <option value="">Tutti</option>
         <option value="student">Studente</option>
         <option value="teacher">Insegnante</option>
       </select>
     </div>
+  
+    <div class="col-md-4"></div>
     
-    <div class="col-md-8">
-      <div class="classes-header d-flex justify-content-end">
+    <div class="col-md-3">
+      <div class="classes-header">
         <div class="input-container">
-          <span class="pe-3">Cerca: </span>
-          <input type="text" name="" id="search" placeholder="Scrivi per cercare..." #filter>
+          <input type="text" name="" id="search" placeholder="Scrivi per cercare..." (input)="saveSearch(filter.value)" #filter>
           <i class="bi bi-search px-2" type="button" (click)="saveSearch(filter.value)"></i>
         </div>
       </div>
     </div>
-    <div class="col-md-2 ps-5">
-      <button class="btn btn-warning mx-3 fw-medium">PDF</button>
+    <div class="col-md-2">
+      <button [routerLink]="['/add-user']" class="btn btn-warning fw-medium">Crea Utente</button>
     </div>
   </div>
 </div>
   
 <div class="container">
-  <table class="table table-hover">
+  <table class="table">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col" id="name">Nome
-          <i *ngIf="this.orders.name === 'desc'" class="bi bi-caret-down-fill" (click)="getUser('Name', 'asc', 'name')"></i>
-          <i *ngIf="this.orders.name === 'asc'" class="bi bi-caret-up-fill" (click)="getUser('Name', 'desc', 'name')"></i>
+          <i style="cursor: pointer;" *ngIf="this.orders.name === 'desc'" class="bi bi-caret-down-fill" (click)="getUser('Name', 'asc', 'name')"></i>
+          <i style="cursor: pointer;" *ngIf="this.orders.name === 'asc'" class="bi bi-caret-up-fill" (click)="getUser('Name', 'desc', 'name')"></i>
         </th>
         <th scope="col" id="surname">Cognome
-          <i *ngIf="this.orders.surname === 'asc'" class="bi bi-caret-up-fill" (click)="getUser('Surname', 'desc', 'surname')"></i>
-          <i *ngIf="this.orders.surname === 'desc'" class="bi bi-caret-down-fill" (click)="getUser('Surname', 'asc', 'surname')"></i>
+          <i style="cursor: pointer;" *ngIf="this.orders.surname === 'asc'" class="bi bi-caret-up-fill" (click)="getUser('Surname', 'desc', 'surname')"></i>
+          <i style="cursor: pointer;" *ngIf="this.orders.surname === 'desc'" class="bi bi-caret-down-fill" (click)="getUser('Surname', 'asc', 'surname')"></i>
         </th>
         <th scope="col" id="birth">Data di nascita
-          <i *ngIf="this.orders.birth === 'asc'" class="bi bi-caret-up-fill" (click)="getUser('Birth', 'desc', 'birth')"></i>
-          <i *ngIf="this.orders.birth === 'desc'" class="bi bi-caret-down-fill" (click)="getUser('Birth', 'asc', 'birth')"></i>
+          <i style="cursor: pointer;" *ngIf="this.orders.birth === 'asc'" class="bi bi-caret-up-fill" (click)="getUser('Birth', 'desc', 'birth')"></i>
+          <i style="cursor: pointer;" *ngIf="this.orders.birth === 'desc'" class="bi bi-caret-down-fill" (click)="getUser('Birth', 'asc', 'birth')"></i>
         </th>
         <th scope="col">Azioni</th>
       </tr>
@@ -58,7 +61,7 @@
         <th scope="row">{{i + 1}}</th>
         <td>{{registry.name}}</td>
         <td>{{registry.surname}}</td>
-        <td>{{registry.birth}}</td>
+        <td>{{registry.birth | date: "dd/MM/yyyy"}}</td>
         <div class="dropdown d-flex justify-content-center">
           <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"aria-expanded="false">
             <i class="bi bi-gear-fill"></i>
@@ -78,7 +81,7 @@
 </div>
 
   <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="deleteModalLabel">CONFERMA ELIMINAZIONE</h1>
@@ -88,8 +91,8 @@
           Sei sicuro di voler eliminare questo utente?
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Annulla</button>
-          <button type="button" class="btn btn-warning" data-bs-dismiss="modal" (click)="dUser(this.id)">ELIMINA</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal" style="color: white; font-weight: 400;" (click)="dUser(this.id)">ELIMINA</button>
         </div>
       </div>
     </div>

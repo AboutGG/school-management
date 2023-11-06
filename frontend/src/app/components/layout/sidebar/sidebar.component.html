@@ -1,4 +1,4 @@
-<div class="sidebar vh-100" [ngClass]="{ 'expanded': isExpanded }">
+<div *ngIf="userMe" class="sidebar vh-100" [ngClass]="{ 'expanded': isExpanded }">
   <div class="content alt vh-100" [ngClass]="{ 'expanded': isExpanded }">
     <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link"
       class="link">
@@ -13,38 +13,17 @@
       </div>
     </div>
 
-    <!--students-->
-    <!-- <div [routerLink]="['/students']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"  class="link">
-      <div class="content">
-        <div class="icon">
-          <i class="bi bi-person-lines-fill"></i> 
-        </div>
-        <div class="title">Students</div>
-      </div>
-    </div> -->
-
-    <div (click)="toggleCollapse()" *ngIf="isTeacher" class="link">
+    <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="isTeacher" class="link">
       <div class="content">
         <div class="icon">
           <i class="bi bi-person"></i>
         </div>
         <div class="title">Utenti</div>
-        <i *ngIf="isExpanded" [ngClass]="!isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
+        <i class="invisible" *ngIf="isExpanded" [ngClass]="!isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
     </div>
 
-    <div *ngIf="isExpanded" [ngClass]="{'collapse-content': !isCollapsed}" [ngClass]="{ 'expanded': isExpanded }"
-      class="custom-collapse collapse-content">
-      <div [routerLink]="['/add-user']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
-        <p>Crea Utente</p>
-      </div>
-      <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-        class="link" class="link">
-        <p>Gestisci Utenti</p>
-      </div>
-    </div>
-
-    <div [routerLink]="[isTeacher ? linkByRole + '/classes/' : linkByRole + '/classes/'+ userId.classroomId]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
+    <div [routerLink]="[isTeacher ? linkByRole + '/classes/' : linkByRole + '/classes/'+ userMe.classroomId]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
         <div class="icon">
           <i class="bi bi-newspaper"></i>

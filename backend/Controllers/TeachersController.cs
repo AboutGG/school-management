@@ -274,6 +274,7 @@ public class TeachersController : Controller
             Exam takenExam = examGenericRepository.GetByIdUsingIQueryable(query => query
                 .Where(el => el.Id.ToString() == id)
                 .Include(el => el.TeacherSubjectClassroom.Subject)
+                .Include(el => el.TeacherSubjectClassroom.Classroom)
                 .Include(el => el.StudentExams)
                 .ThenInclude(el => el.Student)
                 .ThenInclude(el => el.Registry)
