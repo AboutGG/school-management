@@ -36,4 +36,8 @@ export class AuthService {
     return this.getRole() == 'teacher'.toLowerCase() ? true : false
   }
   
+  changePassword(user: {}, id: string) {
+    return this.http.put(`${URL}/users/${id}`, user);
+  }
+
 }

@@ -69,8 +69,8 @@ export class NavbarComponent implements OnInit {
   }
 
   onSubmit() {
-    this.accountService
-      .putUser(this.accountForm.value, this.users.id)
+    this.authService
+      .changePassword(this.accountForm.value, this.users.id)
       .subscribe({
         next: (res: any) => {
           this.successEdit = true;
