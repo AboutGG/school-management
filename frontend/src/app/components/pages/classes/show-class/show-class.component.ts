@@ -66,7 +66,9 @@ export class ShowClassComponent {
   }
 
   fetchClassDetails() {
-    const params = new HttpParams().set("Order", this.order);
+    const params = new HttpParams()
+    .set("Order", this.order)
+    .set("isCurrentYear", true);
     this.classroomService
       .getSingleClassroom(this.classId, params)
       .pipe(takeUntil(this.unsubscribe$))

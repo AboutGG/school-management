@@ -70,11 +70,11 @@ export class SubjectsComponent {
   }
 
   // Open Modal Componente padre
-  openModalExam(teacher: TeacherSubject){
+  openModalExam(teacher: TeacherSubject, type?:string){
   const dialogRef = this.dialog.open(ModalAddExamWizardComponent, {
     width: '400px',
     height: '400px',
-    data: teacher,
+    data: {teacher, type}
   });
   dialogRef.afterClosed().subscribe((result: any) => {
     dialogRef.close();

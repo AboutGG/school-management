@@ -3,9 +3,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ExamslistComponent } from '../examslist/examslist.component';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TeacherExam } from 'src/app/shared/models/teacherexam';
-import { ListResponse } from 'src/app/shared/models/users';
+import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
+import { ListResponse, UsersMe } from 'src/app/shared/models/users';
 import { HttpParams } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
+import { TeacherService } from 'src/app/shared/service/teacher.service';
+import { TeacherClassroom } from 'src/app/shared/models/classrooms';
+import { UsersService } from 'src/app/shared/service/users.service';
 
 @Component({
   selector: 'app-modal-add-exam-wizard',
@@ -14,14 +18,21 @@ import { HttpParams } from '@angular/common/http';
 })
 export class ModalAddExamWizardComponent implements OnInit {
 
-  constructor( public dialogRef: MatDialogRef<ModalAddExamWizardComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private examsService: ExamsService){}
+  constructor( public dialogRef: MatDialogRef<ModalAddExamWizardComponent>, 
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private examsService: ExamsService,
+    private teacherService: TeacherService,
+    private usersService: UsersService){}
 
 
   examsList!: TeacherExam[];
+  subjects!: IdName[]
+  classrooms!: TeacherClassroom[]
+  examId?: string
+  subjectsByClassroom?: IdName[]
+  user!: UsersMe
+  isEdit = this.data
   examForm!: FormGroup;
-  classroomId!: FormControl
-  subjectId!: FormControl
-  date!: FormControl
   total!: number
   page: number = 1
   itemsPerPage: number = 10
@@ -34,57 +45,121 @@ export class ModalAddExamWizardComponent implements OnInit {
   selectedPages!: number
   currentDate = new Date()
   today = new Date(new Date().getTime()).toISOString().substring(0,10);
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+
 
   ngOnInit(): void {
-    this.date = new FormControl(null, Validators.required),
-    this.classroomId = new FormControl(this.data.classroomId, Validators.required),
-    this.subjectId = new FormControl(this.data.subjectId, Validators.required)
-
-  this.examForm = new FormGroup({
-    date: this.date,
-    classroomId: this.classroomId,
-    subjectId: this.subjectId
+    this.examForm = new FormGroup({
+    date : new FormControl(null, Validators.required),
+    classroomId : new FormControl(null, Validators.required),
+    subjectId : new FormControl(null, Validators.required)
   });
-      console.log('onInit',this.data);
-      
+      this.getUser();
+      this.getTeacherExams()
+      this.getTeacherClassrooms(); 
   }
 
-  onCloseModal(){
-    this.dialogRef.close()
+  compileForm(){
 
+    this.examForm.patchValue({
+      date: this.data.exam?.date ?? null,
+      classroomId: this.data.exam?.classroom.id || this.data?.teacher.classroomId,
+      subjectId: this.data.exam?.subject.id || this.data?.teacher.subjectId
+    });
+    this.getTeacherSubjectsByClassroom(this.examForm.value.classroomId)
+    
   }
 
-  onSaveClick() {
-    console.log('onSaveClick',this.examForm.value);
-    if (this.examForm.value.date > this.today) {
-    this.examsService.addExam(this.examForm.value).subscribe({
-      next: () => {
-        this.getTeacherExams();
-       
-      }
-    })
-     this.dialogRef.close();
+
+   
+    getTeacherClassrooms() {
+      this.teacherService.getDataClassroom().pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (res) => {
+          this.classrooms = res.data
+        }
+      });
     }
-  }
+  
+    getTeacherSubjects() {
+      this.teacherService.getTeacherSubjects(this.user?.id).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (res) => {
+          this.subjects = res
+          console.log(res);
+        }
+      });
+    }
+
+    getUser() {
+      this.usersService.getUsersMe().pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (res) => {
+          this.user = res
+          this.getTeacherSubjects();
+          if(this.data.type){
+            this.compileForm();
+           }
+          console.log("DEBUG USER ", this.user);
+        }
+      })
+    }
+  
+    getTeacherSubjectsByClassroom(classroomId: string) {
+      const params = new HttpParams().set('classroomId', classroomId)
+      console.log(params)
+      this.teacherService.getTeacherSubjectsByClassroom(this.user?.id, params).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (res: IdName[]) => {
+          this.subjectsByClassroom = res;
+        }
+      })
+    }
+  
+    subjectEvent(event: any) {
+      this.getTeacherSubjectsByClassroom(event.target.value)
+    }
+
+    //funzione per creazione o modifica esame
+    onClickModal() {
+      if (this.data.type === 'add' || !(this.data.type)) {
+       
+        this.examsService.addExam(this.examForm.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
+          next: () => {
+            this.examForm.reset();
+            this.getTeacherExams()
+           
+          }
+        })
+      }
+      else {
+        this.examsService.editExam(this.examForm.value, this.user.id, this.data.exam.id).pipe(takeUntil(this.unsubscribe$)).subscribe({
+          next: () => {
+            this.getTeacherExams();
+ 
+          }
+        })    
+      }
+    }
 
     getTeacherExams() {
       const params = new HttpParams()
-        .set('Page', this.page)
-        .set('Filter', this.filtered)
-        .set('Search', this.search)
-        .set('OrderType', this.orderType)
-        .set('Order', this.order)
-        .set('ItemsPerPage', this.itemsPerPage)
+  
       this.examsService.getTeacherExams(params).subscribe({
         next: (res: ListResponse<TeacherExam[]>) => {
           this.examsList = res.data
           this.total = res.total
+          console.log('get esami',res.data);
         },
         error: (error) => {
           console.log(error);
         }
       });
     }
+
+    onCloseModal(){
+      this.dialogRef.close()
+      
+  
+    }
+
+  
 
 
 }

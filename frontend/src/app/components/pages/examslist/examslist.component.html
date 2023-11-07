@@ -36,17 +36,10 @@
                 </select>
             </form>
         </div>
-        <div *ngIf="successEditOrNew && !isEdit"
-            class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
-            Esame creato con successo.
-        </div>
-        <div *ngIf="successEditOrNew && isEdit"
-            class="alert alert-success m-0 col-4 p-0 d-flex justify-content-center align-items-center mx-1">
-            Esame modificato con successo.
-        </div>
+    
         <div class="col-3 d-flex justify-content-end">
-            <button class="w-50 btn btn-warning" data-bs-target="#exam" data-bs-toggle="modal"
-                (click)="isEdit = false; this.examForm.reset()">Crea esame</button>
+            <button class="w-50 btn btn-warning" 
+                (click)="openModalExam()">Crea esame</button>
         </div>
     </div>
     <table class="table table-hover">
@@ -92,8 +85,8 @@
                                         class="bi bi-eye-fill px-2"></i>Visualizza</button>
                             </li>
                             <li [title]="(today > exam.date) ? 'Impossibile modificare un esame già svolto' : '' ">
-                                <button (click)="[editExam(exam), isEdit = true]" class="dropdown-item"
-                                    data-bs-toggle="modal" data-bs-target="#exam" [disabled]="today > exam.date">
+                                <button (click)="openModalExam(exam, 'edit')" class="dropdown-item"
+                                     [disabled]="today > exam.date">
                                     <i class="bi px-2" [ngClass]="{
                                             'bi-book-fill': today <= exam.date,
                                             'bi-lock-fill': today > exam.date
@@ -114,7 +107,7 @@
         </tbody>
     </table>
 
-    <div class="modal fade" id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -132,7 +125,7 @@
                         <div class="d-flex flex-column my-2">
                             <label for="classroom" class="form-label">Classe: </label>
                             <select id="classroom" class="w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="classroomId" (change)="subjectEvent($event)">
+                                formControlName="classroomId">
                                 <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms "
                                     (click)="getTeacherSubjectsByClassroom(classroom.id_classroom!)">
                                     {{classroom.name_classroom}}</option>
@@ -140,7 +133,7 @@
                             <!-- <small
                                 *ngIf="!examForm.get('classroom')?.touched && !examForm.get('classroom')?.valid">Campo
                                 obbligatorio</small> -->
-                        </div>
+                        <!-- </div>
                         <div class="d-flex flex-column my-2">
                             <label for="subject" class="form-label">Materia: </label>
                             <select id="subject" class="w-100 p-1 btn btn-outline-warning text-dark"
@@ -150,18 +143,15 @@
                             </select>
                             <!-- <small *ngIf="!examForm.get('subject')?.touched && !examForm.get('subject')?.valid">Campo
                                 obbligatorio</small> -->
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
+                      
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary border-0 text-white"
                         data-bs-dismiss="modal">Chiudi</button>
-                    <button (click)="onClickModal()" type="button" class="btn btn-warning border-0 text-white"
+                    <button  type="button" class="btn btn-warning border-0 text-white"
                         data-bs-dismiss="modal" [disabled]="!examForm.valid">CONFERMA</button>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div> -->
+   
 
     <div class="modal fade" id="deleteExam" tabindex="-1" aria-labelledby="deleteExamLabel" aria-hidden="true">
         <div class="modal-dialog">
