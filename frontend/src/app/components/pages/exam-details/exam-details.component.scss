@@ -30,11 +30,16 @@ td, th {
 .icon-back {
   border: 2px solid;
   border-radius: 50px;
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #ffb900;
   margin-left: 20px;
+}
+
+.bi-arrow-left{
+  font-size: 25px;
+    color: #ffb900;
 }

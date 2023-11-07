@@ -75,7 +75,7 @@ export class DashboardComponent implements OnInit {
 
       this.editForm =this.fb.group({
       circularNumber: new FormControl (null, Validators.required),
-      uploadDate: new FormControl(this.today, [Validators.required],),
+      uploadDate: new FormControl(this.todayExams, [Validators.required],),
       location: new FormControl(null, Validators.required),
       object: new FormControl(null, Validators.required),
       header: new FormControl(null, Validators.required),
@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
     this.editForm.reset();
 
     // ripristina la data odierna
-    this.editForm.get('uploadDate')?.setValue(this.today);
+    this.editForm.get('uploadDate')?.setValue(this.todayExams);
 
     this.commonService.addCirculars(data).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (data) => {

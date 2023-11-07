@@ -23,6 +23,7 @@ export class ModalAddExamWizardComponent implements OnInit {
     private examsService: ExamsService,
     private teacherService: TeacherService,
     private usersService: UsersService){}
+    
 
 
   examsList!: TeacherExam[];
@@ -63,15 +64,14 @@ export class ModalAddExamWizardComponent implements OnInit {
 
     this.examForm.patchValue({
       date: this.data.exam?.date ?? null,
-      classroomId: this.data.exam?.classroom.id || this.data?.teacher.classroomId,
-      subjectId: this.data.exam?.subject.id || this.data?.teacher.subjectId
+      classroomId: this.data.exam?.classroom.id ?? this.data.teacher?.classroomId,
+      subjectId: this.data.exam?.subject.id ?? this.data?.teacher?.subjectId
     });
     this.getTeacherSubjectsByClassroom(this.examForm.value.classroomId)
     
   }
 
 
-   
     getTeacherClassrooms() {
       this.teacherService.getDataClassroom().pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (res) => {
@@ -123,7 +123,7 @@ export class ModalAddExamWizardComponent implements OnInit {
         this.examsService.addExam(this.examForm.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
           next: () => {
             this.examForm.reset();
-            this.getTeacherExams()
+            this.getTeacherExams();
            
           }
         })
@@ -156,10 +156,6 @@ export class ModalAddExamWizardComponent implements OnInit {
     onCloseModal(){
       this.dialogRef.close()
       
-  
     }
-
-  
-
 
 }

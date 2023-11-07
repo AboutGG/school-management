@@ -6,7 +6,7 @@
               <h1 *ngIf="!(data.type) || data.type == 'add'" class="modal-title fs-5" id="ExamLabel">CREA ESAME</h1>
               <h1 *ngIf="data.type == 'edit'" class="modal-title fs-5" id="ExamLabel">MODIFICA ESAME</h1>
              
-              <button (click)="onCloseModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button (click)="onCloseModal()" type="button" class="btn-close" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form [formGroup]="examForm">
@@ -37,9 +37,9 @@
           </div>
           <div class="modal-footer d-flex mt-3">
               <button style="margin-right: 10px;" (click)="onCloseModal()" type="button" class="btn btn-secondary border-0 text-white"
-                  data-bs-dismiss="modal">Chiudi</button>
+                  >Chiudi</button>
               <button [disabled]="!examForm.valid" (click)="onCloseModal(); onClickModal()" type="button" class="btn btn-warning border-0 text-white"
-                  data-bs-dismiss="modal">CONFERMA</button>
+                  >CONFERMA</button>
           </div>
       </div>
   </div>

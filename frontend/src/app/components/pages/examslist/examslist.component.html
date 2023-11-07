@@ -1,35 +1,25 @@
 <div class="container mt-3">
     <hr>
-    <div class="row">
-        <span class="col-1 icon-back" style="cursor: pointer;" (click)="goBack()"><i class="bi bi-arrow-left"  ></i> </span>
-        <div class="col-11 d-flex justify-content-center align-items-center fw-bold fs-5">
+        <div class="d-flex justify-content-center align-items-center fw-bold fs-5">
             <span>LISTA ESAMI</span>
             <span class="icon-data">
                 <i class="bi bi-card-list list-icon"></i>
             </span>
         </div>
-    </div>
     <hr>
 </div>
 <div class="container mt-6 bb">
     <div class="row mb-3 justify-content-between">
         <div class="col-3 d-flex">
-            <!-- <form [formGroup]="formSubjects" class="d-flex pe-2 justify-content-center ">
-                <select class="btn btn-warning" formControlName="subjects"
-                    (click)="[onClickFilter = true, dropdownFilter()]">
-                    <option selected value="">Tutte le materie</option>
-                    <option *ngFor="let subject of subjects">{{subject.subjectName}}</option>
-                </select>
-            </form> -->
             <form [formGroup]="formSubjects" class="d-flex pe-2 justify-content-center ">
-                <select class="btn btn-warning" formControlName="subjects"
+                <select style="width: 159px;" class="btn btn-warning" formControlName="subjects"
                     (click)="[onClickFilter = true, dropdownFilter()]">
                     <option selected value="">Tutte le materie</option>
                     <option *ngFor="let subject of subjects">{{subject.name}}</option>
                 </select>
             </form>
             <form [formGroup]="formClassrooms" class="d-flex ps-2 justify-content-center ">
-                <select class="btn btn-warning" formControlName="classrooms"
+                <select style="width: 159px;" class="btn btn-warning" formControlName="classrooms"
                     (click)="[onClickFilter = false, dropdownFilter()]">
                     <option selected value="">Tutte le classi</option>
                     <option *ngFor="let classroom of classrooms">{{classroom.name_classroom}}</option>
@@ -47,22 +37,10 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col" id="date">Data
-                    <!-- <i *ngIf="this.orders.name === 'desc'" class="bi bi-caret-down-fill"
-                        (click)="getData('Name', 'asc', 'name')"></i>
-                    <i *ngIf="this.orders.name === 'asc'" class="bi bi-caret-up-fill"
-                        (click)="getData('Name', 'desc', 'name')"></i> -->
                 </th>
                 <th scope="col" id="matter">Materia
-                    <!-- <i *ngIf="this.orders.surname === 'asc'" class="bi bi-caret-up-fill"
-                        (click)="getData('Surname', 'desc', 'surname')"></i>
-                    <i *ngIf="this.orders.surname === 'desc'" class="bi bi-caret-down-fill"
-                        (click)="getData('Surname', 'asc', 'surname')"></i> -->
                 </th>
                 <th scope="col" id="birth">Classe
-                    <!-- <i *ngIf="this.orders.birth === 'asc'" class="bi bi-caret-up-fill"
-                        (click)="getData('Birth', 'desc', 'birth')"></i>
-                    <i *ngIf="this.orders.birth === 'desc'" class="bi bi-caret-down-fill"
-                        (click)="getData('Birth', 'asc', 'birth')"></i> -->
                 </th>
                 <th scope="col">Azioni</th>
             </tr>
@@ -106,52 +84,6 @@
             </tr>
         </tbody>
     </table>
-
-    <!-- <div class="modal fade" id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 *ngIf="isEdit === false" class="modal-title fs-5" id="ExamLabel">CONFERMA CREAZIONE</h1>
-                    <h1 *ngIf="isEdit === true" class="modal-title fs-5" id="ExamLabel">CONFERMA MODIFICA</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form [formGroup]="examForm">
-                        <div class="mt-5 mb-2">
-                            <label for="date" class="form-label">Data: </label>
-                            <input type="date" class="form-control w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="date" [min]="today">
-                        </div>
-                        <div class="d-flex flex-column my-2">
-                            <label for="classroom" class="form-label">Classe: </label>
-                            <select id="classroom" class="w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="classroomId">
-                                <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms "
-                                    (click)="getTeacherSubjectsByClassroom(classroom.id_classroom!)">
-                                    {{classroom.name_classroom}}</option>
-                            </select>
-                            <!-- <small
-                                *ngIf="!examForm.get('classroom')?.touched && !examForm.get('classroom')?.valid">Campo
-                                obbligatorio</small> -->
-                        <!-- </div>
-                        <div class="d-flex flex-column my-2">
-                            <label for="subject" class="form-label">Materia: </label>
-                            <select id="subject" class="w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="subjectId">
-                                <option [value]="subject.id" *ngFor="let subject of subjectsByClassroom">
-                                    {{subject.name}}</option>
-                            </select>
-                            <!-- <small *ngIf="!examForm.get('subject')?.touched && !examForm.get('subject')?.valid">Campo
-                                obbligatorio</small> -->
-                      
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary border-0 text-white"
-                        data-bs-dismiss="modal">Chiudi</button>
-                    <button  type="button" class="btn btn-warning border-0 text-white"
-                        data-bs-dismiss="modal" [disabled]="!examForm.valid">CONFERMA</button>
-                </div>
-            </div> -->
-   
 
     <div class="modal fade" id="deleteExam" tabindex="-1" aria-labelledby="deleteExamLabel" aria-hidden="true">
         <div class="modal-dialog">

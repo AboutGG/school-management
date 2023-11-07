@@ -21,7 +21,11 @@ import { ModalAddExamWizardComponent } from '../modal-add-exam-wizard/modal-add-
 
 })
 export class ExamslistComponent implements OnInit, OnDestroy {
-  constructor(private examsService: ExamsService, private teacherService: TeacherService, private usersService: UsersService, private location: Location, public dialog: MatDialog) { }
+  constructor(private examsService: ExamsService,
+    private teacherService: TeacherService,
+    private usersService: UsersService,
+    private location: Location,
+    public dialog: MatDialog) { }
 
   user!: UsersMe
   formSubjects = new FormGroup({
@@ -33,11 +37,6 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   examsList!: TeacherExam[]
   subjects!: IdName[]
   classrooms!: TeacherClassroom[]
-  orders = {
-    date: 'asc',
-    subject: 'asc',
-    classroom: 'asc'
-  }
   page: number = 1
   itemsPerPage: number = 10
   filtered: string = ""
@@ -49,11 +48,6 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   selectedPages!: number
   total!: number
   examId?: string
-  subjectsByClassroom?: IdName[]
-  classroomId!: FormControl
-  subjectId!: FormControl
-  date!: FormControl
-  examForm!: FormGroup
   currentDate = new Date()
   today = new Date(new Date().getTime()).toISOString().substring(0,10);
   alert: boolean = false;
