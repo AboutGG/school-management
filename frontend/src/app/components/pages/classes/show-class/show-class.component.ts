@@ -162,6 +162,8 @@ export class ShowClassComponent {
         },
       });
     console.log(this.graduationForm.value);
+    this.fetchClassDetails();
+    
   }
 
   ngOnDestroy(): void {
