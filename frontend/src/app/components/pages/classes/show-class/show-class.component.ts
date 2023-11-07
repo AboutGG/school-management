@@ -35,6 +35,9 @@ export class ShowClassComponent {
   promotionStartDate = new Date();
   promotionEndDate = new Date();
 
+  currentYear!: boolean;
+  schoolYear!: string;
+
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -48,6 +51,8 @@ export class ShowClassComponent {
     this.route.params.subscribe((params) => {
       this.classId = params["id"];
     });
+        this.currentYear = true;
+
     this.fetchClassDetails();
     this.isTeacher = this.authService.isTeacher();
 
@@ -66,7 +71,9 @@ export class ShowClassComponent {
   }
 
   fetchClassDetails() {
-    const params = new HttpParams().set("Order", this.order);
+    const params = new HttpParams()
+      .set("Order", this.order)
+      .set("isCurrentYear", this.currentYear);
     this.classroomService
       .getSingleClassroom(this.classId, params)
       .pipe(takeUntil(this.unsubscribe$))
@@ -74,6 +81,7 @@ export class ShowClassComponent {
         next: (res: ListResponse<ClassDetails>) => {
           this.classDetails = res.data;
           console.log(this.classDetails.students);
+    console.log(this.currentYear);
 
           this.classDetails.students.map((student: Students) => {
             const userId = student.id;
@@ -95,6 +103,12 @@ export class ShowClassComponent {
           console.log("error", err);
         },
       });
+  }
+
+  isCurrentYear() {
+    this.fetchClassDetails();
+    console.log(this.currentYear);
+    
   }
 
   navigateToTeachersClasses() {

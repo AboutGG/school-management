@@ -19,6 +19,28 @@
         <a class="btn btn-warning" *ngIf="isTeacher" [routerLink]="['/history-promotion/' + this.classId]"><i class="bi bi-card-list px-2"></i>STORICO PROMOZIONI</a>
   </div> -->
   
+      <!-- <div class="button m-3 d-flex w-100 justify-content-end pe-5">
+        <select class="btn btn-warning" (click)="isCurrentYear()">
+          <option (click)="this.currentYear = true">2023-2024</option>
+          <option (click)="this.currentYear = false">2024-2025</option>
+
+        </select>
+      </div> -->
+
+      
+
+      <div class="button m-3 d-flex w-100 justify-content-end pe-5">
+        <select class="btn btn-warning" [(ngModel)]="this.currentYear" (change)="isCurrentYear()">
+          <option [ngValue]="true">2023-2024</option>
+          <option [ngValue]="false">2024-2025</option>
+         </select>
+      </div>
+
+
+
+          
+     
+
 
     <div  class="row justify-content-center">    
       <div [ngClass]="{'col-md-5 table-teachers-1': isTeacher, 'col-md-6 table-teachers-2': !isTeacher}">
@@ -140,7 +162,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-warning"
                         data-bs-dismiss="modal">Chiudi</button>
-                    <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white">CONFERMA</button>
+                    <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white"  data-bs-dismiss="modal">CONFERMA</button>
                 </div>
             </div>
         </div>
