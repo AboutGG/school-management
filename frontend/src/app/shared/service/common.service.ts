@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ListResponse } from '../models/users';
+import { ListResponse } from '../models/listresponse';
 import { Observable } from 'rxjs';
 import { PdfCirculars } from '../models/pdf';
 import { FormGroup } from '@angular/forms';

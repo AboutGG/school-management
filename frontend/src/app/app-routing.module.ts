@@ -11,10 +11,10 @@ import { ShowClassComponent } from './components/pages/classes/show-class/show-c
 import { SubjectsComponent } from "./components/pages/subjects/subjects.component";
 import { ListUsersComponent } from './components/pages/users/list-users/list-users.component';
 import { DetailUserComponent } from './components/pages/users/detail-user/detail-user.component';
-import { ExamsStudentListComponent } from "./components/pages/exams-student-list/exams-student-list.component";
-import { ExamslistComponent } from "./components/pages/examslist/examslist.component";
+import { ExamsStudentListComponent } from "./components/pages/exams/exams-student-list/exams-student-list.component";
+import { ExamslistComponent } from "./components/pages/exams/examslist/examslist.component";
 import { StudentSubjectsComponent } from "./components/pages/student-subjects/student-subjects.component";
-import { ExamDetailsComponent } from "./components/pages/exam-details/exam-details.component";
+import { ExamDetailsComponent } from "./components/pages/exams/exam-details/exam-details.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},

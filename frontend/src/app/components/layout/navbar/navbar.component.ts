@@ -1,9 +1,8 @@
-import { Component, EventEmitter, inject, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { UsersMe } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import { UsersService } from "src/app/shared/service/users.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AccountService } from "../../../shared/service/account.service";
 import { Subject, takeUntil } from "rxjs";
 
 @Component({
@@ -13,8 +12,6 @@ import { Subject, takeUntil } from "rxjs";
 })
 export class NavbarComponent implements OnInit {
   @Output() toggleSidebar: EventEmitter<void> = new EventEmitter<void>();
-
-  accountService = inject(AccountService);
 
   constructor(
     private authService: AuthService,

@@ -59,8 +59,3 @@ export interface Teachers {
   surname: string;
   subjects: string[];
 }
-
-export interface ListResponse<T> {
-  data: T,
-  total: number
-}
