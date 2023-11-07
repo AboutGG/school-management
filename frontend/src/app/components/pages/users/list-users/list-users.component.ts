@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Registry, Users, ListResponse } from 'src/app/shared/models/users';
+import { Registry } from 'src/app/shared/models/users';
+import { ListResponse } from 'src/app/shared/models/users';
 import { UsersService } from 'src/app/shared/service/users.service';
 
 

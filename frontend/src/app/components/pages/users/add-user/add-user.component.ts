@@ -5,8 +5,6 @@ import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Classroom } from "src/app/shared/models/classrooms";
 import { Registry } from "src/app/shared/models/users";
-import { Users } from "src/app/shared/models/users";
-import { AuthService } from "src/app/shared/service/auth.service";
 import { Location } from "@angular/common";
 import { Subject, takeUntil } from "rxjs";
 

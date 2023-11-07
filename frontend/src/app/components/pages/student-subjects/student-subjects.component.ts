@@ -1,7 +1,6 @@
 import { HttpParams } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { SubjectService } from "src/app/shared/service/subject.service";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { StudentSubject } from "src/app/shared/models/subjects";
 import { ListResponse } from "src/app/shared/models/listresponse";
 

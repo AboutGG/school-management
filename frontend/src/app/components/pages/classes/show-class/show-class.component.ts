@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Registry, Students, Teachers } from 'src/app/shared/models/users';
-import { ClassDetails, Classroom, TeacherClassroom } from 'src/app/shared/models/classrooms';
+import { Students } from 'src/app/shared/models/users';
+import { ClassDetails, Classroom } from 'src/app/shared/models/classrooms';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { ListResponse } from 'src/app/shared/models/listresponse';
 import { HttpParams } from '@angular/common/http';
-import { Form, FormControl, FormGroup, Validators} from "@angular/forms";
+import { FormControl, FormGroup, Validators} from "@angular/forms";
 import { Grade, StudentGraduation } from 'src/app/shared/models/studentgraduation';
 import { Subject, takeUntil } from 'rxjs';
 

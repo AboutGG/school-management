@@ -2,9 +2,8 @@ import { HttpParams } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from "@angular/forms";
 import { PdfCirculars } from "src/app/shared/models/pdf";
-import { StudentExam } from "src/app/shared/models/studentexam";
-import { TeacherExam } from "src/app/shared/models/teacherexam";
-import { Students, TypeCount, UsersMe } from "src/app/shared/models/users";
+import { StudentExam, TeacherExam } from "src/app/shared/models/exams";
+import { UsersMe } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { CommonService } from "src/app/shared/service/common.service";
@@ -24,12 +23,7 @@ import { Subject, takeUntil } from "rxjs";
 })
 export class DashboardComponent implements OnInit {
 
-  count: TypeCount = {
-    Users: 0,
-    Students: 0,
-    Teachers:0,
-    Classrooms:0
-  };
+  count: any;
 
   isTeacher = this.authService.isTeacher();
   unsubscribe$: Subject<boolean> = new Subject<boolean>();

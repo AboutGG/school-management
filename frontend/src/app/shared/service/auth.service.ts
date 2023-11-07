@@ -1,6 +1,5 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.example';
 import { User } from '../models/users';
 

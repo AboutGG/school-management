@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';
 import { ListResponse } from 'src/app/shared/models/listresponse';
-import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
+import { IdName, TeacherExam } from 'src/app/shared/models/exams';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';

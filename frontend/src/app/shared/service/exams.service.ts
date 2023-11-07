@@ -1,12 +1,8 @@
-import { ClassDetails } from './../models/classrooms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ListResponse } from '../models/listresponse';
-import { StudentExams, User } from '../models/users';
 import { FormGroup } from '@angular/forms';
-import { TeacherExam } from '../models/teacherexam';
-import { Observable } from 'rxjs';
-import { ExamDetails, ExamStudentDetails } from '../models/examdetails';
+import { ExamDetails, ExamStudentDetails, TeacherExam } from '../models/exams';
 @Injectable({
   providedIn: 'root'
 })

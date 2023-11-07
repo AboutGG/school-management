@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { ExamDetails, ExamStudentDetails } from 'src/app/shared/models/examdetails';
+import { ExamDetails, ExamStudentDetails } from 'src/app/shared/models/exams';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 
 @Component({
