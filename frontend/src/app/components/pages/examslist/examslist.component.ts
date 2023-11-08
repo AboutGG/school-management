@@ -9,7 +9,6 @@ import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
 import { Subject, takeUntil } from 'rxjs';
 import { Location } from '@angular/common';
 import { ModalAddExamWizardComponent } from '../modal-add-exam-wizard/modal-add-exam-wizard.component';
@@ -146,7 +145,10 @@ export class ExamslistComponent implements OnInit, OnDestroy {
         height: '400px',
         data: {exam, type}
       });
-     
+      dialogRef.beforeClosed().subscribe((result: any) => {
+        this.getTeacherExams();
+        
+      });
       dialogRef.afterClosed().subscribe((result: any) => {
         dialogRef.close();
       });

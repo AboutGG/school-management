@@ -25,7 +25,6 @@ export class ModalAddExamWizardComponent implements OnInit {
     private usersService: UsersService){}
     
 
-
   examsList!: TeacherExam[];
   subjects!: IdName[]
   classrooms!: TeacherClassroom[]
@@ -56,12 +55,10 @@ export class ModalAddExamWizardComponent implements OnInit {
     subjectId : new FormControl(null, Validators.required)
   });
       this.getUser();
-      this.getTeacherExams()
-      this.getTeacherClassrooms(); 
+      this.getTeacherClassrooms();
   }
 
   compileForm(){
-
     this.examForm.patchValue({
       date: this.data.exam?.date ?? null,
       classroomId: this.data.exam?.classroom.id ?? this.data.teacher?.classroomId,
@@ -75,7 +72,8 @@ export class ModalAddExamWizardComponent implements OnInit {
     getTeacherClassrooms() {
       this.teacherService.getDataClassroom().pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (res) => {
-          this.classrooms = res.data
+          this.classrooms = res.data;
+          
         }
       });
     }
@@ -123,39 +121,20 @@ export class ModalAddExamWizardComponent implements OnInit {
         this.examsService.addExam(this.examForm.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
           next: () => {
             this.examForm.reset();
-            this.getTeacherExams();
-           
           }
         })
       }
       else {
         this.examsService.editExam(this.examForm.value, this.user.id, this.data.exam.id).pipe(takeUntil(this.unsubscribe$)).subscribe({
           next: () => {
-            this.getTeacherExams();
- 
           }
         })    
       }
     }
 
-    getTeacherExams() {
-      const params = new HttpParams()
-  
-      this.examsService.getTeacherExams(params).subscribe({
-        next: (res: ListResponse<TeacherExam[]>) => {
-          this.examsList = res.data
-          this.total = res.total
-          console.log('get esami',res.data);
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      });
-    }
 
     onCloseModal(){
-      this.dialogRef.close()
-      
+      this.dialogRef.close();
     }
 
 }

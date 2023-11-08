@@ -8,31 +8,31 @@
         </div>
     <hr>
 </div>
-<div class="container mt-6 bb">
-    <div class="row mb-3 justify-content-between">
+<div class="container mt-4 bb">
+    <div class="row mb-4 justify-content-between">
         <div class="col-3 d-flex">
             <form [formGroup]="formSubjects" class="d-flex pe-2 justify-content-center ">
-                <select style="width: 159px;" class="btn btn-warning" formControlName="subjects"
+                <select class="btn btn-warning fw-medium" formControlName="subjects"
                     (click)="[onClickFilter = true, dropdownFilter()]">
-                    <option selected value="">Tutte le materie</option>
-                    <option *ngFor="let subject of subjects">{{subject.name}}</option>
+                    <option style="background-color: white;" selected value="">Tutte le materie</option>
+                    <option class="dropdown-option" style="background-color: white;" *ngFor="let subject of subjects">{{subject.name}}</option>
                 </select>
             </form>
             <form [formGroup]="formClassrooms" class="d-flex ps-2 justify-content-center ">
-                <select style="width: 159px;" class="btn btn-warning" formControlName="classrooms"
+                <select class="btn btn-warning fw-medium" formControlName="classrooms"
                     (click)="[onClickFilter = false, dropdownFilter()]">
-                    <option selected value="">Tutte le classi</option>
-                    <option *ngFor="let classroom of classrooms">{{classroom.name_classroom}}</option>
+                    <option style="background-color: white;" selected value="">Tutte le classi</option>
+                    <option style="background-color: white;" *ngFor="let classroom of classrooms">{{classroom.name_classroom}}</option>
                 </select>
             </form>
         </div>
     
         <div class="col-3 d-flex justify-content-end">
-            <button class="w-50 btn btn-warning" 
+            <button class="w-50 btn btn-warning fw-medium" 
                 (click)="openModalExam()">Crea esame</button>
         </div>
     </div>
-    <table class="table table-hover">
+    <table class="table">
         <thead class="text-center">
             <tr>
                 <th scope="col">#</th>
@@ -86,7 +86,7 @@
     </table>
 
     <div class="modal fade" id="deleteExam" tabindex="-1" aria-labelledby="deleteExamLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="deleteExamLabel">CONFERMA ELIMINAZIONE</h1>

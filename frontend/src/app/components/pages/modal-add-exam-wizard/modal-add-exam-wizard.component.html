@@ -19,7 +19,7 @@
                       <label for="classroomId" class="form-label">Classe: </label>
                       <select id="classroom" class="w-100 p-1 btn btn-outline-warning text-dark"
                       formControlName="classroomId" (change)="subjectEvent($event)">
-                      <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms "
+                      <option style="background-color: white;" [value]="classroom.id_classroom" *ngFor="let classroom of classrooms "
                           (click)="getTeacherSubjectsByClassroom(classroom.id_classroom!)">
                           {{classroom.name_classroom}}</option>
                   </select>
@@ -28,7 +28,7 @@
                       <label for="subjectId" class="form-label">Materia: </label>
                       <select id="subject" class="w-100 p-1 btn btn-outline-warning text-dark"
                       formControlName="subjectId">
-                      <option [value]="subject.id" *ngFor="let subject of subjectsByClassroom">
+                      <option style="background-color: white;" [value]="subject.id" *ngFor="let subject of subjectsByClassroom">
                           {{subject.name}}</option>
                   </select>
                      

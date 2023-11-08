@@ -11,6 +11,12 @@ td, th {
   vertical-align: middle;
 }
 
+thead,
+tbody {
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
 .icon-data {
   border: 2px solid;
   border-radius: 50px;
@@ -38,6 +44,7 @@ td, th {
   font-size: 12px;
 }
 
-select {
-  width: 150px;
+.dropdown-option:hover{
+  background-color: #ffc422;
+
 }
