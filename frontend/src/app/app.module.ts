@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AddUserComponent } from './components/pages/users/add-user/add-user.component';
-
+import { JwtModule } from "@auth0/angular-jwt";
 import { LoginComponent } from './components/pages/login/login.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from '../app/shared/helpers/auth.interceptor';
@@ -21,6 +21,10 @@ import { ExamsStudentListComponent } from './components/pages/exams/exams-studen
 import { SubjectsComponent } from './components/pages/subjects/subjects.component';
 import { StudentSubjectsComponent } from './components/pages/student-subjects/student-subjects.component';
 import { ExamDetailsComponent } from './components/pages/exams/exam-details/exam-details.component';
+
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
 
 
 @NgModule({
@@ -49,6 +53,13 @@ import { ExamDetailsComponent } from './components/pages/exams/exam-details/exam
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["example.com"],
+        disallowedRoutes: ["http://example.com/examplebadroute/"],
+      },
+    })
   ],
   providers: [
     {

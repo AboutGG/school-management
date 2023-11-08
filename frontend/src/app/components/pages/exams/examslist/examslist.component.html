@@ -116,75 +116,6 @@
             </tbody>
         </table>
     </div>
-</div>
-    <div class="modal fade" id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 *ngIf="isEdit === false" class="modal-title fs-5" id="ExamLabel">CONFERMA CREAZIONE</h1>
-                    <h1 *ngIf="isEdit === true" class="modal-title fs-5" id="ExamLabel">CONFERMA MODIFICA</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form [formGroup]="examForm">
-                        <div class="mt-5 mb-2">
-                            <label for="date" class="form-label">Data: </label>
-                            <input type="date" class="form-control w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="date" [min]="today">
-                        </div>
-                        <div class="d-flex flex-column my-2">
-                            <label for="classroom" class="form-label">Classe: </label>
-                            <select id="classroom" class="w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="classroomId" (change)="subjectEvent($event)">
-                                <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms "
-                                    (click)="getTeacherSubjectsByClassroom(classroom.id_classroom!)">
-                                    {{classroom.name_classroom}}</option>
-                            </select>
-                            <!-- <small
-                                *ngIf="!examForm.get('classroom')?.touched && !examForm.get('classroom')?.valid">Campo
-                                obbligatorio</small> -->
-                        </div>
-                        <div class="d-flex flex-column my-2">
-                            <label for="subject" class="form-label">Materia: </label>
-                            <select id="subject" class="w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="subjectId">
-                                <option [value]="subject.id" *ngFor="let subject of subjectsByClassroom">
-                                    {{subject.name}}</option>
-                            </select>
-                            <!-- <small *ngIf="!examForm.get('subject')?.touched && !examForm.get('subject')?.valid">Campo
-                                obbligatorio</small> -->
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary border-0 text-white"
-                        data-bs-dismiss="modal">Chiudi</button>
-                    <button (click)="onClickModal()" type="button" class="btn btn-warning border-0 text-white"
-                        data-bs-dismiss="modal" [disabled]="!examForm.valid">CONFERMA</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="deleteExam" tabindex="-1" aria-labelledby="deleteExamLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteExamLabel">CONFERMA ELIMINAZIONE</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Sei sicuro di voler eliminare questo esame?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Chiudi</button>
-                    <button type="button" class="btn btn-warning border-0 text-white" data-bs-dismiss="modal"
-                        (click)="deleteExam()">CONFERMA</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item">
@@ -192,11 +123,16 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li *ngIf="page > 1" class="page-item"><a class="page-link" (click)="onChangePage(page - 1)">{{ page -1
-                    }}</a></li>
-            <li class="page-item"><a class="page-link">{{ page }}</a></li>
-            <li *ngIf="page < total / itemsPerPage" class="page-item"><a class="page-link"
-                    (click)="onChangePage(page + 1)"> {{ page + 1 }} </a></li>
+            <li *ngIf="page > 1" class="page-item">
+                <a class="page-link" (click)="onChangePage(page - 1)">{{ page -1 }}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link">{{ page }}</a>
+            </li>
+            <li *ngIf="page && page < totalPages" class="page-item">
+                <a class="page-link"
+                    (click)="onChangePage(page + 1)">{{ page + 1 }}</a>
+                </li>
             <li class="page-item">
                 <a class="page-link" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
@@ -204,3 +140,71 @@
             </li>
         </ul>
     </nav>
+</div>
+<div class="modal fade" id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 *ngIf="isEdit === false" class="modal-title fs-5" id="ExamLabel">CONFERMA CREAZIONE</h1>
+                <h1 *ngIf="isEdit === true" class="modal-title fs-5" id="ExamLabel">CONFERMA MODIFICA</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="examForm">
+                    <div class="mt-5 mb-2">
+                        <label for="date" class="form-label">Data: </label>
+                        <input type="date" class="form-control w-100 p-1 btn btn-outline-warning text-dark"
+                            formControlName="date" [min]="today">
+                    </div>
+                    <div class="d-flex flex-column my-2">
+                        <label for="classroom" class="form-label">Classe: </label>
+                        <select id="classroom" class="w-100 p-1 btn btn-outline-warning text-dark"
+                            formControlName="classroomId" (change)="subjectEvent($event)">
+                            <option [value]="classroom.id_classroom" *ngFor="let classroom of classrooms "
+                                (click)="getTeacherSubjectsByClassroom(classroom.id_classroom!)">
+                                {{classroom.name_classroom}}</option>
+                        </select>
+                        <!-- <small
+                                *ngIf="!examForm.get('classroom')?.touched && !examForm.get('classroom')?.valid">Campo
+                                obbligatorio</small> -->
+                    </div>
+                    <div class="d-flex flex-column my-2">
+                        <label for="subject" class="form-label">Materia: </label>
+                        <select id="subject" class="w-100 p-1 btn btn-outline-warning text-dark"
+                            formControlName="subjectId">
+                            <option [value]="subject.id" *ngFor="let subject of subjectsByClassroom">
+                                {{subject.name}}</option>
+                        </select>
+                        <!-- <small *ngIf="!examForm.get('subject')?.touched && !examForm.get('subject')?.valid">Campo
+                                obbligatorio</small> -->
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary border-0 text-white"
+                    data-bs-dismiss="modal">Chiudi</button>
+                <button (click)="onClickModal()" type="button" class="btn btn-warning border-0 text-white"
+                    data-bs-dismiss="modal" [disabled]="!examForm.valid">CONFERMA</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteExam" tabindex="-1" aria-labelledby="deleteExamLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteExamLabel">CONFERMA ELIMINAZIONE</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler eliminare questo esame?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-warning border-0 text-white" data-bs-dismiss="modal"
+                    (click)="deleteExam()">CONFERMA</button>
+            </div>
+        </div>
+    </div>
+</div>
