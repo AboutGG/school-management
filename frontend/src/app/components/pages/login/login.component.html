@@ -15,7 +15,7 @@
       <div class="mb-3 input-container">
         <input [type]="passwordInputType" class="form-control border border-2 border-dark" formControlName="password"
           id="exampleInputPassword1" placeholder="Inserisci password" required>
-          <i (click)="showPassword()" style="cursor: pointer;" [class]="passwordInputType === 'password' ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          <i (click)="showPassword()" style="cursor: pointer;" [class]="passwordInputType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
       </div>
       <small class="text-danger mb-4" *ngIf="this.showInvalidInput && !loginForm.get('password')?.valid">Campo
         obbligatorio</small>
