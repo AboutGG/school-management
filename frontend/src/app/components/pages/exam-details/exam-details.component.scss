@@ -10,6 +10,14 @@ td, th {
   text-align: center;
   vertical-align: middle;
 }
+td{
+  height: 4rem!important;
+}
+thead,
+tbody {
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
 
 .icon-data {
   border: 2px solid;

@@ -25,19 +25,15 @@
         <th>#</th>
         <th>Insegnante</th>
         <th>Materia</th>
-        <th>Azioni</th>
+        
       </tr>
     </thead>
-    <tbody *ngFor="let teacher of students">
+    <tbody *ngFor="let teacher of students;">
       <tr *ngFor="let subject of teacher.subjects; let i = index">
-        <td scope="row">{{ i + 1 }}</td>
+        <td scope="row">{{ teacher.subjects.length + i }}</td>
         <td>{{ teacher.name + " " + teacher.surname }}</td>
         <td>{{ subject }}</td>
-        <td>
-          <button class="btn" value="dettagli">
-            Visualizza Esame<i class="bi bi-calendar-plus px-2"></i>
-          </button>
-        </td>
+       
       </tr>
     </tbody>
   </table>
