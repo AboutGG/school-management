@@ -15,6 +15,7 @@
           </div>
         </div>  
     </div>
+
     <table class="w-100 table mt-4">
       <thead class="text-center" >
         <tr class="fw-bold">
@@ -31,7 +32,7 @@
           <td>{{teacher.classroomName}}</td>
         
           <td>       
-            <button class="btn " value="dettagli"  [routerLink]="['/teachers/exams']"><i class="bi bi-calendar-plus"></i>Crea Esame</button>
+            <button (click)="openModalExam(teacher, 'add')" class="btn" value="dettagli"><i class="bi bi-calendar-plus"></i>Crea Esame</button>
           </td>
         </tr>
       </tbody>

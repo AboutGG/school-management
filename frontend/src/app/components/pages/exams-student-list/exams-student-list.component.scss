@@ -5,6 +5,22 @@ hr{
   border-top: var(--bs-border-width) solid;
   opacity: 0.25;
 }
+thead,
+tbody {
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+.icon-back {
+  border: 2px solid;
+  border-radius: 50px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffb900;
+  margin-left: 20px;
+}
 .icon-data {
   border: 2px solid;
   border-radius: 50px;
@@ -21,14 +37,14 @@ hr{
     color: #ffb900;
 }
 
-.icon-back {
-  border: 2px solid;
-  border-radius: 50px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #ffb900;
-  margin-left: 20px;
+.bi-arrow-left{
+  font-size: 25px;
+    color: #ffb900;
+}
+td, th{
+  text-align: center;
+  vertical-align: middle;
+}
+td{
+  height: 4rem!important;
 }
