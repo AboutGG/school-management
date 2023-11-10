@@ -96,19 +96,19 @@
                     </a>
                 </li>
      
-                <li *ngIf="currentPage === totalPages" class="page-item" style="cursor: pointer;">
+                <li id="1" *ngIf="currentPage === totalPages && totalPages >= 3" class="page-item" style="cursor: pointer;">
                     <a class="page-link" (click)="onChangePage(currentPage - 2)">{{ currentPage - 2}}</a>
                 </li>
-                <li *ngIf="currentPage > 1" class="page-item" style="cursor: pointer;">
+                <li id="2" *ngIf="currentPage > 1" class="page-item" style="cursor: pointer;">
                     <a class="page-link" (click)="onChangePage(currentPage - 1)">{{ currentPage - 1 }}</a>
                 </li>
-                <li class="page-item" style="cursor: pointer; color:black;">
+                <li id="3" class="page-item" style="cursor: pointer; color:black;">
                     <a class="page-link currentPage fw-semibold">{{ currentPage }}</a>
                 </li>
-                <li *ngIf="currentPage < totalPages" class="page-item" style="cursor: pointer;">
+                <li id="4" *ngIf="currentPage < totalPages" class="page-item" style="cursor: pointer;">
                     <a class="page-link" (click)="onChangePage(currentPage + 1)">{{ currentPage + 1 }}</a>
                 </li>
-                <li *ngIf="currentPage === 1" class="page-item" style="cursor: pointer;">
+                <li id="5" *ngIf="currentPage === 1 && totalPages >= 3" class="page-item" style="cursor: pointer;">
                     <a class="page-link" (click)="onChangePage(currentPage + 2)">{{ currentPage + 2 }}</a>
                 </li>
                
@@ -119,6 +119,7 @@
                     </a>
                 </li>
             </ul>
+            <h5 class="text-center">Pagina {{this.currentPage}} di {{this.totalPages}}</h5>
         </nav>
     </div>
 </div>

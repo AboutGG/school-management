@@ -220,17 +220,15 @@ public class TeachersController : Controller
             List<Exam> teacherExams = examGenericRepository.GetAllUsingIQueryable(@params,
                 query => query
                     . Where(el => el.TeacherSubjectClassroom.Teacher.UserId == takenId)
+                    .Where(el => 
+                        string.IsNullOrWhiteSpace(@params.Filter) ? true :
+                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower() || 
+                        el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower())
                 .Include( el => el.TeacherSubjectClassroom)
                 .Include(el => el.TeacherSubjectClassroom.Classroom)
                     .Include(el => el.TeacherSubjectClassroom.Subject),
                 out var total
             );
-            if (@params.Filter != null)
-                teacherExams = teacherExams.Where(el =>
-                        el.TeacherSubjectClassroom.Subject.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                        || el.TeacherSubjectClassroom.Classroom.Name.Trim().ToLower() == @params.Filter.Trim().ToLower()
-                        )
-                    .ToList();
 
             List<ExamResponseDto> response = new List<ExamResponseDto>();
             
