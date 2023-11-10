@@ -19,6 +19,13 @@
         <a class="btn btn-warning" *ngIf="isTeacher" [routerLink]="['/history-promotion/' + this.classId]"><i class="bi bi-card-list px-2"></i>STORICO PROMOZIONI</a>
   </div> -->
   
+    
+      <div class="button m-3 d-flex w-100 justify-content-end pe-5"  *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">
+        <select class="btn btn-warning" [(ngModel)]="this.currentYear" (change)="isCurrentYear()">
+          <option [ngValue]="true">2023-2024</option>
+          <option [ngValue]="false">2024-2025</option>
+         </select>
+      </div>
 
     <div  class="row justify-content-center">    
       <div [ngClass]="{'col-md-5 table-teachers-1': isTeacher, 'col-md-6 table-teachers-2': !isTeacher}">
@@ -34,8 +41,8 @@
             <tr style="cursor: pointer">
               <td scope="row">{{i + 1}}</td>
               <td *ngIf="isTeacher" [routerLink]="['/details', teacher.id]">{{ teacher.surname + ' ' + teacher.name }}</td>
-              <td style="cursor: default;" *ngIf="!isTeacher">{{ teacher.surname + ' ' + teacher.name }}</td>
-               <td style="cursor: default;">{{ teacher.subjects.join(', ') }}</td>
+              <td *ngIf="!isTeacher">{{ teacher.surname + ' ' + teacher.name }}</td>
+               <td>{{ teacher.subjects.join(', ') }}</td>
             </tr>
             <tr>
             </tr>
@@ -61,12 +68,12 @@
       <tbody *ngFor="let student of classDetails?.students let i = index">
         <tr>
           <td scope="row">{{i + 1}}</td> 
-          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">{{student && student.surname + ' ' +  student.name}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.surname}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.name}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="!isTeacher">{{student.surname}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="!isTeacher">{{student.name}}</td>
-          <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">
+          <td *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">{{student && student.surname + ' ' +  student.name}}</td>
+          <td *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.surname}}</td>
+          <td *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.name}}</td>
+          <td *ngIf="!isTeacher">{{student.surname}}</td>
+          <td *ngIf="!isTeacher">{{student.name}}</td>
+          <td *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">
            <h6 class="mt-2">{{student && student.finalGrade >= 6 ? "NON A RISCHIO": "A RISCHIO"}}</h6>
           </td>
 
@@ -140,7 +147,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-warning"
                         data-bs-dismiss="modal">Chiudi</button>
-                    <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white">CONFERMA</button>
+                    <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white"  data-bs-dismiss="modal">CONFERMA</button>
                 </div>
             </div>
         </div>

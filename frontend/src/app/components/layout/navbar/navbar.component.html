@@ -3,21 +3,27 @@
 
         <div class="container-left d-flex flex-row">
 
-            <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <img class="nav-logo" src="../../../../assets/logo.png" alt="logo">
-            </div>
-
             <button (click)="handleSidebarToggle()" class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
                     aria-expanded="false"
                     aria-label="Toggle navigation">
-                <i class="bi bi-list-nested text-white-img toggle-img"></i>
+                <i class="bi bi-list text-white-img toggle-img"></i>
             </button>
+
+            <div style="cursor: pointer;" class="d-flex align-items-center ">
+                <div class="d-flex align-items-center" [routerLink]="['/dashboard']" >
+                    <img class="nav-name" src="../../../../assets/Eht-Education.png" alt="logo">
+                </div>
+
+                <div class="d-flex align-items-center" [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    <img class="nav-logo" src="../../../../assets/logo-minimal.png" alt="logo">
+                </div>
+            </div>
 
         </div>
 
         <div class="container-right d-flex flex-row align align-items-center">
-            <i class="bi bi-person-circle text-white profile-img"></i>            
+            <i class="bi bi-person-circle text-white  profile-img"></i>            
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle bg-transparent b-0" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -25,7 +31,7 @@
                 </button>
 
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" [routerLink]="['/details/' + this.users.id]"> <i class="bi bi-person-plus-fill"></i> Profilo </a></li>
+                    <li><a class="dropdown-item" href="#" [routerLink]="['/details/' + this.users.id]"> <i class="bi bi-person-fill"></i> Profilo </a></li>
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i
                             class="bi bi-gear-fill"></i> Impostazioni </a></li>
                     <li (click)="logout()"><a class="dropdown-item" href="#"> <i class="bi bi-escape"></i> Logout</a>

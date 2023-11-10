@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using backend.Models;
+using backend.Utils;
 
 namespace backend.Dto;
 
@@ -9,7 +10,7 @@ public class ClassroomStudentCount
     {
         id_classroom = classroom.Id;
         name_classroom = classroom.Name;
-        student_count = classroom.Students.Count();
+        student_count = classroom.Students.Where(el => el.SchoolYear == SchoolYearUtils.GetCurrentSchoolYear()).ToList().Count();
     }
     
     
