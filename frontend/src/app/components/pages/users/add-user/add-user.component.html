@@ -29,14 +29,14 @@
                           <div class="row">
                                 <div class="col-md-6">
                                     <label class="form-label" for="username">Username:<span class="text-danger">*</span></label>
-                                    <input class="form-control placeholder-input" type="text" title="Username" formControlName="username" placeholder="mariorossi2023">
+                                    <input class="form-control placeholder-input" type="text" title="Username" formControlName="username" placeholder="minimo 3 caratteri">
                                     <small class="text-danger" *ngIf="!user.get('username')!.valid && user.get('username')!.touched">Inserisci uno username</small>
                                 </div>
                                 
                                <div class="col-md-6">
                                     <label class="form-label" for="password">Password:<span class="text-danger">*</span></label>
-                                    <input class="form-control placeholder-input" placeholder="minimo 8 caratteri" type="password" title="Password" formControlName="password">
-                                    <small class="text-danger" *ngIf="!user.get('password')!.valid && user.get('password')!.touched">Inserisci una password</small>
+                                    <input class="form-control placeholder-input" placeholder="minimo 6 caratteri" type="password" title="Password" formControlName="password">
+                                    <small class="text-danger" *ngIf="!user.get('password')!.valid && user.get('password')!.touched">Inserisci una password valida</small>
                                 </div>
                         </div>
                     </div>
@@ -48,12 +48,12 @@
                         <div class="row mb-4">
                             <div class="col-md-4 mb-3">
                                 <label for="name" class="form-label">Nome:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control placeholder-input" title="Nome" formControlName="name" placeholder="Mario">
+                                <input type="text" class="form-control placeholder-input" title="Nome" formControlName="name" placeholder="minimo 3 caratteri">
                                 <small class="text-danger" *ngIf="!registry.get('name')!.valid && registry.get('name')!.touched">Inserisci un nome</small>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="surname" class="form-label">Cognome:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control placeholder-input" title="Cognome" formControlName="surname" placeholder="Rossi">
+                                <input type="text" class="form-control placeholder-input" title="Cognome" formControlName="surname" placeholder="minimo 3 caratteri">
                                 <small class="text-danger" *ngIf="!registry.get('surname')!.valid && registry.get('surname')!.touched">Inserisci un cognome</small>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -104,7 +104,7 @@
                     <span class="text-danger">* campo obbligatorio</span>
                 </div>
             <div class="col-md-2">
-                <button style="width: 80px;" (click)="this.alert=true; onAddUser()" type="submit" class="btn btn-warning form-control" [disabled]="!usersForm.valid && !registry.valid" [routerLink]="['/list-users']">SALVA</button>
+                <button style="width: 80px;" (click)="this.alert=true; onAddUser()" type="submit" class="btn btn-warning form-control" [disabled]="!usersForm.valid && !registry.valid || !classroomId.valid" [routerLink]="['/list-users']">SALVA</button>
             </div>
         </div>
           

@@ -21,6 +21,13 @@ import { ExamsStudentListComponent } from './components/pages/exams-student-list
 import { SubjectsComponent } from './components/pages/subjects/subjects.component';
 import { StudentSubjectsComponent } from './components/pages/student-subjects/student-subjects.component';
 import { ExamDetailsComponent } from './components/pages/exam-details/exam-details.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDialogModule} from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import { ModalAddExamWizardComponent } from './components/pages/modal-add-exam-wizard/modal-add-exam-wizard.component';
 
 
 @NgModule({
@@ -42,6 +49,7 @@ import { ExamDetailsComponent } from './components/pages/exam-details/exam-detai
     SubjectsComponent,
     StudentSubjectsComponent,
     ExamDetailsComponent,
+    ModalAddExamWizardComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +57,14 @@ import { ExamDetailsComponent } from './components/pages/exam-details/exam-detai
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
+    MatCardModule,
+    MatDialogModule
+    
+    
   ],
   providers: [
     {
