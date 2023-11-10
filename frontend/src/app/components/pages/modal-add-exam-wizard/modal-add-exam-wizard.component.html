@@ -1,0 +1,48 @@
+
+<div class="modal-exams" id="exam" tabindex="-1" aria-labelledby="ExamLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 *ngIf="!(data.type) || data.type == 'add'" class="modal-title fs-5" id="ExamLabel">CREA ESAME</h1>
+              <h1 *ngIf="data.type == 'edit'" class="modal-title fs-5" id="ExamLabel">MODIFICA ESAME</h1>
+             
+              <button (click)="onCloseModal()" type="button" class="btn-close" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="examForm">
+                  <div class="mt-5 mb-2">
+                      <label for="date" class="form-label">Data: </label>
+                      <input type="date" class="form-control w-100 p-1 btn btn-outline-warning text-dark"
+                          formControlName="date" [min]="today">
+                  </div>
+                  <div class="d-flex flex-column my-2">
+                      <label for="classroomId" class="form-label">Classe: </label>
+                      <select id="classroom" class="w-100 p-1 btn btn-outline-warning text-dark"
+                      formControlName="classroomId" (change)="subjectEvent($event)">
+                      <option style="background-color: white;" [value]="classroom.id_classroom" *ngFor="let classroom of classrooms "
+                          (click)="getTeacherSubjectsByClassroom(classroom.id_classroom!)">
+                          {{classroom.name_classroom}}</option>
+                  </select>
+                  </div>
+                  <div class="d-flex flex-column my-2">
+                      <label for="subjectId" class="form-label">Materia: </label>
+                      <select id="subject" class="w-100 p-1 btn btn-outline-warning text-dark"
+                      formControlName="subjectId">
+                      <option style="background-color: white;" [value]="subject.id" *ngFor="let subject of subjectsByClassroom">
+                          {{subject.name}}</option>
+                  </select>
+                     
+                  </div>
+                </form>
+          </div>
+          <div class="modal-footer d-flex mt-3">
+              <button style="margin-right: 10px;" (click)="onCloseModal()" type="button" class="btn btn-secondary border-0 text-white"
+                  >Chiudi</button>
+              <button [disabled]="!examForm.valid" (click)="onCloseModal(); onClickModal()" type="button" class="btn btn-warning border-0 text-white"
+                  >CONFERMA</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+

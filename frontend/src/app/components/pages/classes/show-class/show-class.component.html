@@ -19,65 +19,64 @@
   <!-- <div class="button m-3 d-flex w-100 justify-content-end pe-5">
         <a class="btn btn-warning" *ngIf="isTeacher" [routerLink]="['/history-promotion/' + this.classId]"><i class="bi bi-card-list px-2"></i>STORICO PROMOZIONI</a>
   </div> -->
+  
+    
+      <div class="button m-3 d-flex w-100 justify-content-end pe-5"  *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">
+        <select class="btn btn-warning" [(ngModel)]="this.currentYear" (change)="isCurrentYear()">
+          <option [ngValue]="true">2023-2024</option>
+          <option [ngValue]="false">2024-2025</option>
+         </select>
+      </div>
+
+    <div  class="row justify-content-center">    
+      <div [ngClass]="{'col-md-5 table-teachers-1': isTeacher, 'col-md-6 table-teachers-2': !isTeacher}">
+        <table class="table table-teachers table-hover mb-5">
+          <thead class="text-center">
+            <tr>
+              <th scope="col-1">#</th>
+              <th scope="col-2">Docente</th>
+              <th scope="col-3">Materie</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
+            <tr style="cursor: pointer">
+              <td scope="row">{{i + 1}}</td>
+              <td *ngIf="isTeacher" [routerLink]="['/details', teacher.id]">{{ teacher.surname + ' ' + teacher.name }}</td>
+              <td *ngIf="!isTeacher">{{ teacher.surname + ' ' + teacher.name }}</td>
+               <td>{{ teacher.subjects.join(', ') }}</td>
+            </tr>
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
 
-  <div class="row justify-content-center">
-    <div [ngClass]="{'col-md-5 table-teachers-1': isTeacher, 'col-md-6 table-teachers-2': !isTeacher}">
-      <table class="table table-teachers table-hover mb-5">
-        <thead class="text-center">
-          <tr>
-            <th scope="col-1">#</th>
-            <th scope="col-2">Docente</th>
-            <th scope="col-3">Materie</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let teacher of classDetails?.teachers, let i = index">
-          <tr style="cursor: pointer">
-            <td scope="row">{{i + 1}}</td>
-            <td *ngIf="isTeacher" [routerLink]="['/details', teacher.id]">{{ teacher.surname + ' ' + teacher.name }}
-            </td>
-            <td style="cursor: default;" *ngIf="!isTeacher">{{ teacher.surname + ' ' + teacher.name }}</td>
-            <td style="cursor: default;">{{ teacher.subjects.join(', ') }}</td>
-          </tr>
-          <tr>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-
-    <div [ngClass]="{'col-md-7 table-students-1': isTeacher, 'col-md-6 table-students-2': !isTeacher}">
-      <table class="table table-students table-hover w-100">
-        <thead class="text-center">
-          <tr>
-            <th>#</th>
-            <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Studente</th>
-            <th *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">Cognome</th>
-            <th *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">Nome</th>
-            <th *ngIf="!isTeacher">Cognome</th>
-            <th *ngIf="!isTeacher">Nome</th>
-            <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Andamento</th>
-            <th *ngIf="isTeacher">Azioni</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let student of classDetails?.students let i = index">
-          <tr>
-            <td scope="row">{{i + 1}}</td>
-            <td style="cursor: pointer" [routerLink]="'/details/'"
-              *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">{{student &&
-              student.surname + ' ' + student.name}}</td>
-            <td style="cursor: pointer" [routerLink]="'/details/'"
-              *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">
-              {{student.surname}}</td>
-            <td style="cursor: pointer" [routerLink]="'/details/'"
-              *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.name}}
-            </td>
-            <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="!isTeacher">{{student.surname}}</td>
-            <td style="cursor: pointer" [routerLink]="'/details/'" *ngIf="!isTeacher">{{student.name}}</td>
-            <td style="cursor: pointer" [routerLink]="'/details/'"
-              *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">
-              <h6 class="mt-2">{{student && student.finalGrade >= 6 ? "NON A RISCHIO": "A RISCHIO"}}</h6>
-            </td>
+  <div [ngClass]="{'col-md-7 table-students-1': isTeacher, 'col-md-6 table-students-2': !isTeacher}">
+    <table class="table table-students table-hover w-100">
+      <thead class="text-center">
+        <tr>
+          <th>#</th>
+          <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Studente</th>
+          <th *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">Cognome</th>
+          <th *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">Nome</th>
+          <th *ngIf="!isTeacher">Cognome</th>
+          <th *ngIf="!isTeacher">Nome</th>
+          <th *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">Andamento</th>
+          <th *ngIf="isTeacher">Azioni</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let student of classDetails?.students let i = index">
+        <tr>
+          <td scope="row">{{i + 1}}</td> 
+          <td *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">{{student && student.surname + ' ' +  student.name}}</td>
+          <td *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.surname}}</td>
+          <td *ngIf="isTeacher && (currentDate < promotionStartDate || currentDate > promotionEndDate)">{{student.name}}</td>
+          <td *ngIf="!isTeacher">{{student.surname}}</td>
+          <td *ngIf="!isTeacher">{{student.name}}</td>
+          <td *ngIf="isTeacher && currentDate >= promotionStartDate && currentDate <= promotionEndDate">
+           <h6 class="mt-2">{{student && student.finalGrade >= 6 ? "NON A RISCHIO": "A RISCHIO"}}</h6>
+          </td>
 
             <td *ngIf="isTeacher">
               <div class="dropdown">
@@ -135,27 +134,28 @@
               <input type="number" name="scholasticBehavior" id="scholasticBehavior" min="1" max="10" step="1" value="0"
                 formControlName="scholasticBehavior">
 
+                        </div>
+                        <div class="d-flex my-2">
+                            <label for="promoted" class="form-label mt-2 me-4">Esito finale: </label>
+                            <h6 class="mt-2">{{studentGrade && studentGrade.finalGrade >= 6 ? "AMMESSO/A": "BOCCIATO/A"}}</h6>
+                            <!-- <h6 class="mt-2">{{studentGrade && studentGrade.finalGrade <= 6 ? "AMMESSO/A": "BOCCIATO/A"}}</h6> -->
+                        </div>
+                        <div class="d-flex flex-column my-2">
+                            <label for="nextClassroom" class="form-label">Classe successiva: </label>
+                            <select class="form-select w-60 " formControlName="nextClassroom">
+                              <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-warning"
+                        data-bs-dismiss="modal">Chiudi</button>
+                    <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white"  data-bs-dismiss="modal">CONFERMA</button>
+                </div>
             </div>
-            <div class="d-flex my-2">
-              <label for="promoted" class="form-label mt-2 me-4">Esito finale: </label>
-              <h6 class="mt-2">{{studentGrade && studentGrade.finalGrade >= 6 ? "AMMESSO/A": "BOCCIATO/A"}}</h6>
-              <!-- <h6 class="mt-2">{{studentGrade && studentGrade.finalGrade <= 6 ? "AMMESSO/A": "BOCCIATO/A"}}</h6> -->
-            </div>
-            <div class="d-flex flex-column my-2">
-              <label for="nextClassroom" class="form-label">Classe successiva: </label>
-              <select class="form-select w-60 " formControlName="nextClassroom">
-                <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
-              </select>
-            </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Chiudi</button>
-          <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white">CONFERMA</button>
-        </div>
-      </div>
     </div>
-  </div>
 
 
   <div class="modal fade" id="graduationModal" tabindex="-1" aria-labelledby="graduationModalLabel" aria-hidden="true">

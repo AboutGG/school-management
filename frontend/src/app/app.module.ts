@@ -21,6 +21,13 @@ import { ExamsStudentListComponent } from './components/pages/exams-student-list
 import { SubjectsComponent } from './components/pages/subjects/subjects.component';
 import { StudentSubjectsComponent } from './components/pages/student-subjects/student-subjects.component';
 import { ExamDetailsComponent } from './components/pages/exam-details/exam-details.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule} from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { ModalAddExamWizardComponent } from './components/pages/modal-add-exam-wizard/modal-add-exam-wizard.component';
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
@@ -46,6 +53,7 @@ export function tokenGetter() {
     SubjectsComponent,
     StudentSubjectsComponent,
     ExamDetailsComponent,
+    ModalAddExamWizardComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,11 +61,17 @@ export function tokenGetter() {
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
+    MatCardModule,
+    MatDialogModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
         allowedDomains: ["example.com"],
-        disallowedRoutes: ["http://example.com/examplebadroute/"],
+        disallowedRoutes: ["http://example.com/examplebadroute/"]
       },
     })
   ],

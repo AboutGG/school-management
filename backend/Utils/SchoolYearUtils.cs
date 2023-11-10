@@ -15,7 +15,7 @@ public static class SchoolYearUtils
         {
             currentSchoolYear = $"{dummy.Year -1}-{dummy.Year}";
         }
-        if (dummy.Month >= 01 && dummy.Month<= 06)
+        if (dummy.Month >= 01 && dummy.Month<= 07)
         {
             currentSchoolYear = $"{dummy.Year - 1}-{dummy.Year}";
         }

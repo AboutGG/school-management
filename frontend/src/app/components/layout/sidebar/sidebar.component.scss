@@ -21,6 +21,7 @@
         .content {
           .title {
             max-width: 100px;
+            margin-left: 28px;
           }
 
           .icon {
@@ -78,7 +79,7 @@
       .content {
         display: flex;
         align-items: center;
-        justify-content: space-evenly;
+        // justify-content: space-evenly;
         padding: 10px;
 
         cursor: pointer;
@@ -98,7 +99,7 @@
         }
 
         .icon {
-          flex: 0 0 30px;
+          margin-left: 10px;
           display: flex;
           align-items: center;
           justify-content: center;

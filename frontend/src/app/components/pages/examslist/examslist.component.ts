@@ -8,16 +8,23 @@ import { IdName, TeacherExam } from 'src/app/shared/models/exams';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { Location } from '@angular/common';
+import { ModalAddExamWizardComponent } from '../modal-add-exam-wizard/modal-add-exam-wizard.component';
 
 @Component({
   selector: 'app-examslist',
   templateUrl: './examslist.component.html',
-  styleUrls: ['./examslist.component.scss']
+  styleUrls: ['./examslist.component.scss'],
+
 })
 export class ExamslistComponent implements OnInit, OnDestroy {
-  constructor(private examsService: ExamsService, private teacherService: TeacherService, private usersService: UsersService, private location: Location) { }
+  constructor(private examsService: ExamsService,
+    private teacherService: TeacherService,
+    private usersService: UsersService,
+    private location: Location,
+    public dialog: MatDialog) { }
 
   user!: UsersMe
   formSubjects = new FormGroup({
@@ -29,44 +36,24 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   examsList!: TeacherExam[]
   subjects!: IdName[]
   classrooms!: TeacherClassroom[]
-  orders = {
-    date: 'asc',
-    subject: 'asc',
-    classroom: 'asc'
-  }
-  page: number = 1
-  itemsPerPage: number = 10
+  currentPage: number = 1
+  itemsPerPage: number = 5
   filtered: string = ""
   search: string = ""
   orderType: string = "asc"
   order: string = "Date"
   onClickFilter: boolean = false
+  totalItems!: number
   totalPages!: number
   selectedPages!: number
   total!: number
-  isEdit: boolean = false
-  successEditOrNew: boolean = false
   examId?: string
-  subjectsByClassroom?: IdName[]
-  classroomId!: FormControl
-  subjectId!: FormControl
-  date!: FormControl
-  examForm!: FormGroup
+  currentDate = new Date()
   today = new Date(new Date().getTime()).toISOString().substring(0, 10);
   alert: boolean = false;
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   ngOnInit(): void {
-    this.date = new FormControl(null, Validators.required),
-    this.classroomId = new FormControl(null, Validators.required),
-    this.subjectId = new FormControl(null, Validators.required)
-
-    this.examForm = new FormGroup({
-      date: this.date,
-      classroomId: this.classroomId,
-      subjectId: this.subjectId
-    });
-
     this.getUser();
     this.getTeacherExams();
     this.getTeacherClassrooms();
@@ -78,10 +65,10 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   }
 
   onChangePage(newPage: number) {
-    this.page = newPage
+    this.currentPage = newPage
     this.getTeacherExams()
-    this.getTeacherClassrooms()
-    this.getTeacherSubjects()
+    console.log(this.currentPage);
+    
   }
 
   dropdownFilter() {
@@ -94,14 +81,13 @@ export class ExamslistComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.user = res
         this.getTeacherSubjects();
-        console.log("DEBUG USER ", this.user);
       }
     })
   }
 
   getTeacherExams() {
     const params = new HttpParams()
-      .set('Page', this.page)
+      .set('Page', this.currentPage)
       .set('Filter', this.filtered)
       .set('Search', this.search)
       .set('OrderType', this.orderType)
@@ -109,17 +95,9 @@ export class ExamslistComponent implements OnInit, OnDestroy {
       .set('ItemsPerPage', this.itemsPerPage)
     this.examsService.getTeacherExams(params).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res: ListResponse<TeacherExam[]>) => {
-        // this.orders = {
-        //   name: 'asc',
-        //   surname: 'asc',
-        //   birth: 'asc',
-        //   [id]: type
-        // };
-        // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
-        // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
-        // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
         this.examsList = res.data
-        this.total = res.total
+        this.totalItems = res.total
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage)
       },
       error: (error) => {
         console.log(error);
@@ -139,59 +117,8 @@ export class ExamslistComponent implements OnInit, OnDestroy {
     this.teacherService.getTeacherSubjects(this.user?.id).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
         this.subjects = res
-        console.log(res);
       }
     });
-  }
-
-  getTeacherSubjectsByClassroom(classroomId: string) {
-    // const params = classroomId ? new HttpParams().set('classroomId', classroomId) : new HttpParams();
-    const params = new HttpParams().set('classroomId', classroomId)
-    console.log(params)
-    this.teacherService.getTeacherSubjectsByClassroom(this.user?.id, params).pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (res: IdName[]) => {
-        this.subjectsByClassroom = res;
-      }
-    })
-  }
-
-  editExam(exam: TeacherExam) {
-    this.examId = exam.id
-    this.examForm.patchValue({
-      date: exam.date,
-      classroomId: exam.classroom.id,
-      subjectId: exam.subject.id
-    })
-    this.getTeacherSubjectsByClassroom(this.examForm.value.classroomId)
-  }
-
-  subjectEvent(event: any) {
-    this.getTeacherSubjectsByClassroom(event.target.value)
-  }
-
-  onClickModal() {
-    if (this.isEdit === false) {
-      this.successEditOrNew = false;
-      this.examsService.addExam(this.examForm.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
-        next: () => {
-          this.successEditOrNew = true;
-          setTimeout(() => this.successEditOrNew = false, 4000)
-          this.examForm.reset();
-          this.getTeacherExams()
-        }
-      })
-    }
-    else {
-      this.successEditOrNew = false
-      this.examsService.editExam(this.examForm.value, this.user.id, this.examId).pipe(takeUntil(this.unsubscribe$)).subscribe({
-        next: () => {
-          this.successEditOrNew = true
-          setTimeout(() => this.successEditOrNew = false, 4000)
-          this.getTeacherExams()
-        }
-      })
-    }
-
   }
 
   onDelete(id: string) {
@@ -208,6 +135,23 @@ export class ExamslistComponent implements OnInit, OnDestroy {
 
   goBack() {
     this.location.back();
+  }
+
+
+  // Open Modal Componente padre
+  openModalExam(exam?: TeacherExam, type?: string) {
+    const dialogRef = this.dialog.open(ModalAddExamWizardComponent, {
+      width: '400px',
+      height: '400px',
+      data: { exam, type }
+    });
+    dialogRef.beforeClosed().subscribe((result: any) => {
+      this.getTeacherExams();
+
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      dialogRef.close();
+    });
   }
 
 }

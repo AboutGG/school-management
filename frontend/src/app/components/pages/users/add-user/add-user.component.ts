@@ -51,8 +51,8 @@ export class AddUserComponent implements OnInit {
   };
     
     this.registry = new FormGroup({
-      name: new FormControl(null, Validators.required),
-      surname: new FormControl(null, Validators.required),
+      name: new FormControl(null,[ Validators.required, Validators.minLength(3) ]),
+      surname: new FormControl(null,[ Validators.required, Validators.minLength(3)]),
       birth: new FormControl(null),
       gender: new FormControl(null, Validators.required),
       email: new FormControl(null, Validators.email),
@@ -65,7 +65,7 @@ export class AddUserComponent implements OnInit {
       ),
     }),
       this.user = new FormGroup({
-        username: new FormControl(null, Validators.required),
+        username: new FormControl(null,[ Validators.required, Validators.minLength(3)]),
         password: new FormControl(null, [
           Validators.required,
           Validators.minLength(6),
@@ -116,7 +116,7 @@ export class AddUserComponent implements OnInit {
   onAddUser() {
     if (this.id) {
       console.log();
-      this.usersService.editUser(this.registry.value, this.id).pipe(takeUntil(this.unsubscribe$)).subscribe()
+      this.usersService.editUser(this.registry.value, this.id).subscribe()
       console.log(this.registry.value);
     }else {
       this.usersService.addUser(this.usersForm.value).subscribe({
