@@ -4,15 +4,10 @@
 
 .input-container {
   position: relative;
-  display: inline-block;
-}
-
-.input-container {
-  i {
+  div {
+    background-color: white;
     position: absolute;
     right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 26%;
   }
-  
 }
