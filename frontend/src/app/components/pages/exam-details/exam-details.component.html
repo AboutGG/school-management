@@ -1,8 +1,10 @@
 <div class="container mt-3" *ngIf="examDetails">
 	<hr>
-	<div class="row">
-		<span class="col-1 icon-back" style="cursor: pointer;" (click)="goBack()"><i class="bi bi-arrow-left"></i> </span>
-		<div class="col-11 d-flex justify-content-center align-items-center fw-bold fs-5">
+	<div class="row align-items-center">
+		<div class="col-1 fs-5">
+			<span class="icon-back" style="cursor: pointer;" (click)="goBack()"><i class="bi bi-arrow-left"></i> </span>
+		</div>
+		<div class="col-10 d-flex justify-content-center align-items-center fw-bold fs-5">
 			<div class="d-flex flex-column justify-content-center align-items-center">
 				<span>ESAME DI {{examDetails.subject | uppercase}} / CLASSE {{examDetails.classroom | uppercase}}</span>
 				<small>{{examDetails.examDate | date: 'dd/MM/yyyy'}}</small>
@@ -59,4 +61,3 @@
 			</tr>
 		</tbody>
 	</table>
-</div>

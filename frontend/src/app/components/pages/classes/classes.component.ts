@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { HttpParams } from '@angular/common/http';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';

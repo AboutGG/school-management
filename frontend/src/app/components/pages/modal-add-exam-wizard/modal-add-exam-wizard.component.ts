@@ -1,10 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ExamslistComponent } from '../examslist/examslist.component';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
-import { ListResponse, UsersMe } from 'src/app/shared/models/users';
+import { IdName, TeacherExam } from 'src/app/shared/models/exams';
+import { UsersMe } from 'src/app/shared/models/users';
 import { HttpParams } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 import { TeacherService } from 'src/app/shared/service/teacher.service';

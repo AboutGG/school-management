@@ -1,7 +1,7 @@
 <div class="container-fluid p-0">
   
   <!-- navbar component -->
-  <app-navbar *ngIf="!(router.url === '/login')" (toggleSidebar)="handleSidebarToggle()"> </app-navbar>
+  <app-navbar style="height: 20vh;" *ngIf="!(router.url === '/login')" (toggleSidebar)="handleSidebarToggle()"> </app-navbar>
 
   <div [ngClass]="{'position-static' : router.url === '/login'}" class="side-content-wrapper d-flex flex-row">
     <!-- sidebar component -->

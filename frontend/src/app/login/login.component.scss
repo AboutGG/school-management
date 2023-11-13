@@ -1,18 +1,15 @@
-.form-check {
-  display: flex;
+form {
+  min-width: 300px;
 }
 
-.input-container {
+.input-container{
   position: relative;
-  display: inline-block;
-}
-
-.input-container {
-  i {
+  input {
+    padding-right: 2rem;
+  }
+  div {
     position: absolute;
     right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 26%;
   }
-  
 }

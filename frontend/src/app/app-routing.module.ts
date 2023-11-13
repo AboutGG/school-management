@@ -35,12 +35,12 @@ const routes: Routes = [
   { path: 'students/exams', component: ExamsStudentListComponent, canActivate: [AuthGuard] },
   { path: 'teachers/exams', component: ExamslistComponent, canActivate: [AuthGuard] },
   { path: 'teachers/exams/:id', component: ExamDetailsComponent, canActivate: [AuthGuard] },
-  { path: "**", redirectTo: "not-found" },
+  { path: "**", redirectTo: "dashboard" },
 ];
 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

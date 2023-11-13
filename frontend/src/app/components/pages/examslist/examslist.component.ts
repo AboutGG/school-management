@@ -1,10 +1,10 @@
-import { UsersService } from './../../../shared/service/users.service';
+import { UsersService } from '../../../shared/service/users.service';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';
 import { ListResponse } from 'src/app/shared/models/listresponse';
-import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
+import { IdName, TeacherExam } from 'src/app/shared/models/exams';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';
@@ -36,19 +36,20 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   examsList!: TeacherExam[]
   subjects!: IdName[]
   classrooms!: TeacherClassroom[]
-  page: number = 1
-  itemsPerPage: number = 10
+  currentPage: number = 1
+  itemsPerPage: number = 5
   filtered: string = ""
   search: string = ""
   orderType: string = "asc"
   order: string = "Date"
   onClickFilter: boolean = false
+  totalItems!: number
   totalPages!: number
   selectedPages!: number
   total!: number
   examId?: string
   currentDate = new Date()
-  today = new Date(new Date().getTime()).toISOString().substring(0,10);
+  today = new Date(new Date().getTime()).toISOString().substring(0, 10);
   alert: boolean = false;
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
@@ -64,10 +65,10 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   }
 
   onChangePage(newPage: number) {
-    this.page = newPage
+    this.currentPage = newPage
     this.getTeacherExams()
-    this.getTeacherClassrooms()
-    this.getTeacherSubjects()
+    console.log(this.currentPage);
+    
   }
 
   dropdownFilter() {
@@ -80,14 +81,13 @@ export class ExamslistComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.user = res
         this.getTeacherSubjects();
-        console.log("DEBUG USER ", this.user);
       }
     })
   }
 
   getTeacherExams() {
     const params = new HttpParams()
-      .set('Page', this.page)
+      .set('Page', this.currentPage)
       .set('Filter', this.filtered)
       .set('Search', this.search)
       .set('OrderType', this.orderType)
@@ -96,7 +96,8 @@ export class ExamslistComponent implements OnInit, OnDestroy {
     this.examsService.getTeacherExams(params).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res: ListResponse<TeacherExam[]>) => {
         this.examsList = res.data
-        this.total = res.total
+        this.totalItems = res.total
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage)
       },
       error: (error) => {
         console.log(error);
@@ -116,7 +117,6 @@ export class ExamslistComponent implements OnInit, OnDestroy {
     this.teacherService.getTeacherSubjects(this.user?.id).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
         this.subjects = res
-        console.log(res);
       }
     });
   }
@@ -138,20 +138,20 @@ export class ExamslistComponent implements OnInit, OnDestroy {
   }
 
 
-    // Open Modal Componente padre
-    openModalExam( exam?: TeacherExam, type?: string){
-      const dialogRef = this.dialog.open(ModalAddExamWizardComponent, {
-        width: '400px',
-        height: '400px',
-        data: {exam, type}
-      });
-      dialogRef.beforeClosed().subscribe((result: any) => {
-        this.getTeacherExams();
-        
-      });
-      dialogRef.afterClosed().subscribe((result: any) => {
-        dialogRef.close();
-      });
-    }
+  // Open Modal Componente padre
+  openModalExam(exam?: TeacherExam, type?: string) {
+    const dialogRef = this.dialog.open(ModalAddExamWizardComponent, {
+      width: '400px',
+      height: '400px',
+      data: { exam, type }
+    });
+    dialogRef.beforeClosed().subscribe((result: any) => {
+      this.getTeacherExams();
+
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      dialogRef.close();
+    });
+  }
 
 }

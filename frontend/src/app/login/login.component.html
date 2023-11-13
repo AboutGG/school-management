@@ -1,28 +1,30 @@
 <div class="d-flex justify-content-center align-items-center vh-100 bg-warning">
   <div class="p-5 bg-light border border-3 border-dark rounded-4">
-    <div class="d-flex flex-column justify-content-center align-items-center pb-3">
-      <img class="w-100 rounded-3 mb-4" style="max-width: 100px;"
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <img class="w-100 mb-3" style="max-width: 100px;"
         src="../../assets/login/default_transparent_1000x1000-removebg-preview.png" alt="logo">
-      <h5>EHT Education</h5>
+      <h2>EHT Education</h2>
     </div>
-    <form [formGroup]="loginForm" class="d-flex flex-column justify-content-center my-3" (change)="error = false ">
-      <div class="mb-3">
+    <form [formGroup]="loginForm" class="d-flex flex-column justify-content-center my-3" (change)="error = false">
+      <div [ngClass]="{'mb-3' : !(this.showInvalidInput && !loginForm.get('username')?.valid)}">
         <input type="username" class="form-control border border-2 border-dark" formControlName="username"
-          id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Inserisci username o email" required>
+          id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Inserisci username" required>
       </div>
       <small class="text-danger mb-4" *ngIf="this.showInvalidInput && !loginForm.get('username')?.valid">Campo
         obbligatorio</small>
-      <div class="mb-3 input-container">
+      <div class="input-container">
         <input [type]="passwordInputType" class="form-control border border-2 border-dark" formControlName="password"
           id="exampleInputPassword1" placeholder="Inserisci password" required>
-          <i (click)="showPassword()" style="cursor: pointer;" [class]="passwordInputType === 'password' ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+        <div class="px-1" (click)="showPassword()">
+          <i style="cursor: pointer;" [class]="passwordInputType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+        </div>
       </div>
       <small class="text-danger mb-4" *ngIf="this.showInvalidInput && !loginForm.get('password')?.valid">Campo
         obbligatorio</small>
-      <small class="text-danger text-center mb-3"
+      <small class="text-danger text-center mt-3 mb-2"
         *ngIf="error && loginForm.get('username' && 'password')?.valid && loginForm.get('username' && 'password')?.touched">Username
         o password errati</small>
-      <div class="my-3 form-check row">
+      <!-- <div class="my-3 form-check row">
         <div class="col-6">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
           <label class="form-check-label" for="exampleCheck1">Ricordami</label>
@@ -30,9 +32,9 @@
         <div class="col-6">
           <a>Hai dimenticato la password?</a>
         </div>
-      </div>
+      </div> -->
     </form>
-    <div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center pt-4">
       <button (click)="[login(), this.showInvalidInput = true]" type="submit"
         class="btn btn-primary w-50">Accedi</button>
     </div>

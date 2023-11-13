@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ListResponse, Registry, Users, UsersMe } from '../models/users';
-import { Classroom} from "../models/classrooms";
+import { Users, Registry, UsersMe } from '../models/users';
+import { ListResponse } from '../models/listresponse';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

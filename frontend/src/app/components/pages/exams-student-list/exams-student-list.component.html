@@ -1,55 +1,57 @@
-<div class="container mt-3">
-	<hr>
-	<div class="row">
-		<span class="col-1 icon-back" style="cursor: pointer;" (click)="goBack()"><i class="bi bi-arrow-left"  ></i> </span>
-		<div class="col-11 d-flex justify-content-center align-items-center fw-bold fs-5">
-			<span>LISTA ESAMI</span>
-			<span class="icon-data">
-				<i class="bi bi-calendar3 list-icon"></i>
-			</span>
+<div class="container-fluid vh-100">
+	<div class="container mt-3">
+		<hr>
+		<div class="row">
+			<span class="col-1 icon-back" style="cursor: pointer;" (click)="goBack()"><i class="bi bi-arrow-left"></i> </span>
+			<div class="col-11 d-flex justify-content-center align-items-center fw-bold fs-5">
+				<span>LISTA ESAMI</span>
+				<span class="icon-data">
+					<i class="bi bi-calendar3 list-icon"></i>
+				</span>
+			</div>
 		</div>
+		<hr>
 	</div>
-	<hr>
-</div>
-<div class="container mt-5 bb">
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col" id="date">Data Esame 
-					<!-- <i *ngIf="this.orders.date === 'asc'" class="bi bi-caret-up-fill"
+	<div class="container mt-6 bb">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col" id="date">Data Esame
+						<!-- <i *ngIf="this.orders.date === 'asc'" class="bi bi-caret-up-fill"
 						(click)="getExams('asc', 'desc', 'date')"></i>
 					<i *ngIf="this.orders.date === 'desc'" class="bi bi-caret-down-fill"
 						(click)="getExams('asc', 'asc', 'date')"></i> -->
-				</th> 
-				<th scope="col" id="matter">Materia 
-					<!-- <i *ngIf="this.orders.matter === 'asc'" class="bi bi-caret-up-fill"
+					</th>
+					<th scope="col" id="matter">Materia
+						<!-- <i *ngIf="this.orders.matter === 'asc'" class="bi bi-caret-up-fill"
 						(click)="getExams('Matter', 'desc', 'matter')"></i>
 					<i *ngIf="this.orders.matter === 'desc'" class="bi bi-caret-down-fill"
 						(click)="getExams('Matter', 'asc', 'matter')"></i> -->
-				</th>
-				<th scope="col" id="grade">Voto
-					<!-- <i *ngIf="this.orders.matter === 'asc'" class="bi bi-caret-up-fill"
+					</th>
+					<th scope="col" id="teacher">Insegnante
+						<!-- <i *ngIf="this.orders.matter === 'asc'" class="bi bi-caret-up-fill"
 						(click)="getExams('Matter', 'desc', 'matter')"></i>
 					<i *ngIf="this.orders.matter === 'desc'" class="bi bi-caret-down-fill"
 						(click)="getExams('Matter', 'asc', 'matter')"></i> -->
-				</th>
-				<th scope="col" id="teacher">Insegnante 
-					<!-- <i *ngIf="this.orders.grade === 'asc'" class="bi bi-caret-up-fill"
+					</th>
+					<th scope="col" id="grade">Voto
+						<!-- <i *ngIf="this.orders.grade === 'asc'" class="bi bi-caret-up-fill"
 							(click)="getExams('Grade', 'desc', 'grade')"></i>
 					<i *ngIf="this.orders.grade === 'desc'" class="bi bi-caret-down-fill"
 							(click)="getExams('Grade', 'asc', 'grade')"></i> -->
-				</th>
-			</tr>
-		</thead>
-		<tbody *ngFor="let exam of examsList, let i = index">
-			<tr>
-				<th scope="row">{{i + 1}}</th>
-				<td>{{exam.date | date: 'dd/MM/yyyy'}}</td>
-				<td>{{exam.subject}}</td>
-				<td>{{exam.grade}}</td>
-				<td>{{exam.teacher}}</td>
-			</tr>
-		</tbody>
-	</table>
+					</th>
+				</tr>
+			</thead>
+			<tbody *ngFor="let exam of examsList, let i = index">
+				<tr>
+					<th scope="row">{{i + 1}}</th>
+					<td>{{exam.date}}</td>
+					<td>{{exam.subject}}</td>
+					<td>{{exam.teacher}}</td>
+					<td>{{exam.grade}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

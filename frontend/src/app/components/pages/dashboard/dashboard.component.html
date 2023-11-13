@@ -1,5 +1,5 @@
-<div class="container py-3 bg-light">
-  <div style="cursor:default;" class="row">
+<div class="container py-3 bg-light vh-100">
+  <div *ngIf="count" style="cursor:default;" class="row">
     <div class="col-md-3">
       <div [ngClass]="{'card-body-count-circolare' : isTeacher, 'card-body-count' : !isTeacher}" class="card card-body-count text-left bg-success mb-2"  data-bs-toggle="modal" data-bs-target="#ModalCirculars">
         <div class="row justify-content-between">

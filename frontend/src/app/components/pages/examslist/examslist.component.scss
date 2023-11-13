@@ -5,21 +5,12 @@ hr{
   border-top: var(--bs-border-width) solid;
   opacity: 0.25;
 }
-
+ 
 td, th {
   text-align: center;
   vertical-align: middle;
 }
-
-thead,
-tbody {
-  border: 1px solid #ddd;
-  background-color: #fff;
-}
-td{
-  height: 4rem!important;
-}
-
+ 
 .icon-data {
   border: 2px solid;
   border-radius: 50px;
@@ -31,27 +22,53 @@ td{
   color: #ffb900;
   margin-left: 20px;
 }
-
-.list-icon {
-  font-size: 25px;
-}
-
+ 
 .dropdown-toggle{
   background-color: #ffc422;
   color: black;
   border: 2px solid;
   border-color: #ffb900;
 }
-
+ 
 .dropdown-item:hover{
   background-color: #ffc422;
 }
-
+ 
 .smallForm {
   font-size: 12px;
 }
-
-.dropdown-option:hover{
-  background-color: #ffc422;
-
+ 
+select {
+  width: 150px;
+}
+ 
+.icon-back {
+  border: 2px solid;
+  border-radius: 50px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffb900;
+  margin-left: 20px;
+}
+ 
+.page-link{
+  border: 0;
+  color: black;
+  &:hover {
+    background-color:#ffc422;
+    color: white;
+  }
+}
+ 
+.currentPage {
+  background-color: rgba($color: #ffc422, $alpha: 0.5);
+  cursor: pointer;
+  &:hover {
+    background-color: #ffc422;
+    opacity: 1;
+    color: white;
+  }
 }
