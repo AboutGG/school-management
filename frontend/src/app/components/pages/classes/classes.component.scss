@@ -62,14 +62,28 @@ hr{
   table {
     border-bottom: 1px solid #ddd;
   }
+  
+  .page-item a:hover{
+    background-color: #ffb900;
+    cursor: pointer;
+  }
+
   .page-item button:hover{
     background-color: #ffb900;
   }
+
+  .page-item button:focus {
+    box-shadow: none;
+  }
+ 
+  .active-page {
+    background-color: #ffb900;
+  }
+
   .btn {
     font-weight: 600;
     border: 2px solid;
     border-color: #ffb900;
-
   }
   .btn:hover{
     background-color: #ffc422;

@@ -21,12 +21,15 @@ export class ClassesComponent {
   totalPages!: number;
   order: string = "name";
 
+  visiblePages: number[] = [];
+
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private classroomService: ClassroomService) {}
 
   ngOnInit() {
     this.fetchData();
+    this.updateVisiblePages();
   }
 
   // get dati api classroom
@@ -40,11 +43,12 @@ export class ClassesComponent {
     this.classroomService.getDataClassroom(params).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (res: ListResponse<TeacherClassroom[]>) => {
           this.totalItems = res.total; // numero totale di elementi
-          this.totalPages = this.totalItems / this.itemsPerPage;
+          this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
           this.class = res.data;
+          this.updateVisiblePages();
 
-          console.log("dati get", res.data);
-          console.log("params", params);
+          console.log('total pages',this.totalPages);
+          
         },
         error: (err) => {
           console.log("error", err);
@@ -62,8 +66,17 @@ export class ClassesComponent {
   //funzione per paginazione
   onPageChange(newPage: number) {
     this.currentPage = newPage;
+    this.updateVisiblePages();
     this.fetchData();
-    console.log("page", this.currentPage);
+    console.log("current page", this.currentPage);
+  }
+
+  updateVisiblePages() {
+    const startPage = Math.max(1, this.currentPage - 1);
+    const endPage = Math.min(startPage + 2, this.totalPages);
+
+    this.visiblePages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+    
   }
 
   ngOnDestroy(): void {
