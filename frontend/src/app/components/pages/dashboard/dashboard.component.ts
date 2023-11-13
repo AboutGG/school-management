@@ -2,9 +2,8 @@ import { HttpParams } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from "@angular/forms";
 import { PdfCirculars } from "src/app/shared/models/pdf";
-import { StudentExam } from "src/app/shared/models/studentexam";
-import { TeacherExam } from "src/app/shared/models/teacherexam";
-import { Students, TypeCount, UsersMe } from "src/app/shared/models/users";
+import { StudentExam, TeacherExam } from "src/app/shared/models/exams";
+import { UsersMe } from "src/app/shared/models/users";
 import { AuthService } from "src/app/shared/service/auth.service";
 import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { CommonService } from "src/app/shared/service/common.service";
@@ -24,12 +23,7 @@ import { Subject, takeUntil } from "rxjs";
 })
 export class DashboardComponent implements OnInit {
 
-  count: TypeCount = {
-    Users: 0,
-    Students: 0,
-    Teachers:0,
-    Classrooms:0
-  };
+  count: any;
 
   isTeacher = this.authService.isTeacher();
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
@@ -46,6 +40,7 @@ export class DashboardComponent implements OnInit {
   month = this.currentDate.getMonth() + 1;
   year = this.currentDate.getFullYear();
   today = this.year + "-" + this.month + "-" + this.day;
+  todayExams = new Date(new Date().getTime()).toISOString().substring(0,10);
 
   quadrimestreInizio1: number = 9;  // Settembre
   quadrimestreFine1: number = 1;    // Gennaio
@@ -74,7 +69,7 @@ export class DashboardComponent implements OnInit {
 
       this.editForm =this.fb.group({
       circularNumber: new FormControl (null, Validators.required),
-      uploadDate: new FormControl(this.today, [Validators.required],),
+      uploadDate: new FormControl(this.todayExams, [Validators.required],),
       location: new FormControl(null, Validators.required),
       object: new FormControl(null, Validators.required),
       header: new FormControl(null, Validators.required),
@@ -117,7 +112,7 @@ export class DashboardComponent implements OnInit {
     this.editForm.reset();
 
     // ripristina la data odierna
-    this.editForm.get('uploadDate')?.setValue(this.today);
+    this.editForm.get('uploadDate')?.setValue(this.todayExams);
 
     this.commonService.addCirculars(data).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (data) => {
@@ -171,8 +166,12 @@ export class DashboardComponent implements OnInit {
         next: (res: ListResponse<TeacherExam[]>) => {
 
           this.examsTeachers = res.data
-            .filter((item, index) => item.date >= this.today)
+            .filter((item, index) => item.date >= this.todayExams)
             .filter((_, index) => index < this.itemsPerPage); 
+            console.log(this.examsTeachers);
+            console.log();
+            
+            
         },
         error: (err) => {
           console.log('error dash', err);
@@ -183,8 +182,9 @@ export class DashboardComponent implements OnInit {
         next: (res: ListResponse<StudentExam[]>) => {
           
           this.examsStudents = res.data
-            .filter((item, index) => item.date >= this.today)
-            .filter((_, index) => index < this.itemsPerPage);
+            .filter((item, index) => item.date >= this.todayExams)
+            .filter((_, index) => index < this.itemsPerPage)    
+            
         },
         error: (err) => {
           console.log('error dash', err);
@@ -199,7 +199,6 @@ export class DashboardComponent implements OnInit {
       next: (res: UsersMe) => {
         this.userData = res;
         this.getStudentYears();
-        console.log('get userMe',res)
       },
       error: (err) => {
         console.log('error', err);

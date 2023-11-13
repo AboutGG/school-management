@@ -1,22 +1,31 @@
-import { UsersService } from './../../../shared/service/users.service';
+import { UsersService } from '../../../shared/service/users.service';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TeacherClassroom } from 'src/app/shared/models/classrooms';
 import { ListResponse } from 'src/app/shared/models/listresponse';
-import { IdName, TeacherExam } from 'src/app/shared/models/teacherexam';
+import { IdName, TeacherExam } from 'src/app/shared/models/exams';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import { TeacherService } from 'src/app/shared/service/teacher.service';
 import { UsersMe } from 'src/app/shared/models/users';
 import Swal from 'sweetalert2';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Subject, takeUntil } from 'rxjs';
+import { Location } from '@angular/common';
+import { ModalAddExamWizardComponent } from '../modal-add-exam-wizard/modal-add-exam-wizard.component';
 
 @Component({
   selector: 'app-examslist',
   templateUrl: './examslist.component.html',
-  styleUrls: ['./examslist.component.scss']
+  styleUrls: ['./examslist.component.scss'],
+
 })
-export class ExamslistComponent implements OnInit {
-  constructor(private examsService: ExamsService, private teacherService: TeacherService, private usersService: UsersService) { }
+export class ExamslistComponent implements OnInit, OnDestroy {
+  constructor(private examsService: ExamsService,
+    private teacherService: TeacherService,
+    private usersService: UsersService,
+    private location: Location,
+    public dialog: MatDialog) { }
 
   user!: UsersMe
   formSubjects = new FormGroup({
@@ -28,57 +37,39 @@ export class ExamslistComponent implements OnInit {
   examsList!: TeacherExam[]
   subjects!: IdName[]
   classrooms!: TeacherClassroom[]
-  orders = {
-    date: 'asc',
-    subject: 'asc',
-    classroom: 'asc'
-  }
-  page: number = 1
-  itemsPerPage: number = 10
+  currentPage: number = 1
+  itemsPerPage: number = 5
   filtered: string = ""
   search: string = ""
   orderType: string = "asc"
   order: string = "Date"
   onClickFilter: boolean = false
+  totalItems!: number
   totalPages!: number
   selectedPages!: number
   total!: number
-  isEdit: boolean = false
-  successEditOrNew: boolean = false
   examId?: string
-  subjectsByClassroom?: IdName[]
-  classroomId!: FormControl
-  subjectId!: FormControl
-  date!: FormControl
-  examForm!: FormGroup
   currentDate = new Date()
-  today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
-  // today = new Date(new Date().getTime()).toISOString().substring(0, 10);
+  today = new Date(new Date().getTime()).toISOString().substring(0, 10);
   alert: boolean = false;
-    ngOnInit(): void {
-      this.date = new FormControl(null, Validators.required);
-      this.classroomId = new FormControl(null, Validators.required);
-      this.subjectId = new FormControl(null, Validators.required);
-    
-      this.examForm = new FormGroup({
-        date: this.date,
-        classroomId: this.classroomId,
-        subjectId: this.subjectId
-      });
-    
-      this.getUser();
-      this.getTeacherExams();
-      this.getTeacherClassrooms();
-    
-      this.getTeacherSubjects();
-    }
-    
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+
+  ngOnInit(): void {
+    this.getUser();
+    this.getTeacherExams();
+    this.getTeacherClassrooms();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
+  }
 
   onChangePage(newPage: number) {
-    this.page = newPage
+    this.currentPage = newPage
     this.getTeacherExams()
-    this.getTeacherClassrooms()
-    this.getTeacherSubjects()
+    console.log(this.currentPage);
+    
   }
 
   dropdownFilter() {
@@ -102,14 +93,13 @@ export class ExamslistComponent implements OnInit {
       next: (res) => {
         this.user = res
         this.getTeacherSubjects();
-        console.log("DEBUG USER ", this.user);
       }
     })
   }
 
   getTeacherExams() {
     const params = new HttpParams()
-      .set('Page', this.page)
+      .set('Page', this.currentPage)
       .set('Filter', this.filtered)
       .set('Search', this.search)
       .set('OrderType', this.orderType)
@@ -117,17 +107,9 @@ export class ExamslistComponent implements OnInit {
       .set('ItemsPerPage', this.itemsPerPage)
     this.examsService.getTeacherExams(params).subscribe({
       next: (res: ListResponse<TeacherExam[]>) => {
-        // this.orders = {
-        //   name: 'asc',
-        //   surname: 'asc',
-        //   birth: 'asc',
-        //   [id]: type
-        // };
-        // id === 'name' && this.orderName === "asc" ? this.orderName = "desc" : this.orderName = "asc";
-        // id === 'surname' && this.orderSurname === "desc" ? this.orderSurname = "asc" : this.orderSurname = "desc"; 
-        // id === 'birth' && this.orderBirth === "desc" ? this.orderBirth = "asc" : this.orderBirth = "desc";
         this.examsList = res.data
-        this.total = res.total
+        this.totalItems = res.total
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage)
       },
       error: (error) => {
         console.log(error);
@@ -146,71 +128,11 @@ export class ExamslistComponent implements OnInit {
   getTeacherSubjects() {
     this.teacherService.getTeacherSubjects(this.user?.id).subscribe({
       next: (res) => {
-        this.subjects = res;
-        console.log('Subjects:', this.subjects); // Add this line to log the subjects
-      },
-      error: (error) => {
-        console.log(error);
+        this.subjects = res
       }
     });
   }
   
-
-  getTeacherSubjectsByClassroom(classroomId: string) {
-    const params = new HttpParams().set('classroomId', classroomId);
-    this.teacherService.getTeacherSubjectsByClassroom(this.user?.id, params).subscribe({
-        next: (res: IdName[]) => {
-            this.subjectsByClassroom = res;
-        },
-        error: (error) => {
-            console.log(error);
-        }
-    });
-}
-
-
-  editExam(exam: TeacherExam) {
-    this.examId = exam.id
-    this.examForm.patchValue({
-      date: exam.date,
-      classroomId: exam.classroom.id,
-      subjectId: exam.subject.id
-    })
-    this.getTeacherSubjectsByClassroom(this.examForm.value.classroomId)
-  }
-
-  onClickModal() {
-    if (this.isEdit === false) {
-      if (this.examForm.value.date > this.today) {
-        this.successEditOrNew = false;
-        this.examsService.addExam(this.examForm.value).subscribe({
-          next: () => {
-            this.successEditOrNew = true;
-            setTimeout(() => this.successEditOrNew = false, 4000)
-            this.examForm.reset();
-            this.getTeacherExams()
-          }
-        })
-      } else {
-        alert("Selezionare una data successiva a quella odierna");
-      }
-
-    } else {
-      if (this.examForm.value.date > this.today) {
-        this.successEditOrNew = false
-        this.examsService.editExam(this.examForm.value, this.user.id, this.examId).subscribe({
-          next: () => {
-            this.successEditOrNew = true
-            setTimeout(() => this.successEditOrNew = false, 4000)
-            this.getTeacherExams()
-          }
-        })
-      } else {
-        alert("Selezionare una data successiva a quella odierna");
-      }
-    }
-
-  }
 
   onDelete(id: string) {
     this.examId = id;
@@ -234,6 +156,23 @@ export class ExamslistComponent implements OnInit {
       timer: 2500,
       background: '#f5d67a'
 
+    });
+  }
+
+
+  // Open Modal Componente padre
+  openModalExam(exam?: TeacherExam, type?: string) {
+    const dialogRef = this.dialog.open(ModalAddExamWizardComponent, {
+      width: '400px',
+      height: '400px',
+      data: { exam, type }
+    });
+    dialogRef.beforeClosed().subscribe((result: any) => {
+      this.getTeacherExams();
+
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      dialogRef.close();
     });
   }
 

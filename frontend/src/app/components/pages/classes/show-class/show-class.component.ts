@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Registry, Students, Teachers } from 'src/app/shared/models/users';
-import { ClassDetails, Classroom, TeacherClassroom } from 'src/app/shared/models/classrooms';
+import { Students } from 'src/app/shared/models/users';
+import { ClassDetails, Classroom } from 'src/app/shared/models/classrooms';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { ListResponse } from 'src/app/shared/models/listresponse';
 import { HttpParams } from '@angular/common/http';
-import { Form, FormControl, FormGroup, Validators} from "@angular/forms";
+import { FormControl, FormGroup, Validators} from "@angular/forms";
 import { Grade, StudentGraduation } from 'src/app/shared/models/studentgraduation';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -35,6 +35,9 @@ export class ShowClassComponent {
   promotionStartDate = new Date();
   promotionEndDate = new Date();
 
+  currentYear!: boolean;
+  schoolYear!: string;
+
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -48,6 +51,8 @@ export class ShowClassComponent {
     this.route.params.subscribe((params) => {
       this.classId = params["id"];
     });
+        this.currentYear = true;
+
     this.fetchClassDetails();
     this.isTeacher = this.authService.isTeacher();
 
@@ -66,7 +71,9 @@ export class ShowClassComponent {
   }
 
   fetchClassDetails() {
-    const params = new HttpParams().set("Order", this.order);
+    const params = new HttpParams()
+      .set("Order", this.order)
+      .set("isCurrentYear", this.currentYear);
     this.classroomService
       .getSingleClassroom(this.classId, params)
       .pipe(takeUntil(this.unsubscribe$))
@@ -74,6 +81,7 @@ export class ShowClassComponent {
         next: (res: ListResponse<ClassDetails>) => {
           this.classDetails = res.data;
           console.log(this.classDetails.students);
+    console.log(this.currentYear);
 
           this.classDetails.students.map((student: Students) => {
             const userId = student.id;
@@ -95,6 +103,12 @@ export class ShowClassComponent {
           console.log("error", err);
         },
       });
+  }
+
+  isCurrentYear() {
+    this.fetchClassDetails();
+    console.log(this.currentYear);
+    
   }
 
   navigateToTeachersClasses() {
@@ -148,6 +162,8 @@ export class ShowClassComponent {
         },
       });
     console.log(this.graduationForm.value);
+    this.fetchClassDetails();
+    
   }
 
   ngOnDestroy(): void {

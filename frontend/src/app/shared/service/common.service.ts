@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ListResponse, TypeCount } from '../models/users';
+import { ListResponse } from '../models/listresponse';
 import { Observable } from 'rxjs';
 import { PdfCirculars } from '../models/pdf';
 import { FormGroup } from '@angular/forms';
@@ -13,7 +13,7 @@ export class CommonService {
   constructor(private http: HttpClient) { }
 
   getCount() {
-    return this.http.get<TypeCount>(`https://localhost:7262/api/details/count`)
+    return this.http.get<any>(`https://localhost:7262/api/details/count`)
   }
 
   addCirculars(form: FormGroup): Observable<PdfCirculars> {

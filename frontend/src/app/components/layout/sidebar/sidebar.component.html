@@ -3,19 +3,19 @@
     <div [routerLink]="['/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link"
       class="link">
       <div class="content">
-        <div class="icon">
+        <div class="icon" title="Dashboard">
           <i class="bi bi-house"></i>
           <!--dashboard-->
         </div>
         <div class="title">Dashboard</div>
-        <i class="invisible" *ngIf="isExpanded"
-          [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
+          <i class="invisible" *ngIf="isExpanded"
+            [ngClass]="isCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
       </div>
     </div>
 
     <div [routerLink]="['/list-users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="isTeacher" class="link">
       <div class="content">
-        <div class="icon">
+        <div class="icon" title="Utenti">
           <i class="bi bi-person"></i>
         </div>
         <div class="title">Utenti</div>
@@ -25,8 +25,8 @@
 
     <div [routerLink]="[isTeacher ? linkByRole + '/classes/' : linkByRole + '/classes/'+ userMe.classroomId]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
-        <div class="icon">
-          <i class="bi bi-newspaper"></i>
+        <div class="icon"  title="Classi">
+          <i class="bi bi-buildings"></i>
           <!--classes-->
         </div>
         <div class="title">{{ isTeacher ? 'Classi' : 'Classe' }}</div>
@@ -37,8 +37,8 @@
 
     <div [routerLink]="[linkByRole +'/subjects']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
-        <div class="icon">
-          <i class="bi bi-journals"></i>
+        <div class="icon"  title="Materie">
+          <i class="bi bi-book"></i>
           <!--subjects-->
         </div>
         <div class="title">Materie</div>
@@ -49,8 +49,8 @@
     
     <div [routerLink]="[linkByRole + '/exams']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="link">
       <div class="content">
-        <div class="icon">
-          <i class="bi bi-book-fill"></i>
+        <div class="icon"  title="Esami">
+          <i class="bi bi-calendar3"></i>
           <!--exams-->
         </div>
         <div class="title">Esami</div>

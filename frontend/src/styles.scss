@@ -11,3 +11,10 @@
 // .bg-pages{
 //   background-color: $background-color-pages;
 // }
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+html, body { height: 100%; width: 100%; }
+body { margin: 0; font-family:Arial, Helvetica, sans-serif;}
+
+

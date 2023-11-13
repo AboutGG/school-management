@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AddUserComponent } from './components/pages/users/add-user/add-user.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JwtModule } from "@auth0/angular-jwt";
 import { LoginComponent } from './login/login.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from '../app/shared/helpers/auth.interceptor';
@@ -21,6 +21,17 @@ import { ExamsStudentListComponent } from './components/pages/exams-student-list
 import { SubjectsComponent } from './components/pages/subjects/subjects.component';
 import { StudentSubjectsComponent } from './components/pages/student-subjects/student-subjects.component';
 import { ExamDetailsComponent } from './components/pages/exam-details/exam-details.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule} from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { ModalAddExamWizardComponent } from './components/pages/modal-add-exam-wizard/modal-add-exam-wizard.component';
+
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
 
 
 @NgModule({
@@ -42,6 +53,7 @@ import { ExamDetailsComponent } from './components/pages/exam-details/exam-detai
     SubjectsComponent,
     StudentSubjectsComponent,
     ExamDetailsComponent,
+    ModalAddExamWizardComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +62,19 @@ import { ExamDetailsComponent } from './components/pages/exam-details/exam-detai
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
+    MatCardModule,
+    MatDialogModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["example.com"],
+        disallowedRoutes: ["http://example.com/examplebadroute/"]
+      },
+    })
   ],
   providers: [
     {

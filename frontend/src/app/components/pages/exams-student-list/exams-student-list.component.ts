@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { StudentExam } from 'src/app/shared/models/studentexam';
+import { StudentExam } from 'src/app/shared/models/exams';
 import { ExamsService } from 'src/app/shared/service/exams.service';
 import Swal from 'sweetalert2';
 
