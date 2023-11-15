@@ -4,6 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Registry } from 'src/app/shared/models/users';
 import { ListResponse } from 'src/app/shared/models/listresponse';
 import { UsersService } from 'src/app/shared/service/users.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -119,6 +120,7 @@ export class ListUsersComponent {
         this.page = 1;
         this.getUser("Name", "asc", "name");
         console.log(res);
+        this.showAlert()
       },
       error: (error) => {
         console.log("error", error);
@@ -126,11 +128,27 @@ export class ListUsersComponent {
     });
   }
 
+ 
+  
+
+
   saveSearch(text: string) {
     this.text = text;
     this.getUser("Name", "asc", "name", this.text);
   }
 
+  showAlert() {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Utente eliminato',
+      showConfirmButton: false,
+      timer: 2500,
+      background:'#fce6a4'
+
+    });
+  }
   ngOnDestroy(): void {
     this.unsubscribe$.next(true);
     this.unsubscribe$.complete(); 

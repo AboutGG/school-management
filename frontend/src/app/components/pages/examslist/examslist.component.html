@@ -95,8 +95,9 @@
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-     
-                <li id="1" *ngIf="currentPage === totalPages && totalPages >= 3" class="page-item" style="cursor: pointer;">
+
+                <li id="1" *ngIf="currentPage === totalPages && totalPages >= 3" class="page-item"
+                    style="cursor: pointer;">
                     <a class="page-link" (click)="onChangePage(currentPage - 2)">{{ currentPage - 2}}</a>
                 </li>
                 <li id="2" *ngIf="currentPage > 1" class="page-item" style="cursor: pointer;">
@@ -111,7 +112,7 @@
                 <li id="5" *ngIf="currentPage === 1 && totalPages >= 3" class="page-item" style="cursor: pointer;">
                     <a class="page-link" (click)="onChangePage(currentPage + 2)">{{ currentPage + 2 }}</a>
                 </li>
-               
+
                 <!-- VAI AD ULTIMA PAGINA -->
                 <li class="page-item" style="cursor: pointer;">
                     <a class="page-link" aria-label="Next" (click)="onChangePage(totalPages)">

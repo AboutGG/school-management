@@ -5,6 +5,9 @@ import { ClassroomService } from "src/app/shared/service/classroom.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Classroom } from "src/app/shared/models/classrooms";
 import { Registry } from "src/app/shared/models/users";
+import { Users } from "src/app/shared/models/users";
+import { AuthService } from "src/app/shared/service/auth.service";
+import Swal from "sweetalert2";
 import { Location } from "@angular/common";
 import { Subject, takeUntil } from "rxjs";
 
@@ -113,6 +116,9 @@ export class AddUserComponent implements OnInit {
     return !!formControl && formControl.invalid;
   }
 
+
+
+
   onAddUser() {
     if (this.id) {
       console.log();
@@ -128,11 +134,15 @@ export class AddUserComponent implements OnInit {
         error: (error) => {
          
           console.log(error);
+
         },
       });
     }
     console.log(this.usersForm.value);
+    this.showAlert()
   }
+
+ 
 
   selectClassroom(classroom: string) {
     this.usersForm.value.classroomId!.setValue(classroom);
@@ -168,6 +178,19 @@ export class AddUserComponent implements OnInit {
     });
   }
 
+  showAlert() {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Creazione avvenuta con successo',
+      showConfirmButton: false,
+      timer: 2500,
+      background: '#fce6a4'
+
+
+    });
+  }
   navigateTo() {
     this.location.back();
   }

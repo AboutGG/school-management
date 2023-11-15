@@ -126,6 +126,7 @@ export class DashboardComponent implements OnInit {
       title: 'Creazione avvenuta con successo',
       showConfirmButton: false,
       timer: 2500,
+      background: '#fce6a4'
     });
     
     this.getCirculars();
@@ -255,7 +256,8 @@ export class DashboardComponent implements OnInit {
         title: 'Pagella non ancora disponibile',
         showConfirmButton: false,
         timer: 2500,
-  
+        background: '#fce6a4'
+
       });
 
     })
