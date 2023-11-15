@@ -13,3 +13,23 @@ form {
     top: 26%;
   }
 }
+
+.custom-login-btn {
+  background-color: #1D1E2C;
+  color: white;
+  transition: background-color 0.2s;  
+
+  &:hover,
+  &:focus {
+    background-color: #FFB900;
+    color:#1D1E2C;
+    border-color: #1D1E2C;
+  }
+
+  &:active {
+    background-color: #FFB900; 
+    color: white;
+    border-color: #1D1E2C;
+
+  }
+}
