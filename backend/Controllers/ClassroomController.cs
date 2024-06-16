@@ -223,7 +223,7 @@ public class ClassroomsController : Controller
                 Promoted = inputStudentPromotion.Promoted
             };
             takenStudent.ClassroomId = inputStudentPromotion.Promoted ? inputStudentPromotion.NextClassroom : takenStudent.ClassroomId;
-            takenStudent.SchoolYear = SchoolYearUtils.GetCurrentSchoolYear();
+            takenStudent.SchoolYear = SchoolYearUtils.GetNextSchoolYear();
 
             //Procedo con la creazione e l'update delle entità precedenti
             if (!new GenericRepository<PromotionHistory>(_context).Create(promotionHistory))
