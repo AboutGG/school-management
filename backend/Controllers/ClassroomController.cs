@@ -73,15 +73,27 @@ public class ClassroomsController : Controller
             .GetAllUsingIQueryable(@params,
                 query => query
                     .Where(el =>
-                        el.ClassroomId == id && 
-                        //effettuo un controllo per selezionare gli alunni appartenenti al corrente o prossimo anno scolastico
-                        isCurrentYear ? el.SchoolYear == SchoolYearUtils.GetCurrentSchoolYear()
-                            : el.SchoolYear == SchoolYearUtils.GetNextSchoolYear())
+                        el.ClassroomId == id)
                     .Include(el => el.Registry)
                     .Include(el => el.Classroom)
                 , out var totalStudents
             );
 
+        if (isCurrentYear)
+        {
+            takenStudents = new GenericRepository<Student>(_context).GetAllUsingIQueryable(@params, query => 
+                takenStudents.AsQueryable().Where(el => el.SchoolYear == SchoolYearUtils.GetCurrentSchoolYear()
+                ), 
+                out totalStudents);
+        }
+        else
+        {
+            takenStudents = new GenericRepository<Student>(_context).GetAllUsingIQueryable(@params, query => 
+                    takenStudents.AsQueryable()
+                        .Where(el => el.SchoolYear == SchoolYearUtils.GetNextSchoolYear()), 
+                out totalStudents);
+        }
+        
         List<StudentDto> responseStudents = new List<StudentDto>();
         foreach (Student takenStudent in takenStudents)
         {
@@ -263,7 +275,7 @@ public class ClassroomsController : Controller
             //Prendo lo studente tramite l'id passato nella route
             Student takenStudent = new GenericRepository<Student>(_context)
                 .GetByIdUsingIQueryable(query => query
-                    .Where(el => el.UserId == userId)
+                    .Where(el => el.UserId == userId && el.SchoolYear == SchoolYearUtils.GetCurrentSchoolYear())
                     .Include(el => el.Registry)
                     .Include(el => el.StudentExams)
                     .ThenInclude(el => el.Exam)
