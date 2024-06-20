@@ -26,7 +26,9 @@ export class ShowClassComponent {
   studentGrade!: Grade;
   gradeForm!: FormGroup;
   idUser!: string;
-
+  fullName!: string;
+  finalGrade!: number;
+  promotion: boolean = true;
 
 
   constructor(
@@ -50,8 +52,7 @@ export class ShowClassComponent {
       promoted: new FormControl(null, Validators.required),
       nextClassroom: new FormControl(null, Validators.required),
     });
-
-
+  
     this.getClassroom();
   }
 
@@ -74,9 +75,7 @@ export class ShowClassComponent {
   }
 
   addGraduation() {
-    this.classroomService
-      .addStudentGraduation(this.graduationForm.value)
-      .subscribe({
+    this.classroomService.addStudentGraduation(this.graduationForm.value).subscribe({
         next: (res) => {},
         error: (error) => {
           console.log(error);
@@ -84,20 +83,17 @@ export class ShowClassComponent {
       });
   }
 
-  // getFinalGrade() {
-  //   this.classroomService.getGrade(this.classId, ).subscribe({
-  //     next: (res:) => {
-  //       this.studentGrade = res;
-  //     },
-  //   });
-    
-  // }
+  getFinalGrade(idUser: string) {
+    this.idUser = idUser;
+    this.classroomService.getGrade(this.classId, this.idUser).subscribe({
+      next: (res: Grade) => {
+        this.studentGrade = res;
+        console.log('res', res)  
+      },
+    });
+  }
 
-  // getIdStudent() {
 
-  //   this.
-
-  // }
 
   getClassroom() {
     this.classroomService.getClassroom().subscribe({

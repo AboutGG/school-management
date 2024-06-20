@@ -5,11 +5,11 @@
     <span class="icon-back" style="cursor: pointer;" (click)="navigateToTeachersClasses()"><i class="bi bi-arrow-left"  ></i> </span>
    </div>
   <div *ngIf="!isTeacher" class="col-md-11 d-flex align-items-center justify-content-center fs-5 fw-bold" >
-   CLASSE {{ classDetails.name_classroom}}
+   CLASSE {{ classDetails && classDetails.name_classroom}}
     <span class="icon"><i class="bi bi-person-vcard"></i> </span>
  </div>
  <div *ngIf="isTeacher" class="col-md-9 d-flex align-items-center justify-content-center fs-5 fw-bold" >
-  CLASSE {{ classDetails.name_classroom}}
+  CLASSE {{ classDetails && classDetails.name_classroom}}
    <span class="icon"><i class="bi bi-person-vcard"></i> </span>
 </div>
 </div>
@@ -50,7 +50,7 @@
         </tr>
       </thead>
       <tbody *ngFor="let student of classDetails?.students let i = index">
-        <tr >
+        <tr>
           <td scope="row">{{i + 1}}</td> 
           <td style="cursor: pointer" [routerLink]="'/details/'">{{student.surname}}</td>
           <td style="cursor: pointer" [routerLink]="'/details/'">{{student.name}}</td>
@@ -62,8 +62,8 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" [routerLink]="'/details/'"><i class="bi bi-eye-fill"></i>Visualizza Profilo</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/teachers/exams']"><i class="bi bi-book-fill"></i>Visualizza Pagella</a></li>
-                <!-- <li><a (click)="getFinalGrade()" class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#graduationModal"> <i -->
-                            <!-- class="bi bi-gear-fill"></i>Promozione</a></li> -->
+                <li><a (click)="getFinalGrade(student.id!)" class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#graduationModal">
+                  <i class="bi bi-gear-fill"></i>Promozione</a></li>
                 <!-- <li><a style="cursor: pointer" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash3-fill px-2"></i>Elimina</a></li> -->
               </ul>
             </div>
@@ -74,7 +74,6 @@
   </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="graduationModal" tabindex="-1" aria-labelledby="graduationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -83,22 +82,23 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+
+                  <div class="d-flex justify-content-center ">
+                    <h6 *ngIf="studentGrade?.fullName">{{studentGrade.fullName | uppercase}}</h6>
+                  </div>
                     <form [formGroup]="graduationForm">
                         <div class="mt-5 mb-2">
                             <label for="scholasticBehavior" class="form-label">Voto condotta: </label>
-                            <input type="number" name="scholasticBehavior" id="scholasticBehavior" min="0" max="10" step="1" value="0" formControlName="scholasticBehavior">
+                            <input type="number" name="scholasticBehavior" id="scholasticBehavior" min="1" max="10" step="1" value="0" formControlName="scholasticBehavior">
 
                         </div>
                         <div class="d-flex flex-column my-2">
-                            <label for="promoted" class="form-label">Promozione: </label>
-                            <select id="promoted" class="w-100 p-1 btn btn-outline-warning text-dark"
-                                formControlName="promoted">
-                            </select>
+                            <label for="promoted" class="form-label" formControlName="promoted">Esito finale: </label>
+                            <h6>{{studentGrade && studentGrade.finalGrade <= 6 ? "AMMESSO/A": "BOCCIATO/A"}}</h6>
                         </div>
                         <div class="d-flex flex-column my-2">
                             <label for="nextClassroom" class="form-label">Classe successiva: </label>
-
-                            <select class="form-select">
+                            <select class="form-select" formControlName="nextClassroom">
                               <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
                             </select>
                         </div>
@@ -113,9 +113,6 @@
             </div>
         </div>
     </div>
-
-
-
 
 
 <div class="modal fade" id="graduationModal" tabindex="-1" aria-labelledby="graduationModalLabel" aria-hidden="true">
@@ -133,6 +130,7 @@
     </div>
   </div>
 </div>
+
   <!-- Modal delete -->
   <!-- <div
     class="modal fade"
@@ -170,83 +168,5 @@
       </div>
     </div>
   </div> -->
-
-
-
-
-<!-- 
-<div class="modal fade" id="exgraduationModal" tabindex="-1" aria-labelledby="graduationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header border-bottom-0">
-                <h5 class="modal-title text-white" id="graduationModalLabel">{{'impostazioni' | uppercase}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-0 ">
-                <div class="container ">
-                    <div class="row bg-pages rounded-bottom">
-                        <div class="col-3 mini-sidebar p-0">
-                            <ul class="nav nav-pills flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link text-black text-center">
-                                        Generale
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-black text-center" >
-                                        Account
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-9 p-3">
-
-                            <div *ngSwitchCase="'account'">
-                                <h6 class="text-center mt-1">Modifica la password</h6>
-                                <form class="container">
-                                <!-- <form [formGroup]="accountForm" class="container" (ngSubmit)="onSubmit()"> -->
-
-                                    <!-- <div class="form-group mt-4">
-                                        <label for="oldpassword" class="form-label">Password attuale:<span class="text-danger">*</span></label>
-                                        <input type="password" id="oldpassword" name="oldpassword" title="oldpassword" class="form-control placeholder-input"
-                                               formControlName="oldpassword">
-                                        
-
-                                    </div>
-
-                                    <div class="form-group mt-3">
-                                        <label for="newpassword">Nuova Password:<span class="text-danger">*</span></label>
-                                        <input type="password" id="newpassword" name="newpassword" class="form-control"
-                                               formControlName="newpassword">
-                                    </div>
-                                    <div class="modal-body p-0">
-                                        <div class="alert alert-success mt-3">
-                                            La password è stata modificata con successo.
-                                        </div>
-                                        <div class="alert alert-danger mt-3">
-                                            La password attuale inserita è errata.
-                                        </div>
-                                    </div>
-
-
-                                <div class="d-flex justify-content-end mt-3">
-                                    <button type="submit" class="col-4 btn btn-warning mt-3">SALVA</button>
-                                </div>  
-                                </form>
-                            </div>
-
-                            <div *ngSwitchDefault>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-         
-        </div>
-      
-    </div>
-</div> -->
-
 
 </div>

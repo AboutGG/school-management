@@ -42,13 +42,10 @@ export class ClassroomService {
   }
 
   addStudentGraduation(form: FormGroup, classroomId?: string, studentId?: string) {
-    return this.http.post<StudentGraduation>(
-      `https://localhost:7262/api/classrooms/${classroomId}/students/${studentId}/graduation`,
-      form
-    );
+    return this.http.post<StudentGraduation>(`https://localhost:7262/api/classrooms/${classroomId}/students/${studentId}/graduation`, form );
   }
 
-  getGrade(classroomId: string, studentId: string) {
-    return this.http.get<Grade>(`https://localhost:7262/api/classrooms/${classroomId}/students/${studentId}/grades`);
+  getGrade(classroomId: string, userId: string) {
+    return this.http.get<Grade>(`https://localhost:7262/api/classrooms/${classroomId}/students/${userId}/grades`);
   }
 }
