@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/shared/service/auth.service';
 import { ClassroomService } from 'src/app/shared/service/classroom.service';
 import { ListResponse } from 'src/app/shared/models/listresponse';
 import { HttpParams } from '@angular/common/http';
-import { Form, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Form, FormControl, FormGroup, Validators} from "@angular/forms";
 import { Grade, StudentGraduation } from 'src/app/shared/models/studentgraduation';
 
 @Component({
@@ -30,7 +30,6 @@ export class ShowClassComponent {
   finalGrade!: number;
   promotion: boolean = true;
 
-
   constructor(
     private classroomService: ClassroomService,
     private authService: AuthService,
@@ -45,14 +44,13 @@ export class ShowClassComponent {
     this.fetchClassDetails();
     this.isTeacher = this.authService.isTeacher();
     console.log();
-    
 
     this.graduationForm = new FormGroup({
       scholasticBehavior: new FormControl(null, Validators.required),
-      promoted: new FormControl(null, Validators.required),
+      promoted: new FormControl(true, Validators.required),
       nextClassroom: new FormControl(null, Validators.required),
     });
-  
+
     this.getClassroom();
   }
 
@@ -61,7 +59,7 @@ export class ShowClassComponent {
     this.classroomService.getSingleClassroom(this.classId, params).subscribe({
       next: (res: ListResponse<ClassDetails>) => {
         this.classDetails = res.data;
-        this.classDetails.students.map((student) => {})
+        this.classDetails.students.map((student) => {});
         console.log(res.data);
       },
       error: (err) => {
@@ -74,26 +72,38 @@ export class ShowClassComponent {
     this.router.navigate(["teachers/classes"]);
   }
 
-  addGraduation() {
-    this.classroomService.addStudentGraduation(this.graduationForm.value).subscribe({
-        next: (res) => {},
-        error: (error) => {
-          console.log(error);
-        },
-      });
-  }
+  // getFinalGrade(idUser: string) {
+  //   this.idUser = idUser;
+  //   this.classroomService.getGrade(this.classId, this.idUser).subscribe({
+  //     next: (res: Grade) => {
+  //       this.studentGrade = res;
+
+  //       if (this.studentGrade.finalGrade >= 6) {
+  //         this.graduationForm.value.promoted = true;
+  //       } else {
+  //         this.graduationForm.value.promoted = false;
+  //       }
+
+  //       console.log("res", res);
+  //     },
+  //   });
+  // }
 
   getFinalGrade(idUser: string) {
     this.idUser = idUser;
     this.classroomService.getGrade(this.classId, this.idUser).subscribe({
       next: (res: Grade) => {
         this.studentGrade = res;
-        console.log('res', res)  
+        // this.finalGrade = this.studentGrade.finalGrade
+
+        this.graduationForm.patchValue({
+          promoted: this.studentGrade.finalGrade >= 6 ? true : false
+          // promoted: this.finalGrade >= 6 ? true : false,
+        });
+        console.log("res", res);
       },
     });
   }
-
-
 
   getClassroom() {
     this.classroomService.getClassroom().subscribe({
@@ -103,4 +113,20 @@ export class ShowClassComponent {
       },
     });
   }
+
+  addGraduation() {
+    this.classroomService.addStudentGraduation(this.graduationForm.value,this.classId,this.idUser).subscribe({
+        next: (res) => {
+          console.log("tentativo", this.graduationForm.value);
+        },
+        error: (error) => {
+          console.log(error);
+          console.log("tentativo errore", this.graduationForm.value);
+        },
+      });
+    console.log(this.graduationForm.value);
+  }
 }
+
+
+

@@ -84,31 +84,31 @@
                 <div class="modal-body">
 
                   <div class="d-flex justify-content-center ">
-                    <h6 *ngIf="studentGrade?.fullName">{{studentGrade.fullName | uppercase}}</h6>
+                    <h5 *ngIf="studentGrade?.fullName">{{studentGrade.fullName | uppercase}}</h5>
                   </div>
                     <form [formGroup]="graduationForm">
-                        <div class="mt-5 mb-2">
-                            <label for="scholasticBehavior" class="form-label">Voto condotta: </label>
+                        <div class="mt-3 mb-2">
+                            <label for="scholasticBehavior" class="form-label me-4">Voto condotta: </label>
                             <input type="number" name="scholasticBehavior" id="scholasticBehavior" min="1" max="10" step="1" value="0" formControlName="scholasticBehavior">
 
                         </div>
-                        <div class="d-flex flex-column my-2">
-                            <label for="promoted" class="form-label" formControlName="promoted">Esito finale: </label>
-                            <h6>{{studentGrade && studentGrade.finalGrade <= 6 ? "AMMESSO/A": "BOCCIATO/A"}}</h6>
+                        <div class="d-flex my-2">
+                            <label for="promoted" class="form-label mt-2 me-4">Esito finale: </label>
+                            <h6 class="mt-2">{{studentGrade && studentGrade.finalGrade >= 6 ? "AMMESSO/A": "BOCCIATO/A"}}</h6>
+                            <!-- <h6 class="mt-2">{{studentGrade && studentGrade.finalGrade <= 6 ? "AMMESSO/A": "BOCCIATO/A"}}</h6> -->
                         </div>
                         <div class="d-flex flex-column my-2">
                             <label for="nextClassroom" class="form-label">Classe successiva: </label>
-                            <select class="form-select" formControlName="nextClassroom">
+                            <select class="form-select w-60 " formControlName="nextClassroom">
                               <option value="{{className.id}}" *ngFor="let className of classes">{{className.name}}</option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary border-0 text-white"
+                    <button type="button" class="btn btn-outline-warning"
                         data-bs-dismiss="modal">Chiudi</button>
-                    <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white"
-                        [disabled]="!graduationForm.valid">CONFERMA</button>
+                    <button (click)="addGraduation()" type="button" class="btn btn-warning border-0 text-white">CONFERMA</button>
                 </div>
             </div>
         </div>

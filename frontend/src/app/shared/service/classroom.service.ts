@@ -41,8 +41,8 @@ export class ClassroomService {
     return this.http.get<Classroom[]>(`https://localhost:7262/api/classrooms`);
   }
 
-  addStudentGraduation(form: FormGroup, classroomId?: string, studentId?: string) {
-    return this.http.post<StudentGraduation>(`https://localhost:7262/api/classrooms/${classroomId}/students/${studentId}/graduation`, form );
+  addStudentGraduation(form: FormGroup, classroomId: string, studentId: string) {
+    return this.http.post<StudentGraduation>(`https://localhost:7262/api/classrooms/${classroomId}/students/${studentId}/graduations`, form );
   }
 
   getGrade(classroomId: string, userId: string) {
