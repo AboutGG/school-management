@@ -151,6 +151,11 @@ public class ClassroomsController : Controller
             {
                 throw new Exception("SCHOOL_YEAR_NOT_FOUND");
             }
+
+            if (takenStudent.StudentExams == null)
+            {
+                throw new Exception("STUDENT_HASNT_EXAMS");
+            }
             
             string[] splittedSchoolYear = takenStudent.SchoolYear.Split("-");
 
