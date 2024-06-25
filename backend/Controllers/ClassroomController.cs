@@ -1,5 +1,4 @@
 ﻿using System.Linq.Dynamic.Core;
-using AutoMapper;
 using backend.Dto;
 using backend.Interfaces;
 using backend.Models;
