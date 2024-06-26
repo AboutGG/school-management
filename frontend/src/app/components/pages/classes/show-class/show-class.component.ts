@@ -31,7 +31,11 @@ export class ShowClassComponent {
   nameSurname!: string;
   promotion: boolean = true;
   // historyPromotionForm!: FormGroup;
+  currentDate = new Date();
+  promotionStartDate = new Date('2024/06/01');
+  promotionEndDate = new Date('2024/07/31');
 
+  today = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate();
 
   constructor(
     private classroomService: ClassroomService,
@@ -66,9 +70,10 @@ export class ShowClassComponent {
     this.classroomService.getSingleClassroom(this.classId, params).subscribe({
       next: (res: ListResponse<ClassDetails>) => {
         this.classDetails = res.data;
-        this.classDetails.students.map((student : Students) => {
-
-          const userId = student.id
+        console.log(this.classDetails.students);
+        
+        this.classDetails.students.map((student: Students) => {
+          const userId = student.id;
           this.classroomService.getGrade(this.classId, userId!).subscribe({
             next: (res) => {
               student.finalGrade = res.finalGrade;
@@ -76,9 +81,8 @@ export class ShowClassComponent {
               // this.finalGrade = student.finalGrade;
               console.log(this.finalGrade);
               console.log(this.fullName);
-              
-            }
-          })
+            },
+          });
 
           // console.log(student.id);
           // const dummy  = this.getFinalGrade(student.id!);
@@ -104,7 +108,7 @@ export class ShowClassComponent {
         // this.finalGrade = this.studentGrade.finalGrade
 
         this.graduationForm.patchValue({
-          promoted: this.studentGrade.finalGrade >= 6 ? true : false
+          promoted: this.studentGrade.finalGrade >= 6 ? true : false,
           // promoted: this.finalGrade >= 6 ? true : false,
         });
         console.log("res", res);
@@ -122,7 +126,13 @@ export class ShowClassComponent {
   }
 
   addGraduation() {
-    this.classroomService.addStudentGraduation(this.graduationForm.value,this.classId,this.idUser).subscribe({
+    this.classroomService
+      .addStudentGraduation(
+        this.graduationForm.value,
+        this.classId,
+        this.idUser
+      )
+      .subscribe({
         next: (res) => {
           console.log("tentativo", this.graduationForm.value);
           alert("promozione inserita con successo");
